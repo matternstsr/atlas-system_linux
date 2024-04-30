@@ -35,15 +35,11 @@ void free_memory(void) {
  */
 void update_race_state(int *id, size_t size) {
     size_t i;
-	int current_id;
-	Car *current_car;
-    Car *prev_car;
-    int found;
     for (i = 0; i < size; i++) {
-        current_id = id[i];
-        current_car = car_list;
-        prev_car = NULL;
-    	found = 0;
+        int current_id = id[i];
+        Car *current_car = car_list;
+        Car *prev_car = NULL;
+        int found = 0;
 
         while (current_car != NULL) {
             if (current_car->id == current_id) {
@@ -108,9 +104,11 @@ void sort_cars(void) {
  * display_race_state - Display the current race state
  */
 void display_race_state(void) {
+    Car *current;
+
     sort_cars(); /* Call sort_cars() before displaying race state */
-    Car *current = car_list;
     printf("Race state:\n");
+    current = car_list;
     while (current != NULL) {
         printf("Car %d [%d laps]\n", current->id, current->laps);
         current = current->next;
