@@ -42,14 +42,14 @@ void free_memory(void)
 void update_race_state(int *id, size_t size)
 {
 	size_t i;
+	Car *new_car, *current_car, *prev_car;
 
 	for (i = 0; i < size; i++)
 	{
 		int current_id = id[i];
-		Car *current_car = car_list;
-		Car *prev_car = NULL;
+		current_car = car_list;
+		prev_car = NULL;
 		int found = 0;
-
 		while (current_car != NULL)
 		{
 			if (current_car->id == current_id)
@@ -61,21 +61,16 @@ void update_race_state(int *id, size_t size)
 			prev_car = current_car;
 			current_car = current_car->next;
 		}
-
 		if (!found)
 		{
-			Car *new_car = (Car *)malloc(sizeof(Car));
+			new_car = (Car *)malloc(sizeof(Car));
 			new_car->id = current_id;
 			new_car->laps = 0;
 			new_car->next = NULL;
-
 			if (prev_car == NULL)
-			{
 				car_list = new_car;
-			} else {
+			else
 				prev_car->next = new_car;
-			}
-
 			printf("Car %d joined the race\n", current_id);
 		}
 	}
@@ -86,34 +81,24 @@ void update_race_state(int *id, size_t size)
  */
 void sort_cars(void) 
 {
-	Car *current = car_list;
-	Car *sorted_list = NULL;
-
+	Car *current = car_list, *sorted_list = NULL, *search, *next;
 	/* Traverse the original list */
 	while (current != NULL) 
 	{
-		Car *next = current->next;
-
+		next = current->next;
 		/* Insert current node into sorted_list */
 		if (sorted_list == NULL || current->id < sorted_list->id)
+			current->next = sorted_list, sorted_list = current;
+		else
 		{
-			current->next = sorted_list;
-			sorted_list = current;
-		} else
-		{
-			Car *search = sorted_list;
+			search = sorted_list;
 			while (search->next != NULL && current->id > search->next->id)
-			{
 				search = search->next;
-			}
-			current->next = search->next;
-			search->next = current;
+			current->next = search->next, search->next = current;
 		}
-
 		/* Move to the next node in the original list */
 		current = next;
 	}
-
 	/* Update car_list with the sorted list */
 	car_list = sorted_list;
 }
