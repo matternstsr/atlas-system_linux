@@ -2,12 +2,21 @@
 
 Car *car_list = NULL;
 
+/**
+ * compare_cars - Compare function for qsort (sort_cars)
+ * @a: Pointer to first Car pointer
+ * @b: Pointer to second Car pointer
+ * Return: Difference between IDs of the two cars
+ */
 int compare_cars(const void *a, const void *b) {
     const Car *car1 = *(const Car **)a;
     const Car *car2 = *(const Car **)b;
     return car1->id - car2->id;
 }
 
+/**
+ * free_memory - Free memory allocated for car list
+ */
 void free_memory() {
     Car *current = car_list;
     Car *temp;
@@ -19,6 +28,11 @@ void free_memory() {
     car_list = NULL;
 }
 
+/**
+ * update_race_state - Update race state with new car IDs
+ * @id: Array of car IDs to update race state with
+ * @size: Size of the id array
+ */
 void update_race_state(int *id, size_t size) {
     size_t i;
     for (i = 0; i < size; i++) {
@@ -54,8 +68,11 @@ void update_race_state(int *id, size_t size) {
     }
 }
 
+/**
+ * sort_cars - Sort the cars in the race by ID
+ */
 void sort_cars() {
-    // Convert linked list to array
+    /* Convert linked list to array */
     int num_cars = 0;
     Car *current = car_list;
     while (current != NULL) {
@@ -70,11 +87,11 @@ void sort_cars() {
         current = current->next;
     }
 
-    // Sort array based on car IDs
+    /* Sort array based on car IDs */
     for (int i = 0; i < num_cars - 1; i++) {
         for (int j = 0; j < num_cars - i - 1; j++) {
             if (car_array[j]->id > car_array[j + 1]->id) {
-                // Swap nodes
+                /* Swap nodes */
                 Car *temp = car_array[j];
                 car_array[j] = car_array[j + 1];
                 car_array[j + 1] = temp;
@@ -82,7 +99,7 @@ void sort_cars() {
         }
     }
 
-    // Update linked list based on sorted array
+    /* Update linked list based on sorted array */
     car_list = car_array[0];
     current = car_list;
     for (int i = 1; i < num_cars; i++) {
@@ -92,8 +109,11 @@ void sort_cars() {
     current->next = NULL;
 }
 
+/**
+ * display_race_state - Display the current race state
+ */
 void display_race_state() {
-    sort_cars(); // Call sort_cars() before displaying race state
+    sort_cars(); /* Call sort_cars() before displaying race state */
     Car *current = car_list;
     printf("Race state:\n");
     while (current != NULL) {
@@ -102,6 +122,11 @@ void display_race_state() {
     }
 }
 
+/**
+ * race_state - Update and display the race state
+ * @id: Array of car IDs to update race state with
+ * @size: Size of the id array
+ */
 void race_state(int *id, size_t size) {
     if (size == 0) {
         free_memory();
