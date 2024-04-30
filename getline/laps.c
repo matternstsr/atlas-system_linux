@@ -8,10 +8,10 @@
  */
 int compare_cars(const void *a, const void *b)
 {
-	const cars_t *car1 = *(const cars_t **)a;
-	const cars_t *car2 = *(const cars_t **)b;
+    const cars_t *car1 = *(const cars_t **)a;
+    const cars_t *car2 = *(const cars_t **)b;
 
-	return (car1->id - car2->id);
+    return (car1->id - car2->id);
 }
 
 /**
@@ -20,71 +20,16 @@ int compare_cars(const void *a, const void *b)
  */
 void free_memory(cars_t **cars)
 {
-	cars_t *current = *cars;
-	cars_t *temp;
+    cars_t *current = *cars;
+    cars_t *temp;
 
-	while (current != NULL)
-	{
-		temp = current;
-		current = current->next;
-		free(temp);
-	}
-	*cars = NULL;
-}
-
-/**
- * new_car - Add a new car to the car list
- * @id: ID of the new car
- * @cars: Pointer to the pointer of the car list
- */
-void new_car(int id, cars_t **cars)
-{
-	cars_t *current = *cars;
-	cars_t *prev_car = NULL;
-	int found = 0;
-
-	while (current != NULL)
-	{
-		if (current->id == id)
-		{
-			found = 1;
-			current->laps++;
-			break;
-		}
-		prev_car = current;
-		current = current->next;
-	}
-
-	if (!found)
-	{
-		cars_t *new_car = (cars_t *)malloc(sizeof(cars_t));
-		new_car->id = id;
-		new_car->laps = 0;
-		new_car->next = NULL;
-
-		if (prev_car == NULL)
-			*cars = new_car;
-		else
-			prev_car->next = new_car;
-
-		printf("Car %d joined the race\n", id);
-	}
-}
-
-/**
- * update_race_state - Update race state with new car IDs
- * @id: Array of car IDs to update race state with
- * @size: Size of the id array
- * @cars: Pointer to the pointer of the car list
- */
-void update_race_state(int *id, size_t size, cars_t **cars)
-{
-	size_t i;
-
-	for (i = 0; i < size; i++)
-	{
-		new_car(id[i], cars);
-	}
+    while (current != NULL)
+    {
+        temp = current;
+        current = current->next;
+        free(temp);
+    }
+    *cars = NULL;
 }
 
 /**
@@ -93,49 +38,33 @@ void update_race_state(int *id, size_t size, cars_t **cars)
  */
 void sort_cars(cars_t **cars)
 {
-	cars_t *sorted = NULL;
-	cars_t *current = *cars;
-	cars_t *next;
-	cars_t *temp;
+    cars_t *sorted = NULL;
+    cars_t *current = *cars;
+    cars_t *next;
+    cars_t *temp;
 
-	while (current != NULL) {
-		next = current->next;
+    while (current != NULL)
+    {
+        next = current->next;
 
-		if (sorted == NULL || sorted->id >= current->id) {
-			current->next = sorted;
-			sorted = current;
-		}
-		else
-		{
-			temp = sorted;
-			while (temp->next != NULL && temp->next->id < current->id) 
-				temp = temp->next;
-			current->next = temp->next;
-			temp->next = current;
-		}
+        if (sorted == NULL || sorted->id >= current->id)
+        {
+            current->next = sorted;
+            sorted = current;
+        }
+        else
+        {
+            temp = sorted;
+            while (temp->next != NULL && temp->next->id < current->id) 
+                temp = temp->next;
+            current->next = temp->next;
+            temp->next = current;
+        }
 
-		current = next;
-	}
+        current = next;
+    }
 
-	*cars = sorted;
-}
-
-/**
- * display_race_state - Display the current race state
- * @cars: Pointer to the pointer of the car list
- */
-void display_race_state(cars_t **cars)
-{
-	cars_t *current;
-
-	sort_cars(cars); /* Call sort_cars() before displaying race state */
-	printf("Race state:\n");
-	current = *cars;
-	while (current != NULL)
-	{
-		printf("Car %d [%d laps]\n", current->id, current->laps);
-		current = current->next;
-	}
+    *cars = sorted;
 }
 
 /**
@@ -144,16 +73,49 @@ void display_race_state(cars_t **cars)
  * @size: Size of the id array
  * @cars: Pointer to the pointer of the car list
  */
-
 void race_state(int *id, size_t size)
 {
-	static cars_t *cars;
-	if (size == 0)
-	{
-		free_memory(&cars);
-		return;
-	}
+    static cars_t *cars, *current, *prev_car, *new_car;
+	int found;
+	size_t i;
 
-	update_race_state(id, size, &cars);
-	display_race_state(&cars);
+    if (size == 0)
+    {
+        free_memory(&cars);
+        return;
+    }
+    for (i = 0; i < size; i++)
+    {
+        current = cars;
+        prev_car = NULL;
+        found = 0;
+        while (current != NULL)
+        {
+            if (current->id == id[i])
+            {
+                found = 1;
+                current->laps++;
+                break;
+            }
+            prev_car = current, current = current->next;
+        }
+        if (!found)
+        {
+            new_car = (cars_t *)malloc(sizeof(cars_t)), new_car->id = id[i];
+            new_car->laps = 0, new_car->next = NULL;
+            if (prev_car == NULL)
+                cars = new_car;
+            else
+                prev_car->next = new_car;
+            printf("Car %d joined the race\n", id[i]);
+        }
+    }
+    sort_cars(&cars);
+    printf("Race state:\n");
+    current = cars;
+    while (current != NULL)
+    {
+        printf("Car %d [%d laps]\n", current->id, current->laps);
+        current = current->next;
+    }
 }
