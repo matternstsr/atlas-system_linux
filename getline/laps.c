@@ -97,7 +97,7 @@ void sort_cars(cars_t **cars)
     int swapped;
 
     if (current == NULL || current->next == NULL)
-        return; // Already sorted or empty list
+        return; /* Already sorted or empty list */
 
     do {
         swapped = 0;
