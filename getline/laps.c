@@ -57,14 +57,15 @@ void update_race_state(int *id, size_t size) {
 void sort_cars() {
     /* Not using qsort due to restrictions
        Sorting linked list based on identifiers */
+    Car *current = car_list;
+    Car *next_car;
+    int swapped;
+
     if (car_list == NULL || car_list->next == NULL) {
         /* No need to sort if there are 0 or 1 cars */
         return;
     }
 
-    Car *current;
-    Car *next_car;
-    int swapped;
     do {
         swapped = 0;
         current = car_list;
@@ -88,7 +89,6 @@ void sort_cars() {
 }
 
 void display_race_state() {
-    sort_cars();
     Car *current = car_list;
     printf("Race state:\n");
     while (current != NULL) {
