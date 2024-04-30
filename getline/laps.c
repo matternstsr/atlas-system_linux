@@ -71,7 +71,6 @@ while (current != NULL)
  * race_state - Update and display the race state
  * @id: Array of car IDs to update race state with
  * @size: Size of the id array
- * @cars: Pointer to the pointer of the car list
  */
 void race_state(int *id, size_t size)
 {
@@ -82,7 +81,6 @@ size_t i;
 if (size == 0)
 {
 	free_memory(&cars);
-	return;
 }
 for (i = 0; i < size; i++)
 {
