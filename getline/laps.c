@@ -55,7 +55,7 @@
 		else
 		{
 			temp = sorted;
-			while (temp->next != NULL && temp->next->id < current->id) 
+			while (temp->next != NULL && temp->next->id < current->id)
 				temp = temp->next;
 			current->next = temp->next;
 			temp->next = current;
@@ -86,15 +86,12 @@
 	}
 	for (i = 0; i < size; i++)
 	{
-		current = cars;
-		prev_car = NULL;
-		found = 0;
+		current = cars, prev_car = NULL, found = 0;
 		while (current != NULL)
 		{
 			if (current->id == id[i])
 			{
-				found = 1;
-				current->laps++;
+				found = 1, current->laps++;
 				break;
 			}
 			prev_car = current, current = current->next;
