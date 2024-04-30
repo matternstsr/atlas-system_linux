@@ -2,11 +2,14 @@
 
 Car *car_list = NULL;
 
-/**
- * 
-*/
-void race_state(int *id, size_t size)
-{
+//Function to compare two cars by their IDs
+int compare_cars(const void *a, const void *b) {
+    const Car *car1 = *(const Car **)a;
+    const Car *car2 = *(const Car **)b;
+    return car1->id - car2->id;
+}
+
+void race_state(int *id, size_t size) {
     if (size == 0) {
         // Free all of the memory that was allocated
         Car *current = car_list;
@@ -54,11 +57,24 @@ void race_state(int *id, size_t size)
         }
     }
 
-    // Show the state of the race
-    printf("Race state:\n");
+    // Sort the cars by their IDs
+    int num_cars = 0;
     Car *current = car_list;
     while (current != NULL) {
-        printf("Car %d [%d laps]\n", current->id, current->laps);
+        num_cars++;
         current = current->next;
+    }
+    Car *car_array[num_cars];
+    current = car_list;
+    for (int i = 0; i < num_cars; i++) {
+        car_array[i] = current;
+        current = current->next;
+    }
+    qsort(car_array, num_cars, sizeof(Car *), compare_cars);
+
+    // Show the state of the race
+    printf("Race state:\n");
+    for (int i = 0; i < num_cars; i++) {
+        printf("Car %d [%d laps]\n", car_array[i]->id, car_array[i]->laps);
     }
 }
