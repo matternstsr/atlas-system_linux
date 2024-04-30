@@ -74,19 +74,20 @@ void update_race_state(int *id, size_t size) {
 void sort_cars() {
     int num_cars = 0;
     Car *current = car_list;
+    Car **car_array;
+    int i;
+
     while (current != NULL) {
         num_cars++;
         current = current->next;
     }
 
-    Car **car_array;
     car_array = (Car **)malloc(num_cars * sizeof(Car *));
     if (car_array == NULL) {
         /* Memory allocation failed */
         return;
     }
 
-    int i;
     current = car_list;
     for (i = 0; i < num_cars; i++) {
         car_array[i] = current;
@@ -102,6 +103,7 @@ void sort_cars() {
 
     free(car_array);
 }
+
 
 
 /**
