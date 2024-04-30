@@ -6,18 +6,17 @@
 #include <stddef.h>
 
 /**
- * struct Car - Represents a car participating in the race
+ * struct cars - Represents a car participating in the race
  * @id: The unique identifier of the car
  * @laps: The number of laps completed by the car
  * @next: Pointer to the next car in the linked list
  */
-typedef struct Car 
+typedef struct cars
 {
     int id;
     int laps;
-    struct Car *next;
-} Car;
-
+    struct cars *next;
+} cars_t;
 
 void race_state(int *id, size_t size);
 

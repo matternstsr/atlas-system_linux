@@ -1,6 +1,5 @@
 #include "laps.h"
 
-#include "laps.h"
 
 /**
  * main - entry point.
