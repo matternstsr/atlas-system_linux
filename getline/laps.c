@@ -79,9 +79,10 @@ void sort_cars() {
         current = current->next;
     }
 
-    Car **car_array = malloc(num_cars * sizeof(Car *));
+    Car **car_array;
+    car_array = (Car **)malloc(num_cars * sizeof(Car *));
     if (car_array == NULL) {
-        // Memory allocation failed
+        /* Memory allocation failed */
         return;
     }
 
@@ -101,6 +102,7 @@ void sort_cars() {
 
     free(car_array);
 }
+
 
 /**
  * display_race_state - Function to display the race state
