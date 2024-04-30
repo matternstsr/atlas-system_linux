@@ -167,13 +167,13 @@ void display_race_state(cars_t **cars)
 
 void race_state(int *id, size_t size)
 {
-	static cars_t **cars;
+	static cars_t *cars;
     if (size == 0)
     {
-        free_memory(cars);
+        free_memory(&cars);
         return;
     }
 
-    update_race_state(id, size, cars);
-    display_race_state(cars);
+    update_race_state(id, size, &cars);
+    display_race_state(&cars);
 }
