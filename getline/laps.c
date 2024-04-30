@@ -60,6 +60,8 @@ void sort_cars() {
     Car *current = car_list;
     Car *next_car;
     int swapped;
+    int temp_laps;
+    int temp_id;
 
     if (car_list == NULL || car_list->next == NULL) {
         /* No need to sort if there are 0 or 1 cars */
@@ -73,11 +75,11 @@ void sort_cars() {
         while (next_car != NULL) {
             if (current->id > next_car->id) {
                 /* Swap IDs */
-                int temp_id = current->id;
+                temp_id = current->id;
                 current->id = next_car->id;
                 next_car->id = temp_id;
                 /* Swap laps */
-                int temp_laps = current->laps;
+                temp_laps = current->laps;
                 current->laps = next_car->laps;
                 next_car->laps = temp_laps;
                 swapped = 1;
