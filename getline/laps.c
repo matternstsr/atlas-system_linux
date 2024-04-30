@@ -72,16 +72,19 @@ void update_race_state(int *id, size_t size) {
  * sort_cars - Sort the cars in the race by ID
  */
 void sort_cars() {
-    /* Count the number of cars */
     int num_cars = 0;
-    Car *current = car_list;
+    Car *current;
+    Car **car_array;
+
+    /* Count the number of cars */
+    current = car_list;
     while (current != NULL) {
         num_cars++;
         current = current->next;
     }
 
-    /* Create an array of Car pointers */
-    Car **car_array = (Car **)malloc(num_cars * sizeof(Car *));
+    /* Allocate memory for the array */
+    car_array = (Car **)malloc(num_cars * sizeof(Car *));
     if (car_array == NULL) {
         /* Handle memory allocation failure */
         return;
@@ -116,9 +119,11 @@ void sort_cars() {
  * display_race_state - Display the current race state
  */
 void display_race_state() {
-    sort_cars(); /* Call sort_cars() before displaying race state */
-    Car *current = car_list;
+    Car *current;
+
+    sort_cars(); // Call sort_cars() before displaying race state
     printf("Race state:\n");
+    current = car_list;
     while (current != NULL) {
         printf("Car %d [%d laps]\n", current->id, current->laps);
         current = current->next;
