@@ -2,22 +2,12 @@
 
 Car *car_list = NULL;
 
-/**
- * compare_cars - Function to compare two cars by their IDs
- * @a: Pointer to the first car
- * @b: Pointer to the second car
- * 
- * Returns: Difference in IDs
- */
 int compare_cars(const void *a, const void *b) {
     const Car *car1 = *(const Car **)a;
     const Car *car2 = *(const Car **)b;
     return car1->id - car2->id;
 }
 
-/**
- * free_memory - Function to free the list of cars
- */
 void free_memory() {
     Car *current = car_list;
     while (current != NULL) {
@@ -28,11 +18,6 @@ void free_memory() {
     car_list = NULL;
 }
 
-/**
- * update_race_state - Function to update the race state based on the provided IDs
- * @id: Array of car IDs
- * @size: Size of the ID array
- */
 void update_race_state(int *id, size_t size) {
     size_t i;
     for (i = 0; i < size; i++) {
@@ -68,56 +53,46 @@ void update_race_state(int *id, size_t size) {
     }
 }
 
-/**
- * sort_cars - Function to sort the cars by their IDs and display the race state
- */
 void sort_cars() {
-    int num_cars = 0;
-    Car *current = car_list;
-    Car **car_array;
-    int i;
-
-    while (current != NULL) {
-        num_cars++;
-        current = current->next;
-    }
-
-    car_array = (Car **)malloc(num_cars * sizeof(Car *));
-    if (car_array == NULL) {
-        /* Memory allocation failed */
+    // Not using qsort due to restrictions
+    // Sorting linked list based on identifiers
+    if (car_list == NULL || car_list->next == NULL) {
+        // No need to sort if there are 0 or 1 cars
         return;
     }
 
-    current = car_list;
-    for (i = 0; i < num_cars; i++) {
-        car_array[i] = current;
-        current = current->next;
-    }
-
-    qsort(car_array, num_cars, sizeof(Car *), compare_cars);
-
-    printf("Race state:\n");
-    for (i = 0; i < num_cars; i++) {
-        printf("Car %d [%d laps]\n", car_array[i]->id, car_array[i]->laps);
-    }
-
-    free(car_array);
+    Car *current = car_list;
+    Car *next_car = NULL;
+    int swapped;
+    do {
+        swapped = 0;
+        current = car_list;
+        while (current->next != next_car) {
+            if (current->id > current->next->id) {
+                int temp_id = current->id;
+                current->id = current->next->id;
+                current->next->id = temp_id;
+                int temp_laps = current->laps;
+                current->laps = current->next->laps;
+                current->next->laps = temp_laps;
+                swapped = 1;
+            }
+            current = current->next;
+        }
+        next_car = current;
+    } while (swapped);
 }
 
-
-
-/**
- * display_race_state - Function to display the race state
- */
 void display_race_state() {
     sort_cars();
+    Car *current = car_list;
+    printf("Race state:\n");
+    while (current != NULL) {
+        printf("Car %d [%d laps]\n", current->id, current->laps);
+        current = current->next;
+    }
 }
 
-/**
- * race_state - Function to handle race state and memory management
- * @id: Array of car IDs
- * @size: Size of the ID array
- */
 void race_state(int *id, size_t size) {
     if (size == 0) {
         free_memory();
