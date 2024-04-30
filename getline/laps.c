@@ -104,11 +104,12 @@ void sort_cars(cars_t **cars)
 		if (sorted == NULL || sorted->id >= current->id) {
 			current->next = sorted;
 			sorted = current;
-		} else {
+		}
+		else
+		{
 			temp = sorted;
-			while (temp->next != NULL && temp->next->id < current->id) {
+			while (temp->next != NULL && temp->next->id < current->id) 
 				temp = temp->next;
-			}
 			current->next = temp->next;
 			temp->next = current;
 		}
@@ -118,8 +119,6 @@ void sort_cars(cars_t **cars)
 
 	*cars = sorted;
 }
-
-
 
 /**
  * display_race_state - Display the current race state
