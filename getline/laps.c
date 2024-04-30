@@ -146,9 +146,11 @@ void sort_cars(cars_t **cars)
  */
 void display_race_state(cars_t **cars)
 {
+	cars_t *current;
+	
     sort_cars(cars); /* Call sort_cars() before displaying race state */
     printf("Race state:\n");
-    cars_t *current = *cars;
+    current = *cars;
     while (current != NULL)
     {
         printf("Car %d [%d laps]\n", current->id, current->laps);
