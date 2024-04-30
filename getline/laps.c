@@ -12,7 +12,8 @@ int compare_cars(const void *a, const void *b)
 {
 	const Car *car1 = *(const Car **)a;
 	const Car *car2 = *(const Car **)b;
-	return car1->id - car2->id;
+
+	return (car1->id - car2->id);
 }
 
 
@@ -23,6 +24,7 @@ void free_memory(void)
 {
 	Car *current = car_list;
 	Car *temp;
+
 	while (current != NULL)
 	{
 		temp = current;
@@ -40,6 +42,7 @@ void free_memory(void)
 void update_race_state(int *id, size_t size)
 {
 	size_t i;
+
 	for (i = 0; i < size; i++)
 	{
 		int current_id = id[i];
