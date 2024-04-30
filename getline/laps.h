@@ -11,7 +11,8 @@
  * @laps: The number of laps completed by the car
  * @next: Pointer to the next car in the linked list
  */
-typedef struct Car {
+typedef struct Car 
+{
     int id;
     int laps;
     struct Car *next;

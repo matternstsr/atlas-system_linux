@@ -44,7 +44,7 @@ void update_race_state(int *id, size_t size)
 	size_t i;
 	Car *new_car, *current_car, *prev_car;
 	int found, current_id;
-	
+
 	for (i = 0; i < size; i++)
 	{
 		current_id = id[i];
@@ -80,11 +80,11 @@ void update_race_state(int *id, size_t size)
 /**
  * sort_cars - Sort the cars in the race by ID
  */
-void sort_cars(void) 
+void sort_cars(void)
 {
 	Car *current = car_list, *sorted_list = NULL, *search, *next;
 	/* Traverse the original list */
-	while (current != NULL) 
+	while (current != NULL)
 	{
 		next = current->next;
 		/* Insert current node into sorted_list */
@@ -107,14 +107,14 @@ void sort_cars(void)
 /**
  * display_race_state - Display the current race state
  */
-void display_race_state(void) 
+void display_race_state(void)
 {
 	Car *current;
 
 	sort_cars(); /* Call sort_cars() before displaying race state */
 	printf("Race state:\n");
 	current = car_list;
-	while (current != NULL) 
+	while (current != NULL)
 	{
 		printf("Car %d [%d laps]\n", current->id, current->laps);
 		current = current->next;
