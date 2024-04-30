@@ -54,11 +54,11 @@ void update_race_state(int *id, size_t size) {
 }
 
 void sort_cars() {
-    // Not using qsort due to restrictions
-    // Sorting linked list based on identifiers
+    /*  Not using qsort due to restrictions*/
+    /*  Sorting linked list based on identifiers*/
     if (car_list == NULL || car_list->next == NULL) {
-        // No need to sort if there are 0 or 1 cars
-        return;
+        /*  No need to sort if there are 0 or 1 cars
+        return;*/
     }
 
     Car *current = car_list;
