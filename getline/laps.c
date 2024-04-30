@@ -93,52 +93,33 @@ void update_race_state(int *id, size_t size, cars_t **cars)
  */
 void sort_cars(cars_t **cars)
 {
-    int num_cars = 0;
     cars_t *current = *cars;
-    cars_t **car_array;
-    int i;
+    int swapped;
 
-    /* Count the number of cars */
-    current = *cars;
-    while (current != NULL)
-    {
-        num_cars++;
-        current = current->next;
-    }
+    if (current == NULL || current->next == NULL)
+        return; // Already sorted or empty list
 
-    /* Allocate memory for the array */
-    car_array = (cars_t **)malloc(num_cars * sizeof(cars_t *));
-    if (car_array == NULL)
-    {
-        /* Handle memory allocation failure */
-        return;
-    }
-
-    /* Populate the array with car pointers */
-    current = *cars;
-    i = 0;
-    for (; i < num_cars && current != NULL; i++)
-    {
-        car_array[i] = current;
-        current = current->next;
-    }
-
-    /* Sort the array based on car IDs */
-    qsort(car_array, num_cars, sizeof(cars_t *), compare_cars);
-
-    /* Update car list based on sorted array */
-    *cars = car_array[0];
-    current = *cars;
-    for (i = 1; i < num_cars; i++)
-    {
-        current->next = car_array[i];
-        current = current->next;
-    }
-    current->next = NULL;
-
-    /* Free the temporary array */
-    free(car_array);
+    do {
+        swapped = 0;
+        current = *cars;
+        while (current->next != NULL) {
+            if (current->id > current->next->id) {
+                // Swap cars
+                cars_t *temp = current;
+                current = current->next;
+                temp->next = current->next;
+                current->next = temp;
+                if (temp == *cars)
+                    *cars = current;
+                swapped = 1;
+            }
+            else {
+                current = current->next;
+            }
+        }
+    } while (swapped);
 }
+
 
 /**
  * display_race_state - Display the current race state
