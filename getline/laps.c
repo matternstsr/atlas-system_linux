@@ -104,7 +104,7 @@ void sort_cars(cars_t **cars)
         current = *cars;
         while (current->next != NULL) {
             if (current->id > current->next->id) {
-                // Swap cars
+                /* Swap cars */
                 cars_t *temp = current;
                 current = current->next;
                 temp->next = current->next;
