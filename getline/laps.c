@@ -55,42 +55,45 @@ void update_race_state(int *id, size_t size) {
 }
 
 void sort_cars() {
-    /* Not using qsort due to restrictions
-       Sorting linked list based on identifiers */
+    // Convert linked list to array
+    int num_cars = 0;
     Car *current = car_list;
-    Car *next_car;
-    int swapped;
-    int temp_laps;
-    int temp_id;
-
-    if (car_list == NULL || car_list->next == NULL) {
-        /* No need to sort if there are 0 or 1 cars */
-        return;
+    while (current != NULL) {
+        num_cars++;
+        current = current->next;
     }
 
-    do {
-        swapped = 0;
-        current = car_list;
-        next_car = current->next;
-        while (next_car != NULL) {
-            if (current->id > next_car->id) {
-                /* Swap IDs */
-                temp_id = current->id;
-                current->id = next_car->id;
-                next_car->id = temp_id;
-                /* Swap laps */
-                temp_laps = current->laps;
-                current->laps = next_car->laps;
-                next_car->laps = temp_laps;
-                swapped = 1;
+    Car *car_array[num_cars];
+    current = car_list;
+    for (int i = 0; i < num_cars; i++) {
+        car_array[i] = current;
+        current = current->next;
+    }
+
+    // Sort array based on car IDs
+    for (int i = 0; i < num_cars - 1; i++) {
+        for (int j = 0; j < num_cars - i - 1; j++) {
+            if (car_array[j]->id > car_array[j + 1]->id) {
+                // Swap nodes
+                Car *temp = car_array[j];
+                car_array[j] = car_array[j + 1];
+                car_array[j + 1] = temp;
             }
-            current = next_car;
-            next_car = next_car->next;
         }
-    } while (swapped);
+    }
+
+    // Update linked list based on sorted array
+    car_list = car_array[0];
+    current = car_list;
+    for (int i = 1; i < num_cars; i++) {
+        current->next = car_array[i];
+        current = current->next;
+    }
+    current->next = NULL;
 }
 
 void display_race_state() {
+    sort_cars(); // Call sort_cars() before displaying race state
     Car *current = car_list;
     printf("Race state:\n");
     while (current != NULL) {
