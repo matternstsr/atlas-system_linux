@@ -43,13 +43,14 @@ void update_race_state(int *id, size_t size)
 {
 	size_t i;
 	Car *new_car, *current_car, *prev_car;
-
+	int found, current_id;
+	
 	for (i = 0; i < size; i++)
 	{
-		int current_id = id[i];
+		current_id = id[i];
 		current_car = car_list;
 		prev_car = NULL;
-		int found = 0;
+		found = 0;
 		while (current_car != NULL)
 		{
 			if (current_car->id == current_id)
