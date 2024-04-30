@@ -93,32 +93,32 @@ void update_race_state(int *id, size_t size, cars_t **cars)
  */
 void sort_cars(cars_t **cars)
 {
+    cars_t *sorted = NULL;
     cars_t *current = *cars;
-    int swapped;
+	cars_t *next;
+	cars_t *temp;
 
-    if (current == NULL || current->next == NULL)
-        return; /* Already sorted or empty list */
+    while (current != NULL) {
+        next = current->next;
 
-    do {
-        swapped = 0;
-        current = *cars;
-        while (current->next != NULL) {
-            if (current->id > current->next->id) {
-                /* Swap cars */
-                cars_t *temp = current;
-                current = current->next;
-                temp->next = current->next;
-                current->next = temp;
-                if (temp == *cars)
-                    *cars = current;
-                swapped = 1;
+        if (sorted == NULL || sorted->id >= current->id) {
+            current->next = sorted;
+            sorted = current;
+        } else {
+            temp = sorted;
+            while (temp->next != NULL && temp->next->id < current->id) {
+                temp = temp->next;
             }
-            else {
-                current = current->next;
-            }
+            current->next = temp->next;
+            temp->next = current;
         }
-    } while (swapped);
+
+        current = next;
+    }
+
+    *cars = sorted;
 }
+
 
 
 /**
