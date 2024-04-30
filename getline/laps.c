@@ -6,6 +6,7 @@
 	 * @b: Pointer to second Car pointer
 	 * Return: Difference between IDs of the two cars
 	 */
+
 	int compare_cars(const void *a, const void *b)
 	{
 	const cars_t *car1 = *(const cars_t **)a;
@@ -18,6 +19,7 @@
 	 * free_memory - Free memory allocated for car list
 	 * @cars: Pointer to the pointer of the car list
 	 */
+
 	void free_memory(cars_t **cars)
 	{
 	cars_t *current = *cars;
@@ -36,6 +38,7 @@
 	 * sort_cars - Sort the cars in the race by ID
 	 * @cars: Pointer to the pointer of the car list
 	 */
+
 	void sort_cars(cars_t **cars)
 	{
 	cars_t *sorted = NULL;
@@ -73,6 +76,7 @@
 	 * @size: Size of the id array
 	 * @cars: Pointer to the pointer of the car list
 	 */
+	
 	void race_state(int *id, size_t size)
 	{
 	static cars_t *cars, *current, *prev_car, *new_car;
