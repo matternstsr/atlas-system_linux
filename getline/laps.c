@@ -75,6 +75,7 @@ void sort_cars() {
     int num_cars = 0;
     Car *current;
     Car **car_array;
+    int i;
 
     /* Count the number of cars */
     current = car_list;
@@ -92,7 +93,7 @@ void sort_cars() {
 
     /* Populate the array with car pointers */
     current = car_list;
-    int i = 0;
+    i = 0;
     for (; i < num_cars && current != NULL; i++) {
         car_array[i] = current;
         current = current->next;
@@ -121,7 +122,7 @@ void sort_cars() {
 void display_race_state() {
     Car *current;
 
-    sort_cars(); // Call sort_cars() before displaying race state
+    sort_cars(); /* Call sort_cars() before displaying race state */
     printf("Race state:\n");
     current = car_list;
     while (current != NULL) {
