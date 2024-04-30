@@ -72,7 +72,7 @@ void update_race_state(int *id, size_t size) {
  * sort_cars - Sort the cars in the race by ID
  */
 void sort_cars() {
-    /* Convert linked list to array */
+    /* Count the number of cars */
     int num_cars = 0;
     Car *current = car_list;
     while (current != NULL) {
@@ -80,34 +80,37 @@ void sort_cars() {
         current = current->next;
     }
 
-    Car *car_array[num_cars];
+    /* Create an array of Car pointers */
+    Car **car_array = (Car **)malloc(num_cars * sizeof(Car *));
+    if (car_array == NULL) {
+        /* Handle memory allocation failure */
+        return;
+    }
+
+    /* Populate the array with car pointers */
     current = car_list;
-    for (int i = 0; i < num_cars; i++) {
+    int i = 0;
+    for (; i < num_cars && current != NULL; i++) {
         car_array[i] = current;
         current = current->next;
     }
 
-    /* Sort array based on car IDs */
-    for (int i = 0; i < num_cars - 1; i++) {
-        for (int j = 0; j < num_cars - i - 1; j++) {
-            if (car_array[j]->id > car_array[j + 1]->id) {
-                /* Swap nodes */
-                Car *temp = car_array[j];
-                car_array[j] = car_array[j + 1];
-                car_array[j + 1] = temp;
-            }
-        }
-    }
+    /* Sort the array based on car IDs */
+    qsort(car_array, num_cars, sizeof(Car *), compare_cars);
 
-    /* Update linked list based on sorted array */
+    /* Rebuild the linked list */
     car_list = car_array[0];
     current = car_list;
-    for (int i = 1; i < num_cars; i++) {
+    for (i = 1; i < num_cars; i++) {
         current->next = car_array[i];
         current = current->next;
     }
     current->next = NULL;
+
+    /* Free the temporary array */
+    free(car_array);
 }
+
 
 /**
  * display_race_state - Display the current race state
