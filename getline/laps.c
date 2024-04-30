@@ -81,7 +81,7 @@ size_t i;
 if (size == 0)
 {
 	free_memory(&cars);
-	return;
+	exit(0);
 }
 for (i = 0; i < size; i++)
 {
