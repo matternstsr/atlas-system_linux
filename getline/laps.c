@@ -10,8 +10,9 @@ int compare_cars(const void *a, const void *b) {
 
 void free_memory() {
     Car *current = car_list;
+    Car *temp;
     while (current != NULL) {
-        Car *temp = current;
+        temp = current;
         current = current->next;
         free(temp);
     }
@@ -37,7 +38,7 @@ void update_race_state(int *id, size_t size) {
         }
 
         if (!found) {
-            Car *new_car = malloc(sizeof(Car));
+            Car *new_car = (Car *)malloc(sizeof(Car));
             new_car->id = current_id;
             new_car->laps = 0;
             new_car->next = NULL;
@@ -61,25 +62,28 @@ void sort_cars() {
         return;*/
     }
 
-    Car *current = car_list;
-    Car *next_car = NULL;
+    Car *current;
+    Car *next_car;
     int swapped;
     do {
         swapped = 0;
         current = car_list;
-        while (current->next != next_car) {
-            if (current->id > current->next->id) {
+        next_car = current->next;
+        while (next_car != NULL) {
+            if (current->id > next_car->id) {
+                // Swap IDs
                 int temp_id = current->id;
-                current->id = current->next->id;
-                current->next->id = temp_id;
+                current->id = next_car->id;
+                next_car->id = temp_id;
+                // Swap laps
                 int temp_laps = current->laps;
-                current->laps = current->next->laps;
-                current->next->laps = temp_laps;
+                current->laps = next_car->laps;
+                next_car->laps = temp_laps;
                 swapped = 1;
             }
-            current = current->next;
+            current = next_car;
+            next_car = next_car->next;
         }
-        next_car = current;
     } while (swapped);
 }
 
