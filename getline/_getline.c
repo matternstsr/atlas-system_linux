@@ -35,7 +35,7 @@ char *_getline(const int fd) {
 
     if (!buffers[fd] || buffer_positions[fd] == (size_t)buffer_sizes[fd]) {
         /* Allocate buffer for this file descriptor or refill the buffer */
-        free(buffers[fd]); // Free existing buffer if it exists
+        free(buffers[fd]); /* Free existing buffer if it exists */
         buffers[fd] = (char *)malloc(BUFFER_SIZE);
         if (!buffers[fd]) {
             return NULL; /* Error allocating memory */
