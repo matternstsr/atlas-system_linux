@@ -95,14 +95,19 @@ char *read_line() {
         } else {
             /* Newline character not found in the current buffer */
             int remaining_size = bytes_remaining - (buf_pos - buffer);
-            line = realloc(line, line_size + remaining_size + 1);
-            if (!line) {
-                return NULL; /* Memory allocation failed */
+            if (remaining_size > 0) {
+                line = realloc(line, line_size + remaining_size + 1);
+                if (!line) {
+                    return NULL; /* Memory allocation failed */
+                }
+                memcpy(line + line_size, buf_pos, remaining_size);
+                line_size += remaining_size;
+                buf_pos += remaining_size;
+                line[line_size] = '\0';
+            } else {
+                /* No characters left in the buffer */
+                newline_found = 1;
             }
-            memcpy(line + line_size, buf_pos, remaining_size);
-            line_size += remaining_size;
-            buf_pos += remaining_size;
-            line[line_size] = '\0';
         }
     }
 
