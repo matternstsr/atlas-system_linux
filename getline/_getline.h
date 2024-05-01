@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define READ_SIZE 1024
+#define READ_SIZE 1
 
 int fill_buffer(const int fd);
 char *find_newline(const char *start, int size);
