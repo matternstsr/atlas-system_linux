@@ -7,7 +7,7 @@
 
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
-static int bytes_remaining = 0; // Renamed from bytes_read to clarify its purpose
+static int bytes_remaining = 0; /* Renamed from bytes_read to clarify its purpose */
 static int total_read = 0;
 
 /**
@@ -19,10 +19,10 @@ static int total_read = 0;
 int fill_buffer(const int fd) {
     int result = read(fd, buffer, READ_SIZE);
     if (result <= 0) {
-        return result; // Error or end of file
+        return result; /* Error or end of file */
     }
     buf_pos = buffer;
-    bytes_remaining = result; // Renamed from bytes_read to clarify its purpose
+    bytes_remaining = result; /* Renamed from bytes_read to clarify its purpose */
     total_read += result;
     return result;
 }
@@ -40,33 +40,33 @@ char *read_line() {
 
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_remaining) {
-            // Buffer is empty, need to fill it
-            int result = fill_buffer(0); // Read from stdin
+            /* Buffer is empty, need to fill it */
+            int result = fill_buffer(0); /* Read from stdin */
             if (result <= 0) {
-                return NULL; // Error or end of file
+                return NULL; /* Error or end of file */
             }
         }
 
-        // Find the position of the newline character manually
+        /* Find the position of the newline character manually */
         newline_pos = strchr(buf_pos, '\n');
         if (newline_pos != NULL) {
-            // Newline character found
+            /* Newline character found */
             int line_length = newline_pos - buf_pos;
             line = realloc(line, line_size + line_length + 1);
             if (!line) {
-                return NULL; // Memory allocation failed
+                return NULL; /* Memory allocation failed */
             }
             memcpy(line + line_size, buf_pos, line_length);
             line_size += line_length;
             line[line_size] = '\0';
-            buf_pos = newline_pos + 1; // Move buffer position after newline character
+            buf_pos = newline_pos + 1; /* Move buffer position after newline character */
             newline_found = 1;
         } else {
-            // Newline character not found in the current buffer
+            /* Newline character not found in the current buffer */
             int remaining_size = bytes_remaining - (buf_pos - buffer);
             line = realloc(line, line_size + remaining_size + 1);
             if (!line) {
-                return NULL; // Memory allocation failed
+                return NULL; /* Memory allocation failed */
             }
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
@@ -99,13 +99,13 @@ char *_getline(const int fd) {
         return NULL;
     }
 
-    // If total_read is non-zero, the buffer already contains some data from a previous read
+    /* If total_read is non-zero, the buffer already contains some data from a previous read */
     if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
-        // Reset buffer position when reaching the end or at the beginning
+        /* Reset buffer position when reaching the end or at the beginning */
         reset_buffer();
         int result = fill_buffer(fd);
         if (result <= 0) {
-            return NULL; // Error or end of file
+            return NULL; /* Error or end of file */
         }
     }
 
