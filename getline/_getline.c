@@ -1,5 +1,3 @@
-// _getline.c
-
 #include "_getline.h"
 
 #define MAX_FILES 1024
@@ -9,6 +7,12 @@ static char *buffers[MAX_FILES] = {0};
 static ssize_t buffer_sizes[MAX_FILES] = {0};
 static size_t buffer_positions[MAX_FILES] = {0};
 
+/**
+ * _getline - Get the next line from a file descriptor
+ * @fd: File descriptor to read from
+ *
+ * Return: Pointer to the read line
+ */
 char *_getline(const int fd) {
     if (fd == -1) {
         // Free all allocated buffers
