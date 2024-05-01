@@ -95,6 +95,7 @@ void reset_buffer() {
  */
 char *_getline(const int fd) {
     if (fd == -1) {
+      int result;
         reset_buffer();
         return NULL;
     }
@@ -103,7 +104,7 @@ char *_getline(const int fd) {
     if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
         /* Reset buffer position when reaching the end or at the beginning */
         reset_buffer();
-        int result = fill_buffer(fd);
+        result = fill_buffer(fd);
         if (result <= 0) {
             return NULL; /* Error or end of file */
         }
