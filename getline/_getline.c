@@ -1,9 +1,4 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
 #include "_getline.h"
-
-#define READ_SIZE 1024
 
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;

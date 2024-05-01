@@ -4,6 +4,11 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+
+#define READ_SIZE 1024
 
 #define READ_SIZE 1024
 
