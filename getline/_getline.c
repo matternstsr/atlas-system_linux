@@ -128,7 +128,7 @@ char *_getline(const int fd) {
         end_of_file_reached = 0; /* Reset flag for future use */
         line = read_line();
         if (line) {
-            printf("End of file reached, printing the next line:\n%s\n", line);
+            /*printf("End of file reached, printing the next line:\n%s\n", line); */
             free(line);
         }
         return NULL; /* End of file reached, return NULL */
@@ -137,7 +137,7 @@ char *_getline(const int fd) {
     if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
         reset_buffer();
         result = fill_buffer(fd);
-        if (result <= 0) {
+        if (result == 0) {
             end_of_file_reached = 1; /* Set flag to indicate end of file */
             return NULL; /* Error or end of file */
         }
@@ -147,7 +147,7 @@ char *_getline(const int fd) {
     
     /* Check if there's more text remaining after '\0' until the end of the line */
     if (line && *(buf_pos - 1) != '\n') {
-        printf("Remaining text in the line: %s\n", buf_pos);
+        /* printf("Remaining text in the line: %s\n", buf_pos); */
     }
 
     return line;
