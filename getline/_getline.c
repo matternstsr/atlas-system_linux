@@ -17,7 +17,7 @@ int i;
 
 
 char *_getline(const int fd) {
-    if (fd == -1) { // Reset all static variables and free buffer memory
+    if (fd == -1) { 
         free(buffer);
         buffer = NULL;
         buffer_index = 0;
