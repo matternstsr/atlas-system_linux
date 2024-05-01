@@ -1,3 +1,24 @@
+#include <stdlib.h>
+
+#define MEMORY_FILL_VALUE ((char)0xFF)
+
+void *my_malloc(size_t size) {
+    void *ptr = malloc(size);
+    if (ptr != NULL) {
+        for (size_t i = 0; i < size; i++) {
+            *((char *)ptr + i) = MEMORY_FILL_VALUE;
+        }
+    }
+    return ptr;
+}
+
+void my_free(void *ptr) {
+    free(ptr);
+}
+
+#define malloc(size) my_malloc(size)
+#define free(ptr) my_free(ptr)
+
 #include "_getline.h"
 
 static char buffer[READ_SIZE + 1];
@@ -5,6 +26,8 @@ static char *buf_pos = buffer;
 static int bytes_remaining = 0; /* Renamed from bytes_read to clarify its purpose */
 static int total_read = 0;
 static int end_of_file_reached = 0;
+
+
 
 /**
  * fill_buffer - Fill the buffer with data from a file descriptor
