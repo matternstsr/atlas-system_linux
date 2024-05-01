@@ -45,7 +45,7 @@ char *read_line() {
             }
         }
 
-        /* Search for newline character */
+        /* Declare and initialize newline_pos dynamically */
         char *newline_pos = strchr(buf_pos, '\n');
 
         if (newline_pos != NULL) {
