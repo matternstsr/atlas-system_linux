@@ -46,10 +46,13 @@ char *read_line() {
             }
         }
 
-        /* Declare and initialize newline_pos dynamically */
-        newline_pos = strchr(buf_pos, '\n');
+        /* Find the position of the newline character manually */
+        newline_pos = buf_pos;
+        while (*newline_pos != '\n' && newline_pos < buffer + bytes_read) {
+            newline_pos++;
+        }
 
-        if (newline_pos != NULL) {
+        if (newline_pos < buffer + bytes_read) {
             /* Newline character found */
             int line_length = newline_pos - buf_pos;
             line = realloc(line, line_size + line_length + 1);
@@ -77,6 +80,7 @@ char *read_line() {
 
     return line;
 }
+
 
 /**
  * reset_buffer - Reset the buffer
