@@ -145,7 +145,7 @@ char *_getline(const int fd) {
 
     line = read_line();
     
-    // Check if there's more text remaining after '\0' until the end of the line
+    /* Check if there's more text remaining after '\0' until the end of the line */
     if (line && *(buf_pos - 1) != '\n') {
         printf("Remaining text in the line: %s\n", buf_pos);
     }
