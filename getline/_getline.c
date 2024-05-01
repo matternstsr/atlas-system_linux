@@ -128,7 +128,7 @@ char *_getline(const int fd) {
         end_of_file_reached = 0; /* Reset flag for future use */
         line = read_line();
         if (line) {
-            /*printf("%s\n", line);*/
+            printf("%s", line);
             free(line);
         }
         return NULL; /* End of file reached, return NULL */
