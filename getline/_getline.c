@@ -1,3 +1,4 @@
+#include "_getline.h"
 #include <stdlib.h>
 
 #define MEMORY_FILL_VALUE ((char)0xFF)
@@ -5,29 +6,20 @@
 void *my_malloc(size_t size) {
     void *ptr = malloc(size);
     if (ptr != NULL) {
-        for (size_t i = 0; i < size; i++) {
+        // Initialize allocated memory to 0xFF
+        size_t i;
+        for (i = 0; i < size; i++) {
             *((char *)ptr + i) = MEMORY_FILL_VALUE;
         }
     }
     return ptr;
 }
 
-void my_free(void *ptr) {
-    free(ptr);
-}
-
-#define malloc(size) my_malloc(size)
-#define free(ptr) my_free(ptr)
-
-#include "_getline.h"
-
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
 static int bytes_remaining = 0; /* Renamed from bytes_read to clarify its purpose */
 static int total_read = 0;
 static int end_of_file_reached = 0;
-
-
 
 /**
  * fill_buffer - Fill the buffer with data from a file descriptor
@@ -65,7 +57,6 @@ char *find_newline(const char *start, int size) {
     }
     return NULL;
 }
-
 
 /**
  * read_line - Read a line from the buffer
@@ -176,4 +167,3 @@ char *_getline(const int fd) {
 
     return line;
 }
-
