@@ -1,14 +1,14 @@
+// _getline.h
 
 #ifndef _GETLINE_H_
 #define _GETLINE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-
-#define READ_SIZE 1024
+#include <sys/types.h>
+#include <unistd.h>
 
 char *_getline(const int fd);
-void reset_buffer();
-int fill_buffer(const int fd);
-char *read_line();
 
 #endif /* _GETLINE_H_ */
