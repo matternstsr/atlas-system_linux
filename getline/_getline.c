@@ -106,13 +106,14 @@ char *read_line() {
                 line[line_size] = '\0';
             } else {
                 /* No characters left in the buffer */
-                newline_found = 1;
+                return NULL;
             }
         }
     }
 
     return line;
 }
+
 
 /**
  * reset_buffer - Reset the buffer
@@ -148,3 +149,4 @@ char *_getline(const int fd) {
 
     return read_line();
 }
+
