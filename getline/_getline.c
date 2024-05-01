@@ -92,7 +92,7 @@ char *read_line() {
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
             buf_pos += remaining_size;
-            /* line[line_size++] = '\n'; /* Add newline character */
+            /* line[line_size++] = '\n'; Add newline character */
             line[line_size] = '\0';
             newline_found = 1;
         }
