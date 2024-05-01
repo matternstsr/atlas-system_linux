@@ -9,6 +9,12 @@
 static char *buffer = NULL;
 static int buffer_index = 0;
 static int buffer_size = 0;
+int start;
+int end;
+int line_length;
+char *line;
+int i;
+
 
 char *_getline(const int fd) {
     if (fd == -1) { // Reset all static variables and free buffer memory
@@ -29,27 +35,27 @@ char *_getline(const int fd) {
         buffer_index = 0;
     }
 
-    int start = buffer_index;
+    start = buffer_index;
     while (buffer_index < buffer_size && buffer[buffer_index] != '\n') {
         buffer_index++;
     }
 
-    int end = buffer_index;
+    end = buffer_index;
     if (buffer_index < buffer_size && buffer[buffer_index] == '\n') {
         buffer_index++;
     }
 
-    int line_length = end - start;
+    line_length = end - start;
     if (line_length == 0) {
         return NULL;
     }
 
-    char *line = (char *)malloc((line_length + 1) * sizeof(char));
+    line = (char *)malloc((line_length + 1) * sizeof(char));
     if (line == NULL) {
         return NULL;
     }
 
-    for (int i = 0; i < line_length; i++) {
+    for (i = 0; i < line_length; i++) {
         line[i] = buffer[start + i];
     }
     line[line_length] = '\0';
