@@ -3,6 +3,7 @@
 #define _GETLINE_H_
 
 #include <string.h>
+#include <stdio.h>
 
 #define READ_SIZE 1024
 
