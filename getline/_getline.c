@@ -7,7 +7,7 @@
 
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
-static int bytes_read = 0;
+static int bytes_remaining = 0; // Renamed from bytes_read to clarify its purpose
 static int total_read = 0;
 
 /**
@@ -17,13 +17,14 @@ static int total_read = 0;
  * Return: Number of bytes read or error indicator
  */
 int fill_buffer(const int fd) {
-    bytes_read = read(fd, buffer, READ_SIZE);
-    if (bytes_read <= 0) {
-        return bytes_read; /* No more data or errors */
+    int result = read(fd, buffer, READ_SIZE);
+    if (result <= 0) {
+        return result; // Error or end of file
     }
     buf_pos = buffer;
-    total_read += bytes_read;
-    return bytes_read;
+    bytes_remaining = result; // Renamed from bytes_read to clarify its purpose
+    total_read += result;
+    return result;
 }
 
 /**
@@ -38,38 +39,34 @@ char *read_line() {
     char *newline_pos;
 
     while (!newline_found) {
-        if (buf_pos - buffer >= bytes_read) {
-            /* Buffer is empty, need to fill it */
-            int result = fill_buffer(0); /* 0 indicates that it's not reading from a file descriptor */
+        if (buf_pos - buffer >= bytes_remaining) {
+            // Buffer is empty, need to fill it
+            int result = fill_buffer(0); // Read from stdin
             if (result <= 0) {
-                return NULL; /* error handle */
+                return NULL; // Error or end of file
             }
         }
 
-        /* Find the position of the newline character manually */
-        newline_pos = buf_pos;
-        while (*newline_pos != '\n' && newline_pos < buffer + bytes_read) {
-            newline_pos++;
-        }
-
-        if (newline_pos < buffer + bytes_read) {
-            /* Newline character found */
+        // Find the position of the newline character manually
+        newline_pos = strchr(buf_pos, '\n');
+        if (newline_pos != NULL) {
+            // Newline character found
             int line_length = newline_pos - buf_pos;
             line = realloc(line, line_size + line_length + 1);
             if (!line) {
-                return NULL; /* error handle */
+                return NULL; // Memory allocation failed
             }
             memcpy(line + line_size, buf_pos, line_length);
             line_size += line_length;
             line[line_size] = '\0';
-            buf_pos = newline_pos + 1; /* Move buffer position after newline character */
+            buf_pos = newline_pos + 1; // Move buffer position after newline character
             newline_found = 1;
         } else {
-            /* Newline character not found in the current buffer */
-            int remaining_size = buffer + bytes_read - buf_pos;
+            // Newline character not found in the current buffer
+            int remaining_size = bytes_remaining - (buf_pos - buffer);
             line = realloc(line, line_size + remaining_size + 1);
             if (!line) {
-                return NULL; /* error handle */
+                return NULL; // Memory allocation failed
             }
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
@@ -81,13 +78,12 @@ char *read_line() {
     return line;
 }
 
-
 /**
  * reset_buffer - Reset the buffer
  */
 void reset_buffer() {
     buf_pos = buffer;
-    bytes_read = 0;
+    bytes_remaining = 0;
     total_read = 0;
 }
 
@@ -98,20 +94,18 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
-  int result;
-  if (fd == -1) {
+    if (fd == -1) {
         reset_buffer();
         return NULL;
     }
 
-    /* If total_read is non-zero, it means the buffer already contains some data from a previous read */
-    /* In that case, we don't need to fill the buffer again */
-    if (total_read == 0 || (buf_pos - buffer >= bytes_read)) {
-        /* Reset buffer position when reaching the end or at the beginning */
+    // If total_read is non-zero, the buffer already contains some data from a previous read
+    if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
+        // Reset buffer position when reaching the end or at the beginning
         reset_buffer();
-        result = fill_buffer(fd);
+        int result = fill_buffer(fd);
         if (result <= 0) {
-            return NULL; /* error handle */
+            return NULL; // Error or end of file
         }
     }
 
