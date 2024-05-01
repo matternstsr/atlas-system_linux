@@ -28,16 +28,47 @@ int fill_buffer(const int fd) {
 }
 
 /**
+ * find_newline - Find the newline character in a string
+ * @start: Pointer to the start of the string to search
+ * @size: Size of the string to search
+ *
+ * Search for the newline character ('\n') in the given string starting from
+ * the specified position. If the newline character is found, the function
+ * returns a pointer to its location in the string. If the newline character
+ * is not found, the function returns NULL.
+ *
+ * Return: Pointer to the first occurrence of the newline character in the
+ * string if found, otherwise NULL.
+ */
+char *find_newline(const char *start, int size) {
+    /* Declarations */
+    int i;
+
+    /* Logic */
+    for (i = 0; i < size; i++) {
+        if (start[i] == '\n') {
+            return (char *)(start + i);
+        }
+    }
+    return NULL;
+}
+
+
+/**
  * read_line - Read a line from the buffer
  *
- * Return: Pointer to the read line
+ * Return: Pointer to the read line. Memory is allocated for the line, and
+ * the caller is responsible for freeing it. Returns NULL if the end of the
+ * input is reached or if an error occurs.
  */
 char *read_line() {
+    /* Declarations */
     char *line = NULL;
     int line_size = 0;
     int newline_found = 0;
     char *newline_pos;
 
+    /* Logic */
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_remaining) {
             /* Buffer is empty, need to fill it */
@@ -48,7 +79,7 @@ char *read_line() {
         }
 
         /* Find the position of the newline character manually */
-        newline_pos = strchr(buf_pos, '\n');
+        newline_pos = find_newline(buf_pos, bytes_remaining);
         if (newline_pos != NULL) {
             /* Newline character found */
             int line_length = newline_pos - buf_pos;
