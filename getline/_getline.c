@@ -93,6 +93,7 @@ char *read_line() {
             line_size += remaining_size;
             buf_pos += remaining_size;
             line[line_size] = '\0';
+            newline_found = 1;
         }
     }
 
