@@ -1,45 +1,44 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include "_getline.h"
 
-char *_getline(const int fd)
-{
-    static char buffer[READ_SIZE + 1];
-    static char *buf_pos = buffer;
-    static int bytes_read = 0;
-    static int total_read = 0;
+#define READ_SIZE 1024
 
-    if (fd == -1) {
-        buf_pos = buffer;
-        bytes_read = 0;
-        total_read = 0;
-        return NULL;
+static char buffer[READ_SIZE + 1];
+static char *buf_pos = buffer;
+static int bytes_read = 0;
+static int total_read = 0;
+
+int fill_buffer(const int fd) {
+    bytes_read = read(fd, buffer, READ_SIZE);
+    if (bytes_read <= 0) {
+        return bytes_read; // No more data or errors
     }
+    buf_pos = buffer;
+    total_read += bytes_read;
+    return bytes_read;
+}
 
+char *read_line() {
     char *line = NULL;
     int line_size = 0;
     int newline_found = 0;
 
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_read) {
-            // fill up buffer if it's empty
-            bytes_read = read(fd, buffer, READ_SIZE);
-            if (bytes_read <= 0) {
-                // No more datas or errors
+            // Buffer is empty, need to fill it
+            int result = fill_buffer(0); // 0 indicates that it's not reading from a file descriptor
+            if (result <= 0) {
                 return NULL; // error handle
             }
-            buf_pos = buffer;
-            total_read += bytes_read;
         }
 
         // Search for newline character
-        char *newline_pos = buf_pos;
-        while (newline_pos < buffer + bytes_read && *newline_pos != '\n') {
-            newline_pos++;
-        }
+        char *newline_pos = strchr(buf_pos, '\n');
 
-        if (newline_pos < buffer + bytes_read) {
-            // IF found newline character
+        if (newline_pos != NULL) {
+            // Newline character found
             int line_length = newline_pos - buf_pos;
             line = realloc(line, line_size + line_length + 1);
             if (!line) {
@@ -65,4 +64,30 @@ char *_getline(const int fd)
     }
 
     return line;
+}
+
+void reset_buffer() {
+    buf_pos = buffer;
+    bytes_read = 0;
+    total_read = 0;
+}
+
+char *_getline(const int fd) {
+    if (fd == -1) {
+        reset_buffer();
+        return NULL;
+    }
+
+    // If total_read is non-zero, it means the buffer already contains some data from a previous read
+    // In that case, we don't need to fill the buffer again
+    if (total_read == 0 || (buf_pos - buffer >= bytes_read)) {
+        // Reset buffer position when reaching the end or at the beginning
+        reset_buffer();
+        int result = fill_buffer(fd);
+        if (result <= 0) {
+            return NULL; // error handle
+        }
+    }
+
+    return read_line();
 }
