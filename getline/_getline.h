@@ -9,6 +9,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define READ_SIZE 1
+
 char *_getline(const int fd);
 
 #endif /* _GETLINE_H_ */
+
+

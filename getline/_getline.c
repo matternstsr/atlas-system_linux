@@ -14,6 +14,7 @@ static size_t buffer_positions[MAX_FILES] = {0};
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
+    static int read_calls = 0;
     ssize_t bytes_read;
     char *line = NULL;
     size_t i;
@@ -35,7 +36,7 @@ char *_getline(const int fd) {
 
     if (!buffers[fd] || buffer_positions[fd] == (size_t)buffer_sizes[fd]) {
         /* Allocate buffer for this file descriptor or refill the buffer */
-        free(buffers[fd]); /* Free existing buffer if it exists */
+        free(buffers[fd]); // Free existing buffer if it exists
         buffers[fd] = (char *)malloc(BUFFER_SIZE);
         if (!buffers[fd]) {
             return NULL; /* Error allocating memory */
@@ -48,6 +49,7 @@ char *_getline(const int fd) {
         }
         buffer_sizes[fd] = bytes_read;
         buffer_positions[fd] = 0;
+        read_calls++;
     }
 
     /* Find the next line in the buffer */
@@ -67,4 +69,5 @@ char *_getline(const int fd) {
 
     return line;
 }
+
 
