@@ -1,34 +1,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include "_getline.h"
 
 #define READ_SIZE 1024
 
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
-static int bytes_read = 0;
+static int bytes_remaining = 0; /* Renamed from bytes_read to clarify its purpose */
 static int total_read = 0;
-
-/**
- * _strchr - Locate the first occurrence of a character in a string
- * @s: Pointer to the string to search
- * @c: Character to search for
- *
- * Return: Pointer to the first occurrence of the character in the string,
- *         or NULL if the character is not found
- */
-char *_strchr(const char *s, int c) {
-    while (*s != '\0') {
-        if (*s == (char)c) {
-            return (char *)s;
-        }
-        s++;
-    }
-    if (c == '\0') {
-        return (char *)s;
-    }
-    return NULL;
-}
 
 /**
  * fill_buffer - Fill the buffer with data from a file descriptor
@@ -37,44 +17,75 @@ char *_strchr(const char *s, int c) {
  * Return: Number of bytes read or error indicator
  */
 int fill_buffer(const int fd) {
-    bytes_read = read(fd, buffer, READ_SIZE);
-    if (bytes_read <= 0) {
-        return bytes_read; /* No more data or errors */
+    int result = read(fd, buffer, READ_SIZE);
+    if (result <= 0) {
+        return result; /* Error or end of file */
     }
     buf_pos = buffer;
-    total_read += bytes_read;
-    return bytes_read;
+    bytes_remaining = result; /* Renamed from bytes_read to clarify its purpose */
+    total_read += result;
+    return result;
 }
+
+/**
+ * find_newline - Find the newline character in a string
+ * @start: Pointer to the start of the string to search
+ * @size: Size of the string to search
+ *
+ * Search for the newline character ('\n') in the given string starting from
+ * the specified position. If the newline character is found, the function
+ * returns a pointer to its location in the string. If the newline character
+ * is not found, the function returns NULL.
+ *
+ * Return: Pointer to the first occurrence of the newline character in the
+ * string if found, otherwise NULL.
+ */
+char *find_newline(const char *start, int size) {
+    /* Declarations */
+    int i;
+
+    /* Logic */
+    for (i = 0; i < size; i++) {
+        if (start[i] == '\n') {
+            return (char *)(start + i);
+        }
+    }
+    return NULL;
+}
+
 
 /**
  * read_line - Read a line from the buffer
  *
- * Return: Pointer to the read line
+ * Return: Pointer to the read line. Memory is allocated for the line, and
+ * the caller is responsible for freeing it. Returns NULL if the end of the
+ * input is reached or if an error occurs.
  */
 char *read_line() {
+    /* Declarations */
     char *line = NULL;
     int line_size = 0;
     int newline_found = 0;
     char *newline_pos;
 
+    /* Logic */
     while (!newline_found) {
-        if (buf_pos - buffer >= bytes_read) {
+        if (buf_pos - buffer >= bytes_remaining) {
             /* Buffer is empty, need to fill it */
-            int result = fill_buffer(0); /* 0 indicates that it's not reading from a file descriptor */
+            int result = fill_buffer(0); /* Read from stdin */
             if (result <= 0) {
-                return NULL; /* error handle */
+                return NULL; /* Error or end of file */
             }
         }
 
-        /* Declare and initialize newline_pos dynamically */
-        newline_pos = _strchr(buf_pos, '\n');
-
+        /* Find the position of the newline character manually */
+        newline_pos = find_newline(buf_pos, bytes_remaining);
         if (newline_pos != NULL) {
             /* Newline character found */
             int line_length = newline_pos - buf_pos;
             line = realloc(line, line_size + line_length + 1);
             if (!line) {
-                return NULL; /* error handle */
+                return NULL; /* Memory allocation failed */
             }
             memcpy(line + line_size, buf_pos, line_length);
             line_size += line_length;
@@ -83,10 +94,10 @@ char *read_line() {
             newline_found = 1;
         } else {
             /* Newline character not found in the current buffer */
-            int remaining_size = buffer + bytes_read - buf_pos;
+            int remaining_size = bytes_remaining - (buf_pos - buffer);
             line = realloc(line, line_size + remaining_size + 1);
             if (!line) {
-                return NULL; /* error handle */
+                return NULL; /* Memory allocation failed */
             }
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
@@ -103,7 +114,7 @@ char *read_line() {
  */
 void reset_buffer() {
     buf_pos = buffer;
-    bytes_read = 0;
+    bytes_remaining = 0;
     total_read = 0;
 }
 
@@ -114,20 +125,19 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
-    int result;
+  int result;
     if (fd == -1) {
         reset_buffer();
         return NULL;
     }
 
-    /* If total_read is non-zero, it means the buffer already contains some data from a previous read */
-    /* In that case, we don't need to fill the buffer again */
-    if (total_read == 0 || (buf_pos - buffer >= bytes_read)) {
+    /* If total_read is non-zero, the buffer already contains some data from a previous read */
+    if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
         /* Reset buffer position when reaching the end or at the beginning */
         reset_buffer();
         result = fill_buffer(fd);
         if (result <= 0) {
-            return NULL; /* error handle */
+            return NULL; /* Error or end of file */
         }
     }
 
