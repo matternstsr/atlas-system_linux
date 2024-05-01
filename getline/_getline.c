@@ -138,13 +138,13 @@ char *_getline(const int fd) {
 
     line = read_line();
     if (line) {
-        total_lines++; // Increment total lines read
+        total_lines++; /* Increment total lines read */
     }
 
-    // Check if reached end of file, print total lines
+    /* Check if reached end of file, print total lines */
     if (line == NULL && total_lines > 0) {
         printf("Total: %d lines\n", total_lines);
-        total_lines = 0; // Reset total lines for future use
+        total_lines = 0; /* Reset total lines for future use */
     }
 
     return line;
