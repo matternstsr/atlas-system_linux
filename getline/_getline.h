@@ -10,5 +10,7 @@ char *_getline(const int fd);
 void reset_buffer();
 int fill_buffer(const int fd);
 char *read_line();
+char *_strchr(const char *s, int c);
+
 
 #endif /* _GETLINE_H_ */
