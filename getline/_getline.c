@@ -6,7 +6,7 @@
 void *my_malloc(size_t size) {
     void *ptr = malloc(size);
     if (ptr != NULL) {
-        // Initialize allocated memory to 0xFF
+        /* Initialize allocated memory to 0xFF */
         size_t i;
         for (i = 0; i < size; i++) {
             *((char *)ptr + i) = MEMORY_FILL_VALUE;
