@@ -31,12 +31,6 @@ int fill_buffer(const int fd) {
  * find_newline - Find the newline character in a string
  * @start: Pointer to the start of the string to search
  * @size: Size of the string to search
- *
- * Search for the newline character ('\n') in the given string starting from
- * the specified position. If the newline character is found, the function
- * returns a pointer to its location in the string. If the newline character
- * is not found, the function returns NULL.
- *
  * Return: Pointer to the first occurrence of the newline character in the
  * string if found, otherwise NULL.
  */
@@ -125,15 +119,15 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
-  int result;
+    int result;
+    static int total_lines = 0; // Static variable to keep track of total lines read
+
     if (fd == -1) {
         reset_buffer();
         return NULL;
     }
 
-    /* If total_read is non-zero, the buffer already contains some data from a previous read */
     if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
-        /* Reset buffer position when reaching the end or at the beginning */
         reset_buffer();
         result = fill_buffer(fd);
         if (result <= 0) {
@@ -141,5 +135,17 @@ char *_getline(const int fd) {
         }
     }
 
-    return read_line();
+    char *line = read_line();
+    if (line) {
+        total_lines++; // Increment total lines read
+    }
+
+    // Check if reached end of file, print total lines
+    if (line == NULL && total_lines > 0) {
+        printf("Total: %d lines\n", total_lines);
+        total_lines = 0; // Reset total lines for future use
+    }
+
+    return line;
 }
+
