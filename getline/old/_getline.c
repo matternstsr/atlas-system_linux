@@ -36,11 +36,12 @@ char *read_line() {
     int line_size = 0;
     int newline_found = 0;
     char *newline_pos;
+     int result;
 
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_read) {
             /* Buffer is empty, need to fill it */
-            int result = fill_buffer(0); /* 0 indicates that it's not reading from a file descriptor */
+            result = fill_buffer(0); /* 0 indicates that it's not reading from a file descriptor */
             if (result <= 0) {
                 return NULL; /* error handle */
             }
