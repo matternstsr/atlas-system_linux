@@ -124,15 +124,15 @@ char *_getline(const int fd) {
     }
 
     if (end_of_file_reached) {
-        end_of_file_reached = 0; // Reset flag for future use
-        return NULL; // End of file reached, return NULL
+        end_of_file_reached = 0; /* Reset flag for future use */
+        return NULL; /* End of file reached, return NULL */
     }
 
     if (total_read == 0 || (buf_pos - buffer >= bytes_remaining)) {
         reset_buffer();
         result = fill_buffer(fd);
         if (result <= 0) {
-            end_of_file_reached = 1; // Set flag to indicate end of file
+            end_of_file_reached = 1; /* Set flag to indicate end of file */
             return NULL; /* Error or end of file */
         }
     }
