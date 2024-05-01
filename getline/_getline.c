@@ -119,8 +119,9 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
+    char *line;
     int result;
-    static int total_lines = 0; // Static variable to keep track of total lines read
+    static int total_lines = 0; /* Static variable to keep track of total lines read */
 
     if (fd == -1) {
         reset_buffer();
@@ -135,7 +136,7 @@ char *_getline(const int fd) {
         }
     }
 
-    char *line = read_line();
+    line = read_line();
     if (line) {
         total_lines++; // Increment total lines read
     }
