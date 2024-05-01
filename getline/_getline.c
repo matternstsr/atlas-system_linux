@@ -35,6 +35,7 @@ char *read_line() {
     char *line = NULL;
     int line_size = 0;
     int newline_found = 0;
+    char *newline_pos;
 
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_read) {
@@ -46,7 +47,7 @@ char *read_line() {
         }
 
         /* Declare and initialize newline_pos dynamically */
-        char *newline_pos = strchr(buf_pos, '\n');
+        newline_pos = strchr(buf_pos, '\n');
 
         if (newline_pos != NULL) {
             /* Newline character found */
@@ -93,7 +94,8 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
-    if (fd == -1) {
+  int result;
+  if (fd == -1) {
         reset_buffer();
         return NULL;
     }
@@ -103,7 +105,7 @@ char *_getline(const int fd) {
     if (total_read == 0 || (buf_pos - buffer >= bytes_read)) {
         /* Reset buffer position when reaching the end or at the beginning */
         reset_buffer();
-        int result = fill_buffer(fd);
+        result = fill_buffer(fd);
         if (result <= 0) {
             return NULL; /* error handle */
         }
