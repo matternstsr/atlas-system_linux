@@ -94,8 +94,8 @@ void reset_buffer() {
  * Return: Pointer to the read line
  */
 char *_getline(const int fd) {
+  int result;
     if (fd == -1) {
-      int result;
         reset_buffer();
         return NULL;
     }
