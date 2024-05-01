@@ -126,7 +126,6 @@ char *_getline(const int fd) {
 
     if (end_of_file_reached) {
         end_of_file_reached = 0; /* Reset flag for future use */
-        printf("End of file reached, printing the next line:\n");
         line = read_line();
         if (line) {
             printf("%s\n", line);
