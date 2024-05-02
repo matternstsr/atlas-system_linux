@@ -7,10 +7,10 @@
 #include <stdio.h>
 
 #define MEMORY_FILL_VALUE ((char)0xFF)
-#define MY_MALLOC(size) my_malloc(size) // Renamed the macro
+#define MY_MALLOC(size) my_malloc(size) /* Renamed the macro */
 #define READ_SIZE 2048
 
-void *my_malloc(size_t size); // Declaration moved before usage
+void *my_malloc(size_t size); /* Declaration moved before usage */
 
 char *_getline(const int fd);
 void reset_buffer();
