@@ -19,20 +19,12 @@ int main(void)
     int i;
 
     fd1 = open("the_swing", O_RDONLY);
+    if (fd1 == -1) {
+        perror("Error opening file");
+        return 1;
+    }
     fd2 = open("man_gcc", O_RDONLY);
     fd3 = open("man_cat", O_RDONLY);
-    printf("---------THE SWING (first 5 lines)-----------\n");
-    i = 0;
-    while ((line1 = _getline(fd1)))
-    {
-        printf("%s\n", line1);
-        free(line1);
-        i++;
-        if (i == 5)
-        {
-            break;
-        }
-    }
     printf("----------MAN GCC (first 5 lines)----------\n");
     i = 0;
     while ((line2 = _getline(fd2)))
