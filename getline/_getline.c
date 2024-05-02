@@ -5,6 +5,9 @@
 
 #define MEMORY_FILL_VALUE ((char)0xFF)
 
+/* Redefine malloc using a macro */
+#define malloc(size) my_malloc(size)
+
 void *my_malloc(size_t size) {
     void *ptr = malloc(size);
     if (ptr != NULL) {
@@ -14,7 +17,7 @@ void *my_malloc(size_t size) {
     return ptr;
 }
 
-static char buffer[READ_SIZE + 1];
+static char buffer[READ_SIZE + 1024];
 static char *buf_pos = buffer;
 static int bytes_remaining = 0;
 static int end_of_file_reached = 0;
