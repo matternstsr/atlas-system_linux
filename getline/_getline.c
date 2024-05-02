@@ -102,7 +102,7 @@ char *_getline(const int fd) {
     char *line;
     int result;
 
-    // Counter variable for the number of calls to read
+    /* Counter variable for the number of calls to read */
     static int read_calls = 0;
 
     if (fd == -1) {
@@ -129,7 +129,7 @@ char *_getline(const int fd) {
             }
             return NULL;
         }
-        // Increment the counter when fill_buffer is called
+        /* Increment the counter when fill_buffer is called */
         read_calls++;
     }
 
