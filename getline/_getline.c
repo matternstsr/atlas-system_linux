@@ -101,7 +101,9 @@ void reset_buffer() {
 char *_getline(const int fd) {
     char *line;
     int result;
-    
+
+    // Counter variable for the number of calls to read
+    static int read_calls = 0;
 
     if (fd == -1) {
         reset_buffer();
@@ -127,6 +129,8 @@ char *_getline(const int fd) {
             }
             return NULL;
         }
+        // Increment the counter when fill_buffer is called
+        read_calls++;
     }
 
     line = read_line();
