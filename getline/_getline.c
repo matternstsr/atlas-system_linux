@@ -101,6 +101,7 @@ void reset_buffer() {
 char *_getline(const int fd) {
     char *line;
     int result;
+    
 
     if (fd == -1) {
         reset_buffer();

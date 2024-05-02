@@ -10,7 +10,7 @@
 
 #define MEMORY_FILL_VALUE ((char)0xFF)
 #define malloc(size) my_malloc(size)
-#define READ_SIZE 1024
+#define READ_SIZE 2048
 
 char *_getline(const int fd);
 void reset_buffer();
