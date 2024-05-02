@@ -19,4 +19,4 @@ char *read_line();
 
 extern int total_lines;
 
-#endif /* _GETLINE_H_ */
+#endif /* _GETLINE_H_  */
