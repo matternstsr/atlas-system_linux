@@ -85,8 +85,8 @@ char *read_line() {
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
             buf_pos += remaining_size;
-            line[line_size] = '\0';
-            newline_found = 1;
+/*             line[line_size] = '\0';
+            newline_found = 1; */
         }
     }
 
@@ -103,7 +103,7 @@ char *_getline(const int fd) {
     int result;
 
     if (fd == -1) {
-        reset_buffer();
+        /* reset_buffer(); */
         return NULL;
     }
 
@@ -117,7 +117,7 @@ char *_getline(const int fd) {
     }
 
     if (bytes_remaining == 0 || (buf_pos - buffer >= bytes_remaining)) {
-        reset_buffer();
+        /* reset_buffer(); */
         result = fill_buffer(fd);
         if (result <= 0) {
             end_of_file_reached = 1;

@@ -2,13 +2,14 @@
 #ifndef _GETLINE_H_
 #define _GETLINE_H_
 
-#include <string.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "_getline.h"
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 
-
-
+#define MEMORY_FILL_VALUE ((char)0xFF)
+#define malloc(size) my_malloc(size)
 #define READ_SIZE 1024
 
 char *_getline(const int fd);
