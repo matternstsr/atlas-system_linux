@@ -121,7 +121,7 @@ char *_getline(const int fd) {
         result = fill_buffer(fd);
         if (result <= 0) {
             if (result == 0) {
-                // End of file reached
+                /* End of file reached */
                 end_of_file_reached = 1;
             }
             return NULL;
