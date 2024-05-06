@@ -8,6 +8,11 @@
 /* Redefine malloc using a macro */
 #define malloc(size) my_malloc(size)
 
+/**
+ * my_malloc - Allocates memory and initializes it to a fill value
+ * @size: Size of memory to allocate
+ * Return: Pointer to the allocated memory
+ */
 void *my_malloc(size_t size)
 {
 void *ptr = malloc(size);
@@ -25,6 +30,11 @@ static char *buf_pos = buffer;
 static int bytes_remaining;
 static int end_of_file_reached;
 
+/**
+ * fill_buffer - Fills the buffer with data from a file descriptor
+ * @fd: File descriptor
+ * Return: Number of bytes read or error indicator
+ */
 int fill_buffer(const int fd)
 {
 int result;
@@ -39,6 +49,12 @@ bytes_remaining = result;
 return (result);
 }
 
+/**
+ * find_newline - Finds the position of the first newline character in a buffer
+ * @start: Pointer to the start of the buffer
+ * @size: Size of the buffer
+ * Return: Pointer to the newline character or NULL if not found
+ */
 char *find_newline(const char *start, int size)
 {
 int i;
@@ -53,6 +69,11 @@ for (i = 0; i < size; i++)
 return (NULL);
 }
 
+/**
+ * read_line - Reads a line from a file descriptor
+ * @fd: File descriptor
+ * Return: Pointer to the read line or NULL if end of file
+ */
 char *read_line(const int fd)
 { /* Function body remains the same */
 int result, line_size = 0, newline_found = 0, line_length, remaining_size;
@@ -96,12 +117,20 @@ while (!newline_found)
 return (line);
 }
 
+/**
+ * reset_buffer - Resets the buffer position and bytes remaining
+ */
 void reset_buffer(void)
 {
 buf_pos = buffer;
 bytes_remaining = 0;
 }
 
+/**
+ * _getline - Reads a line from a file descriptor
+ * @fd: File descriptor
+ * Return: Pointer to the read line or NULL if end of file
+ */
 char *_getline(const int fd)
 {
 char *line;
