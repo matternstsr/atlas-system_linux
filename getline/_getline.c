@@ -45,7 +45,7 @@ char *find_newline(const char *start, int size) {
 }
 
 char *read_line(const int fd) {
-    // Function body remains the same
+     /* Function body remains the same */
     int result;
     char *line = NULL;
     int line_size = 0;
