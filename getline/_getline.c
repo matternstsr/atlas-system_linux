@@ -17,11 +17,10 @@ void *my_malloc(size_t size) {
 	return ptr;
 }
 
-
 static char buffer[READ_SIZE];
 static char *buf_pos = buffer;
-static int bytes_remaining = 0;
-static int end_of_file_reached = 0;
+static int bytes_remaining;
+static int end_of_file_reached;
 
 int fill_buffer(const int fd) {
 	int result;
@@ -36,6 +35,7 @@ int fill_buffer(const int fd) {
 
 char *find_newline(const char *start, int size) {
 	int i;
+
 	for (i = 0; i < size; i++) {
 		if (start[i] == '\n') {
 			return (char *)(start + i);
