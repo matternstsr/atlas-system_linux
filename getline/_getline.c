@@ -17,8 +17,7 @@ void *my_malloc(size_t size) {
     return ptr;
 }
 
-/* Counter variable for the number of calls to read */
-static int read_calls = 0;
+
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
 static int bytes_remaining = 0;
@@ -32,7 +31,6 @@ int fill_buffer(const int fd) {
     }
     buf_pos = buffer;
     bytes_remaining = result;
-    read_calls++; // Increment the counter when fill_buffer is called
     return result;
 }
 
