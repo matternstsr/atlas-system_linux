@@ -102,7 +102,7 @@ while (!newline_found)
 return (line);
 }
 
-void reset_buffer()
+void reset_buffer(void)
 {
 buf_pos = buffer;
 bytes_remaining = 0;
