@@ -8,7 +8,7 @@
 
 #define MEMORY_FILL_VALUE ((char)0xFF)
 #define MY_MALLOC(size) my_malloc(size) /* Renamed the macro */
-#define READ_SIZE 2048
+#define READ_SIZE 4   /* Redefine READ_SIZE to 4 */
 
 void *my_malloc(size_t size); /* Declaration moved before usage */
 
