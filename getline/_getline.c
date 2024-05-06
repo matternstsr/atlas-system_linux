@@ -89,7 +89,8 @@ while (!newline_found)
 		if (!line)
 			return (NULL); /* Memory allocation failed */
 		memcpy(line + line_size, buf_pos, remaining_size);
-		line_size += remaining_size, buf_pos += remaining_size,	line[line_size] = '\0';
+		line_size += remaining_size, buf_pos += remaining_size;
+		line[line_size] = '\0';
 	}
 }
 return (line);
