@@ -17,7 +17,7 @@ void *my_malloc(size_t size)
 		/* Initialize allocated memory to 0xFF */
 		memset(ptr, MEMORY_FILL_VALUE, size);
 	}
-	return ptr;
+	return (ptr);
 }
 
 static char buffer[READ_SIZE];
@@ -32,11 +32,11 @@ int fill_buffer(const int fd)
 	result = read(fd, buffer, READ_SIZE);
 	if (result <= 0)
 	{
-		return result; /* Error or end of file */
+		return (result); /* Error or end of file */
 	}
 	buf_pos = buffer;
 	bytes_remaining = result;
-	return result;
+	return (result);
 }
 
 char *find_newline(const char *start, int size) 
@@ -49,7 +49,7 @@ char *find_newline(const char *start, int size)
 			return (char *)(start + i);
 		}
 	}
-	return NULL;
+	return (NULL);
 }
 
 char *read_line(const int fd)
@@ -63,7 +63,8 @@ char *read_line(const int fd)
 	int line_length;
 	int remaining_size;
 
-	while (!newline_found) {
+	while (!newline_found)
+	{
 		if (buf_pos - buffer >= bytes_remaining)
 		{
 			result = fill_buffer(fd); /* Read from stdin */
@@ -71,7 +72,7 @@ char *read_line(const int fd)
 			{
 				if (line_size == 0)
 				{
-					return NULL; /* No more lines and buffer is empty */
+					return (NULL); /* No more lines and buffer is empty */
 				}
 				newline_found = 1; /* End of file reached */
 				break;
@@ -85,7 +86,7 @@ char *read_line(const int fd)
 			line = realloc(line, line_size + line_length + 1);
 			if (!line)
 			{
-				return NULL; /* Memory allocation failed */
+				return (NULL); /* Memory allocation failed */
 			}
 			memcpy(line + line_size, buf_pos, line_length);
 			line_size += line_length;
@@ -99,7 +100,7 @@ char *read_line(const int fd)
 			line = realloc(line, line_size + remaining_size + 1);
 			if (!line)
 			{
-				return NULL; /* Memory allocation failed */
+				return (NULL); /* Memory allocation failed */
 			}
 			memcpy(line + line_size, buf_pos, remaining_size);
 			line_size += remaining_size;
@@ -109,7 +110,7 @@ char *read_line(const int fd)
 		}
 	}
 
-	return line;
+	return (line);
 }
 
 void reset_buffer() 
@@ -129,7 +130,7 @@ char *_getline(const int fd)
 	if (fd == -1)
 	{
 		reset_buffer();
-		return NULL;
+		return (NULL);
 	}
 
 	if (end_of_file_reached)
@@ -140,7 +141,7 @@ char *_getline(const int fd)
 		{
 			free(line);
 		}
-		return NULL;
+		return (NULL);
 	}
 
 	if (bytes_remaining == 0 || (buf_pos - buffer >= bytes_remaining))
@@ -154,7 +155,7 @@ char *_getline(const int fd)
 				/* End of file reached */
 				end_of_file_reached = 1;
 			}
-			return NULL;
+			return (NULL);
 		}
 		/* Increment the counter when fill_buffer is called */
 		read_calls++;
@@ -162,5 +163,5 @@ char *_getline(const int fd)
 
 	line = read_line(fd);
 
-	return line;
+	return (line);
 }

@@ -15,6 +15,7 @@
 int main(int ac, char *av[])
 {
 	char *file = "test1";
+
 	int fd;
 	char *line;
 	int i;
