@@ -78,7 +78,7 @@ while (!newline_found)
 	newline_pos = find_newline(buf_pos, bytes_remaining);
 	if (newline_pos != NULL)
 	{
-		line_length = newline_pos - buf_pos;, line = realloc(line, line_size + line_length + 1);
+		line_length = newline_pos - buf_pos, line = realloc(line, line_size + line_length + 1);
 		if (!line)
 		{
 			return (NULL); /* Memory allocation failed */
