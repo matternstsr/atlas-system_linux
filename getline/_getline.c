@@ -18,7 +18,7 @@ void *my_malloc(size_t size) {
 }
 
 
-static char buffer[READ_SIZE + 1];
+static char buffer[READ_SIZE];
 static char *buf_pos = buffer;
 static int bytes_remaining = 0;
 static int end_of_file_reached = 0;
