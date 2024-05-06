@@ -44,7 +44,8 @@ char *find_newline(const char *start, int size) {
     return NULL;
 }
 
-char *read_line() {
+char *read_line(const int fd) {
+    // Function body remains the same
     int result;
     char *line = NULL;
     int line_size = 0;
@@ -55,7 +56,7 @@ char *read_line() {
 
     while (!newline_found) {
         if (buf_pos - buffer >= bytes_remaining) {
-            result = fill_buffer(0); /* Read from stdin */
+            result = fill_buffer(fd); /* Read from stdin */
             if (result <= 0) {
                 if (line_size == 0) {
                     return NULL; /* No more lines and buffer is empty */
@@ -86,8 +87,8 @@ char *read_line() {
             memcpy(line + line_size, buf_pos, remaining_size);
             line_size += remaining_size;
             buf_pos += remaining_size;
-            line[line_size] = '\0';
-            newline_found = 1;
+/*             line[line_size] = '\0';
+            newline_found = 1; */
         }
     }
 
@@ -113,7 +114,7 @@ char *_getline(const int fd) {
 
     if (end_of_file_reached) {
         end_of_file_reached = 0;
-        line = read_line();
+        line = read_line(fd);
         if (line) {
             free(line);
         }
@@ -134,7 +135,7 @@ char *_getline(const int fd) {
         read_calls++;
     }
 
-    line = read_line();
+    line = read_line(fd);
 
     return line;
 }
