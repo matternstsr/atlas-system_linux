@@ -27,7 +27,7 @@ char *_getline(const int fd);
 /**
  * reset_buffer - Resets the buffer position and bytes remaining
  */
-void reset_buffer(void);
+void reset_buffer(int fd);
 
 /**
  * fill_buffer - Fills the buffer with data from a file descriptor
