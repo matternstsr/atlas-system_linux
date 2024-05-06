@@ -17,11 +17,12 @@ void *my_malloc(size_t size) {
     return ptr;
 }
 
-
 static char buffer[READ_SIZE + 1];
 static char *buf_pos = buffer;
 static int bytes_remaining = 0;
 static int end_of_file_reached = 0;
+static int read_calls_1 = 0; /*  Counter for READ_SIZE = 1 */
+static int read_calls_4 = 0; /*  Counter for READ_SIZE = 4 */
 
 int fill_buffer(const int fd) {
     int result;
@@ -103,9 +104,6 @@ char *_getline(const int fd) {
     char *line;
     int result;
 
-    /* Counter variable for the number of calls to read */
-    static int read_calls = 0;
-
     if (fd == -1) {
         reset_buffer();
         return NULL;
@@ -130,8 +128,12 @@ char *_getline(const int fd) {
             }
             return NULL;
         }
-        /* Increment the counter when fill_buffer is called */
-        read_calls++;
+        /* Increment the appropriate counter when fill_buffer is called */
+        if (READ_SIZE == 1) {
+            read_calls_1++;
+        } else if (READ_SIZE == 4) {
+            read_calls_4++;
+        }
     }
 
     line = read_line();
