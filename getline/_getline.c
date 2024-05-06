@@ -54,15 +54,10 @@ return (NULL);
 }
 
 char *read_line(const int fd)
-{
-/* Function body remains the same */
-int result;
-char *line = NULL;
-int line_size = 0;
-int newline_found = 0;
-char *newline_pos;
-int line_length;
-int remaining_size;
+{ /* Function body remains the same */
+int result, line_size = 0, newline_found = 0;
+int line_length, remaining_size;
+char *line = NULL, *newline_pos;
 
 while (!newline_found)
 {
@@ -72,9 +67,7 @@ while (!newline_found)
 		if (result <= 0)
 		{
 			if (line_size == 0)
-			{
 				return (NULL); /* No more lines and buffer is empty */
-			}
 			newline_found = 1; /* End of file reached */
 			break;
 		}
@@ -86,13 +79,9 @@ while (!newline_found)
 		line_length = newline_pos - buf_pos;
 		line = realloc(line, line_size + line_length + 1);
 		if (!line)
-		{
 			return (NULL); /* Memory allocation failed */
-		}
 		memcpy(line + line_size, buf_pos, line_length);
-		line_size += line_length;
-		line[line_size] = '\0';
-		buf_pos = newline_pos + 1;
+		line_size += line_length, line[line_size] = '\0', buf_pos = newline_pos + 1;
 		newline_found = 1;
 	}
 	else
@@ -100,17 +89,12 @@ while (!newline_found)
 		remaining_size = bytes_remaining - (buf_pos - buffer);
 		line = realloc(line, line_size + remaining_size + 1);
 		if (!line)
-		{
 			return (NULL); /* Memory allocation failed */
-		}
 		memcpy(line + line_size, buf_pos, remaining_size);
-		line_size += remaining_size;
-		buf_pos += remaining_size;
+		line_size += remaining_size, buf_pos += remaining_size;
 		line[line_size] = '\0';
-/* 			newline_found = 1; */
 	}
 }
-
 return (line);
 }
 

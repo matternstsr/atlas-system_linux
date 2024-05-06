@@ -13,7 +13,7 @@
 void *my_malloc(size_t size); /* Declaration moved before usage */
 
 char *_getline(const int fd);
-void reset_buffer();
+void reset_buffer(void);
 int fill_buffer(const int fd);
 char *read_line();
 
