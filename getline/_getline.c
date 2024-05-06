@@ -98,7 +98,7 @@ while (!newline_found)
 return (line);
 }
 
-void reset_buffer()
+void reset_buffer(void)
 {
 buf_pos = buffer;
 bytes_remaining = 0;
@@ -111,24 +111,19 @@ int result;
 
 /* Counter variable for the number of calls to read */
 static int read_calls = 0;
-
 if (fd == -1)
 {
 	reset_buffer();
 	return (NULL);
 }
-
 if (end_of_file_reached)
 {
 	end_of_file_reached = 0;
 	line = read_line(fd);
 	if (line)
-	{
 		free(line);
-	}
 	return (NULL);
 }
-
 if (bytes_remaining == 0 || (buf_pos - buffer >= bytes_remaining))
 {
 	reset_buffer();
@@ -136,17 +131,11 @@ if (bytes_remaining == 0 || (buf_pos - buffer >= bytes_remaining))
 	if (result <= 0)
 	{
 		if (result == 0)
-		{
-			/* End of file reached */
-			end_of_file_reached = 1;
-		}
+			end_of_file_reached = 1; /* End of file reached */
 		return (NULL);
-	}
-	/* Increment the counter when fill_buffer is called */
+	} /* Increment the counter when fill_buffer is called */
 	read_calls++;
 }
-
 line = read_line(fd);
-
 return (line);
 }
