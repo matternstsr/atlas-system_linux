@@ -56,7 +56,8 @@ return (NULL);
 char *read_line(const int fd)
 {
 /* Function body remains the same */
-int result, line_size = 0, newline_found = 0, line_length, remaining_size;
+int result, line_size = 0, newline_found = 0, line_length;
+int remaining_size;
 char *newline_pos, *line = NULL;
 
 while (!newline_found)
@@ -78,13 +79,15 @@ while (!newline_found)
 	newline_pos = find_newline(buf_pos, bytes_remaining);
 	if (newline_pos != NULL)
 	{
-		line_length = newline_pos - buf_pos, line = realloc(line, line_size + line_length + 1);
+		line_length = newline_pos - buf_pos;
+		line = realloc(line, line_size + line_length + 1);
 		if (!line)
 		{
 			return (NULL); /* Memory allocation failed */
 		}
 		memcpy(line + line_size, buf_pos, line_length);
-		line_size += line_length, line[line_size] = '\0', buf_pos = newline_pos + 1, newline_found = 1;
+		line_size += line_length, line[line_size] = '\0', buf_pos = newline_pos + 1;
+		newline_found = 1;
 	}
 	else
 	{
