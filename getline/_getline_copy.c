@@ -60,14 +60,14 @@ void free_resources(void)
  */
 char *_getline(const int fd)
 {
+    /* Counter variable for the number of calls to read */
+    static int read_calls;
+
     if (fd == -1)
     {
         free_resources();
         return NULL;
     }
-
-    /* Counter variable for the number of calls to read */
-    static int read_calls;
 
     if (end_of_file_reached[fd])
     {
