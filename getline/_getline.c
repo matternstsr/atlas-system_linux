@@ -55,8 +55,7 @@ return (NULL);
 
 char *read_line(const int fd)
 { /* Function body remains the same */
-int result, line_size = 0, newline_found = 0;
-int line_length, remaining_size;
+int result, line_size = 0, newline_found = 0, line_length, remaining_size;
 char *line = NULL, *newline_pos;
 
 while (!newline_found)
@@ -72,7 +71,6 @@ while (!newline_found)
 			break;
 		}
 	}
-
 	newline_pos = find_newline(buf_pos, bytes_remaining);
 	if (newline_pos != NULL)
 	{
@@ -91,8 +89,7 @@ while (!newline_found)
 		if (!line)
 			return (NULL); /* Memory allocation failed */
 		memcpy(line + line_size, buf_pos, remaining_size);
-		line_size += remaining_size, buf_pos += remaining_size;
-		line[line_size] = '\0';
+		line_size += remaining_size, buf_pos += remaining_size,	line[line_size] = '\0';
 	}
 }
 return (line);
@@ -110,7 +107,7 @@ char *line;
 int result;
 
 /* Counter variable for the number of calls to read */
-static int read_calls = 0;
+static int read_calls;
 if (fd == -1)
 {
 	reset_buffer();
