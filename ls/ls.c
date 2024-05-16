@@ -11,8 +11,9 @@ int is_dot_or_dotdot(const char *name) {
 int main(void)
 {
 	DIR *dir;
+	DIR *subdir;
 	struct dirent *entry;
-	struct dirent *subentry; // Declaration moved here
+	struct dirent *subentry; /*Declaration moved here*/
 	struct stat statbuf;
 
 	dir = opendir(".");
@@ -22,7 +23,6 @@ int main(void)
 	}
 
 	while ((entry = readdir(dir)) != NULL) {
-			DIR *subdir;
 			if (!is_dot_or_dotdot(entry->d_name)) {
 					if (lstat(entry->d_name, &statbuf) == -1) {
 							perror("lstat");
