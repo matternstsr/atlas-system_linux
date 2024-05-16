@@ -3,10 +3,17 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include <string.h>
 
 int is_dot_or_dotdot(const char *name) {
-	return strcmp(name, ".") == 0 || strcmp(name, "..") == 0;
+	return name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0'));
+}
+
+int custom_strcomp(const char *s1, const char *s2) {
+	int i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i]) {
+			i++;
+	}
+	return s1[i] - s2[i];
 }
 
 void bubble_sort(char **arr, int n) {
@@ -14,11 +21,7 @@ void bubble_sort(char **arr, int n) {
 	char *temp;
 	for (i = 0; i < n - 1; i++) {
 			for (j = 0; j < n - i - 1; j++) {
-					int k = 0;
-					while (arr[j][k] != '\0' && arr[j + 1][k] != '\0' && arr[j][k] == arr[j + 1][k]) {
-							k++;
-					}
-					if (arr[j][k] > arr[j + 1][k]) {
+					if (custom_strcomp(arr[j], arr[j + 1]) > 0) {
 							temp = arr[j];
 							arr[j] = arr[j + 1];
 							arr[j + 1] = temp;
@@ -41,12 +44,20 @@ int main(void) {
 
 	while ((entry = readdir(dir)) != NULL) {
 			if (!is_dot_or_dotdot(entry->d_name)) {
-					files[num_files] = malloc(strlen(entry->d_name) + 1); /* Allocate memory for the filename */
+					/* Allocate memory for the filename */
+					files[num_files] = malloc(256 * sizeof(char));/* Assuming maximum filename length is 255 */
 					if (files[num_files] == NULL) {
 							perror("malloc");
 							exit(EXIT_FAILURE);
 					}
-					strcpy(files[num_files], entry->d_name);
+
+					/* Copy the filename character by character */
+					int j = 0;
+					while (entry->d_name[j] != '\0') {
+							files[num_files][j] = entry->d_name[j];
+							j++;
+					}
+					files[num_files][j] = '\0'; /* Null-terminate the string */
 					num_files++;
 			}
 	}
