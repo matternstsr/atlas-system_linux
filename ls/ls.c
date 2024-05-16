@@ -33,7 +33,7 @@ int main(void)
 									perror("opendir");
 									exit(EXIT_FAILURE);
 							}
-							*subentry;
+							subentry;
 							while ((subentry = readdir(subdir)) != NULL) {
 									if (!is_dot_or_dotdot(subentry->d_name)) {
 											printf("%s\n", subentry->d_name);
