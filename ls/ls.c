@@ -17,7 +17,7 @@ int main(void) {
     DIR *dir;
     struct dirent *entry;
     char *files[1000]; /*Assuming a maximum of 1000 files*/
-    int num_files = 0;
+    int num_files = 0, i;
 
     dir = opendir(".");
     if (dir == NULL) {
@@ -37,7 +37,6 @@ int main(void) {
     qsort(files, num_files, sizeof(char *), compare);
 
     /*Print sorted filenames*/ 
-    int i;
     for (i = 0; i < num_files; i++) {
         printf("%s\n", files[i]);
         free(files[i]);
