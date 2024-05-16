@@ -11,7 +11,7 @@ int main(void)
 {
 	DIR *dir;
 	struct dirent *entry;
-	struct dirent *subentry; // Declaration moved here
+	struct dirent *subentry; /*Declaration moved here*/
 	struct stat statbuf;
 
 	dir = opendir(".");
