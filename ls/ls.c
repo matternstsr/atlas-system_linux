@@ -3,15 +3,15 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int is_dot_or_dotdot(const char *name) 
-{
+int is_dot_or_dotdot(const char *name) {
 	return name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0'));
 }
 
 int main(void)
 {
-	DIR *dir, *subdir;
-	struct dirent *entry, *subentry;
+	DIR *dir;
+	struct dirent *entry;
+	struct dirent *subentry; // Declaration moved here
 	struct stat statbuf;
 
 	dir = opendir(".");
@@ -21,6 +21,7 @@ int main(void)
 	}
 
 	while ((entry = readdir(dir)) != NULL) {
+			DIR *subdir;
 			if (!is_dot_or_dotdot(entry->d_name)) {
 					if (stat(entry->d_name, &statbuf) == -1) {
 							perror("stat");
@@ -33,7 +34,6 @@ int main(void)
 									perror("opendir");
 									exit(EXIT_FAILURE);
 							}
-							subentry;
 							while ((subentry = readdir(subdir)) != NULL) {
 									if (!is_dot_or_dotdot(subentry->d_name)) {
 											printf("%s\n", subentry->d_name);
