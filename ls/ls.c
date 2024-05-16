@@ -6,41 +6,42 @@
 #include <string.h>
 
 int is_dot_or_dotdot(const char *name) {
-	return strcmp(name, ".") == 0 || strcmp(name, "..") == 0;
+    return strcmp(name, ".") == 0 || strcmp(name, "..") == 0;
 }
 
 int compare(const void *a, const void *b) {
-	return strcmp(*(const char **)a, *(const char **)b);
+    return strcmp(*(const char **)a, *(const char **)b);
 }
 
 int main(void) {
-	DIR *dir;
-	struct dirent *entry;
-	struct stat statbuf;
-	char *files[1000];
+    DIR *dir;
+    struct dirent *entry;
+    char *files[1000]; /*Assuming a maximum of 1000 files*/
+    int num_files = 0;
 
-	dir = opendir(".");
-	if (dir == NULL) {
-			perror("opendir");
-			exit(EXIT_FAILURE);
-	}
+    dir = opendir(".");
+    if (dir == NULL) {
+        perror("opendir");
+        exit(EXIT_FAILURE);
+    }
 
-	int num_files = 0;
+    while ((entry = readdir(dir)) != NULL) {
+        if (!is_dot_or_dotdot(entry->d_name)) {
+            files[num_files++] = strdup(entry->d_name);
+        }
+    }
 
-	while ((entry = readdir(dir)) != NULL) {
-			if (!is_dot_or_dotdot(entry->d_name)) {
-					files[num_files++] = strdup(entry->d_name);
-			}
-	}
+    closedir(dir);
 
-	closedir(dir);
+    /*Sort filenames alphabetically*/ 
+    qsort(files, num_files, sizeof(char *), compare);
 
-	qsort(files, num_files, sizeof(char *), compare);
+    /*Print sorted filenames*/ 
+    int i;
+    for (i = 0; i < num_files; i++) {
+        printf("%s\n", files[i]);
+        free(files[i]);
+    }
 
-	for (int i = 0; i < num_files; i++) {
-			printf("%s\n", files[i]);
-			free(files[i]);
-	}
-
-	return 0;
+    return 0;
 }
