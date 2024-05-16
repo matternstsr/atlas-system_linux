@@ -59,7 +59,8 @@ int main(void) {
 	/* Print sorted filenames */
 	for (i = 0; i < num_files; i++) {
 			printf("%s\n", files[i]);
-			free(files[i]); /*Free allocated memory for each filename*/
+			free(files[i]); /* Free allocated memory for each filename */
 	}
+
 	return 0;
 }
