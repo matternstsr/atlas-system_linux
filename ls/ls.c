@@ -8,20 +8,16 @@ int is_dot_or_dotdot(const char *name) {
 	return name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0'));
 }
 
-int custom_strcmp(const char *s1, const char *s2) {
-	while (*s1 && *s2 && *s1 == *s2) {
-			s1++;
-			s2++;
-	}
-	return *s1 - *s2;
-}
-
 void bubble_sort(char **arr, int n) {
 	int i, j;
 	char *temp;
 	for (i = 0; i < n - 1; i++) {
 			for (j = 0; j < n - i - 1; j++) {
-					if (custom_strcmp(arr[j], arr[j + 1]) > 0) {
+					int k = 0;
+					while (arr[j][k] != '\0' && arr[j + 1][k] != '\0' && arr[j][k] == arr[j + 1][k]) {
+							k++;
+					}
+					if (arr[j][k] > arr[j + 1][k]) {
 							temp = arr[j];
 							arr[j] = arr[j + 1];
 							arr[j + 1] = temp;
