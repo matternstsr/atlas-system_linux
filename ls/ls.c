@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 int is_dot_or_dotdot(const char *name) {
 	return name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0'));
@@ -11,7 +12,7 @@ int main(void)
 {
 	DIR *dir;
 	struct dirent *entry;
-	struct dirent *subentry; /*Declaration moved here*/
+	struct dirent *subentry; // Declaration moved here
 	struct stat statbuf;
 
 	dir = opendir(".");
@@ -23,8 +24,8 @@ int main(void)
 	while ((entry = readdir(dir)) != NULL) {
 			DIR *subdir;
 			if (!is_dot_or_dotdot(entry->d_name)) {
-					if (stat(entry->d_name, &statbuf) == -1) {
-							perror("stat");
+					if (lstat(entry->d_name, &statbuf) == -1) {
+							perror("lstat");
 							exit(EXIT_FAILURE);
 					}
 					if (S_ISDIR(statbuf.st_mode)) {
