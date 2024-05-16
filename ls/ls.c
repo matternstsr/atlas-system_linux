@@ -10,8 +10,8 @@ int is_dot_or_dotdot(const char *name)
 
 int main(void)
 {
-	DIR *dir;
-	struct dirent *entry;
+	DIR *dir, *subdir;
+	struct dirent *entry, *subentry;
 	struct stat statbuf;
 
 	dir = opendir(".");
@@ -28,12 +28,12 @@ int main(void)
 					}
 					if (S_ISDIR(statbuf.st_mode)) {
 							printf("%s:\n", entry->d_name);
-							DIR *subdir = opendir(entry->d_name);
+							subdir = opendir(entry->d_name);
 							if (subdir == NULL) {
 									perror("opendir");
 									exit(EXIT_FAILURE);
 							}
-							struct dirent *subentry;
+							*subentry;
 							while ((subentry = readdir(subdir)) != NULL) {
 									if (!is_dot_or_dotdot(subentry->d_name)) {
 											printf("%s\n", subentry->d_name);
