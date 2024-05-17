@@ -5,7 +5,8 @@
 void *mattset(void *ptr, int value, size_t num)
 {
 unsigned char *p = ptr;
-unsigned char val = (unsigned char)value; /* to ensure value is treated as unsigned */
+/* to ensure value is treated as unsigned */
+unsigned char val = (unsigned char)value;
 
 while (num--)
 *p++ = val;

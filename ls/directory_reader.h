@@ -1,5 +1,3 @@
-/* directory_reader.h */
-
 #ifndef DIRECTORY_READER_H
 #define DIRECTORY_READER_H
 
@@ -20,12 +18,13 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 /* Structure to handle directory reading */
-typedef struct DirectoryReader {
-    DIR *dir;
-    const char *path;
-    struct dirent *current_entry;
-    int finished;
-    int show_all;
+typedef struct DirectoryReader
+{
+	DIR *dir;
+	const char *path;
+	struct dirent *current_entry;
+	int finished;
+	int show_all;
 } DirectoryReader;
 
 /* Function prototypes */
