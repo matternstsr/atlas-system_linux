@@ -1,6 +1,5 @@
 #include "directory_reader.h"
-#include <string.h>
-#include <stdlib.h>
+#include <stdio.h> // Included this line to resolve the error for fprintf
 
 /* Initialize directory reader */
 int initDirectoryReader(DirectoryReader *reader, const char *path) {
