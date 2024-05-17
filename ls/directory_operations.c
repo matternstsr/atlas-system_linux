@@ -49,6 +49,6 @@ void destroyDirectoryReader(DirectoryReader *reader)
 {
 		if (reader && reader->dir) {
 				closedir(reader->dir);
-				memset(reader, 0, sizeof(*reader));
+				mattset(reader, 0, sizeof(*reader));
 		}
 }
