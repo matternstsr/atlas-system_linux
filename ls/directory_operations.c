@@ -6,9 +6,8 @@
 int initDirectoryReader(DirectoryReader *reader, const char *path)
 {
 		DIR *dir = opendir(path);
-		if (!dir) {
+		if (!dir)
 				return -1;
-		}
 
 		reader->dir = dir;
 		reader->path = path;
@@ -21,9 +20,10 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
 struct dirent *getNextEntry(DirectoryReader *reader)
 {
 		struct dirent *next_entry = readdir(reader->dir);
-		if (next_entry) {
+		if (next_entry)
 				reader->current_entry = next_entry;
-		} else {
+		else
+		{
 				reader->finished = 1;
 				reader->current_entry = NULL;
 		}
@@ -34,7 +34,9 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 int forEachEntry(DirectoryReader *reader, int (*itemHandler)(DirectoryReader *))
 {
 		int entry_count = 0;
-		while (getNextEntry(reader)) {
+		while (getNextEntry(reader)) 
+		
+		{
 				if (itemHandler(reader) == -1) {
 						/* Handle error */
 						fprintf(stderr, "Error handling directory entry\n");
@@ -47,7 +49,8 @@ int forEachEntry(DirectoryReader *reader, int (*itemHandler)(DirectoryReader *))
 /* Destroy directory reader */
 void destroyDirectoryReader(DirectoryReader *reader)
 {
-		if (reader && reader->dir) {
+		if (reader && reader->dir) 
+		{
 				closedir(reader->dir);
 				mattset(reader, 0, sizeof(*reader));
 		}
