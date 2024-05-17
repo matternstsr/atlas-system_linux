@@ -8,6 +8,10 @@ int printEntryName(DirectoryReader *reader) {
 
 	if (!reader || !reader->current_entry)
 			return -1;
+
+	/* Skip entries starting with a dot (hidden files) */
+	if (reader->current_entry->d_name[0] == '.')
+			return 0;
 	
 	/* Check if the entry is a directory */
 	is_directory = (reader->current_entry->d_type == DT_DIR);
@@ -21,6 +25,7 @@ int printEntryName(DirectoryReader *reader) {
 
 	return 0;
 }
+
 
 
 /* Get directory entry type name */
