@@ -1,4 +1,3 @@
-
 /* directory_operations.c */
 
 #include "directory_reader.h"
@@ -10,6 +9,7 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
 		if (!dir) {
 				return -1;
 		}
+
 		reader->dir = dir;
 		reader->path = path;
 		reader->current_entry = NULL;
@@ -49,6 +49,6 @@ void destroyDirectoryReader(DirectoryReader *reader)
 {
 		if (reader && reader->dir) {
 				closedir(reader->dir);
-				mattset(reader, 0, sizeof(*reader));
+				memset(reader, 0, sizeof(*reader));
 		}
 }
