@@ -24,7 +24,7 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 
 	if (next_entry)
 		reader->current_entry = next_entry;
-		else 
+		else
 	{
 	reader->finished = 1;
 	reader->current_entry = NULL;
@@ -37,7 +37,7 @@ int forEachEntry(DirectoryReader *reader, int (*itemHandler)(DirectoryReader *))
 {
 	int entry_count = 0;
 
-	while (getNextEntry(reader)) 
+	while (getNextEntry(reader))
 	{
 		if (itemHandler(reader) == -1)
 		{
