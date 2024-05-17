@@ -2,6 +2,7 @@
 #define DIRECTORY_READER_H
 
 #include <dirent.h>
+#include <stdio.h> /* Included this line to resolve the error for fprintf and memeset*/
 
 /* Structure to handle directory reading */
 typedef struct DirectoryReader {

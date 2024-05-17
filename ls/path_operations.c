@@ -1,5 +1,4 @@
 #include "directory_reader.h"
-#include <stdio.h>
 
 /* Join directory path and entry name */
 const char *joinPath(const char *dirpath, const char *entry_name) {

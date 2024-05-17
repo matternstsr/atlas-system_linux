@@ -1,5 +1,4 @@
 #include "directory_reader.h"
-#include <stdio.h>
 
 /* Print directory entry name */
 int printEntryName(DirectoryReader *reader) {
