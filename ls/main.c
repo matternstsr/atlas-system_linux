@@ -14,13 +14,13 @@ int main(int argc, char **argv) {
 		/* Set directory path */
 		if (argc == 2) {
 				directory_path = argv[1];
-				// Check if the user wants to show hidden files
+				/* Check if the user wants to show hidden files */
 				if (strcmp(argv[1], "-a") == 0) {
 						show_all = 0;
 						directory_path = ".";
 				}
 		} else {
-				directory_path = "."; // Default to current directory if no directory path provided
+				directory_path = "."; /* Default to current directory if no directory path provided */
 		}
 
 		/* Initialize directory reader */
