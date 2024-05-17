@@ -8,6 +8,7 @@
 #include <string.h> /* Include this line to resolve the error of memeset */
 #include <stdlib.h> /* Included this line to resolve the undeclared symbols and for qsort */
 #include <stddef.h> /* Included this line to resolve issues for my_functions */
+#include <strings.h> // Include strings.h for strcasecmp
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
