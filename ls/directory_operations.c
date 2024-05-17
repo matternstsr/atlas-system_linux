@@ -33,7 +33,8 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 }
 
 /* Iterate through directory entries and apply item handler */
-int forEachEntry(DirectoryReader *reader, int (*itemHandler)(DirectoryReader *))
+int forEachEntry(DirectoryReader *reader,
+								int (*itemHandler)(DirectoryReader *))
 {
 	int entry_count = 0;
 
