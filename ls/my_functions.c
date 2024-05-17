@@ -21,3 +21,18 @@ void *mattset(void *ptr, int value, size_t num) {
 	}
 	return ptr;
 }
+
+/* Sort directory entries by name using mattsort (Bubble Sort) */
+void mattsort(struct dirent **entries, int num_entries) {
+    int i, j;
+    for (i = 0; i < num_entries - 1; i++) {
+        for (j = 0; j < num_entries - i - 1; j++) {
+            if (mattcomp(entries[j]->d_name, entries[j+1]->d_name) > 0) {
+                /* Swap entries */
+                struct dirent *temp = entries[j];
+                entries[j] = entries[j+1];
+                entries[j+1] = temp;
+            }
+        }
+    }
+}

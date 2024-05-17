@@ -4,11 +4,11 @@
 #define DIRECTORY_READER_H
 
 #include <dirent.h>
-#include <stdio.h> /* Included this line to resolve the error for fprintf and memeset*/
-#include <string.h> /* Include this line to resolve the error of memeset */
-#include <stdlib.h> /* Included this line to resolve the undeclared symbols and for qsort */
-#include <stddef.h> /* Included this line to resolve issues for my_functions */
-#include <strings.h> /* Include strings.h for strcasecmp */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <strings.h>
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -20,11 +20,11 @@
 
 /* Structure to handle directory reading */
 typedef struct DirectoryReader {
-	DIR *dir;
-	const char *path;
-	struct dirent *current_entry;
-	int finished;
-	int show_all;
+    DIR *dir;
+    const char *path;
+    struct dirent *current_entry;
+    int finished;
+    int show_all;
 } DirectoryReader;
 
 /* Function prototypes */
@@ -37,6 +37,6 @@ const char *joinPath(const char *dirpath, const char *entry_name);
 int printEntryName(DirectoryReader *reader);
 int mattcomp(const char *str1, const char *str2);
 void *mattset(void *ptr, int value, size_t num);
-int main(int argc, char **argv);
+void mattsort(struct dirent **entries, int num_entries);  /* Declaration of mattsort function */
 
 #endif /* DIRECTORY_READER_H */

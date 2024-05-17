@@ -4,9 +4,8 @@
 
 /* Print directory entry name */
 int printEntryName(DirectoryReader *reader) {
-
 	int is_directory;
-
+	
 	if (!reader || !reader->current_entry)
 			return -1;
 
