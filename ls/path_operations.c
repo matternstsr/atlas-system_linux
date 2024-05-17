@@ -2,7 +2,7 @@
 
 #include "directory_reader.h"
 
-/* 
+/*
  * joinPath - Join directory path and entry name.
  * @dirpath: Pointer to the directory path string.
  * @entry_name: Pointer to the entry name string.
