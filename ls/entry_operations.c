@@ -4,13 +4,13 @@
 int printEntryName(DirectoryReader *reader)
 {
 	int is_directory;
-	
+
 	if (!reader || !reader->current_entry)
-			return (-1);
+		return (-1);
 
 	/* Skip hidden files (those starting with a dot) */
 	if (reader->current_entry->d_name[0] == '.')
-			return (0);
+		return (0);
 
 	/* Check if the entry is a directory */
 	is_directory = (reader->current_entry->d_type == DT_DIR);
