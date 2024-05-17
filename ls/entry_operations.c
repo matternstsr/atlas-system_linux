@@ -2,7 +2,7 @@
 
 #include "directory_reader.h"
 
-/* Print directory entry name */
+/* Print directory entry name without ANSI escape codes */
 int printEntryName(DirectoryReader *reader) {
 	int is_directory;
 	
@@ -16,9 +16,9 @@ int printEntryName(DirectoryReader *reader) {
 	/* Check if the entry is a directory */
 	is_directory = (reader->current_entry->d_type == DT_DIR);
 
-	/* Print directories in blue */
+	/* Print directories */
 	if (is_directory) {
-			printf("\x1b[34m%s\x1b[0m\n", reader->current_entry->d_name);
+			printf("%s\n", reader->current_entry->d_name);
 	} else {
 			printf("%s\n", reader->current_entry->d_name);
 	}
