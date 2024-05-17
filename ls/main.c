@@ -2,6 +2,11 @@
 
 #include "directory_reader.h"
 
+/* Comparison function for qsort */
+int compareEntries(const void *a, const void *b) {
+    return strcmp((*(struct dirent **)a)->d_name, (*(struct dirent **)b)->d_name);
+}
+
 int main(int argc, char **argv) {
 
 	int entry_count, i;
