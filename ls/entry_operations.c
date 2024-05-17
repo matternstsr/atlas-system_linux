@@ -4,11 +4,13 @@
 
 /* Print directory entry name */
 int printEntryName(DirectoryReader *reader) {
+	int is_directory;
+
 	if (!reader || !reader->current_entry)
 			return -1;
 	
 	/* Check if the entry is a directory */
-	int is_directory = (reader->current_entry->d_type == DT_DIR);
+	is_directory = (reader->current_entry->d_type == DT_DIR);
 
 	/* Print directories in blue */
 	if (is_directory) {
