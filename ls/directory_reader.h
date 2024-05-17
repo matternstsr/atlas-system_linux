@@ -37,6 +37,6 @@ const char *joinPath(const char *dirpath, const char *entry_name);
 int printEntryName(DirectoryReader *reader);
 int mattcomp(const char *str1, const char *str2);
 void *mattset(void *ptr, int value, size_t num);
-
+int main(int argc, char **argv);
 
 #endif /* DIRECTORY_READER_H */

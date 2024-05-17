@@ -3,6 +3,9 @@
 #include "directory_reader.h"
 
 int main(int argc, char **argv) {
+
+	int entry_count, i;
+
     const char *directory_path;
     int show_all = 1;
     DirectoryReader reader;
@@ -35,7 +38,7 @@ int main(int argc, char **argv) {
     reader.show_all = show_all;
 
     /* Collect directory entries */
-    int entry_count = 0;
+    entry_count = 0;
     while (getNextEntry(&reader)) {
         entries[entry_count++] = reader.current_entry;
     }
@@ -44,7 +47,7 @@ int main(int argc, char **argv) {
     qsort(entries, entry_count, sizeof(struct dirent *), compareEntries);
 
     /* Print sorted directory entries */
-    for (int i = 0; i < entry_count; ++i) {
+    for (i = 0; i < entry_count; ++i) {
         printEntryName(entries[i]);
     }
 
