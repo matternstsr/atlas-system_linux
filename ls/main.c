@@ -9,11 +9,12 @@ int compareEntries(const void *a, const void *b) {
 int main(int argc, char **argv) {
 
 	int entry_count;
+	int i;
 
     const char *directory_path;
     int show_all = 1;
     DirectoryReader reader;
-    struct dirent *entries[1000]; // Assuming max 1000 entries
+    struct dirent *entries[1000]; /* Assuming max 1000 entries */
 
     /* Check for correct usage */
     if (argc > 2) {
@@ -30,7 +31,7 @@ int main(int argc, char **argv) {
             directory_path = ".";
         }
     } else {
-        directory_path = "."; // Default to current directory if no directory path provided
+        directory_path = "."; /* Default to current directory if no directory path provided */
     }
 
     /* Initialize directory reader */
@@ -51,8 +52,8 @@ int main(int argc, char **argv) {
     qsort(entries, entry_count, sizeof(struct dirent *), compareEntries);
 
     /* Print sorted directory entries */
-    for (int i = 0; i < entry_count; ++i) {
-        printEntryName(&reader); // Pass the DirectoryReader pointer instead of dirent pointer
+    for (i = 0; i < entry_count; ++i) {
+        printEntryName(&reader); /* Pass the DirectoryReader pointer instead of dirent pointer */
     }
 
     /* Cleanup */
