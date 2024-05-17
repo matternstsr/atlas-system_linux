@@ -1,6 +1,10 @@
 #include "directory_reader.h"
 
-/* Print directory entry name without ANSI escape codes */
+/* 
+ * printEntryName - Print directory entry name without ANSI escape codes.
+ * @reader: Pointer to a DirectoryReader structure.
+ * Returns: 0 on success, -1 if reader or reader->current_entry is NULL.
+ */
 int printEntryName(DirectoryReader *reader)
 {
 	int is_directory;
@@ -23,7 +27,11 @@ int printEntryName(DirectoryReader *reader)
 	return (0);
 }
 
-/* Get directory entry type name */
+/* 
+ * getEntryTypeName - Get directory entry type name.
+ * @d_type: The directory entry type.
+ * Returns: A string describing the directory entry type.
+ */
 const char *getEntryTypeName(unsigned char d_type)
 {
 	switch (d_type)

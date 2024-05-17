@@ -1,7 +1,13 @@
 /* my_functions.c */
 #include "directory_reader.h"
 
-/* Custom memset function */
+/* 
+ * mattset - Custom memset function.
+ * @ptr: Pointer to the memory area to be filled.
+ * @value: Value to be set. Note: treated as unsigned.
+ * @num: Number of bytes to be set to the value.
+ * Returns: Pointer to the memory area.
+ */
 void *mattset(void *ptr, int value, size_t num)
 {
 unsigned char *p = ptr;
@@ -13,7 +19,12 @@ while (num--)
 return (ptr);
 }
 
-/* Custom string comparison function */
+/* 
+ * mattcomp - Custom string comparison function.
+ * @str1: Pointer to the first string.
+ * @str2: Pointer to the second string.
+ * Returns: An integer less than, equal to, or greater than zero if str1 is found, respectively, to be less than, to match, or be greater than str2.
+ */
 int mattcomp(const char *str1, const char *str2)
 {
 while (*str1 && *str2)
