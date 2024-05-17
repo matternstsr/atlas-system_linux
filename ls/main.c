@@ -1,17 +1,12 @@
 /* main.c */
 
 #include "directory_reader.h"
-
-/* Comparison function for qsort */
-int compareEntries(const void *a, const void *b) {
-	return mattcomp((*(struct dirent **)a)->d_name, (*(struct dirent **)b)->d_name);
-}
+#include <string.h>
 
 int main(int argc, char **argv) {
 	const char *directory_path;
 	int show_all = 1;
 	DirectoryReader reader;
-	struct dirent *entries[1000]; /* Assuming max 1000 entries */
 
 	/* Check for correct usage */
 	if (argc > 2) {
@@ -22,7 +17,7 @@ int main(int argc, char **argv) {
 	/* Set directory path */
 	if (argc == 2) {
 			directory_path = argv[1];
-			/* Check if the user wants to show hidden files */
+			/*  Check if the user wants to show hidden files */
 			if (mattcomp(argv[1], "-a") == 0) {
 					show_all = 0;
 					directory_path = ".";
@@ -39,18 +34,10 @@ int main(int argc, char **argv) {
 
 	reader.show_all = show_all;
 
-	/* Collect directory entries */
-	int entry_count = 0;
-	while (getNextEntry(&reader)) {
-			entries[entry_count++] = reader.current_entry;
-	}
-
-	/* Sort entries alphabetically */
-	qsort(entries, entry_count, sizeof(struct dirent *), compareEntries);
-
-	/* Print sorted directory entries */
-	for (int i = 0; i < entry_count; ++i) {
-			printEntryName(entries[i]);
+	/* Iterate through directory entries and print them */
+	if (forEachEntry(&reader, printEntryName) == -1) {
+			fprintf(stderr, "Error occurred parsing directory '%s'\n", directory_path);
+			return EXIT_FAILURE;
 	}
 
 	/* Cleanup */
