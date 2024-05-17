@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <strings.h>
-#include <ctype.h> /* Convert characters to lowercase for comparison */
+#include <ctype.h> /* Conv chars to lower for comp */
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -37,6 +37,6 @@ const char *joinPath(const char *dirpath, const char *entry_name);
 int printEntryName(DirectoryReader *reader);
 int mattcomp(const char *str1, const char *str2);
 void *mattset(void *ptr, int value, size_t num);
-void mattsort(struct dirent **entries, int num_entries);  /* Declaration of mattsort function */
+void mattsort(struct dirent **entries, int num_entries);
 
 #endif /* DIRECTORY_READER_H */
