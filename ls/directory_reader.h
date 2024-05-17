@@ -31,7 +31,7 @@ typedef struct DirectoryReader
 int initDirectoryReader(DirectoryReader *reader, const char *path);
 struct dirent *getNextEntry(DirectoryReader *reader);
 int forEachEntry(DirectoryReader *reader,
-								int (*itemHandler)(DirectoryReader *))
+								int (*itemHandler)(DirectoryReader *));
 void destroyDirectoryReader(DirectoryReader *reader);
 const char *getEntryTypeName(unsigned char d_type);
 const char *joinPath(const char *dirpath, const char *entry_name);
