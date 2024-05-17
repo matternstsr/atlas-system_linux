@@ -2,10 +2,16 @@
 
 #include "directory_reader.h"
 
+/* Comparison function for qsort */
+int compareEntries(const void *a, const void *b) {
+    return strcmp((*(struct dirent **)a)->d_name, (*(struct dirent **)b)->d_name);
+}
+
 /* Print directory entry name */
 int printEntryName(DirectoryReader *reader) {
+
 	int is_directory;
-	
+
 	if (!reader || !reader->current_entry)
 			return -1;
 
