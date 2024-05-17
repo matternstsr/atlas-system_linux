@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <strings.h>
+#include <ctype.h> /* Convert characters to lowercase for comparison */
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
