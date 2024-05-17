@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 	const char *directory_path;
 	int show_all = 1;
 	DirectoryReader reader;
-	
+
 	/* Check for correct usage */
 	if (argc > 2)
 	{
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		}
 	}
 	else
-		directory_path = "."; /* Default to current directory if no directory path provided */
+		directory_path = "."; /* Default to cur dir if no dir path prov */
 	/* Initialize directory reader */
 	if (initDirectoryReader(&reader, directory_path) == -1)
 	{
