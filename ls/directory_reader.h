@@ -3,6 +3,7 @@
 
 #include <dirent.h>
 #include <stdio.h> /* Included this line to resolve the error for fprintf and memeset*/
+#include <string.h> /* Include this line to resolve the error of memeset */
 
 /* Structure to handle directory reading */
 typedef struct DirectoryReader {
