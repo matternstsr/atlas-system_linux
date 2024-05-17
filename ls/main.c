@@ -4,7 +4,7 @@
 
 /* Comparison function for qsort */
 int compareEntries(const void *a, const void *b) {
-    return strcmp((*(struct dirent **)a)->d_name, (*(struct dirent **)b)->d_name);
+    return mattcomp((*(struct dirent **)a)->d_name, (*(struct dirent **)b)->d_name);
 }
 int main(int argc, char **argv) {
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         directory_path = argv[1];
         /* Check if the user wants to show hidden files */
-        if (strcmp(argv[1], "-a") == 0) {
+        if (mattcomp(argv[1], "-a") == 0) {
             show_all = 0;
             directory_path = ".";
         }
