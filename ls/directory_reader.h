@@ -7,6 +7,7 @@
 #include <stdio.h> /* Included this line to resolve the error for fprintf and memeset*/
 #include <string.h> /* Include this line to resolve the error of memeset */
 #include <stdlib.h> /* Included this line to resolve the undeclared symbols */
+#include <stddef.h> /* Included this line to resolve issues for my_functions */
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -33,5 +34,8 @@ void destroyDirectoryReader(DirectoryReader *reader);
 const char *getEntryTypeName(unsigned char d_type);
 const char *joinPath(const char *dirpath, const char *entry_name);
 int printEntryName(DirectoryReader *reader);
+int mattcomp(const char *str1, const char *str2);
+void *mattset(void *ptr, int value, size_t num);
+
 
 #endif /* DIRECTORY_READER_H */
