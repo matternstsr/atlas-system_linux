@@ -69,6 +69,7 @@ int forEachEntry(DirectoryReader *reader,
 	int entry_count = 0;
 	int capacity = INITIAL_CAPACITY;
 	struct dirent **entries = malloc(capacity * sizeof(struct dirent *));
+	struct dirent **new_entries = realloc(entries, capacity * sizeof(struct dirent *));
 
 	if (entries == NULL)
 	{
@@ -84,7 +85,7 @@ int forEachEntry(DirectoryReader *reader,
 		{
 			/* Resize the array if it's full */
 			capacity *= 2;
-			struct dirent **new_entries = realloc(entries, capacity * sizeof(struct dirent *));
+			new_entries = realloc(entries, capacity * sizeof(struct dirent *));
 			if (new_entries == NULL)
 			{
 			/* Handle memory reallocation failure */
