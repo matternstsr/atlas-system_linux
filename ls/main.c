@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     for (i = 1; i < argc; i++) {
         path = argv[i];
         if (lstat(path, &statbuf) == -1) {
-            printf("%s: cannot access %s: %s\n", argv[0], path, strerror(errno));
+            printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
             continue;
         }
         if (!S_ISDIR(statbuf.st_mode)) {
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
         }
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
-            printf("%s: cannot open directory %s: %s\n", argv[0], path, strerror(errno));
+            printf("%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             return (EXIT_FAILURE);
         }
 
