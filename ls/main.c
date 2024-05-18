@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "directory_reader.h"
-#include <sys/stat.h>
 
 int isDirectory(const char *path) {
     DIR *dir = opendir(path);
@@ -17,8 +16,12 @@ int isDirectory(const char *path) {
 }
 
 int fileExists(const char *path) {
-    struct stat buffer;
-    return stat(path, &buffer) == 0;
+    FILE *file = fopen(path, "r");
+    if (file != NULL) {
+        fclose(file);
+        return 1; /* File exists */
+    }
+    return 0; /* File doesn't exist */
 }
 
 int main(int argc, char **argv)
