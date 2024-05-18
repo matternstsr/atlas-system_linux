@@ -6,8 +6,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <errno.h> /* Include errno for error handling */
+#include <errno.h> // Include errno for error handling
 #include <limits.h>
+
 
 int main(int argc, char **argv) {
     int i;
@@ -24,6 +25,12 @@ int main(int argc, char **argv) {
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
+
+        // Skip the program name itself
+        if (i == 0) {
+            continue;
+        }
+
         if (lstat(path, &statbuf) == -1) {
             printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
             continue;
