@@ -10,7 +10,7 @@
  * Description: This function fills the memory area pointed to
  * by ptr with the specified value.
  *
- * Returns: Pointer to the memory area.
+ * Return: Pointer to the memory area.
  */
 void *mattset(void *ptr, int value, size_t num)
 {
