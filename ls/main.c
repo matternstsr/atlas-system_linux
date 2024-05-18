@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         if (type == 0)
         {
             if (access(path, F_OK) == 0) {
-                printf("%s\n", path); // File exists, print the path
+                printf("%s\n", path); /* File exists, print the path */
             } else {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
             }
