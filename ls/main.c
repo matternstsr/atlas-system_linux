@@ -46,8 +46,12 @@ int main(int argc, char **argv) {
         }
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
+            if (errno == ENOENT) {
+                printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
+                continue; /* Continue to the next directory */
+            }
             printf("%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
-            continue; /* Continue to the next directory */
+            return (EXIT_FAILURE);
         }
 
         printf("%s:\n", path); /* Always print directory path */
