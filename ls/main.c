@@ -8,11 +8,12 @@
 
 int isDirectory(const char *path) {
     DIR *dir = opendir(path);
+		
     if (dir != NULL) {
         closedir(dir);
-        return 1; // Directory exists
+        return (1); /* Directory exists */
     }
-    return 0; // Not a directory or doesn't exist
+    return (0); /* Not a directory or doesn't exist */
 }
 
 /**
@@ -25,11 +26,6 @@ int isDirectory(const char *path) {
  *
  * Return: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "directory_reader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
