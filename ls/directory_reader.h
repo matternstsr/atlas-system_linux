@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <strings.h>
 #include <ctype.h> /* Conv chars to lower for comp */
+#include "directory_op_entries.c"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -18,21 +19,6 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 #define INITIAL_CAPACITY 100
-
-/**
- * struct dirent - Directory entry structure
- *
- * Description: This structure represents a directory entry,
- * containing information about a file or directory.
- */
-typedef struct DirectoryReader
-{
-	DIR *dir;
-	const char *path;
-	struct dirent *current_entry;
-	int finished;
-	int show_all;
-} DirectoryReader;
 
 /* Function prototypes */
 int initDirectoryReader(DirectoryReader *reader, const char *path);
