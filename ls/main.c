@@ -5,7 +5,6 @@
 #include <string.h>
 #include "directory_reader.h"
 #include <sys/stat.h>
-#include <unistd.h>
 
 int isDirectory(const char *path) {
     DIR *dir = opendir(path);
@@ -15,6 +14,11 @@ int isDirectory(const char *path) {
         return 1; /* Directory exists */
     }
     return 0; /* Not a directory or doesn't exist */
+}
+
+int fileExists(const char *path) {
+    struct stat buffer;
+    return stat(path, &buffer) == 0;
 }
 
 int main(int argc, char **argv)
@@ -39,7 +43,7 @@ int main(int argc, char **argv)
 
         if (type == 0)
         {
-            if (access(path, F_OK) == 0) {
+            if (fileExists(path)) {
                 printf("%s\n", path); /* File exists, print the path */
             } else {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
