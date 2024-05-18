@@ -47,15 +47,15 @@ int main(int argc, char **argv) {
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
             fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
-            return EXIT_FAILURE;
+            continue; /* Continue to next directory instead of returning immediately */
         }
 
         printf("%s:\n", path); /* Print the directory path */
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
-            destroyDirectoryReader(&reader); /* Clean up before returning */
-            return EXIT_FAILURE;
+            destroyDirectoryReader(&reader); /* Clean up before continuing */
+            continue; /* Continue to next directory */
         }
 
         destroyDirectoryReader(&reader);
