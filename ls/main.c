@@ -41,14 +41,14 @@ int main(int argc, char **argv)
 	/* Initialize directory reader */
 	if (initDirectoryReader(&reader, directory_path) == -1)
 	{
-	/* fprintf(stderr, "Failure opening directory '%s'\n", directory_path); */
+	fprintf(stderr, "Failure opening directory '%s'\n", directory_path);
 	return (EXIT_FAILURE);
 	}
 	reader.show_all = show_all;
 	/* Iterate through directory entries and print them */
 	if (forEachEntry(&reader, printEntryName) == -1)
 	{
-/* 	fprintf(stderr, "Error occurred parsing directory '%s'\n", directory_path); */
+	fprintf(stderr, "Error occurred parsing directory '%s'\n", directory_path);
 	return (EXIT_FAILURE);
 	}
 	/* Cleanup */
