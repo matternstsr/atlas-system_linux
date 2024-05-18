@@ -48,7 +48,9 @@ int main(int argc, char **argv) {
                 return (EXIT_FAILURE);
             }
 
-            printf("%s:\n", path); /* Print directory path */
+            if (has_multiple_dirs) { /* Print directory path only if there are multiple directories */
+                printf("%s:\n", path);
+            }
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
