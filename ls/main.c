@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <errno.h> // Include errno for error handling
+#include <errno.h> /* Include errno for error handling */
 #include <limits.h>
 
 
