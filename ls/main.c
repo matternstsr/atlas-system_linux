@@ -39,10 +39,10 @@ int main(int argc, char **argv)
 {
 		int i;
     DirectoryReader reader;
-		const char *path = argv[i];
-		int is_dir = isDirectory(path);
+		const char *path;
+		int is_dir;
 		int init_result;
-		int has_multiple_dirs = argc > 2 && i < argc - 1;
+		int has_multiple_dirs;
 
     if (argc < 2)
     {
@@ -51,10 +51,9 @@ int main(int argc, char **argv)
     }
     for (i = 1; i < argc; i++)
     {
-        const char *path = argv[i];
-        int is_dir = isDirectory(path);
-        int init_result;
-        int has_multiple_dirs = argc > 2 && i < argc - 1;
+        path = argv[i];
+        is_dir = isDirectory(path);
+        has_multiple_dirs = argc > 2 && i < argc - 1;
 
         if (is_dir)
         {
