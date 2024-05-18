@@ -58,11 +58,11 @@ return (*str1 - *str2);
  */
 char mattlower(char c)
 {
-    if (c >= 'A' && c <= 'Z')
-        /* Convert uppercase letter to lowercase */
-        return (c + ('a' - 'A'));
-    else
-        /* Return unchanged for non-uppercase characters */
-        return (c);
+if (c >= 'A' && c <= 'Z')
+	/* Convert uppercase letter to lowercase */
+	return (c + ('a' - 'A'));
+else
+	/* Return unchanged for non-uppercase characters */
+	return (c);
 }
 
