@@ -71,6 +71,7 @@ int forEachEntry(DirectoryReader *reader,
 	int capacity = INITIAL_CAPACITY;
 	struct dirent **entries;
 	struct dirent **new_entries;
+	int i;
 
 	entries = malloc(capacity * sizeof(struct dirent *));
 	if (entries == NULL)
@@ -104,7 +105,6 @@ int forEachEntry(DirectoryReader *reader,
 	mattsort(entries, entry_count);
 
 	/* Iterate over sorted entries and process them */
-	int i;
 	for (i = 0; i < entry_count; ++i)
 	{
 		reader->current_entry = entries[i];
