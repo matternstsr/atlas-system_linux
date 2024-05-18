@@ -48,8 +48,7 @@ int main(int argc, char **argv) {
                 return (EXIT_FAILURE);
             }
 
-            if (has_multiple_dirs) /* Print directory path only if there are multiple directories */
-                printf("%s:\n", path);
+            printf("%s:\n", path); /* Print directory path */
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
@@ -57,6 +56,9 @@ int main(int argc, char **argv) {
             }
 
             destroyDirectoryReader(&reader);
+
+            if (has_multiple_dirs && i < argc - 1) /* Print new line if there are more directories */
+                printf("\n");
         }
     }
 
