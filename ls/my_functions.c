@@ -2,7 +2,7 @@
 #include "directory_reader.h"
 
 /*
- * mattset - Custom memset function.
+ * mattset: Custom memset function.
  * @ptr: Pointer to the memory area to be filled.
  * @value: Value to be set. Note: treated as unsigned.
  * @num: Number of bytes to be set to the value.

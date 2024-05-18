@@ -3,7 +3,7 @@
 #include "directory_reader.h"
 
 /*
- * initDirectoryReader - directory reader object with the specified path.
+ * initDirectoryReader: directory reader object with the specified path.
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  * Returns: 0 on success, -1 if failed to open the directory.
@@ -23,7 +23,7 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
 }
 
 /*
- * getNextEntry - Retr the next dir entry from the dir being read.
+ * getNextEntry: Retr the next dir entry from the dir being read.
  * @reader: Pointer to a DirectoryReader structure.
  * Returns: Pointer to next directory entry. NULL if none or error.
  */
@@ -42,7 +42,7 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 }
 
 /*
- * forEachEntry - Iterates through each directory entry
+ * forEachEntry: Iterates through each directory entry
  and applies a specified item handler function to each entry.
  * @reader: Pointer to a DirectoryReader structure.
  * @itemHandler: Pointer to a function that handles each directory entry.
@@ -66,7 +66,7 @@ int forEachEntry(DirectoryReader *reader,
 }
 
 /*
- * destroyDirectoryReader - Destroys a directory reader object,
+ * destroyDirectoryReader: Destroys a directory reader object,
  closing the directory stream and freeing allocated memory.
  * @reader: Pointer to a DirectoryReader structure to be destroyed.
  */
