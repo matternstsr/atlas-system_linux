@@ -22,11 +22,13 @@ const char *mattError(int errnum) {
 }
 
 /* Function to count the number of entries in the directory */
-int countEntries(const char *name, const struct stat *status, int type, void *arg) {
+int countEntries(const char *name, const struct stat *status, int type,
+                 void *arg) {
     int *numEntries = (int *)arg;
     (*numEntries)++;
     return 0; /* Continue iteration */
 }
+
 
 int main(int argc, char **argv) {
     int i;
