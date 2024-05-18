@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 			continue; /* Skip to the next argument */
 		if (initDirectoryReader(&reader, directory_path) == -1)
 		{
-			fprintf(stderr, "Failure opening directory '%s'\n", directory_path);
+			/* fprintf(stderr, "Failure opening directory '%s'\n", directory_path); */
 			return (EXIT_FAILURE);
 		}
 		if (argc > 2) /* Print directory path only if there are multiple directories */
