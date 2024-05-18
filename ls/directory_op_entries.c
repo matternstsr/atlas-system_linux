@@ -46,26 +46,20 @@ int forEachEntry(DirectoryReader *reader,
 	struct dirent **new_entries;        /* Pointer for reallocated array */
 	int i;                              /* Loop variable */
 
-	/* Allocate memory for the directory entry array */
 	entries = malloc(capacity * sizeof(struct dirent *));
 	if (entries == NULL)
 	{
-		/* Handle memory allocation failure */
 		fprintf(stderr, "Error: Failed to allocate memory for dir entries.\n");
 		return (-1);
 	}
-
-	/* Collect directory entries into the array */
 	while (getNextEntry(reader))
 	{
 		if (entry_count >= capacity)
 		{
-			/* Resize the array if it's full */
 			capacity *= 2;
 			new_entries = realloc(entries, capacity * sizeof(struct dirent *));
 			if (new_entries == NULL)
 			{
-				/* Handle memory reallocation failure */
 				free(entries);
 				fprintf(stderr, "Error: Failed to reallocate mem for dir entries.\n");
 				return (-1);
@@ -74,23 +68,13 @@ int forEachEntry(DirectoryReader *reader,
 		}
 		entries[entry_count++] = reader->current_entry;
 	}
-
-	/* Sort the array of directory entries */
 	mattsort(entries, entry_count);
-
-	/* Iterate over sorted entries and process them */
 	for (i = 0; i < entry_count; ++i)
 	{
 		reader->current_entry = entries[i];
 		if (itemHandler(reader) == -1)
-		{
-			/* Handle error */
 			fprintf(stderr, "Error handling directory entry\n");
-		}
 	}
-
-	/* Free dynamically allocated memory */
 	free(entries);
-
 	return (entry_count);
 }
