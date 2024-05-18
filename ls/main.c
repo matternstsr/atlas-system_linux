@@ -38,11 +38,10 @@ int main(int argc, char **argv) {
             if (lstat(path, &statbuf) == -1) {
                 /* fprintf(stderr, "%s: cannot access %s: No
                 such file or directory\n", argv[0], path); */
-                fprintf(stderr, "[Anything]\n");
                 has_error = 1;
                 continue;
             }
-            fprintf(stdout, "%s\n", path); /* Print the path if it's not a directory */
+            printf("%s\n", path); /* Print the path if it's not a directory */
             continue;
         }
 
@@ -53,7 +52,7 @@ int main(int argc, char **argv) {
                 return EXIT_FAILURE;
             }
 
-            fprintf(stdout, "%s:\n", path);
+            printf("%s:\n", path);
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "%s: error occurred parsing directory %s: %s\n", argv[0], path, strerror(errno));
@@ -64,15 +63,13 @@ int main(int argc, char **argv) {
             destroyDirectoryReader(&reader);
 
             if (i < argc - 1) /* Print new line if there are more directories */
-                fprintf(stdout, "\n");
+                printf("\n");
         }
     }
 
     if (!has_error) {
         fprintf(stderr, "[Anything]\n");
-    } else {
-        return EXIT_FAILURE;
     }
 
-    return EXIT_SUCCESS;
+    return has_error ? EXIT_FAILURE : EXIT_SUCCESS;
 }
