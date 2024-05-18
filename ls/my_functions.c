@@ -71,7 +71,7 @@ else
  * @entries: Pointer to the array of pointers to struct dirent objects.
  * @num_entries: Number of entries in the array.
  *
- * Description: This function sorts an array of pointers to struct dirent objects
+ * Description: This func sorts an array of pointers to struct dirent objects
  * using a custom sorting algorithm.
  */
 void mattsort(struct dirent **entries, int num_entries)
