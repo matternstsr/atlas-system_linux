@@ -4,7 +4,6 @@
 
 /**
  * getNextEntry - Retrieves the next directory entry
- * struct dirent - Directory entry structur
  * from the directory being read.
  * @reader: Pointer to a DirectoryReader structure.
  *
@@ -26,6 +25,12 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 	}
 	return (next_entry);
 }
+/**
+ * struct dirent - Directory entry structure
+ *
+ * Description: This structure represents a directory entry,
+ * containing information about a file or directory.
+ */
 
 /**
  * forEachEntry - Iterates through each directory entry and
