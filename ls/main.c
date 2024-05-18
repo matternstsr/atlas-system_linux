@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 	/* Initialize directory reader */
 	if (initDirectoryReader(&reader, directory_path) == -1)
 	{
-	fprintf(stderr, "Failure opening directory '%s'\n", directory_path);
+	fprintf(stderr, "Anything");
 	return (EXIT_FAILURE);
 	}
 	reader.show_all = show_all;
