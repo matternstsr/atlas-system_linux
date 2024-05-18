@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	}
 	for (i = 1; i < argc; i++)
 	{
-		if (strcmp(directory_path, "-a") == 0)
+		if (mattcomp(directory_path, "-a") == 0)
 			continue; /* Skip to the next argument */
 		if (initDirectoryReader(&reader, directory_path) == -1)
 		{
