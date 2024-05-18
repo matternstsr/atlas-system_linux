@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
+
 int isDirectory(const char *path) {
     struct stat statbuf;
     if (lstat(path, &statbuf) == -1) {
