@@ -17,6 +17,8 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
+#define INITIAL_CAPACITY 100
+
 /* Structure to handle directory reading */
 typedef struct DirectoryReader
 {
