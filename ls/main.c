@@ -30,14 +30,14 @@ int main(int argc, char **argv) {
 
     if (argc < 2) {
         printf("Usage: %s [DIRPATH]...\n", argv[0]);
-        return (EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
 
         if (lstat(path, &statbuf) == -1) {
-            printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
+            fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
             continue;
         }
         if (!S_ISDIR(statbuf.st_mode)) {
@@ -47,19 +47,19 @@ int main(int argc, char **argv) {
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
             if (errno == ENOENT) {
-                printf("%s: %s\n", path, mattError(errno)); /* Print error only for non-existing directories */
+                fprintf(stderr, "%s: %s\n", argv[0], mattError(errno)); /* Print error only for non-existing directories */
                 continue; /* Continue to the next directory */
             }
-            printf("%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
-            return (EXIT_FAILURE);
+            fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
+            return EXIT_FAILURE;
         }
 
         if (argc > 2) /* Print directory name only if multiple directories are specified */
             printf("%s:\n", path);
 
         if (forEachEntry(&reader, printEntryName) == -1) {
-            printf("%s: error parsing directory %s: Parsing error\n", argv[0], path);
-            return (EXIT_FAILURE);
+            fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
+            return EXIT_FAILURE;
         }
 
         destroyDirectoryReader(&reader);
@@ -68,5 +68,5 @@ int main(int argc, char **argv) {
             printf("\n");
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
