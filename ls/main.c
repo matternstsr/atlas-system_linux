@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
         if (!S_ISDIR(statbuf.st_mode)) {
             printf("%s\n", path); /* Print the path if it's not a directory */
             continue;
-
+        }
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
             fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             continue; /* Continue to next directory instead of returning immediately */
