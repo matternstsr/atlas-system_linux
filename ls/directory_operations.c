@@ -43,7 +43,7 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 
 /**
  * forEachEntry: Iterates through each directory entry
- and applies a specified item handler function to each entry.
+ * and applies a specified item handler function to each entry.
  * @reader: Pointer to a DirectoryReader structure.
  * @itemHandler: Pointer to a function that handles each directory entry.
  * Returns: The number of directory entries iterated.
@@ -67,7 +67,7 @@ int forEachEntry(DirectoryReader *reader,
 
 /**
  * destroyDirectoryReader: Destroys a directory reader object,
- closing the directory stream and freeing allocated memory.
+ * closing the directory stream and freeing allocated memory.
  * @reader: Pointer to a DirectoryReader structure to be destroyed.
  */
 void destroyDirectoryReader(DirectoryReader *reader)
