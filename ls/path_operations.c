@@ -3,9 +3,13 @@
 #include "directory_reader.h"
 
 /**
- * joinPath: Join directory path and entry name.
+ * joinPath - Join directory path and entry name.
  * @dirpath: Pointer to the directory path string.
  * @entry_name: Pointer to the entry name string.
+ *
+ * Description: This function joins the directory path
+ * and entry name to form a complete path.
+ *
  * Returns: Pointer to a static buffer containing the joined path.
  */
 const char *joinPath(const char *dirpath, const char *entry_name)

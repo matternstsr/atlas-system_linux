@@ -7,7 +7,10 @@
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  *
- * Description: Does my stuff explained.
+ * Description: Initializes a directory reader object with the specified path.
+ * This function opens the directory specified by @path and sets up
+ * the DirectoryReader structure accordingly.
+ *
  * Returns: 0 on success, -1 if failed to open the directory.
  */
 int initDirectoryReader(DirectoryReader *reader, const char *path)
@@ -25,9 +28,14 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
 }
 
 /**
- * getNextEntry: Retr the next dir entry from the dir being read.
+ * getNextEntry - Retrieves the next directory entry
+ * from the directory being read.
  * @reader: Pointer to a DirectoryReader structure.
- * Returns: Pointer to next directory entry. NULL if none or error.
+ *
+ * Description: This function retrieves the next directory
+ * entry from the directory being read.
+ *
+ * Returns: Pointer to the next directory entry. NULL if none or error.
  */
 struct dirent *getNextEntry(DirectoryReader *reader)
 {
@@ -44,10 +52,14 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 }
 
 /**
- * forEachEntry: Iterates through each directory entry
- * and applies a specified item handler function to each entry.
+ * forEachEntry - Iterates through each directory entry and
+ * applies a specified item handler function to each entry.
  * @reader: Pointer to a DirectoryReader structure.
  * @itemHandler: Pointer to a function that handles each directory entry.
+ *
+ * Description: This function iterates through each directory
+ * entry and applies a specified item handler function to each entry.
+ *
  * Returns: The number of directory entries iterated.
  */
 int forEachEntry(DirectoryReader *reader,
@@ -68,9 +80,12 @@ int forEachEntry(DirectoryReader *reader,
 }
 
 /**
- * destroyDirectoryReader: Destroys a directory reader object,
+ * destroyDirectoryReader - Destroys a directory reader object,
  * closing the directory stream and freeing allocated memory.
  * @reader: Pointer to a DirectoryReader structure to be destroyed.
+ *
+ * Description: This function destroys a directory reader object,
+ * closing the directory stream and freeing allocated memory.
  */
 void destroyDirectoryReader(DirectoryReader *reader)
 {

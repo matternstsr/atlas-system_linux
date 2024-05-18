@@ -4,9 +4,13 @@
 #include <string.h>
 
 /**
- * main: Entry point of the program.
+ * main - Entry point of the program.
  * @argc: Number of command-line arguments.
  * @argv: Array of command-line argument strings.
+ *
+ * Description: Entry point of the program. It processes
+ * command-line arguments and initiates directory reading.
+ *
  * Returns: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
  */
 int main(int argc, char **argv)
