@@ -53,26 +53,43 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 }
 
 /**
+ * destroyDirectoryReader - Destroys a directory reader object,
+ * closing the directory stream and freeing allocated memory.
+ * @reader: Pointer to a DirectoryReader structure to be destroyed.
+ *
+ * Description: This function destroys a directory reader object,
+ * closing the directory stream and freeing allocated memory.
+ */
+void destroyDirectoryReader(DirectoryReader *reader)
+{
+	if (reader && reader->dir)
+	{
+	closedir(reader->dir);
+	mattset(reader, 0, sizeof(*reader));
+	}
+}
+
+/**
  * forEachEntry - Iterates through each directory entry and
  * applies a specified item handler function to each entry.
  * @reader: Pointer to a DirectoryReader structure.
  * @itemHandler: Pointer to a function that handles each directory entry.
  *
  * Description: This function iterates through each directory
- * entry and applies a specified item handler function to each entry.
+ * entry, collects them into an array, sorts the array, and then
+ * applies a specified item handler function to each entry.
  *
  * Return: The number of directory entries iterated.
  */
-
-int forEachEntry(DirectoryReader *reader,
-                                int (*itemHandler)(DirectoryReader *))
+int forEachEntry(DirectoryReader *reader, int (*itemHandler)(DirectoryReader *))
 {
-	int entry_count = 0;
-	int capacity = INITIAL_CAPACITY;
-	struct dirent **entries;
-	struct dirent **new_entries;
-	int i;
+	int entry_count = 0;                /* Counter for the # of directory entries */
+	int capacity = INITIAL_CAPACITY;    /* Initial capacity of the dir entry array */
+	struct dirent **entries;            /* Array to hold dir entries */
+	struct dirent **new_entries;        /* Pointer for reallocated array */
+	int i;                              /* Loop variable */
 
+	/* Allocate memory for the directory entry array */
 	entries = malloc(capacity * sizeof(struct dirent *));
 	if (entries == NULL)
 	{
@@ -81,7 +98,7 @@ int forEachEntry(DirectoryReader *reader,
 		return -1;
 	}
 
-	/* Collect directory entries into an array */
+	/* Collect directory entries into the array */
 	while (getNextEntry(reader))
 	{
 		if (entry_count >= capacity)
@@ -93,7 +110,7 @@ int forEachEntry(DirectoryReader *reader,
 			{
 				/* Handle memory reallocation failure */
 				free(entries);
-				fprintf(stderr, "Error: Failed to reallocate memory for directory entries.\n");
+				fprintf(stderr, "Error: Failed to reallocate memory for dir entries.\n");
 				return -1;
 			}
 			entries = new_entries;
@@ -119,21 +136,4 @@ int forEachEntry(DirectoryReader *reader,
 	free(entries);
 
 	return entry_count;
-}
-
-/**
- * destroyDirectoryReader - Destroys a directory reader object,
- * closing the directory stream and freeing allocated memory.
- * @reader: Pointer to a DirectoryReader structure to be destroyed.
- *
- * Description: This function destroys a directory reader object,
- * closing the directory stream and freeing allocated memory.
- */
-void destroyDirectoryReader(DirectoryReader *reader)
-{
-	if (reader && reader->dir)
-	{
-	closedir(reader->dir);
-	mattset(reader, 0, sizeof(*reader));
-	}
 }
