@@ -41,21 +41,16 @@ int main(int argc, char **argv) {
             continue;
         }
         if (!S_ISDIR(statbuf.st_mode)) {
-            printf("%s\n", path); /* Print the path if it's not a directory */
+            printf("%s\n", path);  /* Print the path if it's not a directory */
             continue;
         }
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
-            if (errno == ENOENT) {
-                fprintf(stderr, "%s: %s\n", argv[0], mattError(errno)); /* Print error only for non-existing directories */
-                continue; /* Continue to the next directory */
-            }
             fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             return EXIT_FAILURE;
         }
 
-        if (argc > 2) /* Print directory name only if multiple directories are specified */
-            printf("%s:\n", path);
+        printf("%s:\n", path); /* Print the directory path */
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
