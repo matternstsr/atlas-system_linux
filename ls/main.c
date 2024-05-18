@@ -35,8 +35,7 @@ int main(int argc, char **argv) {
 
         if (type == 0) {
             if (lstat(path, &statbuf) == -1) {
-                /* fprintf(stderr, "%s: cannot access %s: %s\n",
-                argv[0], path, strerror(errno)); */
+                fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
                 continue;
             }
             printf("%s\n", path); /* Print the path if it's not a directory */
@@ -49,9 +48,7 @@ int main(int argc, char **argv) {
                 return EXIT_FAILURE;
             }
 
-            if (argc > 2) { /* Print directory path only if there are multiple directories */
-                printf("%s:\n", path);
-            }
+            printf("%s:\n", path);
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "%s: error occurred parsing directory %s: %s\n", argv[0], path, strerror(errno));
@@ -60,7 +57,7 @@ int main(int argc, char **argv) {
 
             destroyDirectoryReader(&reader);
 
-            if (argc > 2 && i < argc - 1) /* Print new line if there are more directories */
+            if (i < argc - 1) /* Print new line if there are more directories */
                 printf("\n");
         }
     }
