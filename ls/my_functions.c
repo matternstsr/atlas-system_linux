@@ -93,26 +93,3 @@ void mattsort(struct dirent **entries, int num_entries)
 		}
 	}
 }
-
-
-const char *matt_strerror(int error_code) {
-     /* Define error messages corresponding to error codes */
-    const char *error_messages[] = {
-        "Success",
-        "Operation not permitted",
-        "No such file or directory",
-        /*  Add more error messages here as needed */
-    };
-
-    /*  Calculate the number of elements in the error_messages array */
-    size_t num_error_messages = sizeof(error_messages) / sizeof(error_messages[0]);
-
-    /*  Check if the error_code is within bounds */
-    if (error_code >= 0 && (size_t)error_code < num_error_messages) {
-        /*  Return the corresponding error message */
-        return error_messages[error_code];
-    } else {
-        /*  Return a generic error message if error_code is out of bounds */
-        return "Unknown error";
-    }
-}
