@@ -3,13 +3,13 @@
 #include "directory_reader.h"
 
 /**
- * initDirectoryReader - Initializes a dir reader object with spec path.
+ * initDirectoryReader - Initializes a dir reader object with the spec path.
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  *
- * Description: Initializes a directory reader object with the specified path.
- * This function opens the directory specified by @path and sets up
- * the DirectoryReader structure accordingly.
+ * Description: Initializes a directory reader object with the specified path. 
+ *              This function opens the directory specified by @path and sets up 
+ *              the DirectoryReader structure accordingly.
  *
  * Returns: 0 on success, -1 if failed to open the directory.
  */
