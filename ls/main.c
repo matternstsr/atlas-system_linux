@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 				/* for dir printing on mult dirs*/
         numDirectories++;
 
-        if (numDirectories > 1) {
+        if (numDirectories > 2) {
             printf("\n%s:\n", path); /* Print the directory path only if it's not the first one */
         }
 
