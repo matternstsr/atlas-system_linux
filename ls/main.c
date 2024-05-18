@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
         path = argv[i];
 
         if (lstat(path, &statbuf) == -1) {
-            fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
+            /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
             continue;
         }
         if (!S_ISDIR(statbuf.st_mode)) {
