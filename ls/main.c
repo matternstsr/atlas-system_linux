@@ -21,6 +21,13 @@ const char *mattError(int errnum) {
     }
 }
 
+/* Function to count the number of entries in the directory */
+int countEntries(const char *name, const struct stat *status, int type, void *arg) {
+    int *numEntries = (int *)arg;
+    (*numEntries)++;
+    return 0; /* Continue iteration */
+}
+
 int main(int argc, char **argv) {
     int i;
     struct stat statbuf;
@@ -55,7 +62,7 @@ int main(int argc, char **argv) {
         }
 
         /* Check if there are entries in the directory */
-        if (forEachEntry(&reader, countEntries) == -1) {
+        if (forEachEntry(&reader, countEntries, &numEntries) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
             destroyDirectoryReader(&reader); /* Clean up before continuing */
             continue; /* Continue to next directory */
