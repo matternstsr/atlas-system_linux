@@ -29,13 +29,16 @@ void printDirectoryContents(const char *dir_path) {
     destroyDirectoryReader(&reader);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
+	int i;
+
     if (argc < 2) {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
         return (EXIT_FAILURE);
     }
 
-    for (int i = 1; i < argc; i++) {
+    for (i = 1; i < argc; i++) {
         const char *path = argv[i];
         int type = isDirectory(path);
 
