@@ -3,25 +3,9 @@
 #include "directory_reader.h"
 
 /**
- * struct dirent - Directory entry structure
- *
- * Description: This structure represents a directory entry,
- * containing information about a file or directory.
- */
-typedef struct DirectoryReader
-{
-	DIR *dir;
-	const char *path;
-	struct dirent *current_entry;
-	int finished;
-	int show_all;
-} DirectoryReader;
-
-/**
  * getNextEntry - Retrieves the next directory entry
  * from the directory being read.
  * @reader: Pointer to a DirectoryReader structure.
- *
  * Description: This function retrieves the next directory
  * entry from the directory being read.
  *
