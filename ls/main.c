@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         const char *directory_path = argv[i];
         DirectoryReader reader;
 
-        if (strcmp(directory_path, "-a") == 0)
+        if (mattcomp(directory_path, "-a") == 0)
         {
             continue; /* Skip to the next argument */
         }
