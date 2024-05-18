@@ -9,11 +9,21 @@
 #include <errno.h> /* Include errno for error handling */
 #include <limits.h>
 
+/* Custom error function */
+const char *mattError(int errnum) {
+    switch (errnum) {
+        case ENOENT:
+            return "Directory not found";
+        case EACCES:
+            return "Access denied";
+        default:
+            return "Unknown error";
+    }
+}
 
 int main(int argc, char **argv) {
     int i;
     struct stat statbuf;
-    int has_multiple_dirs = argc > 2;
     DirectoryReader reader;
     const char *path;
     int init_result;
@@ -25,11 +35,6 @@ int main(int argc, char **argv) {
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
-
-        /* Skip the program name itself */
-        if (i == 0) {
-            continue;
-        }
 
         if (lstat(path, &statbuf) == -1) {
             printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
@@ -45,9 +50,7 @@ int main(int argc, char **argv) {
             return (EXIT_FAILURE);
         }
 
-        if (has_multiple_dirs) { /* Print directory path only if there are multiple directories */
-            printf("%s:\n", path);
-        }
+        printf("%s:\n", path); /* Always print directory path */
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             printf("%s: error parsing directory %s: Parsing error\n", argv[0], path);
@@ -56,7 +59,7 @@ int main(int argc, char **argv) {
 
         destroyDirectoryReader(&reader);
 
-        if (has_multiple_dirs && i < argc - 1) /* Print new line if there are more directories */
+        if (i < argc - 1) /* Print new line if there are more directories */
             printf("\n");
     }
 

@@ -9,7 +9,7 @@
 #include <limits.h>
 
 /* Custom error function */
-const char *mattError(int errnum) {
+/* const char *mattError(int errnum) {
     switch (errnum) {
         case ENOENT:
             return "Directory not found";
@@ -18,4 +18,4 @@ const char *mattError(int errnum) {
         default:
             return "Unknown error";
     }
-}
+} */
