@@ -24,8 +24,11 @@
 int main(int argc, char **argv)
 {
 	DirectoryReader reader;
-	int i = 1;
-	const char *directory_path = argv[i];
+	int i;
+	const char *path = argv[i];
+	int is_dir = isDirectory(path);
+	int init_result;
+	int has_multiple_dirs = argc > 2 && i < argc - 1;
 
 	if (argc < 2)
 	{
@@ -34,23 +37,29 @@ int main(int argc, char **argv)
 	}
 	for (i = 1; i < argc; i++)
 	{
-		if (mattcomp(directory_path, "-a") == 0)
-			continue; /* Skip to the next argument */
-		if (initDirectoryReader(&reader, directory_path) == -1)
+		if (is_dir)
 		{
-			/* fprintf(stderr, "Failure opening directory '%s'\n", directory_path); */
-			return (EXIT_FAILURE);
+			if ((init_result = initDirectoryReader(&reader, path)) == -1)
+			{
+				fprintf(stderr, "Failure opening directory '%s'\n", path);
+				return (EXIT_FAILURE);
+			}
+			if (has_multiple_dirs) /* Print directory path only if there are multiple directories */
+				printf("%s:\n", path);
+			if (forEachEntry(&reader, printEntryName) == -1)
+			{
+				fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
+				return (EXIT_FAILURE);
+			}
+			destroyDirectoryReader(&reader);
+			if (has_multiple_dirs) /* Print new line if there are multiple directories */
+				printf("\n");
 		}
-		if (argc > 2) /* Print directory path only if there are multiple directories */
-			printf("%s:\n", directory_path);
-		if (forEachEntry(&reader, printEntryName) == -1)
+		else
 		{
-			fprintf(stderr, "Error occurred parsing directory '%s'\n", directory_path);
-			return (EXIT_FAILURE);
+			/* Print the file path */
+			printf("%s\n", path);
 		}
-		destroyDirectoryReader(&reader);
-		if (argc > 2 && i < argc - 1) /* Print new line if there are multiple directories */
-			printf("\n");
 	}
 	return (EXIT_SUCCESS);
 }
