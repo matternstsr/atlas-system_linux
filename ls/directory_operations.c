@@ -63,19 +63,21 @@ struct dirent *getNextEntry(DirectoryReader *reader)
  *
  * Return: The number of directory entries iterated.
  */
+
 int forEachEntry(DirectoryReader *reader,
-								int (*itemHandler)(DirectoryReader *))
+                                int (*itemHandler)(DirectoryReader *))
 {
 	int entry_count = 0;
 	int capacity = INITIAL_CAPACITY;
-	struct dirent **entries = malloc(capacity * sizeof(struct dirent *));
-	struct dirent **new_entries = realloc(entries, capacity * sizeof(struct dirent *));
+	struct dirent **entries;
+	struct dirent **new_entries;
 
+	entries = malloc(capacity * sizeof(struct dirent *));
 	if (entries == NULL)
 	{
-	/* Handle memory allocation failure */
-	fprintf(stderr, "Error: Failed to allocate memory for directory entries.\n");
-	return -1;
+		/* Handle memory allocation failure */
+		fprintf(stderr, "Error: Failed to allocate memory for directory entries.\n");
+		return -1;
 	}
 
 	/* Collect directory entries into an array */
@@ -88,19 +90,22 @@ int forEachEntry(DirectoryReader *reader,
 			new_entries = realloc(entries, capacity * sizeof(struct dirent *));
 			if (new_entries == NULL)
 			{
-			/* Handle memory reallocation failure */
-			free(entries);
-			fprintf(stderr, "Error: Failed to reallocate memory for directory entries.\n");
-			return -1;
+				/* Handle memory reallocation failure */
+				free(entries);
+				fprintf(stderr, "Error: Failed to reallocate memory for directory entries.\n");
+				return -1;
 			}
 			entries = new_entries;
 		}
 		entries[entry_count++] = reader->current_entry;
 	}
+
 	/* Sort the array of directory entries */
 	mattsort(entries, entry_count);
+
 	/* Iterate over sorted entries and process them */
-	for (int i = 0; i < entry_count; ++i)
+	int i;
+	for (i = 0; i < entry_count; ++i)
 	{
 		reader->current_entry = entries[i];
 		if (itemHandler(reader) == -1)
@@ -109,8 +114,10 @@ int forEachEntry(DirectoryReader *reader,
 			fprintf(stderr, "Error handling directory entry\n");
 		}
 	}
+
 	/* Free dynamically allocated memory */
 	free(entries);
+
 	return entry_count;
 }
 
