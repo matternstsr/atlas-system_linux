@@ -22,13 +22,11 @@ const char *mattError(int errnum) {
 }
 
 /* Function to count the number of entries in the directory */
-int countEntries(const char *name, const struct stat *status, int type,
-                 void *arg) {
+int countEntries(void *arg) {
     int *numEntries = (int *)arg;
     (*numEntries)++;
     return 0; /* Continue iteration */
 }
-
 
 int main(int argc, char **argv) {
     int i;
@@ -46,9 +44,7 @@ int main(int argc, char **argv) {
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
-        /* Increase the number of directories processed */
         numDirectories++;
-        numEntries = 0; /* Reset the counter for the number of entries in the directory */
 
         if (lstat(path, &statbuf) == -1) {
             /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
@@ -63,20 +59,13 @@ int main(int argc, char **argv) {
             continue; /* Continue to next directory instead of returning immediately */
         }
 
-        /* Check if there are entries in the directory */
-        if (forEachEntry(&reader, countEntries, &numEntries) == -1) {
-            fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
-            destroyDirectoryReader(&reader); /* Clean up before continuing */
-            continue; /* Continue to next directory */
-        }
-
-        if (numDirectories > 1 || numEntries > 0) {
-            printf("\n%s:\n", path); /* Print the directory path if there are multiple directories or entries */
+        if (numDirectories > 1 || (numDirectories == 1 && numEntries > 0)) {
+            printf("\n%s:\n", path); /* Print the directory path if there are multiple files or folders */
         }
 
         numEntries = 0; /* Reset the counter for the number of entries in the directory */
 
-        if (forEachEntry(&reader, printEntryName) == -1) {
+        if (forEachEntry(&reader, countEntries, &numEntries) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
             destroyDirectoryReader(&reader); /* Clean up before continuing */
             continue; /* Continue to next directory */
