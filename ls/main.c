@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
     const char *path;
     int init_result;
     int numDirectories = 0; /* Counter for the number of directories */
+    int numEntries = 0; /* Counter for the number of entries in the directory */
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
@@ -36,10 +37,6 @@ int main(int argc, char **argv) {
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
-
-				/* Increase the number of directories processed */
-				/* for dir printing on mult dirs*/
-        numDirectories++;
 
         if (lstat(path, &statbuf) == -1) {
             /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
@@ -55,9 +52,14 @@ int main(int argc, char **argv) {
             continue; /* Continue to next directory instead of returning immediately */
         }
 
-        if (numDirectories > 2) {
-            printf("\n%s:\n", path); /* Print the directory path only if it's not the first one */
+        /* Increase the number of directories processed */
+        numDirectories++;
+
+        if (numDirectories > 1 || (numDirectories == 1 && numEntries > 0)) {
+            printf("\n%s:\n", path); /* Print the directory path if there are multiple files or folders */
         }
+
+        numEntries = 0; /* Reset the counter for the number of entries in the directory */
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
