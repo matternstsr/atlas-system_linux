@@ -13,9 +13,9 @@
 const char *mattError(int errnum) {
     switch (errnum) {
         case ENOENT:
-            return "Directory not found";
+            return "No such file or directory";
         case EACCES:
-            return "Access denied";
+            return "Permission denied";
         default:
             return "Unknown error";
     }
