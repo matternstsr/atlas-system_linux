@@ -53,7 +53,8 @@ int main(int argc, char **argv) {
 
             if (type == 0) {
                 if (lstat(path, &statbuf) == -1) {
-                    fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, matt_strerror(errno));
+                    /* fprintf(stderr, "%s: cannot access %s: %s\n",
+                    argv[0], path, matt_strerror(errno)); */
                     continue;
                 }
                 printf("%s\n", path); /* Print the path if it's not a directory */
