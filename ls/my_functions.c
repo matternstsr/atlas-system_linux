@@ -38,8 +38,8 @@ int mattcomp(const char *str1, const char *str2)
 {
 while (*str1 && *str2)
 {
-char c1 = tolower(*str1); /* Convert characters to lowercase for comparison */
-char c2 = tolower(*str2);
+char c1 = mattlower(*str1); /* Convert chars to lowercase for comp */
+char c2 = mattlower(*str2);
 if (c1 != c2)
 	return (c1 - c2);
 str1++;
@@ -47,3 +47,22 @@ str2++;
 }
 return (*str1 - *str2);
 }
+
+/**
+ * mattlower - Converts a character to lowercase.
+ * @c: The character to convert to lowercase.
+ *
+ * Description: This function converts the given character to lowercase.
+ *
+ * Return: The lowercase version of the character.
+ */
+char mattlower(char c)
+{
+    if (c >= 'A' && c <= 'Z')
+        /* Convert uppercase letter to lowercase */
+        return (c + ('a' - 'A'));
+    else
+        /* Return unchanged for non-uppercase characters */
+        return (c);
+}
+
