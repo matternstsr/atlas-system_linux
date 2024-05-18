@@ -5,32 +5,17 @@
 #include <string.h>
 #include "directory_reader.h"
 #include <sys/stat.h>
+#include <unistd.h>
 
 int isDirectory(const char *path) {
     DIR *dir = opendir(path);
 
     if (dir != NULL) {
         closedir(dir);
-        return (1); /* Directory exists */
+        return 1; /* Directory exists */
     }
-    return (0); /* Not a directory or doesn't exist */
+    return 0; /* Not a directory or doesn't exist */
 }
-
-/**
- * main - Entry point of the program.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line argument strings.
- *
- * Description: Entry point of the program. It processes
- * command-line arguments and initiates directory reading.
- *
- * Return: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
- */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "directory_reader.h"
 
 int main(int argc, char **argv)
 {
@@ -54,7 +39,11 @@ int main(int argc, char **argv)
 
         if (type == 0)
         {
-            fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
+            if (access(path, F_OK) == 0) {
+                printf("%s\n", path); // File exists, print the path
+            } else {
+                fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
+            }
             continue;
         }
 
