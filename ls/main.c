@@ -60,28 +60,26 @@ int main(int argc, char **argv) {
             destroyDirectoryReader(&reader);
 
             /* Print contents of subdirectories */
-            DIR *dir = opendir(path);
-            struct dirent *entry;
-            while ((entry = readdir(dir)) != NULL) {
-                if (entry->d_type == DT_DIR && 
-    								mattcomp(entry->d_name, ".") != 0 && 
-    								mattcomp(entry->d_name, "..") != 0) {
-                    printf("\n%s/%s:\n", path, entry->d_name);
-                    DirectoryReader sub_reader;
-                    char sub_path[PATH_MAX];
-                    snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
-                    if (initDirectoryReader(&sub_reader, sub_path) == -1) {
-                        fprintf(stderr, "Failure opening subdirectory '%s'\n", sub_path);
-                        return (EXIT_FAILURE);
-                    }
-                    if (forEachEntry(&sub_reader, printEntryName) == -1) {
-                        fprintf(stderr, "Error occurred parsing subdirectory '%s'\n", sub_path);
-                        return (EXIT_FAILURE);
-                    }
-                    destroyDirectoryReader(&sub_reader);
-                }
-            }
-            closedir(dir);
+						DIR *dir = opendir(path);
+						struct dirent *entry;
+						while ((entry = readdir(dir)) != NULL) {
+								if (entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
+										printf("\n%s/%s:\n", path, entry->d_name);
+										DirectoryReader sub_reader;
+										char sub_path[PATH_MAX];
+										snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
+										if (initDirectoryReader(&sub_reader, sub_path) == -1) {
+												fprintf(stderr, "Failure opening subdirectory '%s'\n", sub_path);
+												return (EXIT_FAILURE);
+										}
+										if (forEachEntry(&sub_reader, printEntryName) == -1) {
+												fprintf(stderr, "Error occurred parsing subdirectory '%s'\n", sub_path);
+												return (EXIT_FAILURE);
+										}
+										destroyDirectoryReader(&sub_reader);
+								}
+						}
+						closedir(dir);
 
             if (has_multiple_dirs) /* Print new line if there are multiple directories */
                 printf("\n");
