@@ -25,12 +25,6 @@ struct dirent *getNextEntry(DirectoryReader *reader)
 	}
 	return (next_entry);
 }
-/**
- * struct dirent - Directory entry structure
- *
- * Description: This structure represents a directory entry,
- * containing information about a file or directory.
- */
 
 /**
  * forEachEntry - Iterates through each directory entry and

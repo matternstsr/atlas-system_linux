@@ -19,7 +19,12 @@
 
 #define INITIAL_CAPACITY 100
 
-/* Structure to handle directory reading */
+/**
+ * struct dirent - Directory entry structure
+ *
+ * Description: This structure represents a directory entry,
+ * containing information about a file or directory.
+ */
 typedef struct DirectoryReader
 {
 	DIR *dir;
