@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
                 has_error = 1;
                 continue;
             }
-            printf("%s\n", path); /* Print the path if it's not a directory */
+            fprintf(stdout, "%s\n", path); /* Print the path if it's not a directory */
             continue;
         }
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
                 return EXIT_FAILURE;
             }
 
-            printf("%s:\n", path);
+            fprintf(stdout, "%s:\n", path);
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "%s: error occurred parsing directory %s: %s\n", argv[0], path, strerror(errno));
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
             destroyDirectoryReader(&reader);
 
             if (i < argc - 1) /* Print new line if there are more directories */
-                printf("\n");
+                fprintf(stdout, "\n");
         }
     }
 
