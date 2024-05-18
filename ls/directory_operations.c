@@ -7,7 +7,7 @@
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  *
- * * Description: Does my stuff explained.
+ * Description: Does my stuff explained.
  * Returns: 0 on success, -1 if failed to open the directory.
  */
 int initDirectoryReader(DirectoryReader *reader, const char *path)
