@@ -41,7 +41,7 @@ typedef struct DirectoryReader
 int initDirectoryReader(DirectoryReader *reader, const char *path);
 struct dirent *getNextEntry(DirectoryReader *reader);
 int forEachEntry(DirectoryReader *reader,
-								int (*itemHandler)(DirectoryReader *));
+                 int (*itemHandler)(DirectoryReader *));
 void destroyDirectoryReader(DirectoryReader *reader);
 const char *getEntryTypeName(unsigned char d_type);
 const char *joinPath(const char *dirpath, const char *entry_name);
@@ -50,5 +50,6 @@ int mattcomp(const char *str1, const char *str2);
 void *mattset(void *ptr, int value, size_t num);
 void mattsort(struct dirent **entries, int num_entries);
 char mattlower(char c);
+int checkEmpty(DirectoryReader *reader);
 
 #endif /* DIRECTORY_READER_H */
