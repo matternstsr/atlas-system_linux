@@ -36,7 +36,8 @@ int main(int argc, char **argv) {
 
         if (type == 0) {
             if (lstat(path, &statbuf) == -1) {
-                fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
+                /* fprintf(stderr, "%s: cannot access %s: No
+                such file or directory\n", argv[0], path); */
                 has_error = 1;
                 continue;
             }
