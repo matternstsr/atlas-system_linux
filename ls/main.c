@@ -4,24 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include "directory_reader.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
 
 int isDirectory(const char *path) {
-    DIR *dir = opendir(path);
-
-    if (dir != NULL) {
-        closedir(dir);
-        return 1; /* Directory exists */
+    struct stat statbuf;
+    if (lstat(path, &statbuf) == -1) {
+        return 0; /* Not a directory or doesn't exist */
     }
-    return 0; /* Not a directory or doesn't exist */
-}
-
-int fileExists(const char *path) {
-    FILE *file = fopen(path, "r");
-    if (file != NULL) {
-        fclose(file);
-        return 1; /* File exists */
-    }
-    return 0; /* File doesn't exist */
+    return S_ISDIR(statbuf.st_mode) ? 1 : 0; /* 1 if directory, 0 otherwise */
 }
 
 int main(int argc, char **argv)
@@ -46,11 +39,12 @@ int main(int argc, char **argv)
 
         if (type == 0)
         {
-            if (fileExists(path)) {
-                printf("%s\n", path); /* File exists, print the path */
-            } else {
+            struct stat statbuf;
+            if (lstat(path, &statbuf) == -1) {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
+                continue;
             }
+            printf("%s\n", path); /* Print the path if it's not a directory */
             continue;
         }
 
@@ -74,11 +68,6 @@ int main(int argc, char **argv)
             destroyDirectoryReader(&reader);
             if (has_multiple_dirs) /* Print new line if there are multiple directories */
                 printf("\n");
-        }
-        else /* File */
-        {
-            /* Print the file path */
-            printf("%s\n", path);
         }
     }
 
