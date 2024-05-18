@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
         if (type == 0) {
             if (lstat(path, &statbuf) == -1) {
                 char error_message[256];
-                sprintf(error_message, "cannot access %s: No such file or directory", path);
+                snprintf(error_message, sizeof(error_message), "cannot access %s: No such file or directory", path);
                 print_error(argv[0], error_message);
                 has_error = 1;
                 continue;
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
         if (type == 1) { /* Directory */
             if ((init_result = initDirectoryReader(&reader, path)) == -1) {
                 char error_message[256];
-                sprintf(error_message, "cannot open directory %s: %s", path, strerror(errno));
+                snprintf(error_message, sizeof(error_message), "cannot open directory %s: %s", path, strerror(errno));
                 print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 char error_message[256];
-                sprintf(error_message, "error occurred parsing directory %s: %s", path, strerror(errno));
+                snprintf(error_message, sizeof(error_message), "error occurred parsing directory %s: %s", path, strerror(errno));
                 print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
