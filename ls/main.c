@@ -7,11 +7,12 @@
 #include <sys/stat.h>
 
 int isDirectory(const char *path) {
-    struct stat path_stat;
-    if (stat(path, &path_stat) != 0) {
-        return (0); /* Not a directory */
+    DIR *dir = opendir(path);
+    if (dir != NULL) {
+        closedir(dir);
+        return 1; /* Directory exists */
     }
-    return (S_ISDIR(path_stat.st_mode));
+    return 0; /* Not a directory or doesn't exist */
 }
 
 /**
