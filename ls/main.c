@@ -37,6 +37,7 @@ int isDirectory(const char *path) {
 
 int main(int argc, char **argv)
 {
+		int i;
     DirectoryReader reader;
 
     if (argc < 2)
@@ -44,8 +45,6 @@ int main(int argc, char **argv)
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
         return (EXIT_FAILURE);
     }
-
-    int i;
     for (i = 1; i < argc; i++)
     {
         const char *path = argv[i];
