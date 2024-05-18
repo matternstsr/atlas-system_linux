@@ -1,7 +1,7 @@
 /* my_functions.c */
 #include "directory_reader.h"
 
-/*
+/**
  * mattset: Custom memset function.
  * @ptr: Pointer to the memory area to be filled.
  * @value: Value to be set. Note: treated as unsigned.
@@ -19,8 +19,8 @@ while (num--)
 return (ptr);
 }
 
-/*
- * mattcomp - Custom string comparison function.
+/**
+ * mattcomp: Custom string comparison function.
  * @str1: Pointer to the first string.
  * @str2: Pointer to the second string.
  * Returns: An integer less than, equal to,
