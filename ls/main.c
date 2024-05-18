@@ -42,7 +42,7 @@ int main(int argc, char **argv)
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
                 continue;
             }
-            printf("%s\n", path); // Print the path if it's not a directory
+            printf("%s\n", path); /* Print the path if it's not a directory */
             continue;
         }
 
