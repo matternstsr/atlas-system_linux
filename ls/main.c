@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     DirectoryReader reader;
     const char *path;
     int init_result;
+    int numDirectories = 0; /* Counter for the number of directories */
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
@@ -50,7 +51,13 @@ int main(int argc, char **argv) {
             continue; /* Continue to next directory instead of returning immediately */
         }
 
-        /*printf("%s:\n", path);  Print the directory path */
+        /* Increase the number of directories processed */
+				/* for dir printing on mult dirs*/
+        numDirectories++;
+
+        if (numDirectories > 1) {
+            printf("\n%s:\n", path); /* Print the directory path only if it's not the first one */
+        }
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
