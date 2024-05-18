@@ -3,7 +3,7 @@
 #include "directory_reader.h"
 
 /*
- * initDirectoryReader - Initializes a directory reader object with the specified path.
+ * initDirectoryReader - directory reader object with the specified path.
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  * Returns: 0 on success, -1 if failed to open the directory.
@@ -23,9 +23,9 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
 }
 
 /*
- * getNextEntry - Retrieves the next directory entry from the directory being read.
+ * getNextEntry - Retr the next dir entry from the dir being read.
  * @reader: Pointer to a DirectoryReader structure.
- * Returns: Pointer to the next directory entry. NULL if no more entries or error.
+ * Returns: Pointer to next directory entry. NULL if none or error.
  */
 struct dirent *getNextEntry(DirectoryReader *reader)
 {
