@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
     DirectoryReader reader;
     const char *path;
     int init_result;
-    int numDirectories = 3; /* Counter for the number of directories */
-    int numEntries = 3; /* Counter for the number of entries in the directory */
+    int numDirectories = 1; /* Counter for the number of directories */
+    int numEntries = 0; /* Counter for the number of entries in the directory */
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
