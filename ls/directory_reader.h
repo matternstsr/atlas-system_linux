@@ -52,5 +52,6 @@ void *mattset(void *ptr, int value, size_t num);
 void mattsort(struct dirent **entries, int num_entries);
 char mattlower(char c);
 int checkEmpty(DirectoryReader *reader);
+const char *matt_strerror(int error_code);
 
 #endif /* DIRECTORY_READER_H */
