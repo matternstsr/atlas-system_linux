@@ -3,7 +3,7 @@
 #include "directory_reader.h"
 
 /**
- * initDirectoryReader- Initializes a dir reader object with the spec path.
+ * initDirectoryReader - Initializes a dir reader object with the spec path.
  * @reader: Pointer to a DirectoryReader structure to be initialized.
  * @path: Path of the directory to be read.
  *
@@ -12,7 +12,7 @@
  *              the DirectoryReader structure accordingly.
  *
  * Returns: 0 on success, -1 if failed to open the directory.
- */
+*/
 
 int initDirectoryReader(DirectoryReader *reader, const char *path)
 {
