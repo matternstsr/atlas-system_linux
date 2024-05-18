@@ -39,6 +39,10 @@ int main(int argc, char **argv)
 {
 		int i;
     DirectoryReader reader;
+		const char *path = argv[i];
+		int is_dir = isDirectory(path);
+		int init_result;
+		int has_multiple_dirs = argc > 2 && i < argc - 1;
 
     if (argc < 2)
     {
