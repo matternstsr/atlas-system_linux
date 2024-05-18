@@ -53,5 +53,7 @@ void mattsort(struct dirent **entries, int num_entries);
 char mattlower(char c);
 int checkEmpty(DirectoryReader *reader);
 const char *mattError(int errnum);
+int countEntries(const char *name, const struct stat *status, int type,
+                 void *arg);
 
 #endif /* DIRECTORY_READER_H */
