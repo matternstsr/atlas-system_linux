@@ -37,6 +37,10 @@ int main(int argc, char **argv) {
     for (i = 1; i < argc; i++) {
         path = argv[i];
 
+				/* Increase the number of directories processed */
+				/* for dir printing on mult dirs*/
+        numDirectories++;
+
         if (lstat(path, &statbuf) == -1) {
             /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
             continue;
@@ -50,10 +54,6 @@ int main(int argc, char **argv) {
             fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             continue; /* Continue to next directory instead of returning immediately */
         }
-
-        /* Increase the number of directories processed */
-				/* for dir printing on mult dirs*/
-        numDirectories++;
 
         if (numDirectories > 2) {
             printf("\n%s:\n", path); /* Print the directory path only if it's not the first one */
