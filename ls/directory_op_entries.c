@@ -52,7 +52,7 @@ int forEachEntry(DirectoryReader *reader,
 	{
 		/* Handle memory allocation failure */
 		fprintf(stderr, "Error: Failed to allocate memory for dir entries.\n");
-		return -1;
+		return (-1);
 	}
 
 	/* Collect directory entries into the array */
@@ -68,7 +68,7 @@ int forEachEntry(DirectoryReader *reader,
 				/* Handle memory reallocation failure */
 				free(entries);
 				fprintf(stderr, "Error: Failed to reallocate mem for dir entries.\n");
-				return -1;
+				return (-1);
 			}
 			entries = new_entries;
 		}
@@ -92,5 +92,5 @@ int forEachEntry(DirectoryReader *reader,
 	/* Free dynamically allocated memory */
 	free(entries);
 
-	return entry_count;
+	return (entry_count);
 }
