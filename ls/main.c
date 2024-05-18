@@ -10,9 +10,9 @@ int isDirectory(const char *path) {
     DIR *dir = opendir(path);
     if (dir != NULL) {
         closedir(dir);
-        return 1; /* Directory exists */
+        return 1; // Directory exists
     }
-    return 0; /* Not a directory or doesn't exist */
+    return 0; // Not a directory or doesn't exist
 }
 
 /**
@@ -31,14 +31,19 @@ int isDirectory(const char *path) {
 #include <string.h>
 #include "directory_reader.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "directory_reader.h"
+
 int main(int argc, char **argv)
 {
-    int i;
+		int i;
     DirectoryReader reader;
-    const char *path;
-    int is_dir;
-    int init_result;
-    int has_multiple_dirs;
+		const char *path;
+		int is_dir;
+		int init_result;
+		int has_multiple_dirs;
 
     if (argc < 2)
     {
@@ -51,30 +56,32 @@ int main(int argc, char **argv)
         is_dir = isDirectory(path);
         has_multiple_dirs = argc > 2 && i < argc - 1;
 
-        if (!is_dir)
+        if (is_dir)
         {
-            fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
-            continue;
-        }
+            if ((init_result = initDirectoryReader(&reader, path)) == -1)
+            {
+                fprintf(stderr, "Failure opening directory '%s'\n", path);
+                return (EXIT_FAILURE);
+            }
 
-        if ((init_result = initDirectoryReader(&reader, path)) == -1)
+            if (has_multiple_dirs) /* Print directory path only if there are multiple directories */
+                printf("%s:\n", path);
+
+            if (forEachEntry(&reader, printEntryName) == -1)
+            {
+                fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
+                return (EXIT_FAILURE);
+            }
+
+            destroyDirectoryReader(&reader);
+            if (has_multiple_dirs) /* Print new line if there are multiple directories */
+                printf("\n");
+        }
+        else
         {
-            fprintf(stderr, "Failure opening directory '%s'\n", path);
-            return (EXIT_FAILURE);
+            /* Print the file path */
+            printf("%s\n", path);
         }
-
-        if (has_multiple_dirs) /* Print directory path only if there are multiple directories */
-            printf("%s:\n", path);
-
-        if (forEachEntry(&reader, printEntryName) == -1)
-        {
-            fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
-            return (EXIT_FAILURE);
-        }
-
-        destroyDirectoryReader(&reader);
-        if (has_multiple_dirs) /* Print new line if there are multiple directories */
-            printf("\n");
     }
 
     return (EXIT_SUCCESS);
