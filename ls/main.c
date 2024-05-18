@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     for (i = 1; i < argc; i++) {
         path = argv[i];
 
-        // Skip the program name itself
+        /* Skip the program name itself */
         if (i == 0) {
             continue;
         }
