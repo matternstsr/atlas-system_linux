@@ -37,8 +37,9 @@ int main(int argc, char **argv) {
 
     for (i = 1; i < argc; i++) {
         path = argv[i];
-				        /* Increase the number of directories processed */
+				/* Increase the number of directories processed */
         numDirectories++;
+				numEntries = 0; /* Reset the counter for the number of entries in the directory */
 
         if (lstat(path, &statbuf) == -1) {
             /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
@@ -47,14 +48,12 @@ int main(int argc, char **argv) {
         if (!S_ISDIR(statbuf.st_mode)) {
             printf("%s\n", path); /* Print the path if it's not a directory */
             continue;
-        }
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
             fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             continue; /* Continue to next directory instead of returning immediately */
         }
-								        /* Increase the number of directories processed */
-        numDirectories++;
+
         if (numDirectories > 1 || (numDirectories == 1 && numEntries > 0)) {
             printf("\n%s:\n", path); /* Print the directory path if there are multiple files or folders */
         }
