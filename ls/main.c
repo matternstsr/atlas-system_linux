@@ -8,7 +8,7 @@
 
 int isDirectory(const char *path) {
     DIR *dir = opendir(path);
-		
+
     if (dir != NULL) {
         closedir(dir);
         return (1); /* Directory exists */
@@ -34,12 +34,12 @@ int isDirectory(const char *path) {
 
 int main(int argc, char **argv)
 {
-		int i;
+    int i;
     DirectoryReader reader;
-		const char *path;
-		int is_dir;
-		int init_result;
-		int has_multiple_dirs;
+    const char *path;
+    int type;
+    int init_result;
+    int has_multiple_dirs;
 
     if (argc < 2)
     {
@@ -49,10 +49,16 @@ int main(int argc, char **argv)
     for (i = 1; i < argc; i++)
     {
         path = argv[i];
-        is_dir = isDirectory(path);
+        type = isDirectory(path);
         has_multiple_dirs = argc > 2 && i < argc - 1;
 
-        if (is_dir)
+        if (type == 0)
+        {
+            fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
+            continue;
+        }
+
+        if (type == 1) /* Directory */
         {
             if ((init_result = initDirectoryReader(&reader, path)) == -1)
             {
@@ -73,7 +79,7 @@ int main(int argc, char **argv)
             if (has_multiple_dirs) /* Print new line if there are multiple directories */
                 printf("\n");
         }
-        else
+        else /* File */
         {
             /* Print the file path */
             printf("%s\n", path);
