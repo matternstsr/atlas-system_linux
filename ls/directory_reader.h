@@ -39,5 +39,6 @@ int printEntryName(DirectoryReader *reader);
 int mattcomp(const char *str1, const char *str2);
 void *mattset(void *ptr, int value, size_t num);
 void mattsort(struct dirent **entries, int num_entries);
+char mattlower(char c);
 
 #endif /* DIRECTORY_READER_H */
