@@ -76,7 +76,7 @@ void mattsort(struct dirent **entries, int num_entries)
 		for (j = 0; j < num_entries - i - 1; j++)
 		{
 			/* Compare directory entry names and swap if necessary */
-			if (strcmp(entries[j]->d_name, entries[j + 1]->d_name) > 0)
+			if (mattcomp(entries[j]->d_name, entries[j + 1]->d_name) > 0)
 			{
 				temp = entries[j];
 				entries[j] = entries[j + 1];
