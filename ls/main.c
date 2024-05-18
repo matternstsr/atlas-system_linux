@@ -20,10 +20,6 @@ int main(int argc, char **argv) {
     struct stat statbuf;
     int has_multiple_dirs = argc > 2;
     DirectoryReader reader;
-    DIR *dir;
-    struct dirent *entry;
-    DirectoryReader sub_reader;
-    char sub_path[PATH_MAX];
     const char *path;
     int type;
     int init_result;
@@ -61,32 +57,6 @@ int main(int argc, char **argv) {
             }
 
             destroyDirectoryReader(&reader);
-        }
-    }
-
-    /* Print contents of subdirectories */
-    for (i = 1; i < argc; i++) {
-        path = argv[i];
-        type = isDirectory(path);
-
-        if (type == 1) { /* Directory */
-            dir = opendir(path);
-            while ((entry = readdir(dir)) != NULL) {
-                if (entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-                    printf("\n%s/%s:\n", path, entry->d_name);
-                    snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
-                    if (initDirectoryReader(&sub_reader, sub_path) == -1) {
-                        fprintf(stderr, "Failure opening subdirectory '%s'\n", sub_path);
-                        return (EXIT_FAILURE);
-                    }
-                    if (forEachEntry(&sub_reader, printEntryName) == -1) {
-                        fprintf(stderr, "Error occurred parsing subdirectory '%s'\n", sub_path);
-                        return (EXIT_FAILURE);
-                    }
-                    destroyDirectoryReader(&sub_reader);
-                }
-            }
-            closedir(dir);
         }
     }
 
