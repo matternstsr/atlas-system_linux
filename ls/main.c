@@ -18,6 +18,8 @@ int isDirectory(const char *path) {
 int main(int argc, char **argv) {
     int i;
     DirectoryReader reader;
+		DIR *dir;
+		DirectoryReader sub_reader;
     const char *path;
     int type;
     int init_result;
@@ -60,12 +62,11 @@ int main(int argc, char **argv) {
             destroyDirectoryReader(&reader);
 
             /* Print contents of subdirectories */
-						DIR *dir = opendir(path);
+						dir = opendir(path);
 						struct dirent *entry;
 						while ((entry = readdir(dir)) != NULL) {
 								if (entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
 										printf("\n%s/%s:\n", path, entry->d_name);
-										DirectoryReader sub_reader;
 										char sub_path[PATH_MAX];
 										snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
 										if (initDirectoryReader(&sub_reader, sub_path) == -1) {
