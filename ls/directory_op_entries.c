@@ -4,6 +4,7 @@
 
 /**
  * getNextEntry - Retrieves the next directory entry
+ * struct dirent - Directory entry structur
  * from the directory being read.
  * @reader: Pointer to a DirectoryReader structure.
  *
