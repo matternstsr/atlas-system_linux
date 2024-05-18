@@ -47,14 +47,15 @@ int main(int argc, char **argv) {
 
         if ((init_result = initDirectoryReader(&reader, path)) == -1) {
             if (errno == ENOENT) {
-                printf("%s: cannot access %s: %s\n", argv[0], path, mattError(errno));
+                printf("%s: %s\n", path, mattError(errno)); /* Print error only for non-existing directories */
                 continue; /* Continue to the next directory */
             }
             printf("%s: cannot open directory %s: %s\n", argv[0], path, mattError(errno));
             return (EXIT_FAILURE);
         }
 
-        printf("%s:\n", path); /* Always print directory path */
+        if (argc > 2) /* Print directory name only if multiple directories are specified */
+            printf("%s:\n", path);
 
         if (forEachEntry(&reader, printEntryName) == -1) {
             printf("%s: error parsing directory %s: Parsing error\n", argv[0], path);
