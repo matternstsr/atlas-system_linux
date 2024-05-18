@@ -7,7 +7,7 @@
  * Description: This function prints the name of the directory entry
  * without ANSI escape codes.
  *
- * Returns: 0 on success, -1 if reader or reader->current_entry is NULL.
+ * Return: 0 on success, -1 if reader or reader->current_entry is NULL.
  */
 int printEntryName(DirectoryReader *reader)
 {
@@ -38,7 +38,7 @@ int printEntryName(DirectoryReader *reader)
  * Description: This function retrieves the name corresponding
  * to the directory entry type.
  *
- * Returns: A string describing the directory entry type.
+ * Return: A string describing the directory entry type.
  */
 const char *getEntryTypeName(unsigned char d_type)
 {

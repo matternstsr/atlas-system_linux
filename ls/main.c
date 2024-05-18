@@ -11,7 +11,7 @@
  * Description: Entry point of the program. It processes
  * command-line arguments and initiates directory reading.
  *
- * Returns: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
+ * Return: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
  */
 int main(int argc, char **argv)
 {

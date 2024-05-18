@@ -30,7 +30,7 @@ return (ptr);
  *
  * Description: This function compares two strings case-insensitively.
  *
- * Returns: An integer less than, equal to,
+ * Return: An integer less than, equal to,
  *          or greater than zero if str1 is found, respectively,
  *          to be less than, to match, or be greater than str2.
  */

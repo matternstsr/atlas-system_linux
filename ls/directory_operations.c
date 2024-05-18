@@ -11,7 +11,7 @@
  *              This function opens the dir specified by @path and sets up
  *              the DirectoryReader structure accordingly.
  *
- * Returns: 0 on success, -1 if failed to open the directory.
+ * Return: 0 on success, -1 if failed to open the directory.
 */
 
 int initDirectoryReader(DirectoryReader *reader, const char *path)
@@ -36,7 +36,7 @@ int initDirectoryReader(DirectoryReader *reader, const char *path)
  * Description: This function retrieves the next directory
  * entry from the directory being read.
  *
- * Returns: Pointer to the next directory entry. NULL if none or error.
+ * Return: Pointer to the next directory entry. NULL if none or error.
  */
 struct dirent *getNextEntry(DirectoryReader *reader)
 {
@@ -61,7 +61,7 @@ struct dirent *getNextEntry(DirectoryReader *reader)
  * Description: This function iterates through each directory
  * entry and applies a specified item handler function to each entry.
  *
- * Returns: The number of directory entries iterated.
+ * Return: The number of directory entries iterated.
  */
 int forEachEntry(DirectoryReader *reader,
 								int (*itemHandler)(DirectoryReader *))

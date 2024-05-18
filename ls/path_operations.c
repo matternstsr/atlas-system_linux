@@ -10,7 +10,7 @@
  * Description: This function joins the directory path
  * and entry name to form a complete path.
  *
- * Returns: Pointer to a static buffer containing the joined path.
+ * Return: Pointer to a static buffer containing the joined path.
  */
 const char *joinPath(const char *dirpath, const char *entry_name)
 {
