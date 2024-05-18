@@ -15,8 +15,7 @@ int isDirectory(const char *path) {
     return S_ISDIR(statbuf.st_mode) ? 1 : 0; /* 1 if directory, 0 otherwise */
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     int i;
     DirectoryReader reader;
     const char *path;
@@ -24,19 +23,17 @@ int main(int argc, char **argv)
     int init_result;
     int has_multiple_dirs;
 
-    if (argc < 2)
-    {
+    if (argc < 2) {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
         return (EXIT_FAILURE);
     }
-    for (i = 1; i < argc; i++)
-    {
+
+    for (i = 1; i < argc; i++) {
         path = argv[i];
         type = isDirectory(path);
         has_multiple_dirs = argc > 2 && i < argc - 1;
 
-        if (type == 0)
-        {
+        if (type == 0) {
             struct stat statbuf;
             if (lstat(path, &statbuf) == -1) {
                 fprintf(stderr, "%s: cannot access %s: No such file or directory\n", argv[0], path);
@@ -46,10 +43,8 @@ int main(int argc, char **argv)
             continue;
         }
 
-        if (type == 1) /* Directory */
-        {
-            if ((init_result = initDirectoryReader(&reader, path)) == -1)
-            {
+        if (type == 1) { /* Directory */
+            if ((init_result = initDirectoryReader(&reader, path)) == -1) {
                 fprintf(stderr, "Failure opening directory '%s'\n", path);
                 return (EXIT_FAILURE);
             }
@@ -57,13 +52,37 @@ int main(int argc, char **argv)
             if (has_multiple_dirs) /* Print directory path only if there are multiple directories */
                 printf("%s:\n", path);
 
-            if (forEachEntry(&reader, printEntryName) == -1)
-            {
+            if (forEachEntry(&reader, printEntryName) == -1) {
                 fprintf(stderr, "Error occurred parsing directory '%s'\n", path);
                 return (EXIT_FAILURE);
             }
 
             destroyDirectoryReader(&reader);
+
+            /* Print contents of subdirectories */
+            DIR *dir = opendir(path);
+            struct dirent *entry;
+            while ((entry = readdir(dir)) != NULL) {
+                if (entry->d_type == DT_DIR && 
+    								mattcomp(entry->d_name, ".") != 0 && 
+    								mattcomp(entry->d_name, "..") != 0) {
+                    printf("\n%s/%s:\n", path, entry->d_name);
+                    DirectoryReader sub_reader;
+                    char sub_path[PATH_MAX];
+                    snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
+                    if (initDirectoryReader(&sub_reader, sub_path) == -1) {
+                        fprintf(stderr, "Failure opening subdirectory '%s'\n", sub_path);
+                        return (EXIT_FAILURE);
+                    }
+                    if (forEachEntry(&sub_reader, printEntryName) == -1) {
+                        fprintf(stderr, "Error occurred parsing subdirectory '%s'\n", sub_path);
+                        return (EXIT_FAILURE);
+                    }
+                    destroyDirectoryReader(&sub_reader);
+                }
+            }
+            closedir(dir);
+
             if (has_multiple_dirs) /* Print new line if there are multiple directories */
                 printf("\n");
         }
