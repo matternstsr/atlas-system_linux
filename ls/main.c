@@ -20,6 +20,10 @@ void print_error(const char *program_name, const char *message) {
     fprintf(stderr, "%s: %s\n", program_name, message);
 }
 
+void print_message(const char *message) {
+    printf("%s\n", message);
+}
+
 int main(int argc, char **argv) {
     int i;
     struct stat statbuf;
@@ -42,29 +46,37 @@ int main(int argc, char **argv) {
         if (type == 0) {
             if (lstat(path, &statbuf) == -1) {
                 char error_message[256];
-                snprintf(error_message, sizeof(error_message), "cannot access %s: No such file or directory", path);
+                strcpy(error_message, "cannot access ");
+                strcat(error_message, path);
+                strcat(error_message, ": No such file or directory");
                 print_error(argv[0], error_message);
                 has_error = 1;
                 continue;
             }
-            printf("%s\n", path); /* Print the path if it's not a directory */
+            print_message(path); /* Print the path if it's not a directory */
             continue;
         }
 
         if (type == 1) { /* Directory */
             if ((init_result = initDirectoryReader(&reader, path)) == -1) {
                 char error_message[256];
-                snprintf(error_message, sizeof(error_message), "cannot open directory %s: %s", path, strerror(errno));
+                strcpy(error_message, "cannot open directory ");
+                strcat(error_message, path);
+                strcat(error_message, ": ");
+                strcat(error_message, strerror(errno));
                 print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
             }
 
-            printf("%s:\n", path);
+            print_message(path);
 
             if (forEachEntry(&reader, printEntryName) == -1) {
                 char error_message[256];
-                snprintf(error_message, sizeof(error_message), "error occurred parsing directory %s: %s", path, strerror(errno));
+                strcpy(error_message, "error occurred parsing directory ");
+                strcat(error_message, path);
+                strcat(error_message, ": ");
+                strcat(error_message, strerror(errno));
                 print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
