@@ -23,20 +23,21 @@
 
 int main(int argc, char **argv)
 {
+	int i;
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    for (int i = 1; i < argc; i++)
+    for (i = 1; i < argc; i++)
     {
         const char *directory_path = argv[i];
         DirectoryReader reader;
 
         if (strcmp(directory_path, "-a") == 0)
         {
-            continue; // Skip to the next argument
+            continue; /* Skip to the next argument */
         }
 
         if (initDirectoryReader(&reader, directory_path) == -1)
