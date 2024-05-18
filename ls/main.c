@@ -3,6 +3,12 @@
 #include "directory_reader.h"
 #include <string.h>
 
+/**
+ * main: Entry point of the program.
+ * @argc: Number of command-line arguments.
+ * @argv: Array of command-line argument strings.
+ * Returns: EXIT_SUCCESS if successful, EXIT_FAILURE if an error occurs.
+ */
 int main(int argc, char **argv)
 {
 	const char *directory_path;
