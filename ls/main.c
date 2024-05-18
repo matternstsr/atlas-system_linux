@@ -35,11 +35,13 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    for (i = 1; i < argc; i++) {
+    for (i = 1; i < argc; i++)
+		{
         path = argv[i];
 				/* Increase the number of directories processed */
         numDirectories++;
 				numEntries = 0; /* Reset the counter for the number of entries in the directory */
+		}
 
         if (lstat(path, &statbuf) == -1) {
             /* fprintf(stderr, "%s: cannot access %s: %s\n", argv[0], path, mattError(errno)); */
