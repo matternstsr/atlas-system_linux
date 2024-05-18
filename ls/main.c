@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <errno.h>
 
 int isDirectory(const char *path) {
     struct stat statbuf;
@@ -13,6 +14,10 @@ int isDirectory(const char *path) {
         return 0; /* Not a directory or doesn't exist */
     }
     return S_ISDIR(statbuf.st_mode) ? 1 : 0; /* 1 if directory, 0 otherwise */
+}
+
+void print_error(const char *program_name, const char *message) {
+    fprintf(stderr, "%s: %s\n", program_name, message);
 }
 
 int main(int argc, char **argv) {
@@ -25,7 +30,7 @@ int main(int argc, char **argv) {
     int has_error = 0;
 
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s [DIRPATH]...\n", argv[0]);
+        print_error(argv[0], "Usage: [DIRPATH]...");
         return EXIT_FAILURE;
     }
 
@@ -36,7 +41,9 @@ int main(int argc, char **argv) {
 
         if (type == 0) {
             if (lstat(path, &statbuf) == -1) {
-                fprintf(stderr, "[stderr]: %s: cannot access %s: No such file or directory\n", argv[0], path);
+                char error_message[256];
+                sprintf(error_message, "cannot access %s: No such file or directory", path);
+                print_error(argv[0], error_message);
                 has_error = 1;
                 continue;
             }
@@ -46,7 +53,9 @@ int main(int argc, char **argv) {
 
         if (type == 1) { /* Directory */
             if ((init_result = initDirectoryReader(&reader, path)) == -1) {
-                fprintf(stderr, "%s: cannot open directory %s: %s\n", argv[0], path, strerror(errno));
+                char error_message[256];
+                sprintf(error_message, "cannot open directory %s: %s", path, strerror(errno));
+                print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
             }
@@ -54,7 +63,9 @@ int main(int argc, char **argv) {
             printf("%s:\n", path);
 
             if (forEachEntry(&reader, printEntryName) == -1) {
-                fprintf(stderr, "%s: error occurred parsing directory %s: %s\n", argv[0], path, strerror(errno));
+                char error_message[256];
+                sprintf(error_message, "error occurred parsing directory %s: %s", path, strerror(errno));
+                print_error(argv[0], error_message);
                 has_error = 1;
                 return EXIT_FAILURE;
             }
