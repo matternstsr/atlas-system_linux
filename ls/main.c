@@ -19,7 +19,9 @@ int main(int argc, char **argv) {
     int i;
     DirectoryReader reader;
 		DIR *dir;
+		struct dirent *entry;
 		DirectoryReader sub_reader;
+		char sub_path[PATH_MAX];
     const char *path;
     int type;
     int init_result;
@@ -63,11 +65,9 @@ int main(int argc, char **argv) {
 
             /* Print contents of subdirectories */
 						dir = opendir(path);
-						struct dirent *entry;
 						while ((entry = readdir(dir)) != NULL) {
 								if (entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
 										printf("\n%s/%s:\n", path, entry->d_name);
-										char sub_path[PATH_MAX];
 										snprintf(sub_path, PATH_MAX, "%s/%s", path, entry->d_name);
 										if (initDirectoryReader(&sub_reader, sub_path) == -1) {
 												fprintf(stderr, "Failure opening subdirectory '%s'\n", sub_path);
