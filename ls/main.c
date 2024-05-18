@@ -54,8 +54,15 @@ int main(int argc, char **argv) {
             continue; /* Continue to next directory instead of returning immediately */
         }
 
-        if (numDirectories > 1 || (numDirectories == 1 && numEntries > 0)) {
-            printf("\n%s:\n", path); /* Print the directory path if there are multiple files or folders */
+        /* Check if there are entries in the directory */
+        if (forEachEntry(&reader, countEntries) == -1) {
+            fprintf(stderr, "%s: error parsing directory %s: Parsing error\n", argv[0], path);
+            destroyDirectoryReader(&reader); /* Clean up before continuing */
+            continue; /* Continue to next directory */
+        }
+
+        if (numDirectories > 1 || numEntries > 0) {
+            printf("\n%s:\n", path); /* Print the directory path if there are multiple directories or entries */
         }
 
         numEntries = 0; /* Reset the counter for the number of entries in the directory */
