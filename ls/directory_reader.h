@@ -3,27 +3,17 @@
 
 /** HEADERS **/
 
-/* Header for opendir, readdir, closedir, lstat */
-#include <sys/types.h>
-/* Header for opendir, readdir, closedir */
-#include <dirent.h>
-/* Header for printf, sprintf, fprintf */
-#include <stdio.h>
-/* Headers for lstat */
-#include <sys/stat.h>
+#include <sys/types.h>/* opendir, readdir, closedir, lstat */
+#include <dirent.h>/* opendir, readdir, closedir */
+#include <stdio.h>/* printf, sprintf, fprintf */
+#include <sys/stat.h>/* lstat */
 #include <unistd.h>
-/* Header for errno */
-#include <errno.h>
-/* Header for ctime */
-#include <time.h>
-/* For booleans */
-#include <stdbool.h>
-/* For getpwuid */
-#include <pwd.h>
-/* For group_grabber */
-#include <grp.h>
-/* For malloc, free */
-#include <stdlib.h>
+#include <errno.h>/* errno */
+#include <time.h>/* Header for ctime */
+#include <stdbool.h>/* For booleans */
+#include <pwd.h>/* For getpwuid */
+#include <grp.h>/* For group_grabber */
+#include <stdlib.h>/* For malloc, free */
 
 /** STRUCTS **/
 
