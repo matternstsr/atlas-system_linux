@@ -7,13 +7,13 @@
  * @head_of_directory_list: The head of the directory_node_t list where the new node will be added.
  * Return: 0 on success, or an error code if the directory stream couldn't be opened.
  **/
-int add_directory(char *directory_name, DIR *directory_stream, dir_node_t **head_of_directory_list)
+int add_directory(char *directory_name, DIR *directory_stream, dir_ops_t **head_of_directory_list)
 {
-	dir_node_t *new_directory_node, *current_node;
+	dir_ops_t *new_directory_node, *current_node;
 	struct dirent *entry;
 	file_node_t *file_list_head = NULL;
 	int error_code = errno;
-	new_directory_node = malloc(sizeof(dir_node_t));
+	new_directory_node = malloc(sizeof(dir_ops_t));
 	new_directory_node->dir_name = string_dup(directory_name);
 	new_directory_node->next = NULL;
 	new_directory_node->prev = NULL;
@@ -126,9 +126,9 @@ file_node_t *file_maker(char *name, char *dir_name, struct stat *info)
  * @dir: Directory of interest.
  * @flags: Options inputted into the program.
  **/
-void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_config_t *flags)
+void manage_subdirectories(dir_ops_t **head, dir_ops_t *dir, ls_flag_t *flags)
 {
-	dir_node_t *other_dir, *alt_dir;
+	dir_ops_t *other_dir, *alt_dir;
 
 	if (flags->reversed)
 	{
@@ -174,10 +174,10 @@ void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_config_t *flag
  * @flags: Flags (options) passed onto program.
  * Return: Pointer to the directory node.
  **/
-dir_node_t *add_subdirectories(dir_node_t *dir, ls_config_t *flags)
+dir_ops_t *add_subdirectories(dir_ops_t *dir, ls_flag_t *flags)
 {
 	file_node_t *tmp_file = dir->list;
-	dir_node_t *new_dir = NULL, *prev_dir = NULL;
+	dir_ops_t *new_dir = NULL, *prev_dir = NULL;
 	char path[512];
 
 	if (flags->reversed)

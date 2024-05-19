@@ -35,7 +35,7 @@ typedef struct file_link_s
 } file_node_t;
 
 /**
- * struct ls_config_s - flags struct
+ * struct LsFlags - flags struct
  * @printer: printer (changed to a long printer if -l is present)
  * @one_per_line: -1
  * @dot: -a
@@ -49,9 +49,9 @@ typedef struct file_link_s
  * @max_size: max size
  * @max_strlen: max strlen
  **/
-typedef struct ls_config_s
+typedef struct LsFlags
 {
-	void (*printer)(file_node_t *, struct ls_config_s *);
+	void (*printer)(file_node_t *, struct LsFlags *);
 	bool one_per_line;
 	bool dot;
 	bool dot_alt;
@@ -63,12 +63,12 @@ typedef struct ls_config_s
 	int max_hard_links;
 	int max_size;
 	int max_strlen;
-} ls_config_t;
+} ls_flag_t;
 
-typedef void (*print_t)(file_node_t *, struct ls_config_s *);
+typedef void (*print_t)(file_node_t *, struct LsFlags *);
 
 /**
- * struct dir_node_s - directory node
+ * struct dir_ops_s - directory node
  * @dir_name: dir name
  * @list: list
  * @error_code: error_code
@@ -76,15 +76,15 @@ typedef void (*print_t)(file_node_t *, struct ls_config_s *);
  * @next: next
  * @prev: prev
  **/
-typedef struct dir_node_s
+typedef struct dir_ops_s
 {
 	char *dir_name;
 	file_node_t *list;
 	int error_code;
 	int size;
-	struct dir_node_s *next;
-	struct dir_node_s *prev;
-} dir_node_t;
+	struct dir_ops_s *next;
+	struct dir_ops_s *prev;
+} dir_ops_t;
 
 #define ISLOWER(x) ((x) >= 'a' && (x) <= 'z')
 #define ISUPPER(x) ((x) >= 'A' && (x) <= 'Z')
@@ -106,23 +106,23 @@ void last_modified(char *buffer, time_t time_val);
 char file_type(mode_t mode);
 
 /* Set flags helper function (in main.c) */
-int flag_interpreter(char *arg, ls_config_t *flags);
+int flag_interpreter(char *arg, ls_flag_t *flags);
 
 /* Linked list creation functions (in node_makers.c) */
-dir_node_t *add_subdirectories(dir_node_t *dir, ls_config_t *flags);
-void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_config_t *flags);
-int add_directory(char *name, DIR *stream, dir_node_t **head);
+dir_ops_t *add_subdirectories(dir_ops_t *dir, ls_flag_t *flags);
+void manage_subdirectories(dir_ops_t **head, dir_ops_t *dir, ls_flag_t *flags);
+int add_directory(char *name, DIR *stream, dir_ops_t **head);
 int add_file(char *file_name, char *dir_name, file_node_t **head);
 file_node_t *file_maker(char *name, char *dir_name, struct stat *info);
-bool should_open_directory(file_node_t *dir, ls_config_t *flags);
+bool should_open_directory(file_node_t *dir, ls_flag_t *flags);
 
 /* Alphabetization logic (in first_alphabetical_string.c) */
 char *first_alphabetical_string(char *s1, char *s2);
 
 /* Printing functions */
-int print_dirs(dir_node_t **head, ls_config_t *flags, print_t printer);
-void print_long_list(file_node_t *file_list, ls_config_t *flags);
-void print_short_list(file_node_t *file_list, ls_config_t *flags);
+int print_dirs(dir_ops_t **head, ls_flag_t *flags, print_t printer);
+void print_long_list(file_node_t *file_list, ls_flag_t *flags);
+void print_short_list(file_node_t *file_list, ls_flag_t *flags);
 int error_message_printing(char *name);
 
 /* Custom string functions (in string_helpers.c) */
@@ -139,8 +139,8 @@ file_node_t *file_size_sort_checker(file_node_t *head);
 file_node_t *file_size_sort(file_node_t *head);
 
 /* directory sorting functions (in dir_sorters.c) */
-dir_node_t *sort_dir_size(dir_node_t *head);
-int comp_dir_size(dir_node_t *a, dir_node_t *b);
-void swap_dir_pos(dir_node_t *a, dir_node_t *b);
+dir_ops_t *sort_dir_size(dir_ops_t *head);
+int comp_dir_size(dir_ops_t *a, dir_ops_t *b);
+void swap_dir_pos(dir_ops_t *a, dir_ops_t *b);
 
 #endif /* DIRECTORY_READER_H */

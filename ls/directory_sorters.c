@@ -5,9 +5,9 @@
  * @head: Head of the directory list.
  * Return: Head of the sorted directory list.
  **/
-dir_node_t *sort_dir_size(dir_node_t *head)
+dir_ops_t *sort_dir_size(dir_ops_t *head)
 {
-	dir_node_t *current_node = head;
+	dir_ops_t *current_node = head;
 	if (current_node)
 		return (current_node);
 	while (current_node->next)
@@ -31,7 +31,7 @@ dir_node_t *sort_dir_size(dir_node_t *head)
  * @second_dir: Second directory node.
  * Return: 1 if first_dir is smaller, 0 if second_dir is larger.
  **/
-int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir)
+int comp_dir_size(dir_ops_t *first_dir, dir_ops_t *second_dir)
 {
 	struct stat first_dir_info, second_dir_info;
 
@@ -55,7 +55,7 @@ int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir)
  * @first_dir: First directory node.
  * @second_dir: Second directory node.
  **/
-void swap_dir_pos(dir_node_t *first_dir, dir_node_t *second_dir)
+void swap_dir_pos(dir_ops_t *first_dir, dir_ops_t *second_dir)
 {
 	if (first_dir->prev)
 		first_dir->prev->next = second_dir;

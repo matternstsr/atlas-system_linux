@@ -77,7 +77,7 @@ int str_len(char *s)
  * @flags: Flags structure.
  * Return: 0 on success, 2 if an invalid option is encountered.
  **/
-int flag_interpreter(char *arg, ls_config_t *flags)
+int flag_interpreter(char *arg, ls_flag_t *flags)
 {
     int i;
     for (i = 1; arg[i] != '\0'; i++)

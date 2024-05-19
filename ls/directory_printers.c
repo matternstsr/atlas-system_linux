@@ -5,7 +5,7 @@
  * @file_list: The list of file nodes to be printed.
  * @flags: The configuration flags.
  **/
-void print_short_list(file_node_t *file_list, ls_config_t *flags)
+void print_short_list(file_node_t *file_list, ls_flag_t *flags)
 {
 	char *line_separator = flags->one_per_line ? "\n" : "  ";
 	file_node_t *next_node;
@@ -41,7 +41,7 @@ void print_short_list(file_node_t *file_list, ls_config_t *flags)
  * @file_list: The list of file nodes to be printed.
  * @flags: The configuration flags.
  **/
-void print_long_list(file_node_t *file_list, ls_config_t *flags)
+void print_long_list(file_node_t *file_list, ls_flag_t *flags)
 {
 	char perms[11], time[14], user[256], group[256], name[256], buf[256];
 	char sym_link_path[256];
@@ -85,9 +85,9 @@ void print_long_list(file_node_t *file_list, ls_config_t *flags)
  * @printer: The function used to print the directory contents.
  * Return: The status.
  **/
-int print_dirs(dir_node_t **head, ls_config_t *flags, print_t printer)
+int print_dirs(dir_ops_t **head, ls_flag_t *flags, print_t printer)
 {
-	dir_node_t *current_directory = *head;
+	dir_ops_t *current_directory = *head;
 	int status = 0;
 
 	if (flags->sort_by_size)

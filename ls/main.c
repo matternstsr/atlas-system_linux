@@ -9,10 +9,10 @@
 int main(int argc, char **argv)
 {
     int index, status = 0, check = 0, dir_count = 0;
-    dir_node_t *dirs_list = NULL;
+    dir_ops_t *dirs_list = NULL;
     file_node_t *file_list = NULL;
     DIR *dir_stream;
-    ls_config_t flags = {&print_short_list, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    ls_flag_t flags = {&print_short_list, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     for (index = 1; index < argc; index++, status = check ? check : status)
         if (argv[index][0] == '-' && argv[index][1] != '\0')

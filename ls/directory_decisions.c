@@ -1,7 +1,7 @@
 #include "directory_reader.h"
 
 /**
- * first_alphabetical_string - Returns the string that comes first alphabetically.
+ * first_alphabetical_string - Returns the string that comes first.
  * @strpt1: Pointer to the first string.
  * @strpt2: Pointer to the second string.
  * Return: The string that comes first alphabetically.
@@ -37,7 +37,7 @@ char *first_alphabetical_string(char *strpt1, char *strpt2)
  * @flags: Flags indicating the options passed onto the program.
  * Return: 1 if opening is approved, 0 if rejected.
  **/
-bool should_open_directory(file_node_t *directory_node, ls_config_t *flags)
+bool should_open_directory(file_node_t *directory_node, ls_flag_t *flags)
 {
     char *last_char;
     if (S_ISDIR(directory_node->info->st_mode) == false)
