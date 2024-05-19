@@ -4,8 +4,6 @@
 This project provides a set of functions for performing operations on directories in C. It includes functionalities like reading directory contents, handling directory entries, and obtaining information about directory entries.
 
 ## File Structure
-- **path_operations.c**: Contains functions for joining directory paths and entry names.
-- **entry_operations.c**: Implements functions for printing directory entry names and getting directory entry type names.
 - **directory_reader.h**: Header file defining structures and function prototypes for directory reading operations.
 - **directory_operations.c**: Implements functions for initializing directory readers, iterating through directory entries, and destroying directory readers.
 
