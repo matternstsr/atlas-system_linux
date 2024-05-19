@@ -1,56 +1,156 @@
 #ifndef DIRECTORY_READER_H
 #define DIRECTORY_READER_H
 
-#include <dirent.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <strings.h>
-#include <ctype.h> /* Conv chars to lower for comp */
+/** HEADERS **/
+
+/* Header for opendir, readdir, closedir, lstat */
 #include <sys/types.h>
+/* Header for opendir, readdir, closedir */
+#include <dirent.h>
+/* Header for printf, sprintf, fprintf */
+#include <stdio.h>
+/* Headers for lstat */
 #include <sys/stat.h>
 #include <unistd.h>
+/* Header for errno */
 #include <errno.h>
+/* Header for ctime */
+#include <time.h>
+/* For booleans */
+#include <stdbool.h>
+/* For getpwuid */
+#include <pwd.h>
+/* For group_grabber */
+#include <grp.h>
+/* For malloc, free */
+#include <stdlib.h>
 
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_GREEN   "\x1b[32m"
-#define ANSI_COLOR_YELLOW  "\x1b[33m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
-
-#define INITIAL_CAPACITY 100
+/** STRUCTS **/
 
 /**
- * struct dirent - Directory entry structure
- *
- * Description: This structure represents a directory entry,
- * containing information about a file or directory.
- */
-typedef struct DirectoryReader
+ * struct file_link_s - file linked list node
+ * @name: file name
+ * @dir_name: dir name
+ * @info: stat struct with file info
+ * @next: next
+ * @prev: prev
+ **/
+typedef struct file_link_s
 {
-	DIR *dir;
-	const char *path;
-	struct dirent *current_entry;
-	int finished;
-	int show_all;
-} DirectoryReader;
+	char *name;
+	char *dir_name;
+	struct stat *info;
+	struct file_link_s *next;
+	struct file_link_s *prev;
+} file_node_t;
 
-/* Function prototypes */
-int initDirectoryReader(DirectoryReader *reader, const char *path);
-struct dirent *getNextEntry(DirectoryReader *reader);
-int forEachEntry(DirectoryReader *reader,
-                 int (*itemHandler)(DirectoryReader *));
-void destroyDirectoryReader(DirectoryReader *reader);
-const char *getEntryTypeName(unsigned char d_type);
-const char *joinPath(const char *dirpath, const char *entry_name);
-int printEntryName(DirectoryReader *reader);
-int mattcomp(const char *str1, const char *str2);
-void *mattset(void *ptr, int value, size_t num);
-void mattsort(struct dirent **entries, int num_entries);
-char mattlower(char c);
-int checkEmpty(DirectoryReader *reader);
+/**
+ * struct ls_config_s - flags struct
+ * @printer: printer (changed to a long printer if -l is present)
+ * @one_per_line: -1
+ * @dot: -a
+ * @dot_alt: -A ('.' and '..' ommitted)
+ * @reversed: -r
+ * @sort_by_size: -S
+ * @sort_by_time: -t
+ * @recursive: -R
+ * @print_dir_name: if true, print directory name before printing list
+ * @max_hard_links: max hard links
+ * @max_size: max size
+ * @max_strlen: max strlen
+ **/
+typedef struct ls_config_s
+{
+	void (*printer)(file_node_t *, struct ls_config_s *);
+	bool one_per_line;
+	bool dot;
+	bool dot_alt;
+	bool reversed;
+	bool sort_by_size;
+	bool sort_by_time;
+	bool recursive;
+	bool print_dir_name;
+	int max_hard_links;
+	int max_size;
+	int max_strlen;
+} ls_config_t;
+
+typedef void (*print_t)(file_node_t *, struct ls_config_s *);
+
+/**
+ * struct dir_node_s - directory node
+ * @dir_name: dir name
+ * @list: list
+ * @error_code: error_code
+ * @size: size in bytes
+ * @next: next
+ * @prev: prev
+ **/
+typedef struct dir_node_s
+{
+	char *dir_name;
+	file_node_t *list;
+	int error_code;
+	int size;
+	struct dir_node_s *next;
+	struct dir_node_s *prev;
+} dir_node_t;
+
+#define ISLOWER(x) ((x) >= 'a' && (x) <= 'z')
+#define ISUPPER(x) ((x) >= 'A' && (x) <= 'Z')
+
+#define IS_PARENT_DIR(x) (str_len(x) == 2 && x[0] == '.' && x[1] == '.')
+#define IS_CWD(x) (str_len(x) == 1 && x[0] == '.')
+#define IS_PATH(x) (char_search(x, '/') != NULL)
+#define IS_HIDDEN(x) (x[0] == '.')
+#define should_print(x) (!IS_HIDDEN(x) || IS_PATH(x) || flags->dot || \
+						(flags->dot_alt && !IS_CWD(x) && !IS_PARENT_DIR(x)))
+
+/* Function Prototypes */
+
+/* Long format helper functions (in string_getters.c) */
+void perm_log(char *buffer, mode_t mode);
+void group_grabber(char *buffer, gid_t group_id);
+void user_grabber(char *buffer, uid_t user_id);
+void last_modified(char *buffer, time_t time_val);
+char file_type(mode_t mode);
+
+/* Set flags helper function (in main.c) */
+int flag_interpreter(char *arg, ls_config_t *flags);
+
+/* Linked list creation functions (in node_makers.c) */
+dir_node_t *add_subdirectories(dir_node_t *dir, ls_config_t *flags);
+void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_config_t *flags);
+int add_directory(char *name, DIR *stream, dir_node_t **head);
+int add_file(char *file_name, char *dir_name, file_node_t **head);
+file_node_t *file_maker(char *name, char *dir_name, struct stat *info);
+bool should_open_directory(file_node_t *dir, ls_config_t *flags);
+
+/* Alphabetization logic (in first_alphabetical_string.c) */
+char *first_alphabetical_string(char *s1, char *s2);
+
+/* Printing functions */
+int print_dirs(dir_node_t **head, ls_config_t *flags, print_t printer);
+void print_long_list(file_node_t *file_list, ls_config_t *flags);
+void print_short_list(file_node_t *file_list, ls_config_t *flags);
+int error_message_printing(char *name);
+
+/* Custom string functions (in string_helpers.c) */
+char *char_search(char *str, char c);
+char *string_copy(char *dest, char *src);
+char *string_dup(char *str);
+int str_len(char *str);
+
+/* file sorting functions (in sorters.c)*/
+file_node_t *recent_file_sort(file_node_t *head);
+int compare_recent(file_node_t *a, file_node_t *b);
+void swap_files(file_node_t *a, file_node_t *b);
+file_node_t *file_size_sort_checker(file_node_t *head);
+file_node_t *file_size_sort(file_node_t *head);
+
+/* directory sorting functions (in dir_sorters.c) */
+dir_node_t *sort_dir_size(dir_node_t *head);
+int comp_dir_size(dir_node_t *a, dir_node_t *b);
+void swap_dir_pos(dir_node_t *a, dir_node_t *b);
 
 #endif /* DIRECTORY_READER_H */
