@@ -143,4 +143,8 @@ dir_ops_t *sort_dir_size(dir_ops_t *head);
 int comp_dir_size(dir_ops_t *a, dir_ops_t *b);
 void swap_dir_pos(dir_ops_t *a, dir_ops_t *b);
 
+/* Freeing functions (in freers.c) */
+void Free_It_All(dir_ops_t *d_head, file_node_t *f_head);
+void Free_Directory_Files(file_node_t *file_list);
+
 #endif /* DIRECTORY_READER_H */

@@ -15,7 +15,7 @@ int error_message_printing(char *filename)
 		error_template = "hls: cannot open directory %s";
 	else
 		error_template = "hls: cannot access %s";
-	fprintf(buffer, error_template, filename);
+	sprintf(buffer, error_template, filename);
 	perror(buffer);
 	return error_code;
 }

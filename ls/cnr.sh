@@ -29,43 +29,43 @@ perform_betty_checks() {
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls
+        valgrind --leak-check=full ./hls 
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls test
+        valgrind --leak-check=full ./hls test
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls test/folder1/ test
+        valgrind --leak-check=full ./hls test/folder1/ test
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls test/random
+        valgrind --leak-check=full ./hls test/random
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls test -1
+        valgrind --leak-check=full ./hls test -1
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls -a test
+        valgrind --leak-check=full ./hls -a test
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls -a test/folder1
+        valgrind --leak-check=full ./hls -a test/folder1
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls -A test
+        valgrind --leak-check=full ./hls -A test
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls -A test/folder1
+        valgrind --leak-check=full ./hls -A test/folder1
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
-        valgrind ./hls -l test
+        valgrind --leak-check=full ./hls -l test
         echo "                                                        "
         echo "########################################################"
         echo "                                                        "
