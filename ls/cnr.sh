@@ -12,15 +12,15 @@ perform_betty_checks() {
         betty-doc *.c > $betty_output
     else
         echo "Invalid option!"
-        rm $betty_output
+        # rm $betty_output
     fi
     
     if [ -s $betty_output ]; then
         echo "Fix Betty $checks errors before compiling!"
         cat $betty_output
-        rm $betty_output
+        # rm $betty_output
     fi
-    rm $betty_output
+    # rm $betty_output
 }
 
 # Function to run Valgrind

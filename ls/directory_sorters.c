@@ -38,11 +38,12 @@ dir_node_t *sort_dir_size(dir_node_t *head)
 	return head;
 }
 
-/* comp_dir_size - Compares two directory nodes by size.
-* @first_dir: Pointer to the first directory node.
-* @second_dir: Pointer to the second directory node.
-* Return: 1 if first_dir is smaller, 0 if second_dir is larger.
-**/
+/**
+ * comp_dir_size - Compares two directory nodes by size.
+ * @first_dir: Pointer to the first directory node.
+ * @second_dir: Pointer to the second directory node.
+ * Return: 1 if first_dir is smaller, 0 if second_dir is larger.
+ **/
 int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir) {
 struct stat first_dir_info, second_dir_info;
 
@@ -71,10 +72,11 @@ if (first_dir->size == second_dir->size) {
 }
 
 
-/* swap_dir_pos - Swaps the position of two directory nodes.
-* @first_dir: Pointer to the first directory node.
-* @second_dir: Pointer to the second directory node.
-**/
+/**
+ * swap_dir_pos - Swaps the position of two directory nodes.
+ * @first_dir: Pointer to the first directory node.
+ * @second_dir: Pointer to the second directory node.
+ **/
 void swap_dir_pos(dir_node_t *first_dir, dir_node_t *second_dir) {
 	/* Ensure both nodes are valid */
 	if (!first_dir || !second_dir)
