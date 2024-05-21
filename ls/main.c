@@ -2,7 +2,7 @@
 
 #include "directory_reader.h"
 
-char *program_name; // Declaration of the global variable to store the program name
+char *program_name; /* Declaration of the global variable to store the program name */
 
 /**
  * main - Custom implementation of the ls command.
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     DIR *dir_stream;
     ls_flag_t flags = {&print_short_list, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    // Initialize the global variable with argv[0]
+    /* Initialize the global variable with argv[0] */
     program_name = argv[0];
 
     for (index = 1; index < argc; index++, status = check ? check : status)
