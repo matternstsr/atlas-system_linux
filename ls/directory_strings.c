@@ -1,4 +1,4 @@
-#include "directory_rader.h"
+#include "directory_reader.h"
 /**
  * user_grabber - Retrieves the username associated with a given user ID.
  * @buffer: Buffer to store the username.

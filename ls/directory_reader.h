@@ -84,7 +84,7 @@ typedef struct dir_ops_s
 	int size;
 	struct dir_ops_s *next;
 	struct dir_ops_s *prev;
-} dir_ops_t;
+} dir_node_t;
 
 #define ISLOWER(x) ((x) >= 'a' && (x) <= 'z')
 #define ISUPPER(x) ((x) >= 'A' && (x) <= 'Z')
@@ -109,9 +109,9 @@ char file_type(mode_t mode);
 int flag_interpreter(char *arg, ls_flag_t *flags);
 
 /* Linked list creation functions (in node_makers.c) */
-dir_ops_t *add_subdirectories(dir_ops_t *dir, ls_flag_t *flags);
-void manage_subdirectories(dir_ops_t **head, dir_ops_t *dir, ls_flag_t *flags);
-int add_directory(char *name, DIR *stream, dir_ops_t **head);
+dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags);
+void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags);
+int add_directory(char *name, DIR *stream, dir_node_t **head);
 int add_file(char *file_name, char *dir_name, file_node_t **head);
 file_node_t *file_maker(char *name, char *dir_name, struct stat *info);
 bool should_open_directory(file_node_t *dir, ls_flag_t *flags);
@@ -120,7 +120,7 @@ bool should_open_directory(file_node_t *dir, ls_flag_t *flags);
 char *first_alphabetical_string(char *s1, char *s2);
 
 /* Printing functions */
-int print_dirs(dir_ops_t **head, ls_flag_t *flags, print_t printer);
+int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer);
 void print_long_list(file_node_t *file_list, ls_flag_t *flags);
 void print_short_list(file_node_t *file_list, ls_flag_t *flags);
 int error_message_printing(char *name);
@@ -139,12 +139,12 @@ file_node_t *file_size_sort_checker(file_node_t *head);
 file_node_t *file_size_sort(file_node_t *head);
 
 /* directory sorting functions (in dir_sorters.c) */
-dir_ops_t *sort_dir_size(dir_ops_t *head);
-int comp_dir_size(dir_ops_t *a, dir_ops_t *b);
-void swap_dir_pos(dir_ops_t *a, dir_ops_t *b);
+dir_node_t *sort_dir_size(dir_node_t *head);
+int comp_dir_size(dir_node_t *a, dir_node_t *b);
+void swap_dir_pos(dir_node_t *a, dir_node_t *b);
 
 /* Freeing functions (in freers.c) */
-void Free_It_All(dir_ops_t *d_head, file_node_t *f_head);
-void Free_Directory_Files(file_node_t *file_list);
+void free_it_all(dir_node_t *d_head, file_node_t *f_head);
+void free_dir_files(file_node_t *file_list);
 
 #endif /* DIRECTORY_READER_H */

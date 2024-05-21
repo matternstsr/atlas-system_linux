@@ -85,9 +85,9 @@ void print_long_list(file_node_t *file_list, ls_flag_t *flags)
  * @printer: The function used to print the directory contents.
  * Return: The status.
  **/
-int print_dirs(dir_ops_t **head, ls_flag_t *flags, print_t printer)
+int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
 {
-	dir_ops_t *current_directory = *head;
+	dir_node_t *current_directory = *head;
 	int status = 0;
 
 	if (flags->sort_by_size)

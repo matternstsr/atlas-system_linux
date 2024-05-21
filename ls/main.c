@@ -9,7 +9,7 @@
 int main(int argc, char **argv)
 {
     int index, status = 0, check = 0, dir_count = 0;
-    dir_ops_t *dirs_list = NULL;
+    dir_node_t *dirs_list = NULL;
     file_node_t *file_list = NULL;
     DIR *dir_stream;
     ls_flag_t flags = {&print_short_list, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -19,6 +19,7 @@ int main(int argc, char **argv)
         {
             if (flag_interpreter(argv[index], &flags))
             {
+                free_it_all(dirs_list, file_list);
                 return (2);
             }
         }
@@ -40,5 +41,6 @@ int main(int argc, char **argv)
         putchar('\n');
     check = print_dirs(&dirs_list, &flags, flags.printer);
     status = check ? check : status;
+    free_it_all(dirs_list, file_list);
     return (status ? 2 : 0);
 }

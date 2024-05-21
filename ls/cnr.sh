@@ -10,112 +10,110 @@ perform_betty_checks() {
         betty-style *.c > $betty_output
     elif [ "$checks" == "doc" ]; then
         betty-doc *.c > $betty_output
-    elif [ "$checks" == "all" ]; then
-        betty-style *.c > $betty_output
-        betty-doc *.c >> $betty_output
     else
         echo "Invalid option!"
         rm $betty_output
-        exit 1
     fi
     
     if [ -s $betty_output ]; then
         echo "Fix Betty $checks errors before compiling!"
         cat $betty_output
-        # Run gcc with flags
-        echo "Compiling..."
-        gcc -Wall -Werror -Wextra -pedantic *.c -o hls
-        # Run valgrinds
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls 
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls test
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls test/folder1/ test
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls test/random
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls test -1
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls -a test
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls -a test/folder1
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls -A test
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls -A test/folder1
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
-        valgrind --leak-check=full ./hls -l test
-        echo "                                                        "
-        echo "########################################################"
-        echo "                                                        "
         rm $betty_output
-        exit 1
     fi
-    
     rm $betty_output
 }
 
-# Ask user which Betty checks to perform
+# Function to run Valgrind
+run_valgrind() {
+    echo "Running Valgrind..."
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls 
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls test
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls test/folder1/ test
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls test/random
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls test -1
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls -a test
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls -a test/folder1
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls -A test
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls -A test/folder1
+    echo "                                                        "
+    echo "########################################################"
+    echo "                                                        "
+    valgrind --leak-check=full ./hls -l test
+    echo "                                                        "
+    echo "########################################################"
+}
+
+# Main menu function
 clear
-read -p "Which Betty checks do you want to perform? (style/doc/all): " checks
+main_menu() {
+    while true; do
+        echo "Select an option:"
+        echo "1. Perform Betty style checks"
+        echo "2. Perform Betty documentation checks"
+        echo "3. Run Valgrind"
+        echo "4. Compile only"
+        echo "5. Exit"
+    
+        read -p "Enter your choice (1-5): " choice
+    
+        case $choice in
+            1)
+                clear
+                perform_betty_checks "style"
+                ;;
+            2)
+                clear
+                perform_betty_checks "doc"
+                ;;
+            3)
+                clear
+                run_valgrind
+                ;;
+            4)
+                clear
+                echo "Compiling..."
+                if gcc -Wall -Werror -Wextra -pedantic *.c -o hls; then
+                    echo "Compiled! You're good to go!"
+                else
+                    echo "Uhh ohh! You have some explaining to do!"
+                fi
+                ;;
+            5)
+                clear
+                exit 0
+                ;;
+            *)
+                echo "Invalid choice!"
+                ;;
+        esac
+    done
+}
 
-# Perform Betty checks based on user input
-case "$checks" in
-    style)
-        perform_betty_checks "style"
-        ;;
-    doc)
-        perform_betty_checks "doc"
-        ;;
-    all)
-        perform_betty_checks "all"
-        ;;
-    exit)
-        exit 1
-        ;;
-    *)
-        echo "Invalid option!"
-        ./cnr.sh
-        ;;
-esac
-
-# Run gcc with flags
-echo "Compiling..."
-gcc -Wall -Werror -Wextra -pedantic *.c -o hls
-
-# Check if gcc had errors
-if [ $? -eq 0 ]; then
-    # If no errors, pause for 2 seconds
-    sleep 2
-    echo "Running valgrind..."
-    # Run valgrind
-    valgrind ./hls
-else
-    # If gcc had errors, display message
-    echo "Fix it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    # Run valgrind
-    valgrind ./hls
-    # Pause for 2 seconds
-    sleep 2
-fi
+# Start the main menu
+main_menu

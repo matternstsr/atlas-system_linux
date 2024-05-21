@@ -1,4 +1,4 @@
-
+#include "directory_reader.h"
 
 /**
  * string_dup - Returns a pointer to a duplicate of the source string.
