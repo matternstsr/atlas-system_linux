@@ -103,53 +103,53 @@ void print_long_list(file_node_t *file_list, ls_flag_t *flags)
  **/
 int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
 {
-    /* Initialize variables */
-    dir_node_t *current_directory = *head;
-    int status = 0;
+		/* Initialize variables */
+		dir_node_t *current_directory = *head;
+		int status = 0;
 
-    /* Sort by size if flag is set */
-    if (flags->sort_by_size)
-        *head = sort_dir_size(*head);
+		/* Sort by size if flag is set */
+		if (flags->sort_by_size)
+				*head = sort_dir_size(*head);
 
-    /* Move to the last directory if reversed flag is set */
-    if (flags->reversed)
-        while (current_directory->next)
-            current_directory = current_directory->next;
+		/* Move to the last directory if reversed flag is set */
+		if (flags->reversed)
+				while (current_directory->next)
+						current_directory = current_directory->next;
 
-    /* Iterate through directories */
-    for (; current_directory; current_directory = flags->reversed ? current_directory->prev : current_directory->next)
-    {
-        /* Handle directory errors */
-        if (current_directory->error_code)
-        {
-            errno = current_directory->error_code;
-            status = error_message_printing(current_directory->dir_name, program_name);
-        }
-        else
-        {
-            /* Manage subdirectories if recursive flag is set */
-            if (flags->recursive)
-                manage_subdirectories(head, current_directory, flags);
+		/* Iterate through directories */
+		for (; current_directory; current_directory = flags->reversed ? current_directory->prev : current_directory->next)
+		{
+				/* Handle directory errors */
+				if (current_directory->error_code)
+				{
+						errno = current_directory->error_code;
+						status = error_message_printing(current_directory->dir_name, program_name);
+				}
+				else
+				{
+						/* Manage subdirectories if recursive flag is set */
+						if (flags->recursive)
+								manage_subdirectories(head, current_directory, flags);
 
-            /* Print directory name if flag is set */
-            if (flags->print_dir_name)
-                printf("%s:\n", current_directory->dir_name);
+						/* Print directory name if flag is set */
+						if (flags->print_dir_name)
+								printf("%s:\n", current_directory->dir_name);
 
-            /* Sort by size if flag is set */
-            if (flags->sort_by_size)
-                current_directory->list = file_size_sort(current_directory->list);
+						/* Sort by size if flag is set */
+						if (flags->sort_by_size)
+								current_directory->list = file_size_sort(current_directory->list);
 
-            /* Sort by time if flag is set */
-            if (flags->sort_by_time)
-                current_directory->list = recent_file_sort(current_directory->list);
+						/* Sort by time if flag is set */
+						if (flags->sort_by_time)
+								current_directory->list = recent_file_sort(current_directory->list);
 
-            /* Print directory contents */
-            printer(current_directory->list, flags);
+						/* Print directory contents */
+						printer(current_directory->list, flags);
 
-            /* Print newline if there are more directories */
-            if (flags->reversed ? current_directory->prev : current_directory->next)
-                putchar('\n');
-        }
-    }
-    return status;
+						/* Print newline if there are more directories */
+						if (flags->reversed ? current_directory->prev : current_directory->next)
+								putchar('\n');
+				}
+		}
+		return status;
 }

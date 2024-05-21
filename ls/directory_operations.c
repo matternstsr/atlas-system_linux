@@ -141,20 +141,20 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
  **/
 file_node_t *file_maker(char *name, char *dir_name, struct stat *info)
 {
-    /* Allocate memory for a new file node */
+		/* Allocate memory for a new file node */
 	file_node_t *new_node;
 
 	new_node = malloc(sizeof(file_node_t));
-    /* Copy the name of the file */
+		/* Copy the name of the file */
 	new_node->name = string_dup(name);
-    /* Copy the name of the directory */
+		/* Copy the name of the directory */
 	new_node->dir_name = string_dup(dir_name);
-    /* Store the information about the file */
+		/* Store the information about the file */
 	new_node->info = info;
-    /* Initialize next and previous pointers */
+		/* Initialize next and previous pointers */
 	new_node->next = NULL;
 	new_node->prev = NULL;
-    /* Return the newly created file node */
+		/* Return the newly created file node */
 	return (new_node);
 }
 
@@ -167,64 +167,64 @@ file_node_t *file_maker(char *name, char *dir_name, struct stat *info)
  **/
 void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags)
 {
-    /* Handle directory traversal in both forward and reverse directions */
-    dir_node_t *other_dir, *alt_dir;
+		/* Handle directory traversal in both forward and reverse directions */
+		dir_node_t *other_dir, *alt_dir;
 
-    /* Check if traversal direction is reversed */
-    if (flags->reversed)
-    {
-        /* Save the previous directory and update it with subdirectories */
-        other_dir = dir->prev, dir->prev = add_subdirectories(dir, flags);
-        
-        /* Check if subdirectories were successfully added */
-        if (dir->prev)
-        {
-            /* Set flag to print directory name and update links */
-            flags->print_dir_name = true, dir->prev->next = dir;
-            
-            /* Traverse to the beginning of the list */
-            for (alt_dir = dir->prev; alt_dir->prev; alt_dir = alt_dir->prev)
-                ;
-            
-            /* Adjust links to include new directory */
-            alt_dir->prev = other_dir;
-            if (other_dir)
-                other_dir->next = alt_dir;
-            else
-                *head = alt_dir;
-        }
-        else
-        {
-            /* Revert changes if subdirectories couldn't be added */
-            dir->prev = other_dir;
-        }
-    }
-    else
-    {
-        /* Save the next directory and update it with subdirectories */
-        other_dir = dir->next, dir->next = add_subdirectories(dir, flags);
-        
-        /* Check if subdirectories were successfully added */
-        if (dir->next)
-        {
-            /* Set flag to print directory name and update links */
-            flags->print_dir_name = true, dir->next->prev = dir;
-            
-            /* Traverse to the end of the list */
-            for (alt_dir = dir->next; alt_dir->next; alt_dir = alt_dir->next)
-                ;
-            
-            /* Adjust links to include new directory */
-            alt_dir->next = other_dir;
-            if (other_dir)
-                other_dir->prev = alt_dir;
-        }
-        else
-        {
-            /* Revert changes if subdirectories couldn't be added */
-            dir->next = other_dir;
-        }
-    }
+		/* Check if traversal direction is reversed */
+		if (flags->reversed)
+		{
+				/* Save the previous directory and update it with subdirectories */
+				other_dir = dir->prev, dir->prev = add_subdirectories(dir, flags);
+				
+				/* Check if subdirectories were successfully added */
+				if (dir->prev)
+				{
+						/* Set flag to print directory name and update links */
+						flags->print_dir_name = true, dir->prev->next = dir;
+						
+						/* Traverse to the beginning of the list */
+						for (alt_dir = dir->prev; alt_dir->prev; alt_dir = alt_dir->prev)
+								;
+						
+						/* Adjust links to include new directory */
+						alt_dir->prev = other_dir;
+						if (other_dir)
+								other_dir->next = alt_dir;
+						else
+								*head = alt_dir;
+				}
+				else
+				{
+						/* Revert changes if subdirectories couldn't be added */
+						dir->prev = other_dir;
+				}
+		}
+		else
+		{
+				/* Save the next directory and update it with subdirectories */
+				other_dir = dir->next, dir->next = add_subdirectories(dir, flags);
+				
+				/* Check if subdirectories were successfully added */
+				if (dir->next)
+				{
+						/* Set flag to print directory name and update links */
+						flags->print_dir_name = true, dir->next->prev = dir;
+						
+						/* Traverse to the end of the list */
+						for (alt_dir = dir->next; alt_dir->next; alt_dir = alt_dir->next)
+								;
+						
+						/* Adjust links to include new directory */
+						alt_dir->next = other_dir;
+						if (other_dir)
+								other_dir->prev = alt_dir;
+				}
+				else
+				{
+						/* Revert changes if subdirectories couldn't be added */
+						dir->next = other_dir;
+				}
+		}
 }
 
 

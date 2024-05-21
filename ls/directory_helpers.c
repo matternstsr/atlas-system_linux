@@ -9,19 +9,20 @@
  */
 char *string_dup(char *source_string)
 {
-	int index, length;
-	char *copied_string;
-	if (source_string == NULL) /* Check if source string is NULL */ 
-		return NULL;
-	for (length = 0; source_string[length]; length++) /* Get string length */
-		;
-	length++;
-	copied_string = (char *)malloc(length); /* Allocate memory */
-	if (copied_string == NULL) /* Check for NULL after memory allocation */		
-		return NULL;
-	for (index = 0; index < length; index++) /* Copy string */
-		copied_string[index] = source_string[index];
-	return copied_string; /* Return pointer */
+    int index, length;
+    char *copied_string;
+
+    if (source_string == NULL) /* Check if source string is NULL */ 
+        return NULL;
+    for (length = 0; source_string[length]; length++) /* Get string length */
+        ;
+    length++;
+    copied_string = (char *)malloc(length); /* Allocate memory */
+    if (copied_string == NULL) /* Check for NULL after memory allocation */		
+        return NULL;
+    for (index = 0; index < length; index++) /* Copy string */
+        copied_string[index] = source_string[index];
+    return copied_string; /* Return pointer */
 }
 
 /**
@@ -59,15 +60,16 @@ char *char_search(char *str, char c)
  **/
 char *string_copy(char *dest, char *src)
 {
-	int i;
-	if (!dest || !src) /* Check if either dest or src is NULL */
-		return (NULL);
-	for (i = 0; src[i]; i++) /* Iterate through source string */
-	{
-		dest[i] = src[i]; /* Copy characters from source to destination */
-	}
-	dest[i] = '\0'; /* Add null terminator to destination */
-	return (dest); /* Return pointer to destination */
+    int i;
+
+    if (!dest || !src) /* Check if either dest or src is NULL */
+        return (NULL);
+    for (i = 0; src[i]; i++) /* Iterate through source string */
+    {
+        dest[i] = src[i]; /* Copy characters from source to destination */
+    }
+    dest[i] = '\0'; /* Add null terminator to destination */
+    return (dest); /* Return pointer to destination */
 }
 
 
@@ -78,10 +80,11 @@ char *string_copy(char *dest, char *src)
 **/
 int str_len(char *s)
 {
-	int strlen = 0; /* Initialize the variable to store the length of the string. */
-	while (s[strlen]) /* Loop through the string until the null terminator is reached. */
-		strlen++; /* Increment the length for each character encountered. */
-	return (strlen); /* Return the length of the string. */
+    int strlen = 0; /* Initialize the variable to store the length of the string. */
+
+    while (s[strlen]) /* Loop through the string until the null terminator is reached. */
+        strlen++; /* Increment the length for each character encountered. */
+    return (strlen); /* Return the length of the string. */
 }
 
 /**
@@ -93,6 +96,7 @@ int str_len(char *s)
 int flag_interpreter(char *arg, ls_flag_t *flags)
 {
     int i;
+		
     for (i = 1; arg[i] != '\0'; i++)
         if (arg[i] == '1') /* Set flag for one per line */
             flags->one_per_line = true;

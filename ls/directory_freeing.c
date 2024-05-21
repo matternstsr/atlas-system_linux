@@ -9,6 +9,7 @@
 void free_dir_files(file_node_t *file_list)
 {
 	file_node_t *current = file_list, *prev;
+	
 	while (current)
 	{
 		prev = current;
@@ -30,6 +31,7 @@ void free_it_all(dir_node_t *d_head, file_node_t *f_head)
 {
 	file_node_t *f; /* Initialize a file node pointer */
 	dir_node_t *prev; /* Initialize a directory node pointer */
+
 	if (f_head) /* Check if file list is not empty */
 		free_dir_files(f_head); /* Free memory for files */
 	while (d_head) /* Loop through directory list */

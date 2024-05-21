@@ -9,16 +9,16 @@
  **/
 void user_grabber(char *buffer, uid_t user_id)
 {
-    /* Retrieve user information based on user ID */
-    struct passwd *user_info = getpwuid(user_id);
+		/* Retrieve user information based on user ID */
+		struct passwd *user_info = getpwuid(user_id);
 
-    /* Check if user information exists and if username is not empty */
-    if (user_info && user_info->pw_name && user_info->pw_name[0])
-        /* Copy username to the buffer */
-        string_copy(buffer, user_info->pw_name);
-    else
-        /* If no username found, convert user ID to string and store */
-        sprintf(buffer, "%u", user_id);
+		/* Check if user information exists and if username is not empty */
+		if (user_info && user_info->pw_name && user_info->pw_name[0])
+				/* Copy username to the buffer */
+				string_copy(buffer, user_info->pw_name);
+		else
+				/* If no username found, convert user ID to string and store */
+				sprintf(buffer, "%u", user_id);
 }
 
 
@@ -29,20 +29,20 @@ void user_grabber(char *buffer, uid_t user_id)
  **/
 void last_modified(char *buffer, time_t time_val)
 {
-    char *time_string;
-    int i, j, colon_count = 0;
+		char *time_string;
+		int i, j, colon_count = 0;
 
-    /* Get time string */
-    time_string = ctime(&time_val);
-    /* Copy hours and minutes to buffer */
-    for (i = 0, j = 4; colon_count < 2; i++, j++)
-    {
-        buffer[i] = time_string[j];
-        if (buffer[i] == ':')
-            colon_count++;
-    }
-    /* Null-terminate buffer */
-    buffer[i - 1] = '\0';
+		/* Get time string */
+		time_string = ctime(&time_val);
+		/* Copy hours and minutes to buffer */
+		for (i = 0, j = 4; colon_count < 2; i++, j++)
+		{
+				buffer[i] = time_string[j];
+				if (buffer[i] == ':')
+						colon_count++;
+		}
+		/* Null-terminate buffer */
+		buffer[i - 1] = '\0';
 }
 
 
@@ -54,18 +54,18 @@ void last_modified(char *buffer, time_t time_val)
  **/
 void group_grabber(char *buffer, gid_t group_id)
 {
-    /* Retrieve group information based on group ID */
-    struct group *group_info = getgrgid(group_id);
-    if (group_info != NULL) {
-        /* Check if group name is available */
-        if (group_info->gr_name != NULL && group_info->gr_name[0] != '\0') {
-            string_copy(buffer, group_info->gr_name); /* Copy group name to buffer */
-            return;
-        }
-    }
-    
-    /* If group name not found or group_info is NULL, fallback to group ID */
-    sprintf(buffer, "%u", (unsigned int)group_id); /* Store group ID as string */
+		/* Retrieve group information based on group ID */
+		struct group *group_info = getgrgid(group_id);
+		if (group_info != NULL) {
+				/* Check if group name is available */
+				if (group_info->gr_name != NULL && group_info->gr_name[0] != '\0') {
+						string_copy(buffer, group_info->gr_name); /* Copy group name to buffer */
+						return;
+				}
+		}
+		
+		/* If group name not found or group_info is NULL, fallback to group ID */
+		sprintf(buffer, "%u", (unsigned int)group_id); /* Store group ID as string */
 }
 
 
@@ -76,22 +76,22 @@ void group_grabber(char *buffer, gid_t group_id)
  **/
 void perm_log(char *buffer, mode_t mode)
 {
-    /* Store file type */
-    buffer[0] = file_type(mode);
-    /* User permissions */
-    buffer[1] = mode & S_IRUSR ? 'r' : '-';
-    buffer[2] = mode & S_IWUSR ? 'w' : '-';
-    buffer[3] = mode & S_IXUSR ? 'x' : '-';
-    /* Group permissions */
-    buffer[4] = mode & S_IRGRP ? 'r' : '-';
-    buffer[5] = mode & S_IWGRP ? 'w' : '-';
-    buffer[6] = mode & S_IXGRP ? 'x' : '-';
-    /* Others permissions */
-    buffer[7] = mode & S_IROTH ? 'r' : '-';
-    buffer[8] = mode & S_IWOTH ? 'w' : '-';
-    buffer[9] = mode & S_IXOTH ? 'x' : '-';
-    /* Null-terminate the string */
-    buffer[10] = '\0';
+		/* Store file type */
+		buffer[0] = file_type(mode);
+		/* User permissions */
+		buffer[1] = mode & S_IRUSR ? 'r' : '-';
+		buffer[2] = mode & S_IWUSR ? 'w' : '-';
+		buffer[3] = mode & S_IXUSR ? 'x' : '-';
+		/* Group permissions */
+		buffer[4] = mode & S_IRGRP ? 'r' : '-';
+		buffer[5] = mode & S_IWGRP ? 'w' : '-';
+		buffer[6] = mode & S_IXGRP ? 'x' : '-';
+		/* Others permissions */
+		buffer[7] = mode & S_IROTH ? 'r' : '-';
+		buffer[8] = mode & S_IWOTH ? 'w' : '-';
+		buffer[9] = mode & S_IXOTH ? 'x' : '-';
+		/* Null-terminate the string */
+		buffer[10] = '\0';
 }
 
 
@@ -102,27 +102,27 @@ void perm_log(char *buffer, mode_t mode)
  **/
 char file_type(mode_t mode)
 {
-    /* Check if regular file */
-    if (S_ISREG(mode))
-        return '-';
-    /* Check if directory */
-    if (S_ISDIR(mode))
-        return 'd';
-    /* Check if character device */
-    if (S_ISCHR(mode))
-        return 'c';
-    /* Check if block device */
-    if (S_ISBLK(mode))
-        return 'b';
-    /* Check if FIFO (named pipe) */
-    if (S_ISFIFO(mode))
-        return 'p';
-    /* Check if symbolic link */
-    if (S_ISLNK(mode))
-        return 'l';
-    /* Check if socket */
-    if (S_ISSOCK(mode))
-        return 's';
-    /* If none of the above, return '-' */
-    return '-';
+		/* Check if regular file */
+		if (S_ISREG(mode))
+				return '-';
+		/* Check if directory */
+		if (S_ISDIR(mode))
+				return 'd';
+		/* Check if character device */
+		if (S_ISCHR(mode))
+				return 'c';
+		/* Check if block device */
+		if (S_ISBLK(mode))
+				return 'b';
+		/* Check if FIFO (named pipe) */
+		if (S_ISFIFO(mode))
+				return 'p';
+		/* Check if symbolic link */
+		if (S_ISLNK(mode))
+				return 'l';
+		/* Check if socket */
+		if (S_ISSOCK(mode))
+				return 's';
+		/* If none of the above, return '-' */
+		return '-';
 }

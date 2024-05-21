@@ -21,39 +21,39 @@ extern char *program_name;
 /** STRUCTS **/
 typedef struct file_link_s
 {
-    char *name;
-    char *dir_name;
-    struct stat *info;
-    struct file_link_s *next;
-    struct file_link_s *prev;
+		char *name;
+		char *dir_name;
+		struct stat *info;
+		struct file_link_s *next;
+		struct file_link_s *prev;
 } file_node_t;
 
 typedef struct LsFlags
 {
-    void (*printer)(file_node_t *, struct LsFlags *);
-    bool one_per_line;
-    bool dot;
-    bool dot_alt;
-    bool reversed;
-    bool sort_by_size;
-    bool sort_by_time;
-    bool recursive;
-    bool print_dir_name;
-    int max_hard_links;
-    int max_size;
-    int max_strlen;
+		void (*printer)(file_node_t *, struct LsFlags *);
+		bool one_per_line;
+		bool dot;
+		bool dot_alt;
+		bool reversed;
+		bool sort_by_size;
+		bool sort_by_time;
+		bool recursive;
+		bool print_dir_name;
+		int max_hard_links;
+		int max_size;
+		int max_strlen;
 } ls_flag_t;
 
 typedef void (*print_t)(file_node_t *, struct LsFlags *);
 
 typedef struct dir_ops_s
 {
-    char *dir_name;
-    file_node_t *list;
-    int error_code;
-    int size;
-    struct dir_ops_s *next;
-    struct dir_ops_s *prev;
+		char *dir_name;
+		file_node_t *list;
+		int error_code;
+		int size;
+		struct dir_ops_s *next;
+		struct dir_ops_s *prev;
 } dir_node_t;
 
 /** MACROS **/
@@ -65,7 +65,7 @@ typedef struct dir_ops_s
 #define IS_PATH(x) (char_search(x, '/') != NULL)
 #define IS_HIDDEN(x) (x[0] == '.')
 #define should_print(x) (!IS_HIDDEN(x) || IS_PATH(x) || flags->dot || \
-                        (flags->dot_alt && !IS_CWD(x) && !IS_PARENT_DIR(x)))
+												(flags->dot_alt && !IS_CWD(x) && !IS_PARENT_DIR(x)))
 
 /** FUNCTION PROTOTYPES **/
 

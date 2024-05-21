@@ -11,6 +11,7 @@
 char *first_alphabetical_string(char *strpt1, char *strpt2)
 {
     char *result;
+    
     if (*strpt1 == '\0')
         return (*strpt2 ? strpt1 : NULL); /* If strpt1 is empty, return strpt1 if strpt2 is not empty, otherwise return NULL */
     if (*strpt2 == '\0')
