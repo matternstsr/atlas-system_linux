@@ -16,6 +16,8 @@
 #include <grp.h>            /* For group_grabber */
 #include <stdlib.h>         /* For malloc, free */
 
+extern char *program_name;
+
 /** STRUCTS **/
 typedef struct file_link_s
 {
@@ -92,7 +94,7 @@ char *first_alphabetical_string(char *s1, char *s2);
 int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer);
 void print_long_list(file_node_t *file_list, ls_flag_t *flags);
 void print_short_list(file_node_t *file_list, ls_flag_t *flags);
-int error_message_printing(char *name);
+int error_message_printing(char *filename, char *argv0);
 
 /* Custom string functions */
 char *char_search(char *str, char c);

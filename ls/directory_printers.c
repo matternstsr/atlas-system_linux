@@ -123,7 +123,7 @@ int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
         if (current_directory->error_code)
         {
             errno = current_directory->error_code;
-            status = error_message_printing(current_directory->dir_name);
+            status = error_message_printing(current_directory->dir_name, program_name);
         }
         else
         {

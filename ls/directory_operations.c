@@ -98,7 +98,7 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
 	if (lstat(file_path, file_info) == -1)
 	{
 		free(file_info);
-		return (error_message_printing(file_name));
+		return error_message_printing(file_name, program_name);
 	}
 
 	/* Create a new file node */

@@ -2,6 +2,8 @@
 
 #include "directory_reader.h"
 
+char *program_name; // Declaration of the global variable to store the program name
+
 /**
  * main - Custom implementation of the ls command.
  * @argc: Argument count.
@@ -15,6 +17,9 @@ int main(int argc, char **argv)
     file_node_t *file_list = NULL;
     DIR *dir_stream;
     ls_flag_t flags = {&print_short_list, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    // Initialize the global variable with argv[0]
+    program_name = argv[0];
 
     for (index = 1; index < argc; index++, status = check ? check : status)
         if (argv[index][0] == '-' && argv[index][1] != '\0')
