@@ -8,7 +8,7 @@
 dir_node_t *sort_dir_size(dir_node_t *head)
 {
 	dir_node_t *current_node = head;
-	if (!current_node)
+	if (current_node)
 		return (current_node);
 	while (current_node->next)
 		if (comp_dir_size(current_node, current_node->next))

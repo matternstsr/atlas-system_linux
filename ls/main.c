@@ -19,7 +19,6 @@ int main(int argc, char **argv)
         {
             if (flag_interpreter(argv[index], &flags))
             {
-                free_it_all(dirs_list, file_list);
                 return (2);
             }
         }
@@ -41,6 +40,5 @@ int main(int argc, char **argv)
         putchar('\n');
     check = print_dirs(&dirs_list, &flags, flags.printer);
     status = check ? check : status;
-    free_it_all(dirs_list, file_list);
     return (status ? 2 : 0);
 }
