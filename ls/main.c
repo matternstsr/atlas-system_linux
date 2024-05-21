@@ -1,5 +1,7 @@
 /* atlas-system_linux/ls/main.c */
 
+//
+
 #include "directory_reader.h"
 
 char *program_name; /* Declaration of the global variable to store the program name */
