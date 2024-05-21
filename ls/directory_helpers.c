@@ -1,4 +1,6 @@
-#include "directory_reader.
+/* atlas-system_linux/ls/directory_helpers.c */
+
+#include "directory_reader.h"
 
 /**
  * string_dup - Returns a pointer to a duplicate of the source string.
@@ -9,13 +11,13 @@ char *string_dup(char *source_string)
 {
 	int index, length;
 	char *copied_string;
-	if (source_string == NULL)
+	if (source_string == NULL) /* Check if source string is NULL */ 
 		return NULL;
 	for (length = 0; source_string[length]; length++) /* Get string length */
 		;
 	length++;
 	copied_string = (char *)malloc(length); /* Allocate memory */
-	if (copied_string == NULL)		        /* Check for NULL */
+	if (copied_string == NULL) /* Check for NULL after memory allocation */		
 		return NULL;
 	for (index = 0; index < length; index++) /* Copy string */
 		copied_string[index] = source_string[index];
@@ -30,15 +32,23 @@ char *string_dup(char *source_string)
  **/
 char *char_search(char *str, char c)
 {
+    /* Check if the string is NULL */
     if (!str)
         return NULL;
+    
+    /* Iterate through the string */
     while (*str)
+        /* If the current character is not equal to 'c', move to the next character */
         if (*str != c)
             str++;
+        /* If the current character is equal to 'c', return a pointer to it */
         else
             return str;
+    
+    /* If 'c' is not found in 'str', return NULL */
     return NULL;
 }
+
 
 
 /**
@@ -50,15 +60,16 @@ char *char_search(char *str, char c)
 char *string_copy(char *dest, char *src)
 {
 	int i;
-	if (!dest || !src)
+	if (!dest || !src) /* Check if either dest or src is NULL */
 		return (NULL);
-	for (i = 0; src[i]; i++)
+	for (i = 0; src[i]; i++) /* Iterate through source string */
 	{
-		dest[i] = src[i];
+		dest[i] = src[i]; /* Copy characters from source to destination */
 	}
-	dest[i] = '\0';
-	return (dest);
+	dest[i] = '\0'; /* Add null terminator to destination */
+	return (dest); /* Return pointer to destination */
 }
+
 
 /**
 * str_len - Returns the length of a string.
@@ -67,10 +78,10 @@ char *string_copy(char *dest, char *src)
 **/
 int str_len(char *s)
 {
-	int strlen = 0;
-	while (s[strlen])
-		strlen++;
-	return (strlen);
+	int strlen = 0; /* Initialize the variable to store the length of the string. */
+	while (s[strlen]) /* Loop through the string until the null terminator is reached. */
+		strlen++; /* Increment the length for each character encountered. */
+	return (strlen); /* Return the length of the string. */
 }
 
 /**
@@ -83,23 +94,23 @@ int flag_interpreter(char *arg, ls_flag_t *flags)
 {
     int i;
     for (i = 1; arg[i] != '\0'; i++)
-        if (arg[i] == '1')
+        if (arg[i] == '1') /* Set flag for one per line */
             flags->one_per_line = true;
-        else if (arg[i] == 'a')
+        else if (arg[i] == 'a') /* Set flag for dot */
             flags->dot = true;
-        else if (arg[i] == 'A')
+        else if (arg[i] == 'A') /* Set flag for dot_alt */
             flags->dot_alt = true;
-        else if (arg[i] == 'l')
+        else if (arg[i] == 'l') /* Set printer function for long list */
             flags->printer = &print_long_list;
-        else if (arg[i] == 'r')
+        else if (arg[i] == 'r') /* Set flag for reversed */
             flags->reversed = true;
-        else if (arg[i] == 'R')
+        else if (arg[i] == 'R') /* Set flag for recursive */
             flags->recursive = true;
-        else if (arg[i] == 't')
+        else if (arg[i] == 't') /* Set flag for sort by time */
             flags->sort_by_time = true;
-        else if (arg[i] == 'S')
+        else if (arg[i] == 'S') /* Set flag for sort by size */
             flags->sort_by_size = true;
-        else
+        else /* Handle invalid option */
         {
             fprintf(stderr, "hls: invalid option -- '%c'\n", arg[i]);
             fprintf(stderr, "Try 'hls --help' for more information.\n");
@@ -107,3 +118,4 @@ int flag_interpreter(char *arg, ls_flag_t *flags)
         }
     return (0);
 }
+

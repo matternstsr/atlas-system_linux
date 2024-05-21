@@ -1,3 +1,5 @@
+/* atlas-system_linux/ls/main.c */
+
 #include "directory_reader.h"
 
 /**
@@ -19,6 +21,7 @@ int main(int argc, char **argv)
         {
             if (flag_interpreter(argv[index], &flags))
             {
+                free_it_all(dirs_list, file_list);
                 return (2);
             }
         }
@@ -28,17 +31,18 @@ int main(int argc, char **argv)
             if (dir_stream == NULL && (errno == ENOTDIR || errno == ENOENT))
                 check = add_file(argv[index], "", &file_list);
             else
-                check = add_directory(argv[index], dir_stream, &dirs_list), dir_count++;
+                check = add_dir(argv[index], dir_stream, &dirs_list), dir_count++;
         }
 
     if (file_list || dir_count > 1 || (file_list == NULL && status != 0))
         flags.print_dir_name = true;
     if (dir_count == 0 && file_list == NULL && status == 0)
-        add_directory(".", opendir("."), &dirs_list);
+        add_dir(".", opendir("."), &dirs_list);
     flags.printer(file_list, &flags);
     if (dir_count && file_list)
         putchar('\n');
     check = print_dirs(&dirs_list, &flags, flags.printer);
     status = check ? check : status;
+    free_it_all(dirs_list, file_list);
     return (status ? 2 : 0);
 }

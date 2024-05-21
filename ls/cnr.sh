@@ -76,11 +76,12 @@ main_menu() {
         echo "Select an option:"
         echo "1. Perform Betty style checks"
         echo "2. Perform Betty documentation checks"
-        echo "3. Run Valgrind"
-        echo "4. Compile only"
-        echo "5. Exit"
+        echo "3. Compile only"
+        echo "4. Run Valgrind"
+        echo "5. Compile and Run Valgrind (Check for memory leaks)"
+        echo "6. Exit"
     
-        read -p "Enter your choice (1-5): " choice
+        read -p "Enter your choice (1-6): " choice
     
         case $choice in
             1)
@@ -93,18 +94,29 @@ main_menu() {
                 ;;
             3)
                 clear
-                run_valgrind
+                echo "Compiling..."
+                if gcc -Wall -Werror -Wextra -pedantic *.c -o hls; then
+                    echo "Compiled successfully!"
+                else
+                    echo "Compilation failed!"
+                fi
                 ;;
             4)
                 clear
-                echo "Compiling..."
-                if gcc -Wall -Werror -Wextra -pedantic *.c -o hls; then
-                    echo "Compiled! You're good to go!"
-                else
-                    echo "Uhh ohh! You have some explaining to do!"
-                fi
+                run_valgrind
                 ;;
             5)
+                clear
+                echo "Compiling..."
+                if gcc -Wall -Werror -Wextra -pedantic *.c -o hls; then
+                    echo "Compiled successfully!"
+                    run_valgrind
+                    echo "All good!"
+                else
+                    echo "Compilation failed! Oops, better check that code."
+                fi
+                ;;
+            6)
                 clear
                 exit 0
                 ;;
@@ -114,6 +126,7 @@ main_menu() {
         esac
     done
 }
+
 
 # Start the main menu
 main_menu

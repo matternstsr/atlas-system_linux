@@ -1,3 +1,5 @@
+/* atlas-system_linux/ls/directory_freeing.c */
+
 #include "directory_reader.h"
 
 /**
@@ -11,12 +13,13 @@ void free_dir_files(file_node_t *file_list)
 	{
 		prev = current;
 		current = current->next;
-		free(prev->info);
-		free(prev->name);
-		free(prev->dir_name);
-		free(prev);
+		free(prev->info); /* Freeing memory allocated for file information */
+		free(prev->name); /* Freeing memory allocated for file name */
+		free(prev->dir_name); /* Freeing memory allocated for directory name */
+		free(prev); /* Freeing memory allocated for file node */
 	}
 }
+
 
 /**
  * free_it_all - Frees all memory allocated for directories and files.
@@ -25,17 +28,17 @@ void free_dir_files(file_node_t *file_list)
  **/
 void free_it_all(dir_node_t *d_head, file_node_t *f_head)
 {
-	file_node_t *f;
-	dir_node_t *prev;
-	if (f_head)
-		free_dir_files(f_head);
-	while (d_head)
+	file_node_t *f; /* Initialize a file node pointer */
+	dir_node_t *prev; /* Initialize a directory node pointer */
+	if (f_head) /* Check if file list is not empty */
+		free_dir_files(f_head); /* Free memory for files */
+	while (d_head) /* Loop through directory list */
 	{
-		f = d_head->list;
-		free_dir_files(f);
-		prev = d_head;
-		d_head = d_head->next;
-		free(prev->dir_name);
-		free(prev);
+		f = d_head->list; /* Assign file list of current directory */
+		free_dir_files(f); /* Free memory for files in directory */
+		prev = d_head; /* Assign current directory to prev */
+		d_head = d_head->next; /* Move to next directory */
+		free(prev->dir_name); /* Free memory for directory name */
+		free(prev); /* Free memory for directory node */
 	}
 }

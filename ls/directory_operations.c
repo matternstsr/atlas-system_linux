@@ -1,42 +1,58 @@
+/* atlas-system_linux/ls/directory_operations.c */
+
 #include "directory_reader.h"
 
 /**
- * add_directory - Adds a directory node to a directory_node_t linked list.
+ * add_dir - Adds a directory node to a directory_node_t linked list.
  * @directory_name: The name of the directory.
  * @directory_stream: The directory stream.
  * @head_of_directory_list: The head of the directory_node_t list where the new node will be added.
  * Return: 0 on success, or an error code if the directory stream couldn't be opened.
  **/
-int add_directory(char *directory_name, DIR *directory_stream, dir_node_t **head_of_directory_list)
+int add_dir(char *directory_name, DIR *directory_stream, dir_node_t **head_of_directory_list)
 {
 	dir_node_t *new_directory_node, *current_node;
 	struct dirent *entry;
 	file_node_t *file_list_head = NULL;
 	int error_code = errno;
+
+	/* Allocate memory for new directory node */
 	new_directory_node = malloc(sizeof(dir_node_t));
+
+	/* Copy directory name to the new directory node */
 	new_directory_node->dir_name = string_dup(directory_name);
 	new_directory_node->next = NULL;
 	new_directory_node->prev = NULL;
 	new_directory_node->size = -1;
 	new_directory_node->error_code = directory_stream ? 0 : error_code;
+
+	/* If directory stream is valid, iterate through directory entries and add files */
 	if (new_directory_node->error_code == 0)
 	{
 		while ((entry = readdir(directory_stream)) != NULL)
 			error_code = add_file(entry->d_name, directory_name, &file_list_head);
 		closedir(directory_stream);
 	}
+
+	/* Set file list of the new directory node */
 	new_directory_node->list = file_list_head;
+
+	/* If directory list is empty, set new node as head and return */
 	if (*head_of_directory_list == NULL)
 	{
 		*head_of_directory_list = new_directory_node;
 		return new_directory_node->error_code;
 	}
+
+	/* Find the correct position to insert the new directory node in alphabetical order */
 	current_node = *head_of_directory_list;
 	while (current_node && first_alphabetical_string(directory_name, current_node->dir_name) != directory_name)
 	{
 		new_directory_node->prev = current_node;
 		current_node = current_node->next;
 	}
+
+	/* Insert the new directory node at the correct position */
 	if (current_node)
 	{
 		new_directory_node->prev = current_node->prev;
@@ -49,8 +65,10 @@ int add_directory(char *directory_name, DIR *directory_stream, dir_node_t **head
 	}
 	else
 		new_directory_node->prev->next = new_directory_node;
+
 	return new_directory_node->error_code;
 }
+
 
 /**
  * add_file - Adds a file node to a file_node_t linked list.
@@ -61,10 +79,13 @@ int add_directory(char *directory_name, DIR *directory_stream, dir_node_t **head
  **/
 int add_file(char *file_name, char *dir_name, file_node_t **head)
 {
+	/* Allocate memory for storing file information */
 	file_node_t *new_file_node, *tmp_node;
 	struct stat *file_info = malloc(sizeof(struct stat));
 	char file_path[512];
 	int i, j;
+
+	/* Construct the file path */
 	for (i = 0; dir_name[i]; i++)
 		file_path[i] = dir_name[i];
 	if (i)
@@ -72,17 +93,25 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
 	for (j = 0; file_name[j]; i++, j++)
 		file_path[i] = file_name[j];
 	file_path[i] = '\0';
+
+	/* Check if lstat fails */
 	if (lstat(file_path, file_info) == -1)
 	{
 		free(file_info);
 		return (error_message_printing(file_name));
 	}
+
+	/* Create a new file node */
 	new_file_node = file_maker(file_name, dir_name, file_info);
+
+	/* If the list is empty, make the new node the head */
 	if (*head == NULL)
 	{
 		*head = new_file_node;
 		return (0);
 	}
+
+	/* Otherwise, find the correct position to insert the new node */
 	tmp_node = *head;
 	while (tmp_node && first_alphabetical_string(file_name, tmp_node->name) != file_name)
 		new_file_node->prev = tmp_node, tmp_node = tmp_node->next;
@@ -98,8 +127,10 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
 	}
 	else
 		new_file_node->prev->next = new_file_node;
+
 	return (0);
 }
+
 
 /**
  * file_maker - Initializes a file node.
@@ -110,16 +141,23 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
  **/
 file_node_t *file_maker(char *name, char *dir_name, struct stat *info)
 {
+    /* Allocate memory for a new file node */
 	file_node_t *new_node;
 
 	new_node = malloc(sizeof(file_node_t));
+    /* Copy the name of the file */
 	new_node->name = string_dup(name);
+    /* Copy the name of the directory */
 	new_node->dir_name = string_dup(dir_name);
+    /* Store the information about the file */
 	new_node->info = info;
+    /* Initialize next and previous pointers */
 	new_node->next = NULL;
 	new_node->prev = NULL;
+    /* Return the newly created file node */
 	return (new_node);
 }
+
 
 /**
  * manage_subdirectories - Lists directory recursively.
@@ -129,45 +167,66 @@ file_node_t *file_maker(char *name, char *dir_name, struct stat *info)
  **/
 void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags)
 {
-	dir_node_t *other_dir, *alt_dir;
+    /* Handle directory traversal in both forward and reverse directions */
+    dir_node_t *other_dir, *alt_dir;
 
-	if (flags->reversed)
-	{
-		other_dir = dir->prev, dir->prev = add_subdirectories(dir, flags);
-		if (dir->prev)
-		{
-			flags->print_dir_name = true, dir->prev->next = dir;
-			for (alt_dir = dir->prev; alt_dir->prev; alt_dir = alt_dir->prev)
-				;
-			alt_dir->prev = other_dir;
-			if (other_dir)
-				other_dir->next = alt_dir;
-			else
-				*head = alt_dir;
-		}
-		else
-		{
-			dir->prev = other_dir;
-		}
-	}
-	else
-	{
-		other_dir = dir->next, dir->next = add_subdirectories(dir, flags);
-		if (dir->next)
-		{
-			flags->print_dir_name = true, dir->next->prev = dir;
-			for (alt_dir = dir->next; alt_dir->next; alt_dir = alt_dir->next)
-				;
-			alt_dir->next = other_dir;
-			if (other_dir)
-				other_dir->prev = alt_dir;
-		}
-		else
-		{
-			dir->next = other_dir;
-		}
-	}
+    /* Check if traversal direction is reversed */
+    if (flags->reversed)
+    {
+        /* Save the previous directory and update it with subdirectories */
+        other_dir = dir->prev, dir->prev = add_subdirectories(dir, flags);
+        
+        /* Check if subdirectories were successfully added */
+        if (dir->prev)
+        {
+            /* Set flag to print directory name and update links */
+            flags->print_dir_name = true, dir->prev->next = dir;
+            
+            /* Traverse to the beginning of the list */
+            for (alt_dir = dir->prev; alt_dir->prev; alt_dir = alt_dir->prev)
+                ;
+            
+            /* Adjust links to include new directory */
+            alt_dir->prev = other_dir;
+            if (other_dir)
+                other_dir->next = alt_dir;
+            else
+                *head = alt_dir;
+        }
+        else
+        {
+            /* Revert changes if subdirectories couldn't be added */
+            dir->prev = other_dir;
+        }
+    }
+    else
+    {
+        /* Save the next directory and update it with subdirectories */
+        other_dir = dir->next, dir->next = add_subdirectories(dir, flags);
+        
+        /* Check if subdirectories were successfully added */
+        if (dir->next)
+        {
+            /* Set flag to print directory name and update links */
+            flags->print_dir_name = true, dir->next->prev = dir;
+            
+            /* Traverse to the end of the list */
+            for (alt_dir = dir->next; alt_dir->next; alt_dir = alt_dir->next)
+                ;
+            
+            /* Adjust links to include new directory */
+            alt_dir->next = other_dir;
+            if (other_dir)
+                other_dir->prev = alt_dir;
+        }
+        else
+        {
+            /* Revert changes if subdirectories couldn't be added */
+            dir->next = other_dir;
+        }
+    }
 }
+
 
 /**
  * add_subdirectories - Includes a directory's subdirectories in directory list.
@@ -181,14 +240,19 @@ dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags)
 	dir_node_t *new_dir = NULL, *prev_dir = NULL;
 	char path[512];
 
+	/* Check if the 'reversed' flag is set */
 	if (flags->reversed)
 		while (tmp_file->next)
 			tmp_file = tmp_file->next;
+	/* Iterate over files in the directory */
 	for (; tmp_file; tmp_file = flags->reversed ? tmp_file->prev : tmp_file->next)
 		if (should_open_directory(tmp_file, flags))
 		{
+			/* Construct full path of the subdirectory */
 			sprintf(path, "%s/%s", dir->dir_name, tmp_file->name);
-			add_directory(path, opendir(path), &new_dir);
+			/* Add the subdirectory to the list */
+			add_dir(path, opendir(path), &new_dir);
+			/* Adjust pointers based on the 'reversed' flag */
 			if (flags->reversed)
 			{
 				new_dir->next = prev_dir;
@@ -203,12 +267,15 @@ dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags)
 			}
 			prev_dir = new_dir, new_dir = NULL;
 		}
+	/* Move 'prev_dir' to the last directory if 'reversed' flag is set */
 	if (flags->reversed && prev_dir)
 		while (prev_dir->next)
 			prev_dir = prev_dir->next;
+	/* Move 'prev_dir' to the first directory if 'reversed' flag is not set */
 	else if (prev_dir)
 		while (prev_dir->prev)
 			prev_dir = prev_dir->prev;
+	/* Sort the directory list by size if 'sort_by_size' flag is set */
 	if (flags->sort_by_size)
 		prev_dir = sort_dir_size(prev_dir);
 	return (prev_dir);
