@@ -9,7 +9,7 @@
 void free_dir_files(file_node_t *file_list)
 {
 	file_node_t *current = file_list, *prev;
-	
+
 	while (current)
 	{
 		prev = current;
