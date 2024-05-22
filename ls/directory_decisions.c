@@ -3,12 +3,12 @@
 #include "directory_reader.h"
 
 /**
- * first_alphabetical_string - Returns the string that comes first.
+ * FAS - Returns the string that comes first. (first_alphabetical_string)
  * @strpt1: Pointer to the first string.
  * @strpt2: Pointer to the second string.
  * Return: The string that comes first alphabetically.
  **/
-char *first_alphabetical_string(char *strpt1, char *strpt2)
+char *FAS(char *strpt1, char *strpt2)
 {
     char *result;
     
@@ -17,12 +17,12 @@ char *first_alphabetical_string(char *strpt1, char *strpt2)
     if (*strpt2 == '\0')
         return (strpt2); /* If strpt2 is empty, return strpt2 */
     if (*strpt1 == '.')
-        return (first_alphabetical_string(strpt2, strpt1 + 1) == strpt1 + 1 ? strpt1 : strpt2); /* If strpt1 starts with '.', compare strpt1+1 with strpt2 */
+        return (FAS(strpt2, strpt1 + 1) == strpt1 + 1 ? strpt1 : strpt2); /* If strpt1 starts with '.', compare strpt1+1 with strpt2 */
     if (*strpt2 == '.')
-        return (first_alphabetical_string(strpt1, strpt2 + 1) == strpt2 + 1 ? strpt2 : strpt1); /* If strpt2 starts with '.', compare strpt2+1 with strpt1 */
+        return (FAS(strpt1, strpt2 + 1) == strpt2 + 1 ? strpt2 : strpt1); /* If strpt2 starts with '.', compare strpt2+1 with strpt1 */
     if (*strpt1 + 32 * ISUPPER(*strpt1) == *strpt2 + 32 * ISUPPER(*strpt2))
     {
-        result = first_alphabetical_string(strpt1 + 1, strpt2 + 1); /* If strpt1 and strpt2 have the same character (case insensitive), compare the next characters */
+        result = FAS(strpt1 + 1, strpt2 + 1); /* If strpt1 and strpt2 have the same character (case insensitive), compare the next characters */
         if (result == strpt1 + 1)
             return (strpt1); /* If strpt1 comes first alphabetically, return strpt1 */
         if (result == strpt2 + 1)

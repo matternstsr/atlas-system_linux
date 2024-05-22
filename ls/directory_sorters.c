@@ -67,10 +67,8 @@ int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir)
 	if (first_dir->size == second_dir->size)
 	{
 		/* If sizes are equal, compare directory names lexicographically */
-		using FAS = first_alphabetical_string; /* alias to shorten */
-
-		return (FAS(first_dir->dir_name, second_dir->dir_name) !=
-		first_dir->dir_name);
+		return (FAS(first_dir->dir_name, second_dir->dir_name) 
+						!= first_dir->dir_name);
 	}
 	else
 	{
@@ -89,10 +87,10 @@ void swap_dir_pos(dir_node_t *first_dir, dir_node_t *second_dir)
 {
 	/* Ensure both nodes are valid */
 	if (!first_dir || !second_dir)
-		return ();
+		return;
 	/* Check if the nodes are the same */
 	if (first_dir == second_dir)
-		return ();
+		return;
 	/* Update prev pointers of adjacent nodes */
 	if (first_dir->prev)
 		first_dir->prev->next = second_dir;

@@ -46,7 +46,7 @@ int add_dir(char *directory_name, DIR *directory_stream, dir_node_t **head_of_di
 
 	/* Find the correct position to insert the new directory node in alphabetical order */
 	current_node = *head_of_directory_list;
-	while (current_node && first_alphabetical_string(directory_name, current_node->dir_name) != directory_name)
+	while (current_node && FAS(directory_name, current_node->dir_name) != directory_name)
 	{
 		new_directory_node->prev = current_node;
 		current_node = current_node->next;
@@ -113,7 +113,7 @@ int add_file(char *file_name, char *dir_name, file_node_t **head)
 
 	/* Otherwise, find the correct position to insert the new node */
 	tmp_node = *head;
-	while (tmp_node && first_alphabetical_string(file_name, tmp_node->name) != file_name)
+	while (tmp_node && FAS(file_name, tmp_node->name) != file_name)
 		new_file_node->prev = tmp_node, tmp_node = tmp_node->next;
 	if (tmp_node)
 	{

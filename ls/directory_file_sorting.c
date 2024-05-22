@@ -75,7 +75,7 @@ int compare_recent(file_node_t *a, file_node_t *b)
 
 	/* Check if both files have the same modification time and nanoseconds */
 	if (a_time == b_time && a_nano == b_nano)
-		return (first_alphabetical_string(a->name, b->name) != a->name); /* If same time, return the result of comparing their names alphabetically */
+		return (FAS(a->name, b->name) != a->name); /* If same time, return the result of comparing their names alphabetically */
 	
 	/* If 'a' has a later modification time or the same modification time but later nanoseconds, return 1; otherwise, return 0 */
 	return (a_time < b_time || (a_time == b_time && a_nano < b_nano));
@@ -103,7 +103,7 @@ file_node_t *file_size_sort(file_node_t *head)
         current_name = current_node->name;
         next_name = next_node->name;
         /* Compare sizes and names for sorting */
-        if (current_size > next_size || (current_size == next_size && first_alphabetical_string(current_name, next_name) == current_name))
+        if (current_size > next_size || (current_size == next_size && FAS(current_name, next_name) == current_name))
         {
             /* Swap nodes */
             if (current_node->next != next_node)
@@ -120,7 +120,7 @@ file_node_t *file_size_sort(file_node_t *head)
             }
             current_node = next_node;
         }
-        else if ((!next_node->next && (current_size < next_size || first_alphabetical_string(current_name, next_name) == next_name)))
+        else if ((!next_node->next && (current_size < next_size || FAS(current_name, next_name) == next_name)))
         {
             /* Move current node to the end */
             if (current_node->prev)
@@ -161,7 +161,7 @@ file_node_t *file_size_sort_checker(file_node_t *head)
 		if (current_node->info->st_size < current_node->next->info->st_size)
 			return file_size_sort(head);
 		/* If names are not in alphabetical order, return sorted list */
-		if (first_alphabetical_string(current_node->name, current_node->next->name) != current_node->name)
+		if (FAS(current_node->name, current_node->next->name) != current_node->name)
 			return file_size_sort(head);
 	}
 	/* Return the head of the list */

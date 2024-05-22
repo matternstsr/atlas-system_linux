@@ -88,7 +88,7 @@ file_node_t *file_maker(char *name, char *dir_name, struct stat *info);
 bool should_open_directory(file_node_t *dir, ls_flag_t *flags);
 
 /* Alphabetization logic */
-char *first_alphabetical_string(char *s1, char *s2);
+char *FAS(char *s1, char *s2);
 
 /* Printing functions */
 int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer);
