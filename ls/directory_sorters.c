@@ -14,9 +14,8 @@ dir_node_t *sort_dir_size(dir_node_t *head)
 
 	/* If the list is empty or has only one element, it's already sorted */
 	if (!head || !head->next)
-		return head;
-	do
-	{
+		return (head);
+	do {
 		swapped = 0;
 		current_node = head;
 		/* Traverse the list */
@@ -35,7 +34,7 @@ dir_node_t *sort_dir_size(dir_node_t *head)
 			current_node = current_node->next;
 		}
 	} while (swapped); /* Repeat until no more swaps are needed */
-	return head;
+	return (head);
 }
 
 /**
@@ -44,31 +43,40 @@ dir_node_t *sort_dir_size(dir_node_t *head)
  * @second_dir: Pointer to the second directory node.
  * Return: 1 if first_dir is smaller, 0 if second_dir is larger.
  **/
-int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir) {
-struct stat first_dir_info, second_dir_info;
+int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir)
+{
+	struct stat first_dir_info, second_dir_info;
 
-/* Check if either directory node is NULL */
-if (!first_dir || !second_dir)
-	return 0; /* Indicate they are equal in size since they are not valid for comparison */
-/* Retrieve size information if it's not already cached */
-if (first_dir->size == -1) {
-	if (lstat(first_dir->dir_name, &first_dir_info) == -1)
-		return 0; /* Unable to get size, consider them equal */
-	first_dir->size = first_dir_info.st_size;
-}
-if (second_dir->size == -1) {
-	if (lstat(second_dir->dir_name, &second_dir_info) == -1)
-		return 0; /* Unable to get size, consider them equal */
-	second_dir->size = second_dir_info.st_size;
-}
-/* Compare sizes */
-if (first_dir->size == second_dir->size) {
-	/* If sizes are equal, compare directory names lexicographically */
-	return (first_alphabetical_string(first_dir->dir_name, second_dir->dir_name) != first_dir->dir_name);
-} else {
-	/* Otherwise, directly compare sizes */
-	return (first_dir->size < second_dir->size);
-}
+	/* Check if either directory node is NULL */
+	if (!first_dir || !second_dir)
+		return (0); /* show are equal since they are not valid for comparison */
+	/* Retrieve size information if it's not already cached */
+	if (first_dir->size == -1)
+	{
+		if (lstat(first_dir->dir_name, &first_dir_info) == -1)
+			return (0); /* Unable to get size, consider them equal */
+		first_dir->size = first_dir_info.st_size;
+	}
+	if (second_dir->size == -1)
+	{
+		if (lstat(second_dir->dir_name, &second_dir_info) == -1)
+			return (0); /* Unable to get size, consider them equal */
+		second_dir->size = second_dir_info.st_size;
+	}
+	/* Compare sizes */
+	if (first_dir->size == second_dir->size)
+	{
+		/* If sizes are equal, compare directory names lexicographically */
+		using FAS = first_alphabetical_string; /* alias to shorten */
+
+		return (FAS(first_dir->dir_name, second_dir->dir_name) !=
+		first_dir->dir_name);
+	}
+	else
+	{
+		/* Otherwise, directly compare sizes */
+		return (first_dir->size < second_dir->size);
+	}
 }
 
 
@@ -77,13 +85,14 @@ if (first_dir->size == second_dir->size) {
  * @first_dir: Pointer to the first directory node.
  * @second_dir: Pointer to the second directory node.
  **/
-void swap_dir_pos(dir_node_t *first_dir, dir_node_t *second_dir) {
+void swap_dir_pos(dir_node_t *first_dir, dir_node_t *second_dir)
+{
 	/* Ensure both nodes are valid */
 	if (!first_dir || !second_dir)
-		return;
+		return ();
 	/* Check if the nodes are the same */
 	if (first_dir == second_dir)
-		return;
+		return ();
 	/* Update prev pointers of adjacent nodes */
 	if (first_dir->prev)
 		first_dir->prev->next = second_dir;
