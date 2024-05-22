@@ -89,7 +89,8 @@ main_menu() {
         echo "3. Compile only"
         echo "4. Run Valgrind"
         echo "5. Compile and Run Valgrind (Check for memory leaks)"
-        echo "6. Exit"
+        echo "6. Push your code"
+        echo "7. Exit"
     
         read -p "Enter your choice (1-6): " choice
     
@@ -127,6 +128,10 @@ main_menu() {
                 fi
                 ;;
             6)
+                clear
+                pusher
+                ;;
+            7)
                 clear
                 exit 0
                 ;;
