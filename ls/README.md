@@ -89,6 +89,75 @@ While the Atlas Directory Reader (`atlas_ls`) shares similarities with the tradi
 ![ls with column formatting](readmeimages/ls-l.jpg)
 ![Atlas Directory Reader without column formatting](readmeimages/hls-l.jpg)
 
+## How it works
+
+`.hls`
+
+Initialization:
+
+When you type ./hls, the shell locates the hls executable file in the current directory.
+The operating system loads the program into memory and begins executing it.
+The main function of hls is invoked to start the program.
+Argument Parsing:
+
+The main function parses the command-line arguments provided to hls, including the "walk" argument (walk).
+It identifies walk as the directory to list.
+Directory Listing:
+
+The program proceeds to list the contents of the specified directory (walk) using the Atlas Directory Reader.
+It opens the directory using the opendir system call.
+The readdir system call is used to read each entry (file or directory) within the specified directory.
+For each entry, the Atlas Directory Reader gathers relevant information such as file permissions, size, owner, group, and modification time.
+This information is stored in memory as a linked list of directory nodes (dir_node_t) and file nodes (file_node_t).
+Sorting:
+
+Once all entries are read and stored, the Atlas Directory Reader sorts them based on the specified options (if any).
+Sorting can include sorting by file size, modification time, or other criteria specified by flags like -t, -S, -r, etc.
+Directories and files are sorted separately according to the specified criteria.
+Printing:
+
+After sorting, the Atlas Directory Reader begins printing the sorted directory contents.
+It prints the contents according to the specified formatting options, such as long listing format (-l), one entry per line (-1), etc.
+For each entry, it prints details such as file permissions, owner, group, size, and modification time.
+The printing process may involve colorizing file types (directories, executables, etc.) based on the real C ls behavior.
+Cleanup:
+
+Once all entries are printed, the Atlas Directory Reader deallocates any dynamically allocated memory used during the listing process.
+It closes the directory using the closedir system call and exits gracefully.
+
+---
+
+`.hls -l (or ./hls -l)` 
+
+Initialization:
+
+When you execute hls -l or ./hls -l, the shell locates the hls executable file and passes the -l flag as an argument.
+The program loads into memory and starts executing.
+Argument Parsing:
+
+The main function parses the command-line arguments and identifies the -l flag as a request for long listing format.
+It determines that no directory is specified, so it defaults to listing the contents of the current directory.
+Directory Listing:
+
+The Atlas Directory Reader (hls) opens the current directory using the opendir system call.
+It reads each entry (file or directory) in the current directory using the readdir system call.
+For each entry, the Atlas Directory Reader gathers relevant information such as file permissions, size, owner, group, and modification time.
+This information is stored in memory as a linked list of directory nodes (dir_node_t) and file nodes (file_node_t).
+Sorting:
+
+Once all entries are read and stored, the Atlas Directory Reader sorts them based on the -l flag, which indicates the long listing format.
+Sorting involves arranging the entries in a tabular format, with detailed information for each file or directory (permissions, size, owner, group, modification time).
+Directories and files are sorted separately based on the specified criteria.
+Printing:
+
+The Atlas Directory Reader begins printing the sorted directory contents in long listing format.
+Each entry is printed on a separate line, with detailed information displayed for each file or directory.
+The printed output includes file permissions, owner, group, size, modification time, and filename.
+Colors may be applied to different file types (directories, executables, etc.) to enhance readability, similar to the behavior of the real C ls command.
+Cleanup:
+
+After printing all entries, the Atlas Directory Reader deallocates any dynamically allocated memory used during the listing process.
+It closes the current directory using the closedir system call and exits gracefully.
 
 ## Function Descriptions
 <div style="background-color: #808080; color: #0000FF; padding: 15px; border-radius: 5px;">
@@ -725,7 +794,7 @@ The `free_dir_files` function ensures proper cleanup of memory resources associa
 </div>
 -----------------------------------------------------------------------------
 
-# The real C - ls 
+# The Project
 
 
 # C - ls

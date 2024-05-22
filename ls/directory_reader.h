@@ -7,8 +7,8 @@
 #include <sys/types.h>      /* opendir, readdir, closedir, lstat */
 #include <dirent.h>         /* opendir, readdir, closedir */
 #include <stdio.h>          /* printf, sprintf, fprintf */
-#include <sys/stat.h>       /* lstat */
-#include <unistd.h>
+#include <sys/stat.h>       /* lstat for file_type*/
+#include <unistd.h>					/* S_IRUSR, S_IWGRP, S_ISREG, S_ISDIR */
 #include <errno.h>          /* errno */
 #include <time.h>           /* Header for ctime */
 #include <stdbool.h>        /* For booleans */

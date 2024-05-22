@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Flag to track if memory leaks are detected
+memory_leaks_detected=0
+
 # Function to perform Betty style checks
 perform_betty_checks() {
     local checks=$1
@@ -28,67 +31,68 @@ run_valgrind() {
     echo "Running Valgrind..."
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls 
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls test
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls test/folder1/ test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls test/folder1/ test
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls test/random |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls test/random
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls test -1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls test -1
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls -a test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls -a test
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls -a test/folder1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls -a test/folder1
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls -A test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls -A test
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls -A test/folder1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls -A test/folder1
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
+    valgrind --leak-check=full ./hls -l test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
     valgrind --leak-check=full ./hls -l test
     echo "                                                        "
-    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
 }
 
 # Main menu function
 clear
 main_menu() {
+echo -e "\e[34m Thank You for using Matt Checker 1.0 \e[0m"
     while true; do
-        echo "Select an option:"
+        echo -e "\e[34mSelect an option:\e[0m"
         echo "1. Perform Betty style checks"
         echo "2. Perform Betty documentation checks"
         echo "3. Compile only"
         echo "4. Run Valgrind"
-        echo "5. Compile and Run Valgrind (Check for memory leaks)"
+        echo -e "\e[31m5. Compile and Run Valgrind (Check for memory leaks)\e[0m"
         echo "6. Push your code"
         echo "7. Exit"
     
@@ -122,7 +126,11 @@ main_menu() {
                 if gcc -Wall -Werror -Wextra -pedantic *.c -o hls; then
                     echo "Compiled successfully!"
                     run_valgrind
-                    echo "All good!"
+                    if [ $memory_leaks_detected -eq 1 ]; then
+                        echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ YOU HAVE MEMORY LEAKS! @@@@@@@@@@@@@@@@@@@@@@@@\e[0m"
+                    else
+                        echo -e "\e[32mAll good!\e[0m"
+                    fi
                 else
                     echo "Compilation failed! Oops, better check that code."
                 fi
@@ -141,7 +149,6 @@ main_menu() {
         esac
     done
 }
-
 
 # Start the main menu
 main_menu
