@@ -10,12 +10,12 @@
 void print_short_list(file_node_t *file_list, ls_flag_t *flags)
 {
 	/* Determine line separator based on configuration */
-	char *line_separator = flags->one_per_line ? "\n" : "  ";
+	char *line_separator = flags->opl ? "\n" : "  ";
 	file_node_t *next_node;
 	bool first_file = true;
 	/* Determine if sorting should be in reverse order */
-	bool reverse_order = flags->reversed
-												&& (flags->sort_by_size ||  flags->sort_by_time);
+	bool reverse_order = flags->rev
+												&& (flags->sbs ||  flags->sbt);
 	/* If the file list is empty, return */
 	if (file_list == NULL)
 		return;
@@ -58,8 +58,8 @@ void print_long_list(file_node_t *file_list, ls_flag_t *flags)
 
 	if (file_list == NULL) /* Check if the file list is empty */
 		return;
-	if (flags->reversed) /* Check if printing should be reversed */
-		while (file_list->next) /* go to the last node if printing is reversed */
+	if (flags->rev) /* Check if printing should be rev */
+		while (file_list->next) /* go to the last node if printing is rev */
 			file_list = file_list->next;
 	while (file_list != NULL) /* Iterate through the file list */
 	{
@@ -87,7 +87,7 @@ void print_long_list(file_node_t *file_list, ls_flag_t *flags)
 			}
 			putchar('\n'); /* Newline after printing file info */
 		}
-		file_list = flags->reversed ? file_list->prev : file_list->next;
+		file_list = flags->rev ? file_list->prev : file_list->next;
 		/* Move to the next or previous node based on printing direction */
 	}
 }
@@ -107,15 +107,15 @@ int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
 	int status = 0;
 
 	/* Sort by size if flag is set */
-	if (flags->sort_by_size)
+	if (flags->sbs)
 		*head = sort_dir_size(*head);
-	/* Move to the last directory if reversed flag is set */
-	if (flags->reversed)
+	/* Move to the last directory if rev flag is set */
+	if (flags->rev)
 		while (current_directory->next)
 			current_directory = current_directory->next;
 	/* Iterate through directories */
 	for (; current_directory; current_directory =
-			flags->reversed ? current_directory->prev : current_directory->next)
+			flags->rev ? current_directory->prev : current_directory->next)
 	{
 		/* Handle directory errors */
 		if (current_directory->error_code)
@@ -126,17 +126,17 @@ int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
 		}
 		else
 		{
-			if (flags->recursive) /* Manage subdirs if recur flag is set */
+			if (flags->rec) /* Manage subdirs if recur flag is set */
 				manage_subdirs(head, current_directory, flags);
-			if (flags->print_dir_name) /* Print directory name if flag is set */
+			if (flags->pdn) /* Print directory name if flag is set */
 				printf("%s:\n", current_directory->dir_name);
-			if (flags->sort_by_size) /* Sort by size if flag */
+			if (flags->sbs) /* Sort by size if flag */
 				current_directory->list = file_size_sort(current_directory->list);
-			if (flags->sort_by_time) /* Sort by time if flag is set */
+			if (flags->sbt) /* Sort by time if flag is set */
 				current_directory->list = recent_file_sort(current_directory->list);
 			/* Print directory contents */
 			printer(current_directory->list, flags);
-			if (flags->reversed ? current_directory->prev : current_directory->next)
+			if (flags->rev ? current_directory->prev : current_directory->next)
 				putchar('\n'); /* Print newline if there are more directories */
 		}
 	}

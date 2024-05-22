@@ -62,8 +62,8 @@ bool should_open_directory(file_node_t *directory_node, ls_flag_t *flags)
 		if (IS_PARENT_DIR(directory_node->name) ||
 			IS_CWD(directory_node->name))
 			return (false);
-		/* Check if dot options are disabled */
-		if (flags->dot == false && flags->dot_alt == false)
+		/* Check if p options are disabled */
+		if (flags->p == false && flags->pa == false)
 			return (false);
 	}
 	/* Check for special directories . and .. */

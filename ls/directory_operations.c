@@ -145,13 +145,13 @@ void manage_subdirs(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags)
 { /* Handle directory traversal in both forward and reverse directions */
 	dir_node_t *other_dir, *alt_dir;
 
-	if (flags->reversed) /* Check if traversal direction is reversed */
+	if (flags->rev) /* Check if traversal direction is rev */
 	{ /* Save the previous directory and update it with subdirectories */
 		other_dir = dir->prev, dir->prev = add_subdirectories(dir, flags);
 		/* Check if subdirectories were successfully added */
 		if (dir->prev)
 		{ /* Set flag to print directory name and update links */
-			flags->print_dir_name = true, dir->prev->next = dir;
+			flags->pdn = true, dir->prev->next = dir;
 			/* Traverse to the beginning of the list */
 			for (alt_dir = dir->prev; alt_dir->prev; alt_dir = alt_dir->prev)
 			alt_dir->prev = other_dir; /* Adjust links to include new directory */
@@ -168,7 +168,7 @@ void manage_subdirs(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags)
 		other_dir = dir->next, dir->next = add_subdirectories(dir, flags);
 		if (dir->next) /* Check if subdirectories were successfully added */
 		{ /* Set flag to print directory name and update links */
-			flags->print_dir_name = true, dir->next->prev = dir;
+			flags->pdn = true, dir->next->prev = dir;
 			/* Traverse to the end of the list */
 			for (alt_dir = dir->next; alt_dir->next; alt_dir = alt_dir->next)
 			alt_dir->next = other_dir; /* Adjust links to include new directory */
@@ -194,16 +194,16 @@ dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags)
 	dir_node_t *new_dir = NULL, *prev_dir = NULL;
 	char path[512];
 
-	if (flags->reversed) /* Check if the 'reversed' flag is set */
+	if (flags->rev) /* Check if the 'rev' flag is set */
 		while (tmp_file->next)
 		tmp_file = tmp_file->next; /* Iterate dir files */
-	for (; tmp_file; tmp_file = flags->reversed
+	for (; tmp_file; tmp_file = flags->rev
 				? tmp_file->prev : tmp_file->next)
 		if (should_open_directory(tmp_file, flags))
 		{ /* Construct full path of the subdirectory */
 			sprintf(path, "%s/%s", dir->dir_name, tmp_file->name);
 			add_dir(path, opendir(path), &new_dir); /* Add the subdir to the list */
-			if (flags->reversed) /* Adjust pointers based on the 'reversed' flag */
+			if (flags->rev) /* Adjust pointers based on the 'rev' flag */
 			{
 				new_dir->next = prev_dir;
 				if (prev_dir)
@@ -216,14 +216,14 @@ dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags)
 				prev_dir->next = new_dir;
 			}
 			prev_dir = new_dir, new_dir = NULL;
-		} /* Move 'prev_dir' to the last directory if 'reversed' flag is set */
-	if (flags->reversed && prev_dir)
+		} /* Move 'prev_dir' to the last directory if 'rev' flag is set */
+	if (flags->rev && prev_dir)
 		while (prev_dir->next)
 			prev_dir = prev_dir->next;
 	else if (prev_dir) /* Move 'prev_dir' to first dir if 'rev' flag isnt set */
 		while (prev_dir->prev)
 			prev_dir = prev_dir->prev;
-	if (flags->sort_by_size) /* Sort the dir list by size if flag is set */
+	if (flags->sbs) /* Sort the dir list by size if flag is set */
 		prev_dir = sort_dir_size(prev_dir);
 	return (prev_dir);
 }

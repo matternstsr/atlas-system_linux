@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 				check = add_dir(argv[index], dir_stream, &dirs_list), dir_count++;
 		}
 	if (file_list || dir_count > 1 || (file_list == NULL && status != 0))
-		flags.print_dir_name = true;
+		flags.pdn = true;
 	if (dir_count == 0 && file_list == NULL && status == 0)
 		add_dir(".", opendir("."), &dirs_list);
 	flags.printer(file_list, &flags);

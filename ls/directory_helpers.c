@@ -99,21 +99,21 @@ int flag_interpreter(char *arg, ls_flag_t *flags)
 
 	for (i = 1; arg[i] != '\0'; i++)
 		if (arg[i] == '1') /* Set flag for one per line */
-			flags->one_per_line = true;
-		else if (arg[i] == 'a') /* Set flag for dot */
-			flags->dot = true;
-		else if (arg[i] == 'A') /* Set flag for dot_alt */
-			flags->dot_alt = true;
+			flags->opl = true;
+		else if (arg[i] == 'a') /* Set flag for p */
+			flags->p = true;
+		else if (arg[i] == 'A') /* Set flag for pa */
+			flags->pa = true;
 		else if (arg[i] == 'l') /* Set printer function for long list */
 			flags->printer = &print_long_list;
-		else if (arg[i] == 'r') /* Set flag for reversed */
-			flags->reversed = true;
+		else if (arg[i] == 'r') /* Set flag for rev */
+			flags->rev = true;
 		else if (arg[i] == 'R') /* Set flag for recursive */
-			flags->recursive = true;
+			flags->rec = true;
 		else if (arg[i] == 't') /* Set flag for sort by time */
-			flags->sort_by_time = true;
+			flags->sbt = true;
 		else if (arg[i] == 'S') /* Set flag for sort by size */
-			flags->sort_by_size = true;
+			flags->sbs = true;
 		else /* Handle invalid option */
 		{
 			fprintf(stderr, "hls: invalid option -- '%c'\n", arg[i]);

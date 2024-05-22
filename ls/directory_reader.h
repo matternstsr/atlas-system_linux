@@ -1,5 +1,4 @@
 /* atlas-system_linux/ls/directory_reader.h */
-//
 
 #ifndef DIRECTORY_READER_H
 #define DIRECTORY_READER_H
@@ -32,17 +31,17 @@ typedef struct file_link_s
 typedef struct LsFlags
 {
 		void (*printer)(file_node_t *, struct LsFlags *);
-		bool one_per_line;
-		bool dot;
-		bool dot_alt;
-		bool reversed;
-		bool sort_by_size;
-		bool sort_by_time;
-		bool recursive;
-		bool print_dir_name;
-		int max_hard_links;
-		int max_size;
-		int max_strlen;
+		bool opl;
+		bool p;
+		bool pa;
+		bool rev;
+		bool sbs;
+		bool sbt;
+		bool rec;
+		bool pdn;
+		int a;
+		int b;
+		int c;
 } ls_flag_t;
 
 typedef void (*print_t)(file_node_t *, struct LsFlags *);
@@ -58,15 +57,14 @@ typedef struct dir_ops_s
 } dir_node_t;
 
 /** MACROS **/
-#define ISLOWER(x) ((x) >= 'a' && (x) <= 'z')
-#define ISUPPER(x) ((x) >= 'A' && (x) <= 'Z')
-
 #define IS_PARENT_DIR(x) (str_len(x) == 2 && x[0] == '.' && x[1] == '.')
 #define IS_CWD(x) (str_len(x) == 1 && x[0] == '.')
 #define IS_PATH(x) (char_search(x, '/') != NULL)
 #define IS_HIDDEN(x) (x[0] == '.')
-#define should_print(x) (!IS_HIDDEN(x) || IS_PATH(x) || flags->dot || \
-												(flags->dot_alt && !IS_CWD(x) && !IS_PARENT_DIR(x)))
+#define should_print(x) (!IS_HIDDEN(x) || IS_PATH(x) || flags->p || \
+												(flags->pa && !IS_CWD(x) && !IS_PARENT_DIR(x)))
+#define ISLOWER(x) ((x) >= 'a' && (x) <= 'z')
+#define ISUPPER(x) ((x) >= 'A' && (x) <= 'Z')
 
 /** FUNCTION PROTOTYPES **/
 
