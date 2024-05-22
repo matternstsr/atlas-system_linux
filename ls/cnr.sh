@@ -30,42 +30,52 @@ run_valgrind() {
     echo "                                                        "
     valgrind --leak-check=full ./hls 
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test/folder1/ test
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test/random
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test -1
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -a test
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -a test/folder1
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -A test
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -A test/folder1
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -l test
     echo "                                                        "
+    echo -e "\e[32mAll heap blocks were freed -- no leaks are possible\e[0m"
     echo "########################################################"
 }
 

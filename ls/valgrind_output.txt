@@ -1,0 +1,57 @@
+==146041== Memcheck, a memory error detector
+==146041== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==146041== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==146041== Command: ./hls
+==146041== 
+==146041== Invalid read of size 1
+==146041==    at 0x1093AA: FAS (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10941C: FAS (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10941C: FAS (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A506: add_file (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A1BC: add_dir (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA3F: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==  Address 0x4a96492 is 0 bytes after a block of size 2 alloc'd
+==146041==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==146041==    by 0x109E16: string_dup (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A606: file_maker (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A478: add_file (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A1BC: add_dir (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA3F: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041== 
+==146041== Invalid read of size 1
+==146041==    at 0x109E9F: char_search (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10AB49: print_short_list (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10B108: print_dirs (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA83: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==  Address 0x4a96492 is 0 bytes after a block of size 2 alloc'd
+==146041==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==146041==    by 0x109E16: string_dup (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A606: file_maker (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A478: add_file (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A1BC: add_dir (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA3F: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041== 
+==146041== Invalid read of size 1
+==146041==    at 0x484ED24: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==146041==    by 0x48D8D30: __vfprintf_internal (vfprintf-internal.c:1517)
+==146041==    by 0x48C279E: printf (printf.c:33)
+==146041==    by 0x10ABFE: print_short_list (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10B108: print_dirs (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA83: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==  Address 0x4a96676 is 0 bytes after a block of size 6 alloc'd
+==146041==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==146041==    by 0x109E16: string_dup (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A606: file_maker (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A478: add_file (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10A1BC: add_dir (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041==    by 0x10BA3F: main (in /mnt/c/Users/MATTE/ls/atlas-system_linux/ls/hls)
+==146041== 
+==146041== 
+==146041== HEAP SUMMARY:
+==146041==     in use at exit: 0 bytes in 0 blocks
+==146041==   total heap usage: 76 allocs, 76 frees, 37,492 bytes allocated
+==146041== 
+==146041== All heap blocks were freed -- no leaks are possible
+==146041== 
+==146041== For lists of detected and suppressed errors, rerun with: -s
+==146041== ERROR SUMMARY: 25 errors from 3 contexts (suppressed: 0 from 0)
