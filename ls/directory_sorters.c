@@ -67,7 +67,7 @@ int comp_dir_size(dir_node_t *first_dir, dir_node_t *second_dir)
 	if (first_dir->size == second_dir->size)
 	{
 		/* If sizes are equal, compare directory names lexicographically */
-		return (FAS(first_dir->dir_name, second_dir->dir_name) 
+		return (FAS(first_dir->dir_name, second_dir->dir_name)
 						!= first_dir->dir_name);
 	}
 	else

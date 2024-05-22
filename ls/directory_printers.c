@@ -14,7 +14,8 @@ void print_short_list(file_node_t *file_list, ls_flag_t *flags)
 	file_node_t *next_node;
 	bool first_file = true;
 	/* Determine if sorting should be in reverse order */
-	bool reverse_order = flags->reversed && (flags->sort_by_size ||  flags->sort_by_time);
+	bool reverse_order = flags->reversed
+												&& (flags->sort_by_size ||  flags->sort_by_time);
 	/* If the file list is empty, return */
 	if (file_list == NULL)
 		return;
@@ -126,7 +127,7 @@ int print_dirs(dir_node_t **head, ls_flag_t *flags, print_t printer)
 		else
 		{
 			if (flags->recursive) /* Manage subdirs if recur flag is set */
-				manage_subdirectories(head, current_directory, flags);
+				manage_subdirs(head, current_directory, flags);
 			if (flags->print_dir_name) /* Print directory name if flag is set */
 				printf("%s:\n", current_directory->dir_name);
 			if (flags->sort_by_size) /* Sort by size if flag */

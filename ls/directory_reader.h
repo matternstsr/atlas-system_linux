@@ -81,7 +81,7 @@ int flag_interpreter(char *arg, ls_flag_t *flags);
 
 /* Linked list creation functions */
 dir_node_t *add_subdirectories(dir_node_t *dir, ls_flag_t *flags);
-void manage_subdirectories(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags);
+void manage_subdirs(dir_node_t **head, dir_node_t *dir, ls_flag_t *flags);
 int add_dir(char *name, DIR *stream, dir_node_t **head);
 int add_file(char *file_name, char *dir_name, file_node_t **head);
 file_node_t *file_maker(char *name, char *dir_name, struct stat *info);
