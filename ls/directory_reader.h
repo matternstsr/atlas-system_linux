@@ -1,5 +1,3 @@
-/* atlas-system_linux/ls/directory_reader.h */
-
 #ifndef DIRECTORY_READER_H
 #define DIRECTORY_READER_H
 
