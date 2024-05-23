@@ -32,51 +32,61 @@ run_valgrind() {
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls 
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls test |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls test
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test/folder1/ test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls test/folder1/ test |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls test/folder1/ test
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test/random |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls test/random |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls test/random
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls test -1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls test -1 |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls test -1
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -a test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls -a test |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls -a test
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -a test/folder1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls -a test/folder1 |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls -a test/folder1
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -A test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls -A test |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls -A test
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -A test/folder1 |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls -A test/folder1 |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls -A test/folder1
     echo "                                                        "
     echo "########################################################"
     echo "                                                        "
     valgrind --leak-check=full ./hls -l test |& grep -q "definitely lost" && { echo -e "\e[31m@@@@@@@@@@@@@@@@@@@@@@@@ LOST MEMORY @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=1; }
+    valgrind --leak-check=full ./hls -l test |& grep -q "no leaks are possible" && { echo -e "\e[32m@@@@@@@@@@@@@@@@@@@@@@@@ NO MEMORY LEAKS @@@@@@@@@@@@@@@@@@@@@@@\e[0m"; memory_leaks_detected=0; }
     valgrind --leak-check=full ./hls -l test
     echo "                                                        "
     echo "########################################################"
