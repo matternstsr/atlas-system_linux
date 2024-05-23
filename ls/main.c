@@ -2,6 +2,8 @@
 
 #include "directory_reader.h"
 
+int main(int argc, char **argv);
+
 char *program_name; /* Declar of the global var to store the program name */
 
 /**

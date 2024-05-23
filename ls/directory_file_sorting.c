@@ -85,53 +85,43 @@ int compare_recent(file_node_t *a, file_node_t *b)
  **/
 file_node_t *file_size_sort(file_node_t *head)
 {
-	file_node_t *current_node, *next_node, *temporary_node;
-	size_t current_size, next_size;
+	file_node_t *curr_node, *next_node, *temporary_node;
+	size_t curr_sz, next_size;
 	char *current_name, *next_name;
 
 	if (!head || !head->next)
 		return (head);
-	for (current_node = head, next_node = head->next; next_node; next_node =
+	for (curr_node = head, next_node = head->next; next_node; next_node =
 				next_node->next)
 	{
-		/* Store current node's size and name */
-		current_size = current_node->info->st_size;
-		next_size = next_node->info->st_size;
-		current_name = current_node->name;
-		next_name = next_node->name;
-		/* Compare sizes and names for sorting */
-		if (current_size > next_size || (current_size == next_size
+		curr_sz = curr_node->info->st_size, next_size = next_node->info->st_size;
+		current_name = curr_node->name, next_name = next_node->name;
+		if (curr_sz > next_size || (curr_sz == next_size
 				&& FAS(current_name, next_name) == current_name))
 		{
-			/* Swap nodes */
-			if (current_node->next != next_node)
+			if (curr_node->next != next_node)
 			{
-				if (current_node->prev)
-					current_node->prev->next = current_node->next;
+				if (curr_node->prev)
+					curr_node->prev->next = curr_node->next;
 				else
-					head = current_node->next;
-				current_node->next->prev = current_node->prev;
-				current_node->next = next_node;
-				current_node->prev = next_node->prev;
-				next_node->prev->next = current_node;
-				next_node->prev = current_node;
+					head = curr_node->next;
+				curr_node->next->prev = curr_node->prev;
+				curr_node->next = next_node, curr_node->prev = next_node->prev;
+				next_node->prev->next = curr_node, next_node->prev = curr_node;
 			}
-			current_node = next_node;
+			curr_node = next_node;
 		}
-		else if ((!next_node->next && (current_size < next_size ||
+		else if ((!next_node->next && (curr_sz < next_size ||
 						FAS(current_name, next_name) == next_name)))
 		{
-			if (current_node->prev) /* Move current node to the end */
-				current_node->prev->next = current_node->next;
+			if (curr_node->prev) /* Move current node to the end */
+				curr_node->prev->next = curr_node->next;
 			else
-				head = current_node->next;
-			current_node->next->prev = current_node->prev;
-			temporary_node = current_node->next;
-			current_node->next = NULL;
-			current_node->prev = next_node;
-			next_node->next = current_node;
-			current_node = temporary_node;
-			next_node = current_node;
+				head = curr_node->next;
+			curr_node->next->prev = curr_node->prev;
+			temporary_node = curr_node->next, curr_node->next = NULL;
+			curr_node->prev = next_node, next_node->next = curr_node;
+			curr_node = temporary_node, next_node = curr_node;
 		}
 	}
 	return (file_size_sort_checker(head));

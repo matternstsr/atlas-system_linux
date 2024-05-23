@@ -12,53 +12,44 @@
 int add_dir(char *directory_name, DIR *directory_stream,
 						dir_node_t **head_of_directory_list)
 						{
-	dir_node_t *new_directory_node, *current_node;
+	dir_node_t *new_dir_node, *current_node;
 	struct dirent *entry;
 	file_node_t *file_list_head = NULL;
 	int error_code = errno;
 
-	/* Allocate memory for new directory node */
-	new_directory_node = malloc(sizeof(dir_node_t));
-	/* Copy directory name to the new directory node */
-	new_directory_node->dir_name = string_dup(directory_name);
-	new_directory_node->next = NULL;
-	new_directory_node->prev = NULL;
-	new_directory_node->size = -1;
-	new_directory_node->error_code = directory_stream ? 0 : error_code;
-	/* If dir stream is valid, iterate through dir entries and add files */
-	if (new_directory_node->error_code == 0)
+	new_dir_node = malloc(sizeof(dir_node_t));
+	new_dir_node->dir_name = string_dup(directory_name);
+	new_dir_node->next = NULL, new_dir_node->prev = NULL;
+	new_dir_node->size = -1;
+	new_dir_node->error_code = directory_stream ? 0 : error_code;
+	if (new_dir_node->error_code == 0)
 	{
 		while ((entry = readdir(directory_stream)) != NULL)
 			error_code = add_file(entry->d_name, directory_name, &file_list_head);
 		closedir(directory_stream);
 	} /* Set file list of the new directory node */
-	new_directory_node->list = file_list_head;
-	/* If directory list is empty, set new node as head and return */
+	new_dir_node->list = file_list_head;
 	if (*head_of_directory_list == NULL)
 	{
-		*head_of_directory_list = new_directory_node;
-		return (new_directory_node->error_code);
+		*head_of_directory_list = new_dir_node;
+		return (new_dir_node->error_code);
 	} /* Find the correct position to putnew dir node in alpha order */
 	current_node = *head_of_directory_list;
 	while (current_node && FAS(directory_name, current_node->dir_name)
 				!= directory_name)
-	{
-		new_directory_node->prev = current_node;
-		current_node = current_node->next;
-	}
+		new_dir_node->prev = current_node, current_node = current_node->next;
 	if (current_node) /* Insert the new directory node at the correct position */
 	{
-		new_directory_node->prev = current_node->prev;
+		new_dir_node->prev = current_node->prev;
 		if (current_node->prev)
-			current_node->prev->next = new_directory_node;
-		new_directory_node->next = current_node;
-		current_node->prev = new_directory_node;
+			current_node->prev->next = new_dir_node;
+		new_dir_node->next = current_node, current_node->prev = new_dir_node;
 		if (current_node == *head_of_directory_list)
-			*head_of_directory_list = new_directory_node;
+			*head_of_directory_list = new_dir_node;
 	}
 	else
-		new_directory_node->prev->next = new_directory_node;
-	return (new_directory_node->error_code);
+		new_dir_node->prev->next = new_dir_node;
+	return (new_dir_node->error_code);
 }
 
 
