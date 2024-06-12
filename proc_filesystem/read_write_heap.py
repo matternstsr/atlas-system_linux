@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+
 """
 Finds and substitutes the initial instance of a string within the heap
 memory of a process.
