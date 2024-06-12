@@ -51,7 +51,9 @@ if __name__ == "__main__":
 	if len(sys.argv) != 4:
 		print("Usage: python script.py <pid> <search_string> <replace_string>")
 		sys.exit(1)
+	
 	pid = sys.argv[1]
 	search_string = sys.argv[2]
 	replace_string = sys.argv[3]
+	
 	find_replace_string(pid, search_string, replace_string)
