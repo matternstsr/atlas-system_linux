@@ -4,18 +4,10 @@ import sys
 import os
 
 """
-A script to find and replace a string in the heap memory of a running process.
+Python - Python - /proc filesystem - 0. Hack the VM
 
-Usage: read_write_heap.py pid search_string replace_string
-
-Args:
-	pid (str): The process ID of the running process.
-	search_string (str): The string to search for in the heap.
-	replace_string (str): The string to replace the found string with.
-
-Raises:
-	FileNotFoundError: If the process does not exist.
-	IOError: If there is an error reading or writing process memory.
+	Looks through the heap of a given process for string and replaces it with
+another one.
 """
 
 def find_replace_string(pid, search_string, replace_string):
