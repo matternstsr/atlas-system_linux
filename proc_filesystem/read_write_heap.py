@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 
-import sys
-import os
-
 """
 Python - Python - /proc filesystem - 0. Hack the VM
 
 	Looks through the heap of a given process for string and replaces it with
 another one.
 """
+
+import sys
+import os
 
 def find_replace_string(pid, search_string, replace_string):
 	"""
@@ -23,6 +23,7 @@ def find_replace_string(pid, search_string, replace_string):
 	Returns:
 		None
 	"""
+
 	# Check if there is a process
 	if not os.path.exists(f"/proc/{pid}"):
 		print("Error: Process not found.")
@@ -59,6 +60,7 @@ def find_replace_string(pid, search_string, replace_string):
 	except Exception as e:
 		print(f"Error accessing process memory: {e}")
 		sys.exit(1)
+
 if __name__ == "__main__":
 	# Check for correct usage
 	if len(sys.argv) != 4:
