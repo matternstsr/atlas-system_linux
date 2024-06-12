@@ -40,6 +40,7 @@ def find_replace_string(pid, search_string, replace_string):
 	except Exception as e:
 		print(f"Error reading memory map: {e}")
 		sys.exit(1)
+
 	try:
 		# Open the process memory file
 		with open(f"/proc/{pid}/mem", 'rb+', 0) as mem_file:
