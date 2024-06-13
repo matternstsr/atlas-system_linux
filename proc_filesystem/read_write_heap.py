@@ -65,6 +65,7 @@ def read_write_heap(pid, search_string, replace_string):
         replace_string: String to replace the search string with.
     """
     add_in_memory = None
+    proc_py = None  # Initialize proc_py outside the try block
     try:
         maps_filename = f"/proc/{pid}/maps"
         mem_filename = f"/proc/{pid}/mem"
@@ -102,6 +103,9 @@ def read_write_heap(pid, search_string, replace_string):
                 print("FAIL!")
     except Exception as e:
         print(e)
+    finally:
+        if proc_py is not None:  # Ensure proc_py is defined before trying to kill it
+            proc_py.kill()
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
