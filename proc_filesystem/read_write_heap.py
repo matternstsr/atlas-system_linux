@@ -1,46 +1,57 @@
 #!/usr/bin/python3
+
 """
-Finds and replaces a specified string
-in a provided PID heap memory
+Python - Python - /proc filesystem - 0. Hack the VM
+
+	Looks thru the heap of a given process for a str and rep with another one.
 """
+
+import sys
+import os
+
+def replace_string_in_heap(pid, search_string, replace_string):
+    try:
+        # Open maps file
+        maps_file = open("/proc/{}/maps".format(pid), 'r')
+        for line in maps_file:
+            fields = line.split()
+            if fields[-1] == "[heap]":
+                # Found the heap region
+                start_addr = int(fields[0].split("-")[0], 16)
+                end_addr = int(fields[0].split("-")[1], 16)
+                # Open mem file
+                mem_file = open("/proc/{}/mem".format(pid), 'rb+')
+                mem_file.seek(start_addr)
+                heap_data = mem_file.read(end_addr - start_addr)
+                # Search for the string
+                offset = heap_data.find(search_string.encode())
+                if offset != -1:
+                    mem_file.seek(start_addr + offset)
+                    mem_file.write(replace_string.encode() + b'\0')
+                    print("String replaced successfully.")
+                    mem_file.close()
+                    maps_file.close()
+                    return
+        print("String not found in heap.")
+        maps_file.close()
+    except Exception as e:
+        print("Error:", e)
+
+def main():
+    if len(sys.argv) != 4:
+        print("Usage: {} pid search_string replace_string".format(sys.argv[0]))
+        sys.exit(1)
+
+    try:
+        pid = int(sys.argv[1])
+    except ValueError:
+        print("Error: pid must be an integer.")
+        sys.exit(1)
+
+    search_string = sys.argv[2]
+    replace_string = sys.argv[3]
+
+    replace_string_in_heap(pid, search_string, replace_string)
 
 if __name__ == "__main__":
-    from sys import argv
-
-    if len(argv) != 4:
-        exit("Unsupported  number of arguments")
-    pid = int(argv[1])
-    search_str = argv[2].encode()
-    replace_str = argv[3].encode()
-    try:
-        mem_map = open(f"/proc/{pid}/maps", "r")
-    except FileNotFoundError as error:
-        exit(error)
-    for line in mem_map:
-        if line.endswith("[heap]\n"):
-            heap_start, heap_end = \
-                [int(x, 16) for x in line.split(" ")[0].split("-")]
-    print("Target memory location found")
-    mem_map.close()
-    try:
-        heap_mem = open(f"/proc/{pid}/mem", "r+b")
-    except FileNotFoundError as error:
-        exit(error)
-    heap_mem.seek(heap_start)
-    mem = heap_mem.read(heap_end - heap_start)
-    str_at = mem.find(search_str) + heap_start
-    print(f"{search_str}:{str_at}")
-    if str_at > -1:
-        print(f"Target Located at {hex(str_at)}")
-        if len(search_str) > len(replace_str):
-            heap_mem.seek(str_at + len(replace_str))
-            heap_mem.write(b'\0')
-        else:
-            heap_mem.seek(str_at)
-            heap_mem.write(replace_str)
-        print("Target Replaced")
-    else:
-        print("Unable to locate Target")
-    heap_mem.close()
-    print("Mission Complete")
-    exit()
+    main()
