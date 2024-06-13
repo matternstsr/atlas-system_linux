@@ -14,19 +14,15 @@ def main():
 	# Check for correct command-line arguments
 	if len(argv) != 4 or len(argv[2]) < len(argv[3]):
 		exit("Usage: ./read_write_heap.py pid search_string replace_string")
-
 	# Extract PID from command-line arguments
 	process_id = int(argv[1])
-
 	# Check if PID exists
 	try:
 		os.kill(process_id, 0)
 	except OSError:
 		exit("PID not found")
-
 	# Print process ID
 	print(f"[~] Process ID: {process_id}")
-
 	# Encode search and replace strings to bytes
 	search_string = argv[2].encode()
 	replace_string = argv[3].encode()
@@ -46,10 +42,8 @@ def main():
 					print(f"\tDEVICE: {device}")
 					print(f"\tINODE: {inode}")
 					break
-
 	except FileNotFoundError as err:
 		exit(err)
-
 	# Extract the heap begin and end addresses
 	heap_begin, heap_end = [int(addr, 16) for addr in heap.split("-")]
 	print(f"[~] HEAP BEGIN: [{heap_begin:#x}] | HEAP END: [{heap_end:#x}]")
@@ -64,14 +58,15 @@ def main():
 				print(f"[~] \"{argv[2]}\" FOUND AT {address:#x}")
 				memory.seek(address)
 				memory.write(replace_string)
-				
 				# If the replace string is shorter, null terminate the remaining bytes
 				if len(replace_string) < len(search_string):
 					memory.seek(address + len(replace_string))
 					memory.write(b'\0')
 				print(f"[~] \"{argv[3]}\" WRITTEN AT {address:#x}")
+				print("SUCCESS!")  # Print "SUCCESS!" upon successful replacement
 			else:
 				print(f"[~] \"{argv[2]}\" NOT FOUND")
+				print("FAIL!")  # Print "FAIL!" if the search string is not found
 	except FileNotFoundError as err:
 		exit(err)
 
