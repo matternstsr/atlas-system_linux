@@ -107,5 +107,3 @@ if __name__ == "__main__":
     replace_string = sys.argv[3]
 
     find_and_replace_in_heap(pid, search_string, replace_string)
-
-
