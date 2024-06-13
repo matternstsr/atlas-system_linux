@@ -1,9 +1,31 @@
 #!/usr/bin/python3
 
 """
-Python - Python - /proc filesystem - 0. Hack the VM
+read_write_heap.py - Python script to find and replace a string in the heap of a running process.
 
-Looks thru the heap of a given process for a str and rep with another one.
+Usage:
+    read_write_heap.py pid search_string replace_string
+
+Arguments:
+    pid               PID of the running process.
+    search_string     String to search for in the heap (ASCII).
+    replace_string    String to replace the search string with (ASCII).
+
+Description:
+    This script reads the heap memory of a specified process using the /proc filesystem.
+    It searches for a given string in the heap and replaces it with another string.
+
+    The script first locates the heap memory range of the process by reading the /proc/[pid]/maps file.
+    Then, it reads the heap memory from /proc/[pid]/mem, searches for the specified search string,
+    and replaces it with the specified replace string.
+
+    If the search string is found and replaced successfully, it prints "SUCCESS!".
+    If the search string is not found, it prints "FAIL!".
+
+    If any error occurs during the process, it prints an error message and exits with status code 1.
+
+Example:
+    read_write_heap.py 1234 "Hello" "Hi"
 """
 
 import subprocess
