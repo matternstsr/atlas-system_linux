@@ -3,11 +3,12 @@
 """
 Python - Python - /proc filesystem - 0. Hack the VM
 
-	Looks thru the heap of a given process for a str and rep with another one.
+Looks thru the heap of a given process for a str and rep with another one.
 """
 
 import sys
 import os
+
 
 def read_write_heap(pid, search_string, replace_string):
 	try:
@@ -16,8 +17,10 @@ def read_write_heap(pid, search_string, replace_string):
 			for line in maps_file:
 				if "[heap]" in line:
 					heap_range = line.split()[0]
-					heap_start, heap_end = map(lambda x: int(x, 16),
-                                heap_range.split("-"))
+					heap_start, heap_end = map(
+					lambda x: int(x, 16), 
+					heap_range.split("-")
+					)
 					break
 			else:
 				raise ValueError("Heap not found in process maps")
