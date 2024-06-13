@@ -10,6 +10,7 @@ import sys
 import os
 import re
 
+
 def read_maps(pid):
     """
     Read the contents of the '/proc/[pid]/maps' file for the given process ID.
@@ -27,6 +28,7 @@ def read_maps(pid):
     except FileNotFoundError:
         print("Error: Process with PID {} not found.".format(pid))
         sys.exit(1)
+
 
 def find_heap_address(maps_content):
     """
@@ -46,6 +48,7 @@ def find_heap_address(maps_content):
         print("Error: Heap address not found in process maps.")
         sys.exit(1)
 
+
 def replace_string_in_heap(pid, search_string, replace_string):
     """
     Find and replace a string in the heap of a running process.
@@ -63,7 +66,7 @@ def replace_string_in_heap(pid, search_string, replace_string):
         heap_data = mem_file.read(end - start)
 
         if bytes(search_string, 'ASCII') not in heap_data:
-            print("Error: Search string not found in the heap of process with PID {}.".format(pid))
+            print("Error: string not found heap with PID {}.".format(pid))
             sys.exit(1)
 
         mem_file.seek(start + heap_data.index(bytes(search_string, 'ASCII')))
