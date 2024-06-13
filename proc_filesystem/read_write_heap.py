@@ -1,114 +1,46 @@
 #!/usr/bin/python3
-
 """
-Python - Python - /proc filesystem - 0. Hack the VM
-
-	Looks thru the heap of a given process for a str and rep with another one.
+Finds and replaces a specified string
+in a provided PID heap memory
 """
 
-import sys
-import os
+if __name__ == "__main__":
+    from sys import argv
 
-def print_usage_and_exit():
-    print('Usage: {} pid search write'.format(sys.argv[0]))
-    sys.exit(1)
-
-# check usage
-if len(sys.argv) != 4:
-    print_usage_and_exit()
-
-# get the pid from args
-pid = int(sys.argv[1])
-if pid <= 0:
-    print_usage_and_exit()
-search_string = str(sys.argv[2])
-if search_string == "":
-    print_usage_and_exit()
-write_string = str(sys.argv[3])
-if write_string == "":
-    print_usage_and_exit()
-
-# open the maps and mem files of the process
-maps_filename = "/proc/{}/maps".format(pid)
-print("[*] maps: {}".format(maps_filename))
-mem_filename = "/proc/{}/mem".format(pid)
-print("[*] mem: {}".format(mem_filename))
-
-# try opening the maps file
-try:
-    maps_file = open('/proc/{}/maps'.format(pid), 'r')
-except IOError as e:
-    print("[ERROR] Can not open file {}:".format(maps_filename))
-    print("        I/O error({}): {}".format(e.errno, e.strerror))
-    sys.exit(1)
-
-for line in maps_file:
-    sline = line.split(' ')
-    # check if we found the heap
-    if sline[-1][:-1] != "[heap]":
-        continue
-    print("[*] Found [heap]:")
-
-    # parse line
-    addr = sline[0]
-    perm = sline[1]
-    offset = sline[2]
-    device = sline[3]
-    inode = sline[4]
-    pathname = sline[-1][:-1]
-    print("\tpathname = {}".format(pathname))
-    print("\taddresses = {}".format(addr))
-    print("\tpermisions = {}".format(perm))
-    print("\toffset = {}".format(offset))
-    print("\tinode = {}".format(inode))
-
-    # check if there is read and write permission
-    if perm[0] != 'r' or perm[1] != 'w':
-        print("[*] {} does not have read/write permission".format(pathname))
-        maps_file.close()
-        exit(0)
-
-    # get start and end of the heap in the virtual memory
-    addr = addr.split("-")
-    if len(addr) != 2:  # never trust anyone, not even your OS :)
-        print("[*] Wrong addr format")
-        maps_file.close()
-        exit(1)
-    addr_start = int(addr[0], 16)
-    addr_end = int(addr[1], 16)
-    print("\tAddr start [{:x}] | end [{:x}]".format(addr_start, addr_end))
-
-    # open and read mem
+    if len(argv) != 4:
+        exit("Unsupported  number of arguments")
+    pid = int(argv[1])
+    search_str = argv[2].encode()
+    replace_str = argv[3].encode()
     try:
-        mem_file = open(mem_filename, 'rb+')
-    except IOError as e:
-        print("[ERROR] Can not open file {}:".format(mem_filename))
-        print("        I/O error({}): {}".format(e.errno, e.strerror))
-        maps_file.close()
-        exit(1)
-
-    # read heap
-    mem_file.seek(addr_start)
-    heap = mem_file.read(addr_end - addr_start)
-
-    # find string
+        mem_map = open(f"/proc/{pid}/maps", "r")
+    except FileNotFoundError as error:
+        exit(error)
+    for line in mem_map:
+        if line.endswith("[heap]\n"):
+            heap_start, heap_end = \
+                [int(x, 16) for x in line.split(" ")[0].split("-")]
+    print("Target memory location found")
+    mem_map.close()
     try:
-        i = heap.index(bytes(search_string, "ASCII"))
-    except Exception:
-        print("Can't find '{}'".format(search_string))
-        maps_file.close()
-        mem_file.close()
-        exit(0)
-    print("[*] Found '{}' at {:x}".format(search_string, i))
-
-    # write the new string
-    print("[*] Writing '{}' at {:x}".format(write_string, addr_start + i))
-    mem_file.seek(addr_start + i)
-    mem_file.write(bytes(write_string, "ASCII"))
-
-    # close files
-    maps_file.close()
-    mem_file.close()
-
-    # there is only one heap in our example
-    break
+        heap_mem = open(f"/proc/{pid}/mem", "r+b")
+    except FileNotFoundError as error:
+        exit(error)
+    heap_mem.seek(heap_start)
+    mem = heap_mem.read(heap_end - heap_start)
+    str_at = mem.find(search_str) + heap_start
+    print(f"{search_str}:{str_at}")
+    if str_at > -1:
+        print(f"Target Located at {hex(str_at)}")
+        if len(search_str) > len(replace_str):
+            heap_mem.seek(str_at + len(replace_str))
+            heap_mem.write(b'\0')
+        else:
+            heap_mem.seek(str_at)
+            heap_mem.write(replace_str)
+        print("Target Replaced")
+    else:
+        print("Unable to locate Target")
+    heap_mem.close()
+    print("Mission Complete")
+    exit()
