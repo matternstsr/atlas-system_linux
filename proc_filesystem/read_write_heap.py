@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+"""
+Python - Python - /proc filesystem - 0. Hack the VM
+
+Looks thru the heap of a given process for a str and rep with another one.
+"""
+
 import sys
 import os
 import re
@@ -64,6 +70,9 @@ def replace_string_in_heap(pid, search_string, replace_string):
         mem_file.write(bytes(replace_string, 'ASCII'))
 
 if __name__ == "__main__":
+    """
+    Entry point of the script.
+    """
     # Check if the correct number of arguments is provided
     if len(sys.argv) != 4:
         print("Usage: {} pid search_string replace_string".format(sys.argv[0]))
