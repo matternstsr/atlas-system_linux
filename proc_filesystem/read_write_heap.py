@@ -22,6 +22,7 @@ Behavior:
 
 import sys
 
+
 def find_and_replace_in_heap(pid, search_string, replace_string):
     """
     Finds and replaces a string in the heap of a running process.
