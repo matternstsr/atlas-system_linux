@@ -65,7 +65,7 @@ def read_write_heap(pid, search_string, replace_string):
         replace_string: String to replace the search string with.
     """
     add_in_memory = None
-    proc_py = None  # Initialize proc_py to None
+    proc_py = None
     try:
         maps_filename = f"/proc/{pid}/maps"
         mem_filename = f"/proc/{pid}/mem"
@@ -95,7 +95,6 @@ def read_write_heap(pid, search_string, replace_string):
             proc_py = subprocess.Popen(['./read_write_heap.py', str(pid), search_string, replace_string])
             time.sleep(2)
             new_value = read_value_in_memory(mem_filename, add_in_memory, len(search_string))
-            proc_py.kill()
 
             if previous_value != new_value:
                 print("SUCCESS!")
@@ -106,6 +105,8 @@ def read_write_heap(pid, search_string, replace_string):
     finally:
         if proc_py is not None:
             proc_py.kill()
+        else:
+            print("FAIL!")  # If proc_py is not defined, consider the operation as failed
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
