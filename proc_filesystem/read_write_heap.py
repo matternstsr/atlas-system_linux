@@ -9,49 +9,48 @@ Python - Python - /proc filesystem - 0. Hack the VM
 import sys
 import os
 
-def replace_string_in_heap(pid, search_string, replace_string):
-    try:
-        # Open maps file
-        maps_file = open("/proc/{}/maps".format(pid), 'r')
-        for line in maps_file:
-            fields = line.split()
-            if fields[-1] == "[heap]":
-                # Found the heap region
-                start_addr = int(fields[0].split("-")[0], 16)
-                end_addr = int(fields[0].split("-")[1], 16)
-                # Open mem file
-                mem_file = open("/proc/{}/mem".format(pid), 'rb+')
-                mem_file.seek(start_addr)
-                heap_data = mem_file.read(end_addr - start_addr)
-                # Search for the string
-                offset = heap_data.find(search_string.encode())
-                if offset != -1:
-                    mem_file.seek(start_addr + offset)
-                    mem_file.write(replace_string.encode() + b'\0')
-                    print("String replaced successfully.")
-                    mem_file.close()
-                    maps_file.close()
-                    return
-        print("String not found in heap.")
-        maps_file.close()
-    except Exception as e:
-        print("Error:", e)
+def read_write_heap(pid, search_string, replace_string):
+	try:
+		# Open maps file to find heap range
+		with open(f"/proc/{pid}/maps", "r") as maps_file:
+			for line in maps_file:
+				if "[heap]" in line:
+					heap_range = line.split()[0]
+					heap_start, heap_end = map(lambda x: int(x, 16), heap_range.split("-"))
+					break
+			else:
+				raise ValueError("Heap not found in process maps")
 
-def main():
-    if len(sys.argv) != 4:
-        print("Usage: {} pid search_string replace_string".format(sys.argv[0]))
-        sys.exit(1)
+		# Open mem file to read from heap
+		with open(f"/proc/{pid}/mem", "r+b") as mem_file:
+			mem_file.seek(heap_start)
+			heap_data = mem_file.read(heap_end - heap_start)
 
-    try:
-        pid = int(sys.argv[1])
-    except ValueError:
-        print("Error: pid must be an integer.")
-        sys.exit(1)
+			# Check if search_string exists in heap_data
+			search_bytes = search_string.encode()
+			replace_bytes = replace_string.encode()
+			search_index = heap_data.find(search_bytes)
+			if search_index != -1:
+				print(f"Found search string at offset {search_index} in heap")
 
-    search_string = sys.argv[2]
-    replace_string = sys.argv[3]
+				# Seek to the offset and write replace_string
+				mem_file.seek(heap_start + search_index)
+				mem_file.write(replace_bytes)
+				print(f"Successfully replaced '{search_string}' with '{replace_string}'")
+			else:
+				print(f"Search string '{search_string}' not found in heap")
 
-    replace_string_in_heap(pid, search_string, replace_string)
+	except Exception as e:
+		print(f"Error: {e}")
+		sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+	if len(sys.argv) != 4:
+		print("Usage: read_write_heap.py pid search_string replace_string")
+		sys.exit(1)
+
+	pid = int(sys.argv[1])
+	search_string = sys.argv[2]
+	replace_string = sys.argv[3]
+
+	read_write_heap(pid, search_string, replace_string)
