@@ -34,8 +34,7 @@ def find_heap_address(maps_content):
     """
     Find the start and end addresses of the heap from the maps content.
 
-    Args:
-        maps_content (str): Contents of the '/proc/[pid]/maps' file.
+    Args: s of the '/proc/[pid]/maps' file.
 
     Returns:
         tuple: A tuple containing the start and end addresses of the heap.
