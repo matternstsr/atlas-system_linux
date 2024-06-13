@@ -70,10 +70,6 @@ def read_write_heap(pid, search_string, replace_string):
         maps_filename = f"/proc/{pid}/maps"
         mem_filename = f"/proc/{pid}/mem"
 
-        # Check if the script has necessary permissions to read /proc files
-        if not os.access(maps_filename, os.R_OK) or not os.access(mem_filename, os.R_OK):
-            raise PermissionError("Insufficient permissions to access /proc files")
-
         with open(maps_filename, mode="r") as maps_file:
             for line in maps_file:
                 if "[heap]" in line:
@@ -104,8 +100,6 @@ def read_write_heap(pid, search_string, replace_string):
                 print("SUCCESS!")
             else:
                 print("FAIL!")
-    except PermissionError as pe:
-        print(f"Permission error: {pe}")
     except Exception as e:
         print(e)
     finally:
@@ -122,14 +116,5 @@ if __name__ == "__main__":
     pid = sys.argv[1]
     search_string = sys.argv[2]
     replace_string = sys.argv[3]
-
-    # Check if the script is being run as root, and if not, run with elevated privileges using sudo
-    if os.geteuid() != 0:
-        print("This script requires elevated privileges to access /proc files. Running with sudo...")
-        try:
-            subprocess.run(["sudo", "python3"] + sys.argv)
-        except Exception as e:
-            print(f"Error: {e}")
-        sys.exit()
 
     read_write_heap(pid, search_string, replace_string)
