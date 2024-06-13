@@ -1,9 +1,16 @@
 #!/usr/bin/python3
 
+"""
+Python - Python - /proc filesystem - 0. Hack the VM
+
+Looks thru the heap of a given process for a str and rep with another one.
+"""
+
 import subprocess
 import time
 import sys
 import os
+
 
 def read_value_in_memory(path, addr, l):
     value_read = None
