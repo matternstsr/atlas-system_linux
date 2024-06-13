@@ -18,9 +18,9 @@ def read_write_heap(pid, search_string, replace_string):
                 if "[heap]" in line:
                     heap_range = line.split()[0]
                     heap_start, heap_end = map(
-                    lambda x: int(x, 16),
-                    heap_range.split("-")
-                )
+                        lambda x: int(x, 16),
+                        heap_range.split("-")
+                    )
                     break
             else:
                 raise ValueError("Heap not found in process maps")
@@ -41,8 +41,8 @@ def read_write_heap(pid, search_string, replace_string):
                 mem_file.seek(heap_start + search_index)
                 mem_file.write(replace_bytes)
                 print(
-                        f"Successfully replaced '{search_string}' "
-                        f"with '{replace_string}'"
+                    f"Successfully replaced '{search_string}' "
+                    f"with '{replace_string}'"
                 )
             else:
                 print(f"Search string '{search_string}' not found in heap")
