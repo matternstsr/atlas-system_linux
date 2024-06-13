@@ -9,49 +9,70 @@ Python - Python - /proc filesystem - 0. Hack the VM
 import sys
 import os
 
-def replace_string_in_heap(pid, search_string, replace_string):
-    try:
-        # Open maps file
-        maps_file = open("/proc/{}/maps".format(pid), 'r')
+def print_usage_and_exit():
+    print('Usage: {} pid search replace'.format(sys.argv[0]))
+    sys.exit(1)
+
+def is_ascii(s):
+    return all(ord(c) < 128 for c in s)
+
+if len(sys.argv) != 4:
+    print_usage_and_exit()
+
+pid = int(sys.argv[1])
+if pid <= 0:
+    print_usage_and_exit()
+
+search_string = str(sys.argv[2])
+if not search_string or not is_ascii(search_string):
+    print("Error: Search string must be non-empty ASCII characters.")
+    sys.exit(1)
+
+replace_string = str(sys.argv[3])
+if not replace_string or not is_ascii(replace_string):
+    print("Error: Replace string must be non-empty ASCII characters.")
+    sys.exit(1)
+
+maps_filename = "/proc/{}/maps".format(pid)
+mem_filename = "/proc/{}/mem".format(pid)
+
+try:
+    with open(maps_filename, 'r') as maps_file:
         for line in maps_file:
-            fields = line.split()
-            if fields[-1] == "[heap]":
-                # Found the heap region
-                start_addr = int(fields[0].split("-")[0], 16)
-                end_addr = int(fields[0].split("-")[1], 16)
-                # Open mem file
-                mem_file = open("/proc/{}/mem".format(pid), 'rb+')
-                mem_file.seek(start_addr)
-                heap_data = mem_file.read(end_addr - start_addr)
-                # Search for the string
-                offset = heap_data.find(search_string.encode())
-                if offset != -1:
-                    mem_file.seek(start_addr + offset)
-                    mem_file.write(replace_string.encode() + b'\0')
-                    print("String replaced successfully.")
-                    mem_file.close()
-                    maps_file.close()
-                    return
-        print("String not found in heap.")
-        maps_file.close()
-    except Exception as e:
-        print("Error:", e)
+            sline = line.split(' ')
+            if sline[-1][:-1] != "[heap]":
+                continue
 
-def main():
-    if len(sys.argv) != 4:
-        print("Usage: {} pid search_string replace_string".format(sys.argv[0]))
-        sys.exit(1)
+            addr = sline[0].split("-")
+            if len(addr) != 2:
+                print("[*] Wrong addr format")
+                continue
 
-    try:
-        pid = int(sys.argv[1])
-    except ValueError:
-        print("Error: pid must be an integer.")
-        sys.exit(1)
+            addr_start = int(addr[0], 16)
+            addr_end = int(addr[1], 16)
 
-    search_string = sys.argv[2]
-    replace_string = sys.argv[3]
+            with open(mem_filename, 'rb+') as mem_file:
+                mem_file.seek(addr_start)
+                heap = mem_file.read(addr_end - addr_start)
 
-    replace_string_in_heap(pid, search_string, replace_string)
+                try:
+                    i = heap.index(bytes(search_string, "ASCII"))
+                except ValueError:
+                    print("Can't find '{}'".format(search_string))
+                    continue
 
-if __name__ == "__main__":
-    main()
+                print("[*] Found '{}' at {:x}".format(search_string, i))
+                if len(replace_string) > len(search_string):
+                    print("Error: Replacement string is longer than search string.")
+                    continue
+
+                print("[*] Writing '{}' at {:x}".format(replace_string, addr_start + i))
+                mem_file.seek(addr_start + i)
+                mem_file.write(bytes(replace_string, "ASCII"))
+
+                print("Replacement successful.")
+                break
+
+except IOError as e:
+    print(f"Error: {e}")
+    sys.exit(1)
