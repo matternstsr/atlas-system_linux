@@ -1,62 +1,67 @@
 #!/usr/bin/python3
 
-"""
-Python - Python - /proc filesystem - 0. Hack the VM
-
-Looks thru the heap of a given process for a str and rep with another one.
-"""
-
+import subprocess
+import time
 import sys
 import os
 
+def read_value_in_memory(path, addr, l):
+    value_read = None
+    try:
+        mem_file = open(path, 'rb')
+        mem_file.seek(addr)
+        value_read = mem_file.read(l)
+        mem_file.close()
+    except Exception as e:
+        print(e)
+    return value_read
 
 def read_write_heap(pid, search_string, replace_string):
+    add_in_memory = None
     try:
-        # Open maps file to find heap range
-        with open(f"/proc/{pid}/maps", "r") as maps_file:
+        maps_filename = f"/proc/{pid}/maps"
+        mem_filename = f"/proc/{pid}/mem"
+
+        with open(maps_filename, mode="r") as maps_file:
             for line in maps_file:
                 if "[heap]" in line:
-                    heap_range = line.split()[0]
-                    heap_start, heap_end = map(
-                        lambda x: int(x, 16),
-                        heap_range.split("-")
-                    )
+                    sline = line.split(' ')
+                    addr = sline[0].split("-")
+                    addr_start = int(addr[0], 16)
+                    addr_end = int(addr[1], 16)
+
+                    try:
+                        mem_file = open(mem_filename, 'rb')
+                        mem_file.seek(addr_start)
+                        heap = mem_file.read(addr_end - addr_start)
+                        add_in_memory = heap.find(bytes(search_string, "ASCII"))
+                        if add_in_memory != -1:
+                            add_in_memory += addr_start
+                        mem_file.close()
+                    except Exception as e:
+                        print(e)
                     break
+
+        if add_in_memory is not None:
+            previous_value = read_value_in_memory(mem_filename, add_in_memory, len(search_string))
+            proc_py = subprocess.Popen(['./read_write_heap.py', str(pid), search_string, replace_string])
+            time.sleep(2)
+            new_value = read_value_in_memory(mem_filename, add_in_memory, len(search_string))
+            proc_py.kill()
+
+            if previous_value != new_value:
+                print("SUCCESS!")
             else:
-                raise ValueError("Heap not found in process maps")
-
-        # Open mem file to read from heap
-        with open(f"/proc/{pid}/mem", "r+b") as mem_file:
-            mem_file.seek(heap_start)
-            heap_data = mem_file.read(heap_end - heap_start)
-
-            # Check if search_string exists in heap_data
-            search_bytes = search_string.encode()
-            replace_bytes = replace_string.encode()
-            search_index = heap_data.find(search_bytes)
-            if search_index != -1:
-                print(f"Found search string at offset {search_index} in heap")
-
-                # Seek to the offset and write replace_string
-                mem_file.seek(heap_start + search_index)
-                mem_file.write(replace_bytes)
-                print(
-                    f"Successfully replaced '{search_string}' "
-                    f"with '{replace_string}'"
-                )
-            else:
-                print(f"Search string '{search_string}' not found in heap")
-
+                print("FAIL!")
     except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+        print(e)
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Usage: read_write_heap.py pid search_string replace_string")
         sys.exit(1)
 
-    pid = int(sys.argv[1])
+    pid = sys.argv[1]
     search_string = sys.argv[2]
     replace_string = sys.argv[3]
 
