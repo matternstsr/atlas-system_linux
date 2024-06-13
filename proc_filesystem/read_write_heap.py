@@ -11,8 +11,18 @@ import time
 import sys
 import os
 
-
 def read_value_in_memory(path, addr, l):
+    """
+    Read a value from memory at a specified address.
+
+    Args:
+        path: File path to read memory from.
+        addr: Address to read from.
+        l: Length of the value to read.
+
+    Returns:
+        The value read from memory.
+    """
     value_read = None
     try:
         mem_file = open(path, 'rb')
@@ -24,6 +34,14 @@ def read_value_in_memory(path, addr, l):
     return value_read
 
 def read_write_heap(pid, search_string, replace_string):
+    """
+    Read and modify the heap of a specified process.
+
+    Args:
+        pid: PID of the process.
+        search_string: String to search for in the heap.
+        replace_string: String to replace the search string with.
+    """
     add_in_memory = None
     try:
         maps_filename = f"/proc/{pid}/maps"
