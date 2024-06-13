@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-read_write_heap.py - A script to find and replace a string in the heap of a running process.
+read_write_heap.py - script to find and rep string in heap of running process.
 
 Usage: read_write_heap.py pid search_string replace_string
 
@@ -11,10 +11,13 @@ Arguments:
     replace_string (str): The string to replace the found string with (ASCII).
 
 Behavior:
-    This script locates the heap of the specified process using the /proc/[pid]/maps file.
-    Then, it reads the memory of the process from /proc/[pid]/mem, searches for the search_string in the heap,
-    replaces it with replace_string, and prints an appropriate message indicating success or failure.
-    If any error occurs during the process, it prints an error message and exits with status code 1.
+    script locates heap of specified process using the /proc/[pid]/maps file.
+    Then, reads the mem of process from /proc/[pid]/mem, searches for
+    search_string in the heap,
+    replaces it with replace_string, and prints an appropriate message
+    indicating success or failure.
+    If any error occurs during the process, it prints an error message
+    and exits with status code 1.
 """
 
 import sys
@@ -26,13 +29,15 @@ def find_and_replace_in_heap(pid, search_string, replace_string):
     Args:
         pid (int): The process ID of the running process.
         search_string (str): The string to search for in the heap (ASCII).
-        replace_string (str): The string to replace the found string with (ASCII).
+        replace_string (str): The string to replace the found
+        string with (ASCII).
 
     Returns:
         None
 
     Raises:
-        ValueError: If the heap is not found in the maps file or the input is invalid.
+        ValueError: If the heap is not found in the maps
+        file or the input is invalid.
         OSError: If there's an error accessing the files in /proc/[pid].
     """
     # Validate input
@@ -65,7 +70,8 @@ def find_and_replace_in_heap(pid, search_string, replace_string):
                 raise ValueError("Heap not found in maps file.")
 
         # Extract heap address range
-        heap_start, heap_end = map(lambda x: int(x, 16), heap_info[0].split('-'))
+        heap_start, heap_end = map(lambda x: int(x, 16),
+                                   heap_info[0].split('-'))
 
         # Open the memory file
         with open(mem_file_path, 'rb+') as mem_file:
@@ -101,4 +107,5 @@ if __name__ == "__main__":
     replace_string = sys.argv[3]
 
     find_and_replace_in_heap(pid, search_string, replace_string)
+
 
