@@ -81,7 +81,7 @@ def find_and_replace_in_heap(pid, search_string, replace_string):
                 # Replace the search_string with replace_string
                 mem_file.seek(heap_start + offset)
                 mem_file.write(replace_string.encode('ASCII'))
-                print("String replaced successfully.")
+                print("SUCCESS!")
             else:
                 print("String not found in heap.")
     except OSError as e:
