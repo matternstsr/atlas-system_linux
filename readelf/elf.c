@@ -88,7 +88,7 @@ void readelf_header(const char *filename) {
     printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr32.e_ehsize);
     printf("  Size of program headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_phentsize * ehdr32.e_phnum));
     printf("  Number of program headers:         %u\n", (unsigned int)ehdr32.e_phnum);
-    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize));
+    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize * ehdr32.e_shnum));
     printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum);
     printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx);
 }
