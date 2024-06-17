@@ -1,15 +1,9 @@
-/* atlas-system_linux/readelf/elf.c */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include "notelf.h"  /* Include the elf.h header file */
+#include "notelf.h"
 
 void readelf_header(const char *filename) {
     int fd;
-    int i = 0;
-    Elf64_Ehdr ehdr64;
+    int i;
+    Elf64_Ehdr ehdr64;  /* Assuming 64-bit ELF header for now */
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {

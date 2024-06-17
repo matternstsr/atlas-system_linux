@@ -1,5 +1,3 @@
- /* atlas-system_linux/readelf/elf.h */
-
 #ifndef ELF_H
 #define ELF_H
 
@@ -11,6 +9,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <elf.h>
+
 
 /* ELF header structures for both 32-bit and 64-bit formats */
 /* Function prototypes */
