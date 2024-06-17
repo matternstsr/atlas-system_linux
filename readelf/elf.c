@@ -81,4 +81,14 @@ void readelf_header(const char *filename) {
     }
 
     printf("  Version:                           0x%x\n", (unsigned int)ehdr32.e_version);
-    printf("  Entry point address:  
+    printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
+    printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_phoff);
+    printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_shoff);
+    printf("  Flags:                             0x%x\n", (unsigned int)ehdr32.e_flags);
+    printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr32.e_ehsize);
+    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)ehdr32.e_phentsize * ehdr32.e_phnum);
+    printf("  Number of program headers:         %u\n", (unsigned int)ehdr32.e_phnum);
+    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)ehdr32.e_shentsize * ehdr32.e_shnum);
+    printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum);
+    printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx);
+}
