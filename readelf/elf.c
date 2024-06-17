@@ -11,7 +11,7 @@ void readelf_header(const char *filename) {
     int i = 0;
 
     Elf64_Ehdr ehdr64;  /* Define the Elf64_Ehdr structure */
-    Elf32_Ehdr ehdr32;  // Using Elf32_Ehdr for 32-bit ELF headers
+    Elf32_Ehdr ehdr32;  /* Using Elf32_Ehdr for 32-bit ELF headers pusher */
 
 
     fd = open(filename, O_RDONLY);
