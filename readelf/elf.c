@@ -31,16 +31,16 @@ void readelf_header(const char *filename) {
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr32.e_ident[EI_VERSION]);
     printf("  OS/ABI:                            ");
     switch (ehdr32.e_ident[EI_OSABI]) {
-        case ELFOSABI_SYSV:
-            printf("UNIX - System V\n");
-            break;
-        case ELFOSABI_SOLARIS:
-            printf("UNIX - Solaris\n");
-            break;
-        default:
-            printf("Unknown\n");
-            break;
-    };
+    case ELFOSABI_SYSV:
+        printf("UNIX - System V\n");
+        break;
+    case ELFOSABI_SOLARIS:
+        printf("UNIX - Solaris\n");
+        break;
+    default:
+        printf("<unknown: %u>\n", (unsigned int)ehdr32.e_ident[EI_OSABI]);
+        break;
+};
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
 
     switch (ehdr32.e_type) {
