@@ -1,4 +1,4 @@
-// atlas-system_linux/readelf/0-hreadelf.c
+/* atlas-system_linux/readelf/0-hreadelf.c */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -7,8 +7,8 @@
 #include <inttypes.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h> // defining the consts like EXIT_FAILURE and EXIT_SUCCESS
-#include "notelf.h"  // Include elf.h for ELF header definitions
+#include <stdlib.h>  /* define the consts like EXIT_FAILURE and EXIT_SUCCESS */
+#include "notelf.h"  /* Include elf.h for ELF header definitions */
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -20,4 +20,3 @@ int main(int argc, char *argv[]) {
 
     return(EXIT_SUCCESS);
 }
-

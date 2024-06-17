@@ -1,4 +1,4 @@
-// atlas-system_linux/readelf/elf.h
+ /* atlas-system_linux/readelf/elf.h */
 
 #ifndef ELF_H
 #define ELF_H
@@ -12,9 +12,8 @@
 #include <unistd.h>
 #include <elf.h>
 
-// ELF header structures for both 32-bit and 64-bit formats
-
-// Function prototypes
+/* ELF header structures for both 32-bit and 64-bit formats */
+/* Function prototypes */
 void readelf_header(const char *filename);
 
 #endif /* ELF_H */
