@@ -8,8 +8,8 @@
 
 void readelf_header(const char *filename) {
     int fd;
-    int i = 0
-    
+    int i = 0;
+
     Elf64_Ehdr ehdr64;  /* Define the Elf64_Ehdr structure */
 
     fd = open(filename, O_RDONLY);
