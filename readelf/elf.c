@@ -39,7 +39,18 @@ void readelf_header(const char *filename) {
 
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr64.e_ident[EI_VERSION]);
 
-    printf("  OS/ABI:                            %u\n", (unsigned int)ehdr64.e_ident[EI_OSABI]);
+    printf("  OS/ABI:                            ");
+    switch (ehdr32.e_ident[EI_OSABI]) {
+        case 0x00:
+            printf("UNIX - System V\n");
+            break;
+        case 0x06:
+            printf("UNIX - Solaris\n");
+            break;
+        default:
+            printf("Unknown\n");
+            break;
+    };
 
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr64.e_ident[EI_ABIVERSION]);
 
