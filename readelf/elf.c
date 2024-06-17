@@ -38,7 +38,7 @@ void readelf_header(const char *filename) {
         printf("UNIX - Solaris\n");
         break;
     default:
-        printf("<unknown: %u>\n", (unsigned int)ehdr32.e_ident[EI_OSABI]);
+        printf("<unknown: %x>\n", (unsigned int)ehdr32.e_ident[EI_OSABI]);
         break;
 };
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
