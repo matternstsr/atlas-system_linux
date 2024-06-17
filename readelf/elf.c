@@ -3,7 +3,7 @@
 void readelf_header(const char *filename) {
     int fd;
     int i;
-    Elf64_Ehdr ehdr64;  /* Assuming 64-bit ELF header for now */
+    Elf32_Ehdr ehdr32;  // Assuming 32-bit ELF header for now
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -11,7 +11,7 @@ void readelf_header(const char *filename) {
         exit(EXIT_FAILURE);
     }
 
-    if (read(fd, &ehdr64, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+    if (read(fd, &ehdr32, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr)) {
         perror("read");
         close(fd);
         exit(EXIT_FAILURE);
@@ -22,15 +22,15 @@ void readelf_header(const char *filename) {
     printf("ELF Header:\n");
     printf("  Magic:   ");
     for (i = 0; i < EI_NIDENT; ++i) {
-        printf("%02x ", ehdr64.e_ident[i]);
+        printf("%02x ", ehdr32.e_ident[i]);
     }
     printf("\n");
 
-    printf("  Class:                             %s\n", (ehdr64.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
-    printf("  Data:                              %s\n", (ehdr64.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
-    printf("  Version:                           %u (current)\n", (unsigned int)ehdr64.e_ident[EI_VERSION]);
+    printf("  Class:                             %s\n", (ehdr32.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
+    printf("  Data:                              %s\n", (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
+    printf("  Version:                           %u (current)\n", (unsigned int)ehdr32.e_ident[EI_VERSION]);
     printf("  OS/ABI:                            ");
-    switch (ehdr64.e_ident[EI_OSABI]) {
+    switch (ehdr32.e_ident[EI_OSABI]) {
         case ELFOSABI_SYSV:
             printf("UNIX - System V\n");
             break;
@@ -41,9 +41,9 @@ void readelf_header(const char *filename) {
             printf("Unknown\n");
             break;
     };
-    printf("  ABI Version:                       %u\n", (unsigned int)ehdr64.e_ident[EI_ABIVERSION]);
+    printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
 
-    switch (ehdr64.e_type) {
+    switch (ehdr32.e_type) {
         case ET_NONE:
             printf("  Type:                              NONE (Unknown file type)\n");
             break;
@@ -65,7 +65,7 @@ void readelf_header(const char *filename) {
     }
 
     printf("  Machine:                           ");
-    switch (ehdr64.e_machine) {
+    switch (ehdr32.e_machine) {
         case EM_X86_64:
             printf("Advanced Micro Devices X86-64\n");
             break;
@@ -80,15 +80,5 @@ void readelf_header(const char *filename) {
             break;
     }
 
-    printf("  Version:                           0x%x\n", (unsigned int)ehdr64.e_version);
-    printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr64.e_entry);
-    printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_phoff);
-    printf("  Start of section headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_shoff);
-    printf("  Flags:                             0x%x\n", (unsigned int)ehdr64.e_flags);
-    printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr64.e_ehsize);
-    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)ehdr64.e_phentsize);
-    printf("  Number of program headers:         %u\n", (unsigned int)ehdr64.e_phnum);
-    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)ehdr64.e_shentsize);
-    printf("  Number of section headers:         %u\n", (unsigned int)ehdr64.e_shnum);
-    printf("  Section header string table index: %u\n", (unsigned int)ehdr64.e_shstrndx);
-}
+    printf("  Version:                           0x%x\n", (unsigned int)ehdr32.e_version);
+    printf("  Entry point address:  
