@@ -9,10 +9,7 @@
 void readelf_header(const char *filename) {
     int fd;
     int i = 0;
-
-    Elf64_Ehdr ehdr64;  /* Define the Elf64_Ehdr structure */
-    Elf32_Ehdr ehdr32;  /* Using Elf32_Ehdr for 32-bit ELF headers pusher */
-
+    Elf64_Ehdr ehdr64;
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -34,26 +31,22 @@ void readelf_header(const char *filename) {
         printf("%02x ", ehdr64.e_ident[i]);
     }
     printf("\n");
-    
+
     printf("  Class:                             %s\n", (ehdr64.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
-
     printf("  Data:                              %s\n", (ehdr64.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
-
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr64.e_ident[EI_VERSION]);
-
     printf("  OS/ABI:                            ");
-    switch (ehdr32.e_ident[EI_OSABI]) {
-        case 0x00:
+    switch (ehdr64.e_ident[EI_OSABI]) {
+        case ELFOSABI_SYSV:
             printf("UNIX - System V\n");
             break;
-        case 0x06:
+        case ELFOSABI_SOLARIS:
             printf("UNIX - Solaris\n");
             break;
         default:
             printf("Unknown\n");
             break;
     };
-
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr64.e_ident[EI_ABIVERSION]);
 
     switch (ehdr64.e_type) {
@@ -74,6 +67,7 @@ void readelf_header(const char *filename) {
             break;
         default:
             printf("  Type:                              Unknown\n");
+            break;
     }
 
     printf("  Machine:                           ");
@@ -89,6 +83,7 @@ void readelf_header(const char *filename) {
             break;
         default:
             printf("Unknown\n");
+            break;
     }
 
     printf("  Version:                           0x%x\n", (unsigned int)ehdr64.e_version);
