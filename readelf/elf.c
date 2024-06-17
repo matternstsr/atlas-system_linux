@@ -8,6 +8,8 @@
 
 void readelf_header(const char *filename) {
     int fd;
+    int i = 0
+    
     Elf64_Ehdr ehdr64;  /* Define the Elf64_Ehdr structure */
 
     fd = open(filename, O_RDONLY);
@@ -26,7 +28,7 @@ void readelf_header(const char *filename) {
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr64.e_ident[i]);
     }
     printf("\n");
