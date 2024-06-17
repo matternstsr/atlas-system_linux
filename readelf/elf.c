@@ -3,7 +3,7 @@
 void readelf_header(const char *filename) {
     int fd;
     int i;
-    Elf32_Ehdr ehdr32;  // Assuming 32-bit ELF header for now
+    Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
