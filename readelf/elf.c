@@ -52,7 +52,7 @@ void readelf_header(const char *filename) {
 
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
 
-    printf("  Endianness:                        %s\n", get_endianness());
+    /* printf("  Endianness:                        %s\n", get_endianness()); */
 
     switch (ehdr32.e_type) {
         case ET_NONE:
