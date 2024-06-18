@@ -126,7 +126,7 @@ void readelf_header(const char *filename) {
     type_32_printing(ehdr32);
     machine_32_printing(ehdr32);
 
-    printf("  Version:                           0x%x\n", swap64(ehdr32.e_version, isUnixSystemV));
+    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isUnixSystemV));
     printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isUnixSystemV));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
