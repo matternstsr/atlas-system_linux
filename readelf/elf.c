@@ -1,3 +1,5 @@
+/* atlas-system_linux/readelf/elf.c */
+
 #include "notelf.h"
 
 void readelf_header(const char *filename) {
@@ -40,8 +42,14 @@ void readelf_header(const char *filename) {
     default:
         printf("<unknown: %x>\n", (unsigned int)ehdr32.e_ident[EI_OSABI]);
         break;
-};
+    }
+
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
+
+    /* Check endianness and adjust output accordingly */
+    uint32_t test = 1;
+    const char *endian = (*((char*)&test) == 1) ? "little endian" : "big endian";
+    printf("  Endianness:                        %s\n", endian);
 
     switch (ehdr32.e_type) {
         case ET_NONE:
@@ -92,3 +100,4 @@ void readelf_header(const char *filename) {
     printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum);
     printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx);
 }
+

@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <elf.h>
 
+/* atlas-system_linux/readelf/notelf.h */
 
 /* ELF header structures for both 32-bit and 64-bit formats */
 /* Function prototypes */
