@@ -9,7 +9,7 @@ void readelf_header(const char *filename) {
     int fd;
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    int endiannum = is_little_endian() ? 1 : 256; /* Multiplier based on endianness */
+    int endiannum = is_little_endian() ? 1 : 1; /* Multiplier based on endianness */
     
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -89,13 +89,13 @@ void readelf_header(const char *filename) {
 
     printf("  Version:                           0x%x\n", (unsigned int)ehdr32.e_version);
     printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
-    printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_phoff);
-    printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_shoff);
+    printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_phoff * endiannum);
+    printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_shoff * endiannum);
     printf("  Flags:                             0x%x\n", (unsigned int)ehdr32.e_flags);
-    printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr32.e_ehsize);
-    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_phentsize));
+    printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr32.e_ehsize * endiannum);
+    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_phentsize * endiannum));
     printf("  Number of program headers:         %u\n", (unsigned int)ehdr32.e_phnum * endiannum);
-    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize));
-    printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum);
-    printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx);
+    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize * endiannum));
+    printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum * endiannum);
+    printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx * endiannum);
 }
