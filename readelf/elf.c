@@ -1,17 +1,16 @@
 #include "notelf.h"
 
 /* Function to determine endianness */
-/*const char* get_endianness() {
+int is_little_endian() {
     uint32_t test = 1;
-    return (*((char*)&test) == 1) ? "little" : "big";
-}  NOT USED TESTING ONLY */
+    return (*((char*)&test) == 1);
+}
 
 void readelf_header(const char *filename) {
     int fd;
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    uint32_t test; /* Declaration of the variable test */
-    int endiannum = (*((char*)&test) == 1) ? 256 : 1; /* Multiplier based on endianness */
+    int endiannum = is_little_endian() ? 1 : 256; /* Multiplier based on endianness */
     
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -51,8 +50,6 @@ void readelf_header(const char *filename) {
     }
 
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
-
-    /* printf("  Endianness:                        %s\n", get_endianness()); NOT USED TESTING ONLY*/
 
     switch (ehdr32.e_type) {
         case ET_NONE:
@@ -102,5 +99,4 @@ void readelf_header(const char *filename) {
     printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize * endiannum));
     printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum * endiannum);
     printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx * endiannum);
-    printf("  endiannum: %u\n", (unsigned int)endiannum);
 }
