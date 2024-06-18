@@ -2,8 +2,7 @@
 
 /* Function to determine endianness */
 int is_little_endian() {
-    uint32_t test = 1;
-    return (*((char*)&test) == 1);
+    return (__BYTE_ORDER == __LITTLE_ENDIAN);
 }
 
 void readelf_header(const char *filename) {
