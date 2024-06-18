@@ -7,7 +7,8 @@ void readelf_header(const char *filename) {
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     uint32_t test;
-
+    const char *endian;
+    
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -49,7 +50,7 @@ void readelf_header(const char *filename) {
 
     /* Check endianness and adjust output accordingly */
     test = 1;
-    const char *endian = (*((char*)&test) == 1) ? "little endian" : "big endian";
+    endian = (*((char*)&test) == 1) ? "little endian" : "big endian";
     printf("  Endianness:                        %s\n", endian);
 
     switch (ehdr32.e_type) {
