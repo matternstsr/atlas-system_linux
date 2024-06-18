@@ -19,14 +19,20 @@ uint32_t swap32(uint32_t val, bool swap) {
 
 /* Swap the endianness of a 64-bit integer */
 uint64_t swap64(uint64_t val, bool swap) {
-    return swap ? (((val << 56) & 0xFF00000000000000ULL) |
-                   ((val << 48) & 0x00FF000000000000ULL) |
-                   ((val << 40) & 0x0000FF0000000000ULL) |
-                   ((val << 32) & 0x000000FF00000000ULL) |
-                   ((val << 24) & 0x00000000FF000000ULL) |
-                   ((val << 16) & 0x0000000000FF0000ULL) |
-                   ((val << 8)  & 0x000000000000FF00ULL) |
-                   ((val >> 8)  & 0x00000000000000FFULL)) : val;
+    uint64_t result = 0;
+    if (swap) {
+        result |= ((val & 0xFF00000000000000) >> 56);
+        result |= ((val & 0x00FF000000000000) >> 40);
+        result |= ((val & 0x0000FF0000000000) >> 24);
+        result |= ((val & 0x000000FF00000000) >> 8);
+        result |= ((val & 0x00000000FF000000) << 8);
+        result |= ((val & 0x0000000000FF0000) << 24);
+        result |= ((val & 0x000000000000FF00) << 40);
+        result |= ((val & 0x00000000000000FF) << 56);
+    } else {
+        result = val;
+    }
+    return result;
 }
 
 void machine_64_printing(Elf64_Ehdr e_hdr) {
