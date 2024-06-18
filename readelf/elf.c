@@ -35,14 +35,16 @@ uint64_t swap64(uint64_t val, bool swap) {
     return result;
 }
 
-void machine_64_printing(Elf64_Ehdr e_hdr) {
+void machine_64_printing(Elf64_Ehdr e_hdr, bool isUnixSystemV) {
     unsigned int newmachine;
 
     if (e_hdr.e_ident[EI_DATA] == ELFDATA2MSB)
         newmachine = __bswap_16(e_hdr.e_machine);
     else
         newmachine = e_hdr.e_machine;
+    
     printf("  Machine:                           ");
+    
     switch (newmachine) {
     case EM_X86_64:
         printf("Advanced Micro Devices X86-64\n");
@@ -58,6 +60,7 @@ void machine_64_printing(Elf64_Ehdr e_hdr) {
         break;
     }
 }
+
 
 void type_64_printing(Elf64_Ehdr e_hdr) {
     unsigned int newtype;
