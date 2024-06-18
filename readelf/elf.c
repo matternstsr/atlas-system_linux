@@ -98,8 +98,8 @@ void readelf_header(const char *filename) {
             break;
     }
 
-    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version);
-    printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry);
+    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version));
+    printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
     printf("  Flags:                             0x%x\n", swap32(ehdr32.e_flags, isUnixSystemV));
