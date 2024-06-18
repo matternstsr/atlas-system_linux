@@ -23,7 +23,7 @@ void machine_32_printing(Elf32_Ehdr e_hdr)
 		new = __bswap_16(e_hdr.e_machine);
 	else
 		new = e_hdr.e_machine;
-
+    printf("  Machine:                           ");
 	switch (new) {
         case EM_X86_64:
             printf("Advanced Micro Devices X86-64\n");
