@@ -17,6 +17,11 @@ uint32_t swap32(uint32_t val, bool swap) {
                    ((val >> 24) & 0x000000FF)) : val;
 }
 
+/* Swap the endianness of a 16-bit integer */
+uint16_t swap64(uint16_t val, bool swap) {
+    return swap ? ((val << 8) | (val >> 8)) : val;
+}
+
 void machine_32_printing(Elf32_Ehdr e_hdr)
 {
     unsigned int newmachine;
@@ -121,7 +126,7 @@ void readelf_header(const char *filename) {
     type_32_printing(ehdr32);
     machine_32_printing(ehdr32);
 
-    printf("  Version:                           0x%x\n", swap16(ehdr32.e_version, isUnixSystemV));
+    printf("  Version:                           0x%x\n", swap64(ehdr32.e_version, isUnixSystemV));
     printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isUnixSystemV));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
