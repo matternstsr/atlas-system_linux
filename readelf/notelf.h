@@ -18,6 +18,7 @@
 /* Function prototypes */
 void readelf_header(const char *filename);
 void machine_32_printing(Elf32_Ehdr e_hdr);
+void type_32_printing(Elf32_Ehdr e_hdr);
 /* int is_little_endian();
 int is_big_endian(); */
 
