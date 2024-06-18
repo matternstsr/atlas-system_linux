@@ -35,7 +35,7 @@ uint64_t swap64(uint64_t val, bool swap) {
     return result;
 }
 
-void machine_64_printing(Elf64_Ehdr e_hdr, bool isUnixSystemV) {
+void machine_64_printing(Elf64_Ehdr e_hdr) {
     unsigned int newmachine;
 
     if (e_hdr.e_ident[EI_DATA] == ELFDATA2MSB)
