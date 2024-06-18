@@ -5,14 +5,21 @@ int is_little_endian() {
     return (__BYTE_ORDER == __LITTLE_ENDIAN);
 }
 
+/* Function to determine endianness */
+int is_big_endian() {
+    return (__BYTE_ORDER == __BIG_ENDIAN);
+}
+
 void readelf_header(const char *filename) {
     int fd;
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     int endiannum = 0;
     
-    endiannum = is_little_endian() ? 1 : 32; /* Multiplier based on endianness */
-    
+    endiannum = is_little_endian() ? 1 : 1; /* Multiplier based on endianness */
+    endiannum = is_big_endian() ? 1 : 1; /* Multiplier based on endianness */
+
+
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
