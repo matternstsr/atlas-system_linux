@@ -1,25 +1,11 @@
 #include "notelf.h"
-
-/* Function to determine endianness */
-int is_little_endian() {
-    return (__BYTE_ORDER == __LITTLE_ENDIAN);
-}
-
-/* Function to determine endianness */
-int is_big_endian() {
-    return (__BYTE_ORDER == __BIG_ENDIAN);
-}
+#include <endian.h>
 
 void readelf_header(const char *filename) {
     int fd;
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    int endiannum = 0;
     
-    endiannum = is_little_endian() ? 1 : 1; /* Multiplier based on endianness */
-    endiannum = is_big_endian() ? 1 : 1; /* Multiplier based on endianness */
-
-
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -98,13 +84,13 @@ void readelf_header(const char *filename) {
 
     printf("  Version:                           0x%x\n", (unsigned int)ehdr32.e_version);
     printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
-    printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_phoff * endiannum);
-    printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)ehdr32.e_shoff * endiannum);
-    printf("  Flags:                             0x%x\n", (unsigned int)ehdr32.e_flags);
-    printf("  Size of this header:               %u (bytes)\n", (unsigned int)ehdr32.e_ehsize * endiannum);
-    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_phentsize * endiannum));
-    printf("  Number of program headers:         %u\n", (unsigned int)ehdr32.e_phnum * endiannum);
-    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)(ehdr32.e_shentsize * endiannum));
-    printf("  Number of section headers:         %u\n", (unsigned int)ehdr32.e_shnum * endiannum);
-    printf("  Section header string table index: %u\n", (unsigned int)ehdr32.e_shstrndx * endiannum);
+    printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)__bswap32(ehdr32.e_phoff));
+    printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)__bswap32(ehdr32.e_shoff));
+    printf("  Flags:                             0x%x\n", (unsigned int)__bswap32(ehdr32.e_flags));
+    printf("  Size of this header:               %u (bytes)\n", (unsigned int)__bswap16(ehdr32.e_ehsize));
+    printf("  Size of program headers:           %u (bytes)\n", (unsigned int)__bswap16(ehdr32.e_phentsize));
+    printf("  Number of program headers:         %u\n", (unsigned int)__bswap16(ehdr32.e_phnum));
+    printf("  Size of section headers:           %u (bytes)\n", (unsigned int)__bswap16(ehdr32.e_shentsize));
+    printf("  Number of section headers:         %u\n", (unsigned int)__bswap16(ehdr32.e_shnum));
+    printf("  Section header string table index: %u\n", (unsigned int)__bswap16(ehdr32.e_shstrndx));
 }
