@@ -3,9 +3,9 @@
 #include "notelf.h"
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdio.h> // Added for printf
+#include <stdio.h> /* Added for printf */
 
-#include <byteswap.h> // Added for __bswap_64
+#include <byteswap.h> /* Added for __bswap_64* /
 
 /* Swap the endianness of a 64-bit integer */
 uint64_t swap64(uint64_t val, bool swap) {
@@ -81,7 +81,7 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 
 void readelf_header(const char *filename) {
     int fd;
-    int i; // Moved declaration outside the loop
+    int i; /* Moved declaration outside the loop */
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     bool isUnixSystemV = false;
 
@@ -101,7 +101,7 @@ void readelf_header(const char *filename) {
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (i = 0; i < EI_NIDENT; ++i) { // Moved declaration outside the loop
+    for (i = 0; i < EI_NIDENT; ++i) { /* Moved declaration outside the loop */
         printf("%02x ", ehdr32.e_ident[i]);
     }
     printf("\n");
