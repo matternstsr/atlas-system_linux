@@ -6,6 +6,7 @@ void readelf_header(const char *filename) {
     int fd;
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
+    uint32_t test;
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -47,7 +48,7 @@ void readelf_header(const char *filename) {
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr32.e_ident[EI_ABIVERSION]);
 
     /* Check endianness and adjust output accordingly */
-    uint32_t test = 1;
+    test = 1;
     const char *endian = (*((char*)&test) == 1) ? "little endian" : "big endian";
     printf("  Endianness:                        %s\n", endian);
 
