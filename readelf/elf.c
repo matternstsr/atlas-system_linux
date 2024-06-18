@@ -15,6 +15,31 @@ uint32_t swap32(uint32_t val, bool swap) {
                    ((val >> 24) & 0x000000FF)) : val;
 }
 
+void machine_32_printing(Elf32_Ehdr e_hdr)
+{
+	unsigned int new;
+
+	if (e_hdr.e_ident[EI_DATA] == ELFDATA2MSB)
+		new = __bswap_16(e_hdr.e_machine);
+	else
+		new = e_hdr.e_machine;
+
+	switch (new) {
+        case EM_X86_64:
+            printf("Advanced Micro Devices X86-64\n");
+            break;
+        case EM_386:
+            printf("Intel 80386\n");
+            break;
+        case EM_SPARC:
+            printf("Sparc\n");
+            break;
+        default:
+            printf("Unknown\n");
+            break;
+    }
+}
+
 void readelf_header(const char *filename) {
     int fd;
     int i;
@@ -81,25 +106,10 @@ void readelf_header(const char *filename) {
             printf("  Type:                              Unknown\n");
             break;
     }
+    machine_32_printing(ehdr32);
 
-    printf("  Machine:                           ");
-    switch (ehdr32.e_machine) {
-        case EM_X86_64:
-            printf("Advanced Micro Devices X86-64\n");
-            break;
-        case EM_386:
-            printf("Intel 80386\n");
-            break;
-        case EM_SPARC:
-            printf("Sparc\n");
-            break;
-        default:
-            printf("Unknown\n");
-            break;
-    }
-
-    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isUnixSystemV));
-    printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isUnixSystemV));
+    printf("  Version:                           0x%x\n", __bswap_32(ehdr32.e_version));
+    printf("  Entry point address:               0x%x\n", __bswap_32(ehdr32.e_entry));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
     printf("  Flags:                             0x%x\n", swap32(ehdr32.e_flags, isUnixSystemV));
