@@ -11,7 +11,8 @@ void readelf_header(const char *filename) {
     int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     int endiannum = (*((char*)&test) == 1) ? 1 : 256; /* Multiplier based on endianness */
-
+    unsigned int test;
+    
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
