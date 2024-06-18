@@ -1,3 +1,5 @@
+/* atlas-system_linux/readelf/elf.c */
+
 #include "notelf.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -9,10 +11,10 @@ uint16_t swap16(uint16_t val, bool swap) {
 
 /* Swap the endianness of a 32-bit integer */
 uint32_t swap32(uint32_t val, bool swap) {
-    return swap ? (((val << 24) & 0xFF000000) |
-                   ((val << 8) & 0x00FF0000) |
-                   ((val >> 8) & 0x0000FF00) |
-                   ((val >> 24) & 0x000000FF)) : val;
+    return swap ? (((val << 24) & 0xFF000000U) |
+                   ((val << 8) & 0x00FF0000U) |
+                   ((val >> 8) & 0x0000FF00U) |
+                   ((val >> 24) & 0x000000FFU)) : val;
 }
 
 /* Swap the endianness of a 64-bit integer */
