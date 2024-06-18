@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h> /* Added for printf */
 
-#include <byteswap.h> /* Added for __bswap_64* /
+#include <byteswap.h> /* Added for __bswap_64 */
 
 /* Swap the endianness of a 64-bit integer */
 uint64_t swap64(uint64_t val, bool swap) {
