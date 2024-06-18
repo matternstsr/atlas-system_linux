@@ -1,5 +1,6 @@
 #include "notelf.h"
 #include <endian.h>
+#include <byteswap.h> /* byteswap.h for __bswap16 and __bswap32 functions */
 
 void readelf_header(const char *filename) {
     int fd;
