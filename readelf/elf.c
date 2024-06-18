@@ -49,7 +49,7 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
         newtype = __bswap_16(e_hdr.e_type);
     else
         newtype = e_hdr.e_type;
-    printf("  Type:                           ");
+    printf("  Type:                              ");
     switch (newtype) {
     case ET_NONE:
         printf("NONE (Unknown file type)\n");
