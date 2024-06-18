@@ -15,4 +15,6 @@
 /* Function prototypes */
 void readelf_header(const char *filename);
 
+void print_offset_32(Elf32_Ehdr ehdr32);
+
 #endif /* ELF_H */
