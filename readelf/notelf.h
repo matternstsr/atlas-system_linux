@@ -18,7 +18,7 @@
 /* Function prototypes */
 void readelf_header(const char *filename);
 
-int is_little_endian();
-int is_big_endian();
+/* int is_little_endian();
+int is_big_endian(); */
 
 #endif /* ELF_H */
