@@ -102,7 +102,7 @@ void readelf_sections(FILE *fp) {
     fread(shstrtab, 1, shstrtab_header.sh_size, fp);
 
     /* Print section headers */
-		printf("There are 31 section headers, starting at offset 0x1b18:\n\n");
+    printf("There are %d section headers, starting at offset 0x%lx:\n\n", ehdr.e_shnum, shoff);
     printf("Section Headers:\n");
     printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
     for (i = 0; i < ehdr.e_shnum; i++) {
