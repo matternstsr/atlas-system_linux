@@ -194,7 +194,7 @@ void readelf_header32(const char *filename) {
     printf("  Section header string table index: %u\n", ehdr.e_shstrndx);
 }
 void sparcbigendian32(const char *filename) {
-    int fd;
+    int fd, i;
     Elf32_Ehdr ehdr;
     bool swap_endian = true;
 
@@ -215,7 +215,7 @@ void sparcbigendian32(const char *filename) {
     /* Print ELF Header */
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr.e_ident[i]);
     }
     printf("\n");
