@@ -116,8 +116,11 @@ void readelf_sections(FILE *fp) {
 			flags_to_string(shdr[i].sh_flags), (int)shdr[i].sh_link,
 			(int)shdr[i].sh_info, (int)shdr[i].sh_addralign);
 }
-
-
+	/* Print Key to Flags after 30 section headers */
+	printf("\nKey to Flags:\n");
+	printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
+	printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
+	printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n\n");
 	free(shdr);
 	free(shstrtab);
 }
