@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
 	} /* Read ELF header identification bytes */
 	if (read(fd, ident, EI_NIDENT) != EI_NIDENT)
 	{
-		perror("read"); close(fd);
+		perror("read");
+		close(fd);
 		return (EXIT_FAILURE);
 	}
 	close(fd); /* Close file */
