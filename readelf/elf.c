@@ -96,10 +96,10 @@ void readelf_header(const char *filename) {
     close(fd);
 
     /* Determine endianness */
-    if (ehdr32.e_ident[EI_DATA] == ELFDATA2MSB)
-        isLittleEndian = false; /* Big endian */
-    else if (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB)
+    if (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB)
         isLittleEndian = true; /* Little endian */
+    else if (ehdr32.e_ident[EI_DATA] == ELFDATA2MSB)
+        isLittleEndian = false; /* Big endian */
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
@@ -130,16 +130,15 @@ void readelf_header(const char *filename) {
     machine_32_printing(ehdr32);
 
     /* Print other ELF header fields with proper endianness adjustment */
-    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isLittleEndian));
-    printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isLittleEndian));
-    printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isLittleEndian));
-    printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isLittleEndian));
-    printf("  Flags:                             0x%x\n", swap32(ehdr32.e_flags, isLittleEndian));
-    printf("  Size of this header:               %u (bytes)\n", swap16(ehdr32.e_ehsize, isLittleEndian));
-    printf("  Size of program headers:           %u (bytes)\n", swap16(ehdr32.e_phentsize, isLittleEndian));
-    printf("  Number of program headers:         %u\n", swap16(ehdr32.e_phnum, isLittleEndian));
-    printf("  Size of section headers:           %u (bytes)\n", swap16(ehdr32.e_shentsize, isLittleEndian));
-    printf("  Number of section headers:         %u\n", swap16(ehdr32.e_shnum, isLittleEndian));
-    printf("  Section header string table index: %u\n", swap16(ehdr32.e_shstrndx, isLittleEndian));
+    printf("  Version:                           %u (current)\n", ehdr32.e_version);
+    printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
+    printf("  Start of program headers:          %u (bytes into file)\n", ehdr32.e_phoff);
+    printf("  Start of section headers:          %u (bytes into file)\n", ehdr32.e_shoff);
+    printf("  Flags:                             0x%x\n", ehdr32.e_flags);
+    printf("  Size of this header:               %u (bytes)\n", ehdr32.e_ehsize);
+    printf("  Size of program headers:           %u (bytes)\n", ehdr32.e_phentsize);
+    printf("  Number of program headers:         %u\n", ehdr32.e_phnum);
+    printf("  Size of section headers:           %u (bytes)\n", ehdr32.e_shentsize);
+    printf("  Number of section headers:         %u\n", ehdr32.e_shnum);
+    printf("  Section header string table index: %u\n", ehdr32.e_shstrndx);
 }
-
