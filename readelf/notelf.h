@@ -11,6 +11,18 @@
 #include <unistd.h>
 #include <elf.h>
 
+/* The constants not available in <elf.h> */
+#ifndef ELFOSABI_SORTIX
+#define ELFOSABI_SORTIX 9
+#endif
+
+#ifndef EM_SPARC32PLUS
+#define EM_SPARC32PLUS 18
+#endif
+
+#ifndef EM_SPARCV9
+#define EM_SPARCV9 43
+
 
 /* atlas-system_linux/readelf/notelf.h */
 
