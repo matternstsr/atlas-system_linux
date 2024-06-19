@@ -26,13 +26,42 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
 
     /* Print section headers */
     printf("Section Headers:\n");
-    printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
 
     for (i = 0; i < ehdr.e_shnum; ++i) {
-        printf("  [%2d] %-18s %-16s %016lx %06lx %06lx %02lx %c   %2d   %2d   %2ld\n",
+        const char *name = &shstrtab[shdr[i].sh_name];
+        const char *type = "";
+        
+        switch (shdr[i].sh_type) {
+            case SHT_NULL:            type = "NULL";          break;
+            case SHT_PROGBITS:        type = "PROGBITS";      break;
+            case SHT_SYMTAB:          type = "SYMTAB";        break;
+            case SHT_STRTAB:          type = "STRTAB";        break;
+            case SHT_RELA:            type = "RELA";          break;
+            case SHT_HASH:            type = "HASH";          break;
+            case SHT_DYNAMIC:         type = "DYNAMIC";       break;
+            case SHT_NOTE:            type = "NOTE";          break;
+            case SHT_NOBITS:          type = "NOBITS";        break;
+            case SHT_REL:             type = "REL";           break;
+            case SHT_SHLIB:           type = "SHLIB";         break;
+            case SHT_DYNSYM:          type = "DYNSYM";        break;
+            case SHT_INIT_ARRAY:      type = "INIT_ARRAY";    break;
+            case SHT_FINI_ARRAY:      type = "FINI_ARRAY";    break;
+            case SHT_PREINIT_ARRAY:   type = "PREINIT_ARRAY"; break;
+            case SHT_GROUP:           type = "GROUP";         break;
+            case SHT_SYMTAB_SHNDX:    type = "SYMTAB_SHNDX";  break;
+            case SHT_LOOS:            type = "LOOS";          break;
+            case SHT_HIOS:            type = "HIOS";          break;
+            case SHT_LOPROC:          type = "LOPROC";        break;
+            case SHT_HIPROC:          type = "HIPROC";        break;
+            case SHT_LOUSER:          type = "LOUSER";        break;
+            case SHT_HIUSER:          type = "HIUSER";        break;
+        }
+
+        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %c%3d%4d%3ld\n",
             i,
-            &shstrtab[shdr[i].sh_name],  /* Section name from string table */
-            "",  /* Placeholder for type (to be filled) */
+            name,
+            type,
             (unsigned long)shdr[i].sh_addr,
             (unsigned long)shdr[i].sh_offset,
             (unsigned long)shdr[i].sh_size,
