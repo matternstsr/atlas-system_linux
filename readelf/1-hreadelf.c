@@ -86,7 +86,7 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
               flags,
               shdr[i].sh_link,
               shdr[i].sh_info,
-              (int)shdr[i].sh_addralign); // Cast sh_addralign to int for correct format
+              (int)shdr[i].sh_addralign); /* Cast to int for correct format */
 
     }
 
