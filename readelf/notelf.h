@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <byteswap.h>
 
 /* Define constants not available in <elf.h> */
 #ifndef ELFOSABI_SORTIX

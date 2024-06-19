@@ -196,7 +196,6 @@ void readelf_header32(const char *filename) {
 void sparcbigendian32(const char *filename) {
     int fd, i;
     Elf32_Ehdr ehdr;
-    bool swap_endian = true;
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -226,18 +225,18 @@ void sparcbigendian32(const char *filename) {
 
     print_osabi(ehdr.e_ident[EI_OSABI]);
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr.e_ident[EI_ABIVERSION]);
-    print_file_type(swap16(ehdr.e_type, swap_endian));
-    print_machine_type(swap16(ehdr.e_machine, swap_endian));
+    print_file_type(bswap_16(ehdr.e_type));  /* Use bswap_16 for correct interpretation*/
+    print_machine_type(bswap_16(ehdr.e_machine));  /* Use bswap_16 for correct interpretation*/
 
-    printf("  Version:                           0x%x\n", ehdr.e_version);
-    printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr.e_entry);
-    printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long)ehdr.e_phoff);
-    printf("  Start of section headers:          %lu (bytes into file)\n", (unsigned long)ehdr.e_shoff);
-    printf("  Flags:                             0x%x\n", ehdr.e_flags);
-    printf("  Size of this header:               %u (bytes)\n", ehdr.e_ehsize);
-    printf("  Size of program headers:           %u (bytes)\n", ehdr.e_phentsize);
-    printf("  Number of program headers:         %u\n", ehdr.e_phnum);
-    printf("  Size of section headers:           %u (bytes)\n", ehdr.e_shentsize);
-    printf("  Number of section headers:         %u\n", ehdr.e_shnum);
-    printf("  Section header string table index: %u\n", ehdr.e_shstrndx);
+    printf("  Version:                           0x%x\n", bswap_32(ehdr.e_version));  /* Use bswap_32 for correct interpretation*/
+    printf("  Entry point address:               0x%lx\n", (unsigned long)bswap_32(ehdr.e_entry));  /* Use bswap_32 for correct interpretation*/
+    printf("  Start of program headers:          %u (bytes into file)\n", bswap_32(ehdr.e_phoff));  /* Use bswap_32 for correct interpretation*/
+    printf("  Start of section headers:          %u (bytes into file)\n", bswap_32(ehdr.e_shoff));  /* Use bswap_32 for correct interpretation*/
+    printf("  Flags:                             0x%x\n", bswap_32(ehdr.e_flags));  /* Use bswap_32 for correct interpretation*/
+    printf("  Size of this header:               %u (bytes)\n", bswap_16(ehdr.e_ehsize));  /* Use bswap_16 for correct interpretation*/
+    printf("  Size of program headers:           %u (bytes)\n", bswap_16(ehdr.e_phentsize));  /* Use bswap_16 for correct interpretation*/
+    printf("  Number of program headers:         %u\n", bswap_16(ehdr.e_phnum));  /* Use bswap_16 for correct interpretation*/
+    printf("  Size of section headers:           %u (bytes)\n", bswap_16(ehdr.e_shentsize));  /* Use bswap_16 for correct interpretation*/
+    printf("  Number of section headers:         %u\n", bswap_16(ehdr.e_shnum));  /* Use bswap_16 for correct interpretation*/
+    printf("  Section header string table index: %u\n", bswap_16(ehdr.e_shstrndx));  /* Use bswap_16 for correct interpretation */
 }
