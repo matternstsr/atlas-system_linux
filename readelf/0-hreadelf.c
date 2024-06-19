@@ -1,6 +1,7 @@
 #include "notelf.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int fd;
     unsigned char ident[EI_NIDENT];
 

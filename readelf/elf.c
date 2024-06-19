@@ -3,11 +3,13 @@
 #include "notelf.h"
 
 /* Utility functions for endian swapping */
-uint16_t swap16(uint16_t val, bool swap) {
+uint16_t swap16(uint16_t val, bool swap)
+{
     return (swap ? ((val << 8) | (val >> 8)) : val);
 }
 
-uint32_t swap32(uint32_t val, bool swap) {
+uint32_t swap32(uint32_t val, bool swap)
+{
     if (swap) {
         return (((val << 24) & 0xFF000000) |
                ((val <<  8) & 0x00FF0000) |
@@ -18,7 +20,8 @@ uint32_t swap32(uint32_t val, bool swap) {
 }
 
 /* Function to print OS/ABI */
-void print_osabi(unsigned char osabi) {
+void print_osabi(unsigned char osabi)
+{
     printf("  OS/ABI:                            ");
     switch (osabi) {
         case ELFOSABI_SYSV:
@@ -37,7 +40,8 @@ void print_osabi(unsigned char osabi) {
 }
 
 /* Function to print file type */
-void print_file_type(uint16_t type) {
+void print_file_type(uint16_t type)
+{
     printf("  Type:                              ");
     switch (type) {
         case ET_NONE:
@@ -62,7 +66,8 @@ void print_file_type(uint16_t type) {
 }
 
 /* Function to print machine type */
-void print_machine_type(uint16_t machine) {
+void print_machine_type(uint16_t machine)
+{
     printf("  Machine:                           ");
     switch (machine) {
         case EM_X86_64:
@@ -87,7 +92,8 @@ void print_machine_type(uint16_t machine) {
 }
 
 /* Function to read and print ELF header for 64-bit ELF */
-void readelf_header64(const char *filename) {
+void readelf_header64(const char *filename)
+{
     int fd, i;
     Elf64_Ehdr ehdr;
     bool swap_endian = false;
@@ -141,7 +147,8 @@ void readelf_header64(const char *filename) {
 }
 
 /* Function to read and print ELF header for 32-bit ELF */
-void readelf_header32(const char *filename) {
+void readelf_header32(const char *filename)
+{
     int fd, i;
     Elf32_Ehdr ehdr;
     bool swap_endian = false;
@@ -193,7 +200,8 @@ void readelf_header32(const char *filename) {
     printf("  Number of section headers:         %u\n", ehdr.e_shnum);
     printf("  Section header string table index: %u\n", ehdr.e_shstrndx);
 }
-void sparcbigendian32(const char *filename) {
+void sparcbigendian32(const char *filename)
+{
     int fd, i;
     Elf32_Ehdr ehdr;
 
