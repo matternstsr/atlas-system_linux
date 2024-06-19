@@ -5,6 +5,8 @@
 
 void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     Elf64_Shdr *shdr;
+    Elf64_Shdr shstrtab_header;
+    char *shstrtab;
     int i;
 
     fseek(file, ehdr.e_shoff, SEEK_SET); /* Move to section header table offset */
@@ -12,6 +14,12 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     /* Read section headers */
     shdr = (Elf64_Shdr *)malloc(ehdr.e_shentsize * ehdr.e_shnum);
     fread(shdr, ehdr.e_shentsize, ehdr.e_shnum, file);
+
+    /* Find the section header string table */
+    shstrtab_header = shdr[ehdr.e_shstrndx];
+    shstrtab = (char *)malloc(shstrtab_header.sh_size);
+    fseek(file, shstrtab_header.sh_offset, SEEK_SET);
+    fread(shstrtab, shstrtab_header.sh_size, 1, file);
 
     /* Print section headers */
     printf("There are %d section headers, starting at offset 0x%lx:\n\n", ehdr.e_shnum, ehdr.e_shoff);
@@ -21,8 +29,8 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     for (i = 0; i < ehdr.e_shnum; ++i) {
         printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %c%c %3d %3d %2ld\n",
             i,
-            "", /* Name (we'll fetch this from the string table later) */
-            "", /* Type (we'll convert the type code) */
+            &shstrtab[shdr[i].sh_name], /* Name */
+            "", /* Type (to be implemented) */
             (unsigned long)shdr[i].sh_addr,
             (unsigned long)shdr[i].sh_offset,
             (unsigned long)shdr[i].sh_size,
@@ -36,7 +44,9 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     }
 
     free(shdr);
+    free(shstrtab);
 }
+
 
 int main(int argc, char *argv[]) {
     FILE *file;
