@@ -95,7 +95,7 @@ void print_machine_type(uint16_t machine) {
         case EM_SPARC:
             printf("Sparc\n");
             break;
-        case EM_SPARC64PLUS:
+        case EM_SPARC32PLUS:
             printf("Sparc v8+\n");
             break;
         case EM_SPARCV9:
@@ -139,7 +139,7 @@ void readelf_header(const char *filename) {
     }
     printf("\n");
 
-    printf("  Class:                             %s\n", (ehdr.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF64");
+    printf("  Class:                             %s\n", (ehdr.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
     printf("  Data:                              %s\n", (ehdr.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr.e_ident[EI_VERSION]);
 
