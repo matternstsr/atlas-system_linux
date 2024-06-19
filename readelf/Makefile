@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 
-SRCS = 0-hreadelf.c elf_common.c endian.c readelfhdrs.c
+SRCS = 0-hreadelf.c elf_common.c endian.c elf_header.c
 OBJS = $(SRCS:.c=.o)
 EXEC = 0-hreadelf
 
