@@ -3,6 +3,20 @@
 #include <string.h>
 #include <elf.h>
 
+/* Function to convert sh_flags to string representation */
+const char *flags_to_string(unsigned long flags) {
+    static char buf[9]; // Increase buffer size to accommodate flags
+    buf[0] = (flags & SHF_WRITE) ? 'W' : ' ';
+    buf[1] = (flags & SHF_ALLOC) ? 'A' : ' ';
+    buf[2] = (flags & SHF_EXECINSTR) ? 'X' : ' ';
+    buf[3] = (flags & SHF_MERGE) ? 'M' : ' ';
+    buf[4] = (flags & SHF_STRINGS) ? 'S' : ' ';
+    buf[5] = (flags & SHF_INFO_LINK) ? 'I' : ' '; // Example replacement for SHF_LARGE
+    buf[6] = (flags & SHF_LINK_ORDER) ? 'L' : ' ';
+    buf[7] = '\0';
+    return buf;
+}
+
 void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     Elf64_Shdr *shdr;
     Elf64_Shdr *strtab_shdr;
@@ -61,13 +75,13 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
             default:                  type = "UNKNOWN";         break;
         }
 
-        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %c%3ld%4ld%3ld\n",
+        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %s %3ld%4ld%3ld\n",
                i, name, type,
                (unsigned long)shdr[i].sh_addr,
                (unsigned long)shdr[i].sh_offset,
                (unsigned long)shdr[i].sh_size,
                (unsigned long)shdr[i].sh_entsize,
-               (shdr[i].sh_flags & SHF_ALLOC) ? 'A' : ' ',
+               flags_to_string(shdr[i].sh_flags),
                (long)shdr[i].sh_link,
                (long)shdr[i].sh_info,
                (long)shdr[i].sh_addralign);
@@ -82,6 +96,7 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
     free(shdr);
     free(shstrtab);
 }
+
 
 int main(int argc, char *argv[]) {
     FILE *file;
