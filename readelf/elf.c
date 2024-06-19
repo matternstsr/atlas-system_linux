@@ -19,10 +19,7 @@ uint16_t swap16(uint16_t val, bool swap) {
 
 /* Swap the endianness of a 32-bit integer */
 uint32_t swap32(uint32_t val, bool swap) {
-    return swap ? (((val << 24) & 0xFF000000) |
-                   ((val << 8) & 0x00FF0000) |
-                   ((val >> 8) & 0x0000FF00) |
-                   ((val >> 24) & 0x000000FF)) : val;
+    return swap ? __bswap_32(val) : val;
 }
 
 void machine_32_printing(Elf32_Ehdr e_hdr) {
@@ -128,15 +125,16 @@ void readelf_header(const char *filename) {
     type_32_printing(ehdr32);
     machine_32_printing(ehdr32);
 
+    printf("  Version:                           %u (current)\n", ehdr32.e_ident[EI_VERSION]);
     printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isUnixSystemV));
     printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isUnixSystemV));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
-    printf("  Flags:                             0x%x\n", swap32(ehdr32.e_flags, isUnixSystemV));
     printf("  Size of this header:               %u (bytes)\n", swap16(ehdr32.e_ehsize, isUnixSystemV));
     printf("  Size of program headers:           %u (bytes)\n", swap16(ehdr32.e_phentsize, isUnixSystemV));
     printf("  Number of program headers:         %u\n", swap16(ehdr32.e_phnum, isUnixSystemV));
     printf("  Size of section headers:           %u (bytes)\n", swap16(ehdr32.e_shentsize, isUnixSystemV));
     printf("  Number of section headers:         %u\n", swap16(ehdr32.e_shnum, isUnixSystemV));
     printf("  Section header string table index: %u\n", swap16(ehdr32.e_shstrndx, isUnixSystemV));
+
 }
