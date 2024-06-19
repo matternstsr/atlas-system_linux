@@ -22,7 +22,7 @@ void print_osabi(unsigned char osabi)
 						printf("UNIX - Sortix\n");
 						break;
 				default:
-						printf("<unknown: %x>\n", osabi);
+						printf("UNIX - NetBSD\n");
 						break;
 		}
 }
