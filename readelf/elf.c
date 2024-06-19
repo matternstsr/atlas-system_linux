@@ -58,7 +58,7 @@ void readelf_header64(const char *filename, bool flip_endian) {
     print_osabi(ehdr.e_ident[EI_OSABI]);
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr.e_ident[EI_ABIVERSION]);
     print_file_type(swap16(ehdr.e_type, flip_endian));
-    print_machine_type(swap16(ehdr.e_machine, flip_endian), flip_endian); // Corrected swap16 usage
+    print_machine_type(swap16(ehdr.e_machine, flip_endian), flip_endian);
 
     printf("  Version:                           0x%x\n", ehdr.e_version);
     printf("  Entry point address:               0x%lx\n", (unsigned long)swap32(ehdr.e_entry, flip_endian));
@@ -107,7 +107,7 @@ void readelf_header32(const char *filename, bool flip_endian) {
     print_osabi(ehdr.e_ident[EI_OSABI]);
     printf("  ABI Version:                       %u\n", (unsigned int)ehdr.e_ident[EI_ABIVERSION]);
     print_file_type(swap16(ehdr.e_type, flip_endian));
-    print_machine_type(swap16(ehdr.e_machine, flip_endian), flip_endian); // Corrected swap16 usage
+    print_machine_type(swap16(ehdr.e_machine, flip_endian), flip_endian);
 
     printf("  Version:                           0x%x\n", ehdr.e_version);
     printf("  Entry point address:               0x%lx\n", (unsigned long)swap32(ehdr.e_entry, flip_endian));
