@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
 	close(fd); /* Close file */
 	if (ident[EI_CLASS] == ELFCLASS64) /* Dete & print ELF header information */
 		read_elf_header64(argv[1]);
-		print_elf_header64(&ehdr);
 	else if (ident[EI_CLASS] == ELFCLASS32)
 	{
 		if (ident[EI_DATA] == ELFDATA2MSB && ident[EI_MAG3] == ELFMAG3)
