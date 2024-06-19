@@ -10,7 +10,8 @@ uint16_t swap16(uint16_t val, bool swap)
 
 uint32_t swap32(uint32_t val, bool swap)
 {
-	if (swap) {
+	if (swap)
+	{
 		return (((val << 24) & 0xFF000000) |
 			((val <<  8) & 0x00FF0000) |
 			((val >>  8) & 0x0000FF00) |
@@ -23,7 +24,8 @@ uint32_t swap32(uint32_t val, bool swap)
 void print_osabi(unsigned char osabi)
 {
 	printf("  OS/ABI:                            ");
-	switch (osabi) {
+	switch (osabi)
+	{
 		case ELFOSABI_SYSV:
 			printf("UNIX - System V\n");
 			break;
@@ -43,7 +45,8 @@ void print_osabi(unsigned char osabi)
 void print_file_type(uint16_t type)
 {
 	printf("  Type:                              ");
-	switch (type) {
+	switch (type)
+	{
 		case ET_NONE:
 			printf("NONE (Unknown file type)\n");
 			break;
@@ -69,7 +72,8 @@ void print_file_type(uint16_t type)
 void print_machine_type(uint16_t machine)
 {
 	printf("  Machine:                           ");
-	switch (machine) {
+	switch (machine)
+	{
 		case EM_X86_64:
 			printf("Advanced Micro Devices X86-64\n");
 			break;
@@ -99,12 +103,14 @@ void readelf_header64(const char *filename)
 	bool swap_endian = false;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1) {
+	if (fd == -1)
+	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
-	if (read(fd, &ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+	if (read(fd, &ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr))
+	{
 		perror("read");
 		close(fd);
 		exit(EXIT_FAILURE);
@@ -119,7 +125,8 @@ void readelf_header64(const char *filename)
 	/* Print ELF Header */
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
-	for (i = 0; i < EI_NIDENT; ++i) {
+	for (i = 0; i < EI_NIDENT; ++i)
+	{
 		printf("%02x ", ehdr.e_ident[i]);
 	}
 	printf("\n");
@@ -154,12 +161,14 @@ void readelf_header32(const char *filename)
 	bool swap_endian = false;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1) {
+	if (fd == -1)
+	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
-	if (read(fd, &ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr)) {
+	if (read(fd, &ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
+	{
 		perror("read");
 		close(fd);
 		exit(EXIT_FAILURE);
@@ -174,7 +183,8 @@ void readelf_header32(const char *filename)
 	/* Print ELF Header */
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
-	for (i = 0; i < EI_NIDENT; ++i) {
+	for (i = 0; i < EI_NIDENT; ++i)
+	{
 		printf("%02x ", ehdr.e_ident[i]);
 	}
 	printf("\n");
@@ -206,12 +216,14 @@ void sparcbigendian32(const char *filename)
 	Elf32_Ehdr ehdr;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1) {
+	if (fd == -1)
+	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
-	if (read(fd, &ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr)) {
+	if (read(fd, &ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
+	{
 		perror("read");
 		close(fd);
 		exit(EXIT_FAILURE);
@@ -222,7 +234,8 @@ void sparcbigendian32(const char *filename)
 	/* Print ELF Header */
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
-	for (i = 0; i < EI_NIDENT; ++i) {
+	for (i = 0; i < EI_NIDENT; ++i)
+	{
 		printf("%02x ", ehdr.e_ident[i]);
 	}
 	printf("\n");
