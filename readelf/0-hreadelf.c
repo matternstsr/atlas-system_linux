@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     /* Determine ELF class and process accordingly */
     if (ident[EI_CLASS] == ELFCLASS64)
     {
-        readelf_header64(argv[1]);
+        read_elf_header64(argv[1]);
     }
     else if (ident[EI_CLASS] == ELFCLASS32)
     {
