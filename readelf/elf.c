@@ -114,7 +114,7 @@ void readelf_header(const char *filename) {
             break;
     }
 
-    /* Additional handling for specific OS/ABI values */
+    // Additional handling for specific OS/ABI and class combinations
     if (ehdr64.e_ident[EI_OSABI] == ELFOSABI_SORTIX && ehdr64.e_ident[EI_CLASS] == ELFCLASS32) {
         printf("  Version:                           0x%x\n", ehdr64.e_version);
         printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr64.e_entry);
