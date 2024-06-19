@@ -107,7 +107,7 @@ void readelf_sections(FILE *fp) {
 	printf("Section Headers:\n");
 	printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
 	for (i = 0; i < ehdr.e_shnum; i++) {
-		const char *name = &shstrtab[shdr[i].sh_name];  // Correct way to get section name
+		const char *name = &shstrtab[shdr[i].sh_name];
 
 		printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2d %3d %2d\n",
 			i, name, section_type_to_string(shdr[i].sh_type),
