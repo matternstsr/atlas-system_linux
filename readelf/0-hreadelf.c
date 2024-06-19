@@ -1,11 +1,5 @@
 /* atlas-system_linux/readelf/0-hreadelf.c */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
 #include "notelf.h"
 
 int main(int argc, char *argv[]) {
@@ -13,7 +7,7 @@ int main(int argc, char *argv[]) {
     unsigned char ident[EI_NIDENT];
 
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <ELF file>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <elf-file>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -36,9 +30,9 @@ int main(int argc, char *argv[]) {
 
     /* Determine and print ELF header information */
     if (ident[EI_CLASS] == ELFCLASS64) {
-        readelf_header64(argv[1], ident[EI_DATA] == ELFDATA2MSB);
+        readelf_header64(argv[1]);
     } else if (ident[EI_CLASS] == ELFCLASS32) {
-        readelf_header32(argv[1], ident[EI_DATA] == ELFDATA2MSB);
+        readelf_header32(argv[1]);
     } else {
         fprintf(stderr, "Unknown ELF class\n");
         return EXIT_FAILURE;

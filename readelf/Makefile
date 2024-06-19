@@ -1,18 +1,19 @@
-# Makefile
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -pedantic
 
-CC=gcc
-CFLAGS=-Wall -Werror -Wextra -pedantic
-LDFLAGS=
-
-SRCS = 0-hreadelf.c elf.c
+SRCS = elf.c 0-hreadelf.c
 OBJS = $(SRCS:.c=.o)
-TARGET = 0-hreadelf
+EXEC = 0-hreadelf
 
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $(TARGET)
+.PHONY: all clean
+
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $(EXEC)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(EXEC)
