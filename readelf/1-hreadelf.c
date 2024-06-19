@@ -27,11 +27,12 @@ struct elf_section_header {
 };
 
 void print_section_headers(const void *mem, size_t size, size_t sh_offset, size_t sh_size, size_t sh_entsize, int is_little_endian) {
+    const char *strtab;
+    size_t num_sections, i;
+
     /* Cast unused parameters to void to avoid compiler errors */
     (void)size;
     (void)is_little_endian;
-    const char *strtab;
-    size_t num_sections, i; /* Removed const from num_sections and i */
 
     strtab = (const char *)mem + sh_offset;
     num_sections = sh_size / sh_entsize;
@@ -87,26 +88,33 @@ void print_section_headers(const void *mem, size_t size, size_t sh_offset, size_
 }
 
 int main(int argc, char *argv[]) {
+    const char *filename;
+    int fd;
+    struct stat st;
+    void *mem;
+    Elf64_Ehdr *ehdr;
+    size_t sh_offset, sh_size, sh_entsize;
+    int is_little_endian;
+
     if (argc != 2) {
         fprintf(stderr, "Usage: %s elf_filename\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    const char *filename = argv[1];
-    int fd = open(filename, O_RDONLY);
+    filename = argv[1];
+    fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
         return EXIT_FAILURE;
     }
 
-    struct stat st;
     if (fstat(fd, &st) == -1) {
         perror("fstat");
         close(fd);
         return EXIT_FAILURE;
     }
 
-    void *mem = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    mem = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (mem == MAP_FAILED) {
         perror("mmap");
         close(fd);
@@ -114,7 +122,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* Read ELF header */
-    Elf64_Ehdr *ehdr = (Elf64_Ehdr *)mem;
+    ehdr = (Elf64_Ehdr *)mem;
     if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) != 0) {
         fprintf(stderr, "Not an ELF file.\n");
         munmap(mem, st.st_size);
@@ -122,12 +130,11 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    size_t sh_offset = ehdr->e_shoff;
-    size_t sh_size = ehdr->e_shentsize * ehdr->e_shnum;
-    size_t sh_entsize = ehdr->e_shentsize;
+    sh_offset = ehdr->e_shoff;
+    sh_size = ehdr->e_shentsize * ehdr->e_shnum;
+    sh_entsize = ehdr->e_shentsize;
 
     /* Determine endianness */
-    int is_little_endian;
     if (ehdr->e_ident[EI_DATA] == ELFDATA2LSB) {
         is_little_endian = 1;
     } else if (ehdr->e_ident[EI_DATA] == ELFDATA2MSB) {
