@@ -21,8 +21,11 @@ void print_osabi(unsigned char osabi)
 				case ELFOSABI_SORTIX:
 						printf("UNIX - Sortix\n");
 						break;
-				default:
+				case ELFOSABI_NETBSD:
 						printf("UNIX - NetBSD\n");
+						break;
+				default:
+						printf("<unknown: %x>\n", osabi);
 						break;
 		}
 }
