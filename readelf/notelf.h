@@ -10,7 +10,7 @@
 #include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <string.h>
+#include "notelf.h"
 
 /* Define constants not available in <elf.h> */
 #ifndef ELFOSABI_SORTIX
@@ -25,10 +25,16 @@
 #define EM_SPARCV9 43
 #endif
 
+#ifndef EM_SPARCBIGENDIAN32
+#define EM_SPARCBIGENDIAN32 0x6001
+#endif
+
 /* Function prototypes */
-void readelf_header32(const char *filename);
-void readelf_header64(const char *filename);
-void machine_32_printing(Elf32_Ehdr e_hdr);
-void type_32_printing(Elf32_Ehdr e_hdr);
+void readelf_header32(const char *filename, bool flip_endian);
+void readelf_header64(const char *filename, bool flip_endian);
+void print_machine_type(uint16_t machine, bool flip_endian);
+void print_osabi(unsigned char osabi);
+void print_file_type(uint16_t type);
+void print_machine_type(uint16_t machine, bool flip_endian);
 
 #endif /* ELF_H */
