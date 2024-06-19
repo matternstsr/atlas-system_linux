@@ -12,12 +12,15 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <byteswap.h>
+#include <sys/mman.h>
+#include <stddef.h>
 
 /* Define constants not available in <elf.h> */
 
 #define ELFOSABI_SORTIX 9
 #define EM_SPARC32PLUS 18
 #define EM_SPARCV9 43
+#define MAX_SECTIONS 1000
 
 /* Function prototypes */
 void readelf_header32(const char *filename);

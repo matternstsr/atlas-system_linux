@@ -1,19 +1,31 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 
-SRCS = 0-hreadelf.c elf_common.c endian.c elf_header.c
-OBJS = $(SRCS:.c=.o)
-EXEC = 0-hreadelf
+# Common source files
+COMMON_SRCS = elf_common.c endian.c elf_header.c
+COMMON_OBJS = $(COMMON_SRCS:.c=.o)
+
+# Target 0-hreadelf
+0-hreadelf: 0-hreadelf.o $(COMMON_OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+0-hreadelf.o: 0-hreadelf.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Target 1-hreadelf
+1-hreadelf: 1-hreadelf.o $(COMMON_OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+1-hreadelf.o: 1-hreadelf.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Common object files compilation
+$(COMMON_OBJS): $(COMMON_SRCS)
+	$(CC) $(CFLAGS) -c $^
 
 .PHONY: all clean
 
-all: $(EXEC)
-
-$(EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $(EXEC)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+all: 0-hreadelf 1-hreadelf
 
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(COMMON_OBJS) 0-hreadelf.o 1-hreadelf.o 0-hreadelf 1-hreadelf
