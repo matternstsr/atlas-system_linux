@@ -109,7 +109,7 @@ void print_machine_type(uint16_t machine) {
 
 /* Function to read and print ELF header */
 void readelf_header(const char *filename) {
-    int fd;
+    int fd, i;
     Elf64_Ehdr ehdr;  /* Assume 64-bit ELF header for now */
     bool swap_endian = false;
 
@@ -134,7 +134,7 @@ void readelf_header(const char *filename) {
     /* Print ELF Header */
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr.e_ident[i]);
     }
     printf("\n");
