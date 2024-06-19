@@ -17,6 +17,3 @@ $(EXEC): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(EXEC)
-
-0-hreadelf: 0-hreadelf.c
-	${CC} ${CFLAGS} 0-hreadelf.c elf_common.c endian.c readelfhdrs.c endian.h
