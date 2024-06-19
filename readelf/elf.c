@@ -26,7 +26,7 @@ uint32_t swap32(uint32_t val, bool swap) {
 
 /* Function to read and print ELF header for 64-bit ELF */
 void readelf_header64(const char *filename, bool flip_endian) {
-    int fd;
+    int fd, i;
     Elf64_Ehdr ehdr;
 
     fd = open(filename, O_RDONLY);
@@ -46,7 +46,7 @@ void readelf_header64(const char *filename, bool flip_endian) {
     /* Print ELF Header */
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr.e_ident[i]);
     }
     printf("\n");
@@ -75,7 +75,7 @@ void readelf_header64(const char *filename, bool flip_endian) {
 
 /* Function to read and print ELF header for 32-bit ELF */
 void readelf_header32(const char *filename, bool flip_endian) {
-    int fd;
+    int fd, i;
     Elf32_Ehdr ehdr;
 
     fd = open(filename, O_RDONLY);
@@ -95,7 +95,7 @@ void readelf_header32(const char *filename, bool flip_endian) {
     /* Print ELF Header */
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr.e_ident[i]);
     }
     printf("\n");
