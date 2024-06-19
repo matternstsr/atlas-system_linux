@@ -130,7 +130,7 @@ void readelf_header(const char *filename) {
     machine_32_printing(ehdr32);
 
     /* Print other ELF header fields with proper endianness adjustment */
-    printf("  Version:                           %u (current)\n", ehdr32.e_version);
+    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isUnixSystemV));
     printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
     printf("  Start of program headers:          %u (bytes into file)\n", ehdr32.e_phoff);
     printf("  Start of section headers:          %u (bytes into file)\n", ehdr32.e_shoff);
