@@ -77,7 +77,7 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 }
 
 void readelf_header(const char *filename) {
-    int fd;
+    int fd, int i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     bool isLittleEndian = false;  /* Assume little endian by default */
 
@@ -103,7 +103,7 @@ void readelf_header(const char *filename) {
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr32.e_ident[i]);
     }
     printf("\n");
