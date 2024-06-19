@@ -31,6 +31,9 @@ void sparcbigendian32(const char *filename);
 void readelf_header32(const char *filename);
 void readelf_header64(const char *filename);
 
+Elf64_Ehdr read_elf_header64(const char *filename);
+void print_elf_header64(const Elf64_Ehdr *ehdr);
+
 /* Utility functions for endian swapping */
 uint16_t swap16(uint16_t val, bool swap);
 uint32_t swap32(uint32_t val, bool swap);
