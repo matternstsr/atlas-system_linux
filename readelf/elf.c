@@ -77,7 +77,7 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 }
 
 void readelf_header(const char *filename) {
-    int fd, int i;
+    int fd, i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
     bool isLittleEndian = false;  /* Assume little endian by default */
 
