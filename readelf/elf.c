@@ -8,7 +8,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-// Define missing constants if not available in <elf.h>
 #ifndef ELFOSABI_SORTIX
 #define ELFOSABI_SORTIX 9
 #endif
