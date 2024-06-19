@@ -10,6 +10,7 @@
 #include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
 
 /* Define constants not available in <elf.h> */
 #ifndef ELFOSABI_SORTIX
@@ -25,7 +26,8 @@
 #endif
 
 /* Function prototypes */
-void readelf_header(const char *filename);
+void readelf_header32(const char *filename);
+void readelf_header64(const char *filename);
 void machine_32_printing(Elf32_Ehdr e_hdr);
 void type_32_printing(Elf32_Ehdr e_hdr);
 
