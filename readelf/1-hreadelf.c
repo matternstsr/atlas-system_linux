@@ -5,13 +5,13 @@
 
 /* Function to convert sh_flags to string representation */
 const char *flags_to_string(unsigned long flags) {
-    static char buf[9]; // Increase buffer size to accommodate flags
+    static char buf[9];
     buf[0] = (flags & SHF_WRITE) ? 'W' : ' ';
     buf[1] = (flags & SHF_ALLOC) ? 'A' : ' ';
     buf[2] = (flags & SHF_EXECINSTR) ? 'X' : ' ';
     buf[3] = (flags & SHF_MERGE) ? 'M' : ' ';
     buf[4] = (flags & SHF_STRINGS) ? 'S' : ' ';
-    buf[5] = (flags & SHF_INFO_LINK) ? 'I' : ' '; // Example replacement for SHF_LARGE
+    buf[5] = (flags & SHF_INFO_LINK) ? 'I' : ' ';
     buf[6] = (flags & SHF_LINK_ORDER) ? 'L' : ' ';
     buf[7] = '\0';
     return buf;
