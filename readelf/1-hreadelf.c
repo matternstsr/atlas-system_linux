@@ -28,7 +28,7 @@ struct elf_section_header {
 };
 
 void print_section_headers(const void *mem, size_t size, size_t sh_offset, size_t sh_size, size_t sh_entsize, int is_little_endian) {
-    // Cast unused parameters to void to avoid compiler errors
+    /* Cast unused parameters to void to avoid compiler errors */
     (void)size;
     (void)is_little_endian;
 
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Read ELF header
+    /* Read ELF header */
     Elf64_Ehdr *ehdr = (Elf64_Ehdr *)mem;
     if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) != 0) {
         fprintf(stderr, "Not an ELF file.\n");
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
     size_t sh_size = ehdr->e_shentsize * ehdr->e_shnum;
     size_t sh_entsize = ehdr->e_shentsize;
 
-    // Determine endianness
+    /* Determine endianness */
     int is_little_endian;
     if (ehdr->e_ident[EI_DATA] == ELFDATA2LSB) {
         is_little_endian = 1;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Print section headers
+    /* Print section headers */
     print_section_headers(mem, st.st_size, sh_offset, sh_size, sh_entsize, is_little_endian);
 
     munmap(mem, st.st_size);
