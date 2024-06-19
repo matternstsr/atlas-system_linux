@@ -21,15 +21,14 @@
 
 /* Function prototypes */
 void readelf_header32(const char *filename);
-void readelf_header64(const char *filename);
 void print_osabi(unsigned char osabi);
 void print_file_type(uint16_t type);
 void print_machine_type(uint16_t machine);
 void sparcbigendian32(const char *filename);
-
-/* Function prototypes */
-Elf64_Ehdr read_elf_header64(const char *filename);
 void print_elf_header64(const Elf64_Ehdr *ehdr);
+
+/* Extended Function prototypes */
+Elf64_Ehdr read_elf_header64(const char *filename);
 
 /* Utility functions for endian swapping */
 uint16_t swap16(uint16_t val, bool swap);
