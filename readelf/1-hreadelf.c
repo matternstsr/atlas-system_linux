@@ -26,12 +26,12 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
 
     /* Print section headers */
     printf("Section Headers:\n");
-    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type            Address     Offset   Size     ES Flg Lk Inf Al\n");
 
     for (i = 0; i < ehdr.e_shnum; ++i) {
         const char *name = &shstrtab[shdr[i].sh_name];
         const char *type = "";
-        
+
         switch (shdr[i].sh_type) {
             case SHT_NULL:            type = "NULL";            break;
             case SHT_PROGBITS:        type = "PROGBITS";        break;
@@ -50,33 +50,35 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
             case SHT_PREINIT_ARRAY:   type = "PREINIT_ARRAY";   break;
             case SHT_GROUP:           type = "GROUP";           break;
             case SHT_SYMTAB_SHNDX:    type = "SYMTAB_SHNDX";    break;
+            case SHT_GNU_HASH:        type = "GNU_HASH";        break;
+            case SHT_GNU_verneed:     type = "VERNEED";         break;
             case SHT_LOOS:            type = "LOOS";            break;
             case SHT_HIOS:            type = "HIOS";            break;
             case SHT_LOPROC:          type = "LOPROC";          break;
             case SHT_HIPROC:          type = "HIPROC";          break;
             case SHT_LOUSER:          type = "LOUSER";          break;
             case SHT_HIUSER:          type = "HIUSER";          break;
-            default:                  type = "VERDEF";          break;        break;
+            default:                  type = "UNKNOWN";         break;
         }
-        printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %c%3d%4d%3ld\n",
-              i,
-              name,
-              type,
-              (unsigned long)shdr[i].sh_addr,
-              (unsigned long)shdr[i].sh_offset,
-              (unsigned long)shdr[i].sh_size,
-              (unsigned long)shdr[i].sh_entsize,
-              (shdr[i].sh_flags & SHF_ALLOC) ? 'A' : ' ',
-              shdr[i].sh_link,
-              shdr[i].sh_info,
-              shdr[i].sh_addralign
-        );
+
+        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %c%3ld%4ld%3ld\n",
+               i, name, type,
+               (unsigned long)shdr[i].sh_addr,
+               (unsigned long)shdr[i].sh_offset,
+               (unsigned long)shdr[i].sh_size,
+               (unsigned long)shdr[i].sh_entsize,
+               (shdr[i].sh_flags & SHF_ALLOC) ? 'A' : ' ',
+               (long)shdr[i].sh_link,
+               (long)shdr[i].sh_info,
+               (long)shdr[i].sh_addralign);
     }
-    /* Print Key to Flags after 30 section headers */
+
+    /* Print Key to Flags after section headers */
     printf("\nKey to Flags:\n");
     printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
     printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
     printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n\n");
+
     free(shdr);
     free(shstrtab);
 }
