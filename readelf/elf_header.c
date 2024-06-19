@@ -1,7 +1,7 @@
 #include "endian.h"
 
 /* Function to read and print ELF header for 64-bit ELF */
-Elf64_Ehdr read_elf_header(const char *filename)
+Elf64_Ehdr read_elf_header64(const char *filename)
 {
     int fd;
     Elf64_Ehdr ehdr;
@@ -23,7 +23,7 @@ Elf64_Ehdr read_elf_header(const char *filename)
     return ehdr;
 }
 
-void print_elf_header(const Elf64_Ehdr *ehdr)
+void print_elf_header64(const Elf64_Ehdr *ehdr)
 {
     int i;
     bool swap_endian = false;
