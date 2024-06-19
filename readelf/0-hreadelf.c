@@ -12,24 +12,14 @@ int main(int argc, char *argv[])
 	unsigned char ident[EI_NIDENT];
 
 	if (argc != 2)
-	{
-		fprintf(stderr, "Usage: %s <elf-file>\n", argv[0]);
-		return (EXIT_FAILURE);
-	}
+		fprintf(stderr, "Usage: %s <elf-file>\n", argv[0]); return (EXIT_FAILURE);
 	/* Open ELF file */
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-	{
-		perror("open");
-		return (EXIT_FAILURE);
-	}
+		perror("open"); return (EXIT_FAILURE);
 	/* Read ELF header identification bytes */
 	if (read(fd, ident, EI_NIDENT) != EI_NIDENT)
-	{
-		perror("read");
-		close(fd);
-		return (EXIT_FAILURE);
-	}
+		perror("read"); close(fd); return (EXIT_FAILURE);
 	/* Close file */
 	close(fd);
 
@@ -44,9 +34,6 @@ int main(int argc, char *argv[])
 			readelf_header32(argv[1]);
 	}
 	else
-	{
-		fprintf(stderr, "Unknown ELF class\n");
-		return (EXIT_FAILURE);
-	}
+		fprintf(stderr, "Unknown ELF class\n"); return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
