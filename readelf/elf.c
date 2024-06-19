@@ -79,7 +79,7 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 void readelf_header(const char *filename) {
     int fd;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    bool isLittleEndian = false;  // Assume little endian by default
+    bool isLittleEndian = false;  /* Assume little endian by default */
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -95,11 +95,11 @@ void readelf_header(const char *filename) {
 
     close(fd);
 
-    // Determine endianness
+    /* Determine endianness */
     if (ehdr32.e_ident[EI_DATA] == ELFDATA2MSB)
-        isLittleEndian = false; // Big endian
+        isLittleEndian = false; /* Big endian */
     else if (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB)
-        isLittleEndian = true; // Little endian
+        isLittleEndian = true; /* Little endian */
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
@@ -129,7 +129,7 @@ void readelf_header(const char *filename) {
     type_32_printing(ehdr32);
     machine_32_printing(ehdr32);
 
-    // Print other ELF header fields with proper endianness adjustment
+    /* Print other ELF header fields with proper endianness adjustment */
     printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isLittleEndian));
     printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isLittleEndian));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isLittleEndian));
