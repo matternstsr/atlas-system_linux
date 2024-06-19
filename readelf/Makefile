@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 
-SRCS = elf.c 0-hreadelf.c sparcbigendian32.c
+SRCS = elf.c 0-hreadelf.c
 OBJS = $(SRCS:.c=.o)
 EXEC = 0-hreadelf
 
