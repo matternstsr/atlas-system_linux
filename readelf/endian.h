@@ -13,22 +13,27 @@
 #include <string.h>
 #include <byteswap.h>
 
+
 /* Define constants not available in <elf.h> */
-#ifndef ELFOSABI_SORTIX
+
 #define ELFOSABI_SORTIX 9
-#endif
-
-#ifndef EM_SPARC32PLUS
 #define EM_SPARC32PLUS 18
-#endif
-
-#ifndef EM_SPARCV9
 #define EM_SPARCV9 43
-#endif
 
 /* Function prototypes */
 void readelf_header32(const char *filename);
 void readelf_header64(const char *filename);
+void print_osabi(unsigned char osabi);
+void print_file_type(uint16_t type);
+void print_machine_type(uint16_t machine);
 void sparcbigendian32(const char *filename);
+
+/* Function prototypes */
+void readelf_header32(const char *filename);
+void readelf_header64(const char *filename);
+
+/* Utility functions for endian swapping */
+uint16_t swap16(uint16_t val, bool swap);
+uint32_t swap32(uint32_t val, bool swap);
 
 #endif /* ELF_H */
