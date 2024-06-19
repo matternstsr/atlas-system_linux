@@ -1,3 +1,5 @@
+/* This code works for sparcbigendian32 sortix32 solaris32 */
+
 /* atlas-system_linux/readelf/elf.c */
 
 #include <stdio.h>
