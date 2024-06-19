@@ -79,8 +79,6 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 void readelf_header(const char *filename) {
     int fd, i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    bool isLittleEndian = false;  /* Assume little endian by default */
-    bool isUnixSystemV = false;   /* Declare isUnixSystemV variable */
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -96,12 +94,6 @@ void readelf_header(const char *filename) {
 
     close(fd);
 
-    /* Determine endianness */
-    if (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB)
-        isLittleEndian = true; /* Little endian */
-    else if (ehdr32.e_ident[EI_DATA] == ELFDATA2MSB)
-        isLittleEndian = false; /* Big endian */
-
     printf("ELF Header:\n");
     printf("  Magic:   ");
     for (i = 0; i < EI_NIDENT; ++i) {
@@ -110,13 +102,12 @@ void readelf_header(const char *filename) {
     printf("\n");
 
     printf("  Class:                             %s\n", (ehdr32.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
-    printf("  Data:                              %s\n", (isLittleEndian) ? "2's complement, little endian" : "2's complement, big endian");
+    printf("  Data:                              %s\n", (ehdr32.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr32.e_ident[EI_VERSION]);
     printf("  OS/ABI:                            ");
     switch (ehdr32.e_ident[EI_OSABI]) {
     case ELFOSABI_SYSV:
         printf("UNIX - System V\n");
-        isUnixSystemV = true;
         break;
     case ELFOSABI_SOLARIS:
         printf("UNIX - Solaris\n");
@@ -144,3 +135,4 @@ void readelf_header(const char *filename) {
     printf("  Number of section headers:         %u\n", ehdr32.e_shnum);
     printf("  Section header string table index: %u\n", ehdr32.e_shstrndx);
 }
+
