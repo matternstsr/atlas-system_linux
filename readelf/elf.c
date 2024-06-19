@@ -1,19 +1,17 @@
-#include "notelf.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <byteswap.h>
 
 void readelf_header(const char *filename) {
     int fd, i;
     Elf64_Ehdr ehdr64;
-    /* bool is_big_endian = false; */
-
+    
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -45,6 +43,12 @@ void readelf_header(const char *filename) {
             break;
         case ELFOSABI_NETBSD:
             printf("  OS/ABI:                            UNIX - NetBSD\n");
+            break;
+        case ELFOSABI_SOLARIS:
+            printf("  OS/ABI:                            UNIX - Solaris\n");
+            break;
+        case ELFOSABI_SORTIX:
+            printf("  OS/ABI:                            UNIX - Sortix\n");
             break;
         default:
             printf("  OS/ABI:                            <unknown: %x>\n", (unsigned int)ehdr64.e_ident[EI_OSABI]);
@@ -86,6 +90,12 @@ void readelf_header(const char *filename) {
         case EM_SPARC:
             printf("Sparc\n");
             break;
+        case EM_SPARC32PLUS:
+            printf("Sparc v8+\n");
+            break;
+        case EM_SPARCV9:
+            printf("Sparc v9\n");
+            break;
         default:
             printf("Unknown\n");
             break;
@@ -103,3 +113,4 @@ void readelf_header(const char *filename) {
     printf("  Number of section headers:         %u\n", ehdr64.e_shnum);
     printf("  Section header string table index: %u\n", ehdr64.e_shstrndx);
 }
+
