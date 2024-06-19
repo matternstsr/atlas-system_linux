@@ -80,14 +80,18 @@ void print_section_headers(FILE *file, Elf64_Ehdr ehdr) {
                (unsigned long)shdr[i].sh_addr,
                (unsigned long)shdr[i].sh_offset);
 
-        printf("       %06lx %02lx %s%3d%4d%3d\n",
-              (unsigned long)shdr[i].sh_size,
-              (unsigned long)shdr[i].sh_entsize,
-              flags,
-              shdr[i].sh_link,
-              shdr[i].sh_info,
-              (int)shdr[i].sh_addralign); /* Cast to int for correct format */
-
+printf("  [%2d] %-16s %-15s %016lx %06lx %06lx %02lx %-3s %2d %3d %2d\n",
+       i,
+       shstrtab + shdr[i].sh_name,
+       get_section_type(shdr[i].sh_type),
+       (unsigned long)shdr[i].sh_addr,
+       (unsigned long)shdr[i].sh_offset,
+       (unsigned long)shdr[i].sh_size,
+       (unsigned long)shdr[i].sh_entsize,
+       get_section_flags(shdr[i].sh_flags),
+       shdr[i].sh_link,
+       shdr[i].sh_info,
+       (int)shdr[i].sh_addralign);
     }
 
     /* Print Key to Flags */
