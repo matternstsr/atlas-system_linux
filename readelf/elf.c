@@ -79,7 +79,8 @@ void type_32_printing(Elf32_Ehdr e_hdr) {
 void readelf_header(const char *filename) {
     int fd, i;
     Elf32_Ehdr ehdr32;  /* Assuming 32-bit ELF header for now */
-    bool isLittleEndian = false;  /* Assume little endian by default */
+    bool isLittleEndian = false;  // Assume little endian by default
+    bool isUnixSystemV = false;   // Declare isUnixSystemV variable
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -115,6 +116,7 @@ void readelf_header(const char *filename) {
     switch (ehdr32.e_ident[EI_OSABI]) {
     case ELFOSABI_SYSV:
         printf("UNIX - System V\n");
+        isUnixSystemV = true;
         break;
     case ELFOSABI_SOLARIS:
         printf("UNIX - Solaris\n");
@@ -130,7 +132,7 @@ void readelf_header(const char *filename) {
     machine_32_printing(ehdr32);
 
     /* Print other ELF header fields with proper endianness adjustment */
-    printf("  Version:                           0x%x\n", swap32(ehdr32.e_version, isUnixSystemV));
+    printf("  Version:                           %u (current)\n", ehdr32.e_version);
     printf("  Entry point address:               0x%x\n", ehdr32.e_entry);
     printf("  Start of program headers:          %u (bytes into file)\n", ehdr32.e_phoff);
     printf("  Start of section headers:          %u (bytes into file)\n", ehdr32.e_shoff);
