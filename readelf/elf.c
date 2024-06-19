@@ -4,17 +4,17 @@
 
 /* Utility functions for endian swapping */
 uint16_t swap16(uint16_t val, bool swap) {
-    return swap ? ((val << 8) | (val >> 8)) : val;
+    return (swap ? ((val << 8) | (val >> 8)) : val);
 }
 
 uint32_t swap32(uint32_t val, bool swap) {
     if (swap) {
-        return ((val << 24) & 0xFF000000) |
+        return (((val << 24) & 0xFF000000) |
                ((val <<  8) & 0x00FF0000) |
                ((val >>  8) & 0x0000FF00) |
-               ((val >> 24) & 0x000000FF);
+               ((val >> 24) & 0x000000FF));
     }
-    return val;
+    return (val);
 }
 
 /* Function to print OS/ABI */
