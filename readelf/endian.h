@@ -13,7 +13,6 @@
 #include <string.h>
 #include <byteswap.h>
 
-
 /* Define constants not available in <elf.h> */
 
 #define ELFOSABI_SORTIX 9
