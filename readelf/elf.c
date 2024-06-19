@@ -130,6 +130,7 @@ void readelf_header(const char *filename) {
     printf("  Entry point address:               0x%x\n", swap32(ehdr32.e_entry, isUnixSystemV));
     printf("  Start of program headers:          %u (bytes into file)\n", swap32(ehdr32.e_phoff, isUnixSystemV));
     printf("  Start of section headers:          %u (bytes into file)\n", swap32(ehdr32.e_shoff, isUnixSystemV));
+    printf("  Flags:                             0x%x\n", swap32(ehdr32.e_flags, isUnixSystemV));
     printf("  Size of this header:               %u (bytes)\n", swap16(ehdr32.e_ehsize, isUnixSystemV));
     printf("  Size of program headers:           %u (bytes)\n", swap16(ehdr32.e_phentsize, isUnixSystemV));
     printf("  Number of program headers:         %u\n", swap16(ehdr32.e_phnum, isUnixSystemV));
