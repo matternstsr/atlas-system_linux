@@ -110,7 +110,7 @@ void print_machine_type(uint16_t machine) {
 /* Function to read and print ELF header */
 void readelf_header(const char *filename) {
     int fd, i;
-    Elf64_Ehdr ehdr;  /* Assume 64-bit ELF header for now */
+    Elf32_Ehdr ehdr;  /* Assume 32-bit ELF header for now */
     bool swap_endian = false;
 
     fd = open(filename, O_RDONLY);
@@ -119,7 +119,7 @@ void readelf_header(const char *filename) {
         exit(EXIT_FAILURE);
     }
 
-    if (read(fd, &ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+    if (read(fd, &ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr)) {
         perror("read");
         close(fd);
         exit(EXIT_FAILURE);
@@ -139,7 +139,7 @@ void readelf_header(const char *filename) {
     }
     printf("\n");
 
-    printf("  Class:                             %s\n", (ehdr.e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
+    printf("  Class:                             %s\n", (ehdr.e_ident[EI_CLASS] == ELFCLASS32) ? "ELF32" : "ELF32");
     printf("  Data:                              %s\n", (ehdr.e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
     printf("  Version:                           %u (current)\n", (unsigned int)ehdr.e_ident[EI_VERSION]);
 
