@@ -28,7 +28,6 @@
 /* Function prototypes */
 void readelf_header32(const char *filename);
 void readelf_header64(const char *filename);
-void machine_32_printing(Elf32_Ehdr e_hdr);
-void type_32_printing(Elf32_Ehdr e_hdr);
+void sparcbigendian32(const char *filename);
 
 #endif /* ELF_H */

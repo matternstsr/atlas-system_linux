@@ -1,5 +1,3 @@
-/* atlas-system_linux/readelf/0-hreadelf.c */
-
 #include "notelf.h"
 
 int main(int argc, char *argv[]) {
@@ -32,7 +30,11 @@ int main(int argc, char *argv[]) {
     if (ident[EI_CLASS] == ELFCLASS64) {
         readelf_header64(argv[1]);
     } else if (ident[EI_CLASS] == ELFCLASS32) {
-        readelf_header32(argv[1]);
+        if (ident[EI_DATA] == ELFDATA2MSB && ident[EI_MAG3] == ELFMAG3) {
+            sparcbigendian32(argv[1]);
+        } else {
+            readelf_header32(argv[1]);
+        }
     } else {
         fprintf(stderr, "Unknown ELF class\n");
         return EXIT_FAILURE;
