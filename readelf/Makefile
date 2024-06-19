@@ -1,12 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
-# LDFLAGS = -lelf  # Add any additional libraries needed here
 
 # Common source files
 COMMON_SRCS = elf_common.c endian.c elf_header.c
 COMMON_OBJS = $(COMMON_SRCS:.c=.o)
 
-# Additional source files specific to 2-hreadelf
+# Specific source files for 2-hreadelf
 SPECIFIC_SRCS = 2-hreadelf.c 2-hreadelfhelpers.c
 SPECIFIC_OBJS = $(SPECIFIC_SRCS:.c=.o)
 
