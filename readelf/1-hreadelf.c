@@ -27,7 +27,7 @@ const char *section_type_to_string(unsigned int type) {
 		case SHT_SYMTAB_SHNDX:    type_str = "SYMTAB_SHNDX";    break;
 		case SHT_GNU_HASH:        type_str = "GNU_HASH";        break;
 		case SHT_GNU_verdef:      type_str = "GNU_verdef";      break;
-		case SHT_GNU_verneed:     type_str = "VERNNED";         break;
+		case SHT_GNU_verneed:     type_str = "VERNEED";         break;
 		case SHT_GNU_versym:      type_str = "VERSYM";          break;
 		case SHT_SUNW_move:       type_str = "SUNW_move";       break;
 		case SHT_SUNW_COMDAT:     type_str = "SUNW_COMDAT";     break;
