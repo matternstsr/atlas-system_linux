@@ -28,17 +28,13 @@ void print_elf_header64(const Elf64_Ehdr *ehdr)
     int i;
     bool swap_endian = false;
 
-    /* Determine endianness */
-    if (ehdr->e_ident[EI_DATA] == ELFDATA2MSB)
-        swap_endian = true;
-
-    /* Print ELF Header */
+    if (ehdr->e_ident[EI_DATA] == ELFDATA2MSB)/* Determine endianness */
+        swap_endian = true; /* Print ELF Header */
     printf("ELF Header:\n");
     printf("  Magic:   ");
     for (i = 0; i < EI_NIDENT; ++i)
         printf("%02x ", ehdr->e_ident[i]);
-    printf("\n");
-    printf("  Class:                             %s\n",
+    printf("\n  Class:                             %s\n",
                (ehdr->e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" : "ELF32");
     printf("  Data:                              %s\n",
                (ehdr->e_ident[EI_DATA] == ELFDATA2LSB) ?
