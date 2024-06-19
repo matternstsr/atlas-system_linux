@@ -10,7 +10,7 @@
 #include <byteswap.h>
 
 void readelf_header(const char *filename) {
-    int fd;
+    int fd, i;
     Elf64_Ehdr ehdr64;
     /* bool is_big_endian = false; */
 
@@ -30,7 +30,7 @@ void readelf_header(const char *filename) {
 
     printf("ELF Header:\n");
     printf("  Magic:   ");
-    for (int i = 0; i < EI_NIDENT; ++i) {
+    for (i = 0; i < EI_NIDENT; ++i) {
         printf("%02x ", ehdr64.e_ident[i]);
     }
     printf("\n");
