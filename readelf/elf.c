@@ -114,7 +114,32 @@ void readelf_header(const char *filename) {
             break;
     }
 
+    /* Additional handling for specific OS/ABI values */
     if (ehdr64.e_ident[EI_OSABI] == ELFOSABI_SORTIX && ehdr64.e_ident[EI_CLASS] == ELFCLASS32) {
+        printf("  Version:                           0x%x\n", ehdr64.e_version);
+        printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr64.e_entry);
+        printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_phoff);
+        printf("  Start of section headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_shoff);
+        printf("  Flags:                             0x%x\n", ehdr64.e_flags);
+        printf("  Size of this header:               %u (bytes)\n", ehdr64.e_ehsize);
+        printf("  Size of program headers:           %u (bytes)\n", ehdr64.e_phentsize);
+        printf("  Number of program headers:         %u\n", ehdr64.e_phnum);
+        printf("  Size of section headers:           %u (bytes)\n", ehdr64.e_shentsize);
+        printf("  Number of section headers:         %u\n", ehdr64.e_shnum);
+        printf("  Section header string table index: %u\n", ehdr64.e_shstrndx);
+    } else if (ehdr64.e_ident[EI_OSABI] == ELFOSABI_SOLARIS && ehdr64.e_ident[EI_CLASS] == ELFCLASS32) {
+        printf("  Version:                           0x%x\n", ehdr64.e_version);
+        printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr64.e_entry);
+        printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_phoff);
+        printf("  Start of section headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_shoff);
+        printf("  Flags:                             0x%x\n", ehdr64.e_flags);
+        printf("  Size of this header:               %u (bytes)\n", ehdr64.e_ehsize);
+        printf("  Size of program headers:           %u (bytes)\n", ehdr64.e_phentsize);
+        printf("  Number of program headers:         %u\n", ehdr64.e_phnum);
+        printf("  Size of section headers:           %u (bytes)\n", ehdr64.e_shentsize);
+        printf("  Number of section headers:         %u\n", ehdr64.e_shnum);
+        printf("  Section header string table index: %u\n", ehdr64.e_shstrndx);
+    } else if (ehdr64.e_machine == EM_SPARC && ehdr64.e_ident[EI_CLASS] == ELFCLASS32) {
         printf("  Version:                           0x%x\n", ehdr64.e_version);
         printf("  Entry point address:               0x%lx\n", (unsigned long)ehdr64.e_entry);
         printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long)ehdr64.e_phoff);
