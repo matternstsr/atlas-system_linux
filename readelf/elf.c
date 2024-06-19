@@ -1,3 +1,5 @@
+/* atlas-system_linux/readelf/elf.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -7,6 +9,19 @@
 #include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+// Define missing constants if not available in <elf.h>
+#ifndef ELFOSABI_SORTIX
+#define ELFOSABI_SORTIX 9
+#endif
+
+#ifndef EM_SPARC32PLUS
+#define EM_SPARC32PLUS 18
+#endif
+
+#ifndef EM_SPARCV9
+#define EM_SPARCV9 43
+#endif
 
 void readelf_header(const char *filename) {
     int fd, i;
