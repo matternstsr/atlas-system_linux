@@ -31,16 +31,18 @@ void print_section_headers(const void *mem, size_t size, size_t sh_offset, size_
     /* Cast unused parameters to void to avoid compiler errors */
     (void)size;
     (void)is_little_endian;
+    const char *strtab;
+    const size_t num_sections, i;
 
-    const char *strtab = (const char *)mem + sh_offset;
-    const size_t num_sections = sh_size / sh_entsize;
+    strtab = (const char *)mem + sh_offset;
+    num_sections = sh_size / sh_entsize;
 
     printf("There are %zu section headers, starting at offset 0x%zx:\n\n", num_sections, sh_offset);
 
     printf("Section Headers:\n");
     printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
 
-    for (size_t i = 0; i < num_sections; ++i) {
+    for (i = 0; i < num_sections; ++i) {
         const struct elf_section_header *hdr = (const struct elf_section_header *)((const char *)mem + sh_offset + i * sh_entsize);
 
         printf("  [%2zu] %-17s ", i, strtab + hdr->sh_name);
