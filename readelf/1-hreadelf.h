@@ -38,4 +38,13 @@ void readelf_header64(const char *filename);
 uint16_t swap16(uint16_t val, bool swap);
 uint32_t swap32(uint32_t val, bool swap);
 
+/* Function to read and display section headers */
+void readelf_sections(FILE *fp);
+
+/* Function to map section type to string name */
+extern const char *section_type_to_string(unsigned int type);
+
+/* Function to convert flags to string representation */
+extern const char *flags_to_string(unsigned long flags);
+
 #endif /* ELF_H */

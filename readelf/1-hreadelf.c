@@ -1,8 +1,10 @@
+/* atlas-system_linux/readelf/1-hreadelf.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <elf.h>
-#include "elfplaybook.h"
+#include "1-hreadelf.h"
 
 /* Function to map section type to string name */
 const char *section_type_to_string(unsigned int type) {

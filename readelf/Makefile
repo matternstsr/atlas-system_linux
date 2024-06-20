@@ -16,7 +16,7 @@ COMMON_OBJS = $(COMMON_SRCS:.c=.o)
 1-hreadelf: 1-hreadelf.o $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
 
-1-hreadelf.o: 1-hreadelf.c
+1-hreadelf.o: 1-hreadelf.c elf_sections.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Common object files compilation

@@ -1,10 +1,12 @@
+/* atlas-system_linux/readelf/elf_common.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
 #include "elf.h"
-#include "elfplaybook.h"
+#include "1-hreadelf.h"
 
 /* Function to print OS/ABI */
 void print_osabi(unsigned char osabi)
