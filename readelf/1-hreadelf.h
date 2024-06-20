@@ -45,8 +45,7 @@ const char *resolve_std_sec_type_name(uint32_t sh_type);
 const char *map_spec_sec_type_name(uint32_t sh_type);
 void print_elf_flags_key(void);
 
-int read_sparcbigendian32(const char *filename, Elf32_Ehdr *ehdr);
-void print_elf_header(const Elf32_Ehdr *ehdr);
 void sparcbigendian32(const char *filename);
+
 
 #endif
