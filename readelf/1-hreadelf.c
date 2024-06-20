@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <elf.h>
+#include "elfplaybook.h"
 
 /* Function to map section type to string name */
 const char *section_type_to_string(unsigned int type) {

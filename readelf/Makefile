@@ -19,13 +19,6 @@ COMMON_OBJS = $(COMMON_SRCS:.c=.o)
 1-hreadelf.o: 1-hreadelf.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Target 1-hreadelf
-2-hreadelf: 2-hreadelf.o $(COMMON_OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
-
-2-hreadelf.o: 2-hreadelf.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
 # Common object files compilation
 $(COMMON_OBJS): $(COMMON_SRCS)
 	$(CC) $(CFLAGS) -c $^
