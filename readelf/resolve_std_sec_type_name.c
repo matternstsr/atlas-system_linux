@@ -24,8 +24,9 @@ const char *resolve_std_sec_type_name(uint32_t sh_type)
 {
      /* Calculate number of elements in standard_section_type_mappings */
     size_t num_mappings = sizeof(standard_section_type_mappings) / sizeof(standard_section_type_mappings[0]);
+    size_t i;
 
-    for (size_t i = 0; i < num_mappings; ++i) {
+    for (i = 0; i < num_mappings; ++i) {
         if (standard_section_type_mappings[i].type == sh_type) {
             return standard_section_type_mappings[i].name;
         }
