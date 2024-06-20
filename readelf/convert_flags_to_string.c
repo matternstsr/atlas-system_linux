@@ -2,7 +2,7 @@
 
 const char *convert_flags_to_string(uint64_t flags)
 {
-    static char flag_string[16]; // Adjust size as needed
+    static char flag_string[16];  /* Adjust size as needed */
     const char *flag_chars = "WAXMSILGTEopO";
     int position = 0;
 
@@ -14,9 +14,9 @@ const char *convert_flags_to_string(uint64_t flags)
 
     flag_string[position] = '\0';
 
-    // Handle case where no flags are set
+     /* Handle case where no flags are set */
     if (position == 0)
-        return "-"; // or NULL or any appropriate default
+        return "-";  /* or NULL or any appropriate default */
 
     return flag_string;
 }

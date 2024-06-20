@@ -1,9 +1,9 @@
 #include "1-hreadelf.h"
-#include <fcntl.h>   // for open
-#include <unistd.h>  // for close
+#include <fcntl.h>    /* for open */
+#include <unistd.h>   /* for close */
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <stdio.h>   // for perror
+#include <stdio.h>    /* for perror */
 
 void *map_file_into_memory(const char *filename, size_t *filesize)
 {
@@ -23,8 +23,8 @@ void *map_file_into_memory(const char *filename, size_t *filesize)
     *filesize = st.st_size;
 
     void *mapped_file = mmap(NULL, *filesize, PROT_READ, MAP_PRIVATE, fd, 0);
-    close(fd); // Close file descriptor after mmap regardless of success
-
+    close(fd);  /* Close file descriptor after mmap regardless of success
+ */
     if (mapped_file == MAP_FAILED) {
         perror("mmap");
         return NULL;

@@ -75,7 +75,7 @@ void readelf_sections(FILE *fp) {
                flags_to_string(shdr[i].sh_flags), (int)shdr[i].sh_link,
                (int)shdr[i].sh_info, (int)shdr[i].sh_addralign);
 
-        if (i == 39)  // Stop printing after the 40th section header
+        if (i == 39)   /* Stop printing after the 40th section header */
             break;
     }
 

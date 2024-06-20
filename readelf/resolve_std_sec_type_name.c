@@ -22,7 +22,7 @@ static const SectionTypeMapping standard_section_type_mappings[] = {
 
 const char *resolve_std_sec_type_name(uint32_t sh_type)
 {
-    // Calculate number of elements in standard_section_type_mappings
+     /* Calculate number of elements in standard_section_type_mappings */
     size_t num_mappings = sizeof(standard_section_type_mappings) / sizeof(standard_section_type_mappings[0]);
 
     for (size_t i = 0; i < num_mappings; ++i) {
@@ -31,5 +31,5 @@ const char *resolve_std_sec_type_name(uint32_t sh_type)
         }
     }
 
-    return map_spec_sec_type_name(sh_type); // Fallback if type not found
+    return map_spec_sec_type_name(sh_type);  /* Fallback if type not found */
 }

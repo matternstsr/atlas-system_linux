@@ -35,7 +35,7 @@ void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header, Elf32_Shdr *section_headers, c
                section_headers[section_count].sh_addralign);
     }
 
-    print_flag_key(); // Assuming this function prints flag keys
+    print_flag_key();/* Assuming this function prints flag keys */
 }
 
 #include "1-hreadelf.h"
@@ -75,5 +75,5 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header, Elf64_Shdr *section_headers
                section_headers[section_count].sh_addralign);
     }
 
-    print_elf_flags_key(); // Assuming this function prints ELF flags key
+    print_elf_flags_key();/* Assuming this function prints ELF flags key */
 }

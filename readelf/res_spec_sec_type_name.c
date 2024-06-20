@@ -17,7 +17,7 @@ static const SectionTypeMapping additional_section_type_mappings[] = {
 
 const char *res_spec_sec_type_name(uint32_t sh_type)
 {
-    // Calculate number of elements in additional_section_type_mappings
+     /* Calculate number of elements in additional_section_type_mappings */
     size_t num_mappings = sizeof(additional_section_type_mappings) / sizeof(additional_section_type_mappings[0]);
 
     for (size_t i = 0; i < num_mappings; ++i) {
@@ -26,5 +26,5 @@ const char *res_spec_sec_type_name(uint32_t sh_type)
         }
     }
 
-    return "UNKNOWN"; // Default return for unknown types
+    return "UNKNOWN";  /* Default return for unknown types */
 }
