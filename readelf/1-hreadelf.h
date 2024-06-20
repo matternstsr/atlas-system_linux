@@ -45,7 +45,4 @@ const char *resolve_std_sec_type_name(uint32_t sh_type);
 const char *map_spec_sec_type_name(uint32_t sh_type);
 void print_elf_flags_key(void);
 
-void sparcbigendian32(const char *filename);
-
-
 #endif
