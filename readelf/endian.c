@@ -1,6 +1,4 @@
-/* atlas-system_linux/readelf/elf_header.c */
-
-#include "1-hreadelf.h"
+#include "elfplaybook.h"
 
 /* Utility functions for endian swapping */
 uint16_t swap16(uint16_t val, bool swap)

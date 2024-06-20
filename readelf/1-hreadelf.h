@@ -1,50 +1,35 @@
-#ifndef ELF_H
-#define ELF_H
+#ifndef __1READELF_H__
+#define __1READELF_H__
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <stdbool.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <elf.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <byteswap.h>
 #include <sys/mman.h>
-#include <stddef.h>
+#include <sys/stat.h>
+#include <elf.h>
+#include <byteswap.h>
 
-/* Define constants not available in <elf.h> */
+void print_32bit_sec_hdrs(Elf32_Ehdr * ehdr,
+							  Elf32_Shdr * shdr,
+							  const char *strtab);
+void print_64bit_sec_headers(Elf64_Ehdr *ehdr,
+							  Elf64_Shdr *shdr,
+							  const char *strtab);
+void *map_file_into_memory(const char *filename, size_t *filesize);
+void check_elf_magic(Elf64_Ehdr *ehdr);
+void analyze_prnt_elf_hdrs(void *maps, size_t filesize);
+void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps);
+void proc_prnt_elf32_sec(Elf32_Ehdr *ehdr32, int is_big_endian, void *maps);
+void swap_endianess_64(Elf64_Shdr *shdr, int shnum);
+void swap_endianess_32(Elf32_Shdr *shdr, int shnum);
+void print_flag_key(void);
+const char *convert_flags_to_string(uint64_t flags);
+const char *resolve_section_type(uint32_t sh_type);
+const char *res_spec_sec_type_name(uint32_t sh_type);
+const char *resolve_std_sec_type_name(uint32_t sh_type);
+const char *map_spec_sec_type_name(uint32_t sh_type);
+void print_elf_flags_key(void);
 
-#define ELFOSABI_SORTIX 9
-#define EM_SPARC32PLUS 18
-#define EM_SPARCV9 43
-#define MAX_SECTIONS 1000
-
-/* Function prototypes */
-void readelf_header32(const char *filename);
-void readelf_header64(const char *filename);
-void print_osabi(unsigned char osabi);
-void print_file_type(uint16_t type);
-void print_machine_type(uint16_t machine);
-void sparcbigendian32(const char *filename);
-
-/* Function prototypes */
-void readelf_header32(const char *filename);
-void readelf_header64(const char *filename);
-
-/* Utility functions for endian swapping */
-uint16_t swap16(uint16_t val, bool swap);
-uint32_t swap32(uint32_t val, bool swap);
-
-/* Function to read and display section headers */
-void readelf_sections(FILE *fp);
-
-/* Function to map section type to string name */
-extern const char *section_type_to_string(unsigned int type);
-
-/* Function to convert flags to string representation */
-extern const char *flags_to_string(unsigned long flags);
-
-#endif /* ELF_H */
+#endif
