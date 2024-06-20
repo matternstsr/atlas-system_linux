@@ -4,12 +4,11 @@ const char *convert_flags_to_string(uint64_t flags)
 {
     static char flag_string[16];  /* Adjust size as needed */
     const char *flag_chars = "WAXMSILGTEopO";
-    int position = 0;
+    int position = 0, i;
 
-    for (int i = 0; i < 13; ++i) {
-        if (flags & (1ULL << i)) {
+    for (i = 0; i < 13; ++i) {
+        if (flags & (1UL << i))
             flag_string[position++] = flag_chars[i];
-        }
     }
 
     flag_string[position] = '\0';
