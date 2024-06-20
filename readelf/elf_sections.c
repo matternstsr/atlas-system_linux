@@ -64,21 +64,24 @@ void readelf_sections(FILE *fp) {
     /* Print section headers */
     printf("There are %d section headers, starting at offset 0x%lx:\n\n", ehdr.e_shnum, shoff);
     printf("Section Headers:\n");
-    printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
     for (i = 0; i < ehdr.e_shnum; i++) {
         const char *name = &shstrtab[shdr[i].sh_name];
 
-        printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2d %3d %2d\n",
+        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %3s %2d %3d %2d\n",
                i, name, section_type_to_string(shdr[i].sh_type),
                (unsigned long)shdr[i].sh_addr, (unsigned long)shdr[i].sh_offset,
                (unsigned long)shdr[i].sh_size, (unsigned long)shdr[i].sh_entsize,
                flags_to_string(shdr[i].sh_flags), (int)shdr[i].sh_link,
                (int)shdr[i].sh_info, (int)shdr[i].sh_addralign);
+
+        if (i == 39)  // Stop printing after the 40th section header
+            break;
     }
 
     /* Print Key to Flags */
     printf("Key to Flags:\n");
-    printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
+    printf("  W (write), A (alloc), X (execute), M (merge), S (strings)\n");
     printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
     printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
 
