@@ -1,43 +1,49 @@
-#include "file2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <elf.h>
 
+/* Function prototypes */
+void solaris32_func(const char *filename);
+void sortix32_func(const char *filename);
+void sparcbigendian32_func(const char *filename);
+void jpeg_mod_func(const char *filename);
+void case_python_obj_func(const char *filename);
+void vgpreload_memcheck_x86_linux_so_func(const char *filename);
+
+const char *section_type_to_string_func(unsigned int type);
+const char *flags_to_string_func(unsigned long flags);
+void readelf_sections_func(FILE *fp);
+
+/* Function definitions */
 
 /* Function to handle solaris32 ELF files */
 void solaris32_func(const char *filename) {
-    // Implement functionality for solaris32 ELF files
     printf("Handling solaris32 ELF file: %s\n", filename);
 }
 
 /* Function to handle sortix32 ELF files */
 void sortix32_func(const char *filename) {
-    // Implement functionality for sortix32 ELF files
     printf("Handling sortix32 ELF file: %s\n", filename);
 }
 
 /* Function to handle sparcbigendian32 ELF files */
 void sparcbigendian32_func(const char *filename) {
-    // Implement functionality for sparcbigendian32 ELF files
     printf("Handling sparcbigendian32 ELF file: %s\n", filename);
 }
 
 /* Function to handle jpeg.mod files */
 void jpeg_mod_func(const char *filename) {
-    // Implement functionality for jpeg.mod files
     printf("Handling jpeg.mod file: %s\n", filename);
 }
 
 /* Function to handle case: python.obj files */
 void case_python_obj_func(const char *filename) {
-    // Implement functionality for case: python.obj files
     printf("Handling case: python.obj file: %s\n", filename);
 }
 
 /* Function to handle vgpreload_memcheck-x86-linux.so files */
 void vgpreload_memcheck_x86_linux_so_func(const char *filename) {
-    // Implement functionality for vgpreload_memcheck-x86-linux.so files
     printf("Handling vgpreload_memcheck-x86-linux.so file: %s\n", filename);
 }
 
@@ -142,11 +148,11 @@ void readelf_sections_func(FILE *fp) {
     /* Print section headers */
     printf("There are %d section headers, starting at offset 0x%lx:\n\n", ehdr.e_shnum, shoff);
     printf("Section Headers:\n");
-    printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
+    printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
     for (i = 0; i < ehdr.e_shnum; i++) {
         const char *name = &shstrtab[shdr[i].sh_name];
 
-        printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2d %3d %2d\n",
+        printf("  [%2d] %-17s %-15s %08lx %06lx %06lx %02lx %3s %2d %3d %2d\n",
                i, name, section_type_to_string_func(shdr[i].sh_type),
                (unsigned long)shdr[i].sh_addr, (unsigned long)shdr[i].sh_offset,
                (unsigned long)shdr[i].sh_size, (unsigned long)shdr[i].sh_entsize,
@@ -155,11 +161,29 @@ void readelf_sections_func(FILE *fp) {
     }
 
     /* Print Key to Flags */
-    printf("Key to Flags:\n");
-    printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
+    printf("\nKey to Flags:\n");
+    printf("  W (write), A (alloc), X (execute), M (merge), S (strings)\n");
     printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
-    printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+    printf("  O (extra OS processing required), o (OS specific), p (processor specific)\n");
 
     free(shdr);
     free(shstrtab);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <ELF filename>\n", argv[0]);
+        return 1;
+    }
+
+    FILE *fp = fopen(argv[1], "rb");
+    if (fp == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    readelf_sections_func(fp);
+
+    fclose(fp);
+    return 0;
 }
