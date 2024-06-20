@@ -15,6 +15,19 @@ static const SectionTypeMapping section_type_mappings[] = {
 	{ SHT_LOOS + 0xffffff1, "LOOS+ffffff1" },
 };
 
+
+/**
+ * resolve_section_type - Resolve section type name based on sh_type
+ * @sh_type: The section type to resolve
+ *
+ * This function resolves the section type specified by @sh_type
+ * by searching through the array section_type_mappings. If a match
+ * is found, it returns the corresponding name; otherwise, it falls
+ * back to resolve_section_type_alternative to handle the resolution.
+ *
+ * Return: Pointer to the name corresponding to @sh_type if found;
+ *         otherwise, the result of resolve_section_type_alternative.
+ */
 const char *resolve_section_type(uint32_t sh_type)
 {
 	/* Calculate number of elements in section_type_mappings */
