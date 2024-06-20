@@ -11,6 +11,30 @@
 #include <elf.h>
 #include <byteswap.h>
 
+#define SHT_VERDEF 0x6ffffffd
+
+typedef struct
+{
+  uint32_t type;
+  const char *name;
+} SectionTypeMapping;
+
+typedef struct {
+  uint32_t type;
+  const char *name;
+} SpecialSectionTypeMapping;
+
+typedef struct {
+	uint32_t type;
+	const char *name;
+} SectionTypeMapping;
+
+
+typedef struct {
+		uint32_t type;
+		const char *name;
+} SectionTypeMapping;	
+
 void print_32bit_sec_hdrs(Elf32_Ehdr * ehdr,
 							  Elf32_Shdr * shdr,
 							  const char *strtab);
