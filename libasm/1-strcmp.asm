@@ -42,7 +42,9 @@ asm_strcmp:
     setg al ; al = 1 if s1 > s2
     setl al ; al = -1 if s1 < s2
 
+.return_0:
+	mov eax, 0
+    
 .return:
-    ; Function epilogue
     pop rbp
     ret
