@@ -72,3 +72,9 @@ asm_strcmp:
 .return:
     pop rbp
     ret
+
+;Correct output - case: asm_strcmp("Holberton School", "Holberton School")
+;Correct output - case: asm_strcmp("", "")
+;Correct output - case: Comparing a very long string with itself
+;Correct output - case: Comparing a very long string with itself (1 char differ)
+;both betty
