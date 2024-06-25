@@ -11,16 +11,17 @@ asm_strcmp:
     mov rdi, QWORD [rbp + 8]     ; rdi = s1
     mov rsi, QWORD [rbp + 16]    ; rsi = s2
 
-.loop_compare:    ; Comparison loop
+    ; Comparison loop
+.loop_compare:
     ; Load characters from s1 and s2
     mov al, BYTE [rdi]           ; Load s1 character into al
     mov dl, BYTE [rsi]           ; Load s2 character into dl
 
     ; Check for null terminators
-    cmp al, 0
-    je .return_result            ; If *s1 (al) is null, return result
-    cmp dl, 0
-    je .return_result            ; If *s2 (dl) is null, return result
+    cmp al, 0                    ; Check if *s1 (al) is null
+    je .return_result            ; If *s1 is null, jump to return result
+    cmp dl, 0                    ; Check if *s2 (dl) is null
+    je .return_result            ; If *s2 is null, jump to return result
 
     ; Compare characters
     cmp al, dl                   ; Compare s1 and s2 characters
