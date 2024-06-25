@@ -8,8 +8,8 @@ asm_strcmp:
     mov rbp, rsp
 
     ; Load parameters s1 and s2
-    mov rdi, QWORD [rbp + 8]     ; rdi = s1
-    mov rsi, QWORD [rbp + 16]    ; rsi = s2
+    mov rdi, QWORD [rbp + 16]     ; rdi = s1
+    mov rsi, QWORD [rbp + 24]     ; rsi = s2
 
     ; Comparison loop
 .loop_compare:
@@ -52,6 +52,7 @@ asm_strcmp:
 .greater_than:
     ; Return 1 if s1 > s2
     mov eax, 1
+    jmp .return                  ; Jump to return
 
 .less_than:
     ; Return -1 if s1 < s2
