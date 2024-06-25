@@ -1,24 +1,22 @@
-BITS 64
-
 section .text
     global asm_strlen
 
 asm_strlen:
     push rbp
     mov rbp, rsp
-    mov rdi, QWORD [rbp + 16]    ; Load the argument (str) into rdi
-
-    xor rax, rax                 ; Clear rax (use rax for length)
-    test rdi, rdi                ; Check if str pointer is NULL
-    jz .end                      ; If NULL, return 0
+    mov QWORD [rbp - 8], 0       ; Initialize len to 0
 
 .loop:
-    lodsb                        ; Load byte at [DS:RSI] into AL, increment RSI
+    mov rax, QWORD [rbp + 16]    ; Load str into rax (first argument)
+    movzx eax, byte [rax]        ; Load byte at [rax] into eax, zero-extend to 32 bits
     test al, al                  ; Check if AL (current byte) is zero (null terminator)
-    jz .end                      ; If zero, end of string, exit loop
-    inc rax                      ; Increment length counter
-    jmp .loop                    ; Repeat until null terminator found
+    jz .end                      ; If zero, exit loop
+
+    add QWORD [rbp - 8], 1       ; Increment len
+    add QWORD [rbp + 16], 1      ; Move to the next character in str
+    jmp .loop
 
 .end:
+    mov rax, QWORD [rbp - 8]     ; Load len into rax
     pop rbp                      ; Restore rbp
     ret                          ; Return with rax holding the length of str
