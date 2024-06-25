@@ -14,4 +14,5 @@ asm_strlen:
     jmp .loop                  ; Repeat until null terminator found
     
 .end:
+    dec rax                    ; Adjust length by decrementing by 1 (since we counted null terminator)
     ret                        ; Return with rax holding string length
