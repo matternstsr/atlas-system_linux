@@ -6,17 +6,17 @@ asm_strlen:
     mov rbp, rsp
     mov rdi, QWORD [rbp + 16]    ; Load the argument (str) into rdi
 
-    xor eax, eax                 ; Clear eax (lower 32-bit of rax) for len
-    jmp .test_null
+    xor rax, rax                 ; Clear rax (use rax for length)
+    test rdi, rdi                ; Check if str pointer is NULL
+    jz .end                      ; If NULL, return 0
 
 .loop:
-    add eax, 1                   ; Increment len
-    add rdi, 1                   ; Move to the next character in str
+    lodsb                        ; Load byte at [DS:RSI] into AL, increment RSI
+    test al, al                  ; Check if AL (current byte) is zero (null terminator)
+    jz .end                      ; If zero, end of string, exit loop
+    inc rax                      ; Increment length counter
+    jmp .loop                    ; Repeat until null terminator found
 
-.test_null:
-    movzx edx, byte [rdi]        ; Load the byte at [rdi] into edx (zero-extend to 32 bits)
-    test dl, dl                  ; Check if the byte is null terminator ('\0')
-    jne .loop                    ; If not null, continue looping
-
+.end:
     pop rbp                      ; Restore rbp
-    ret                          ; Return with eax holding the length of str
+    ret                          ; Return with rax holding the length of str
