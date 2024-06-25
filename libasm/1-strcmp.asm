@@ -6,8 +6,8 @@ asm_strcmp:
     mov rbp, rsp
 
     ; Function prologue
-    mov rdi, QWORD [rbp + 16]   ; First argument (s1)
-    mov rsi, QWORD [rbp + 24]   ; Second argument (s2)
+    mov rdi, QWORD [rbp + 8]   ; First argument (s1)
+    mov rsi, QWORD [rbp + 16]   ; Second argument (s2)
 
 .compare_strings:
     ; Load and compare bytes from s1 and s2
