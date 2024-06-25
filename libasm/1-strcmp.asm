@@ -33,7 +33,16 @@ asm_strcmp:
     test al, al
     jz .return_0 ; s1 is empty, so equal if s2 is also empty
 
-    mov eax, 1 ; Return 1 if s1 > s2
+    mov eax, -1 ; Return -1 if s1 > s2
+    jmp .return
+
+.check_s1_less_s2:
+    ; Check if s1 < s2
+    mov al, BYTE [rdi]
+    test al, al
+    jge .return_0 ; s1 is empty, so equal if s2 is also empty
+
+    mov eax, 1 ; Return 1 if s1 < s2
     jmp .return
 
 .return_compare_result:
@@ -43,8 +52,9 @@ asm_strcmp:
     setl al ; al = -1 if s1 < s2
 
 .return_0:
-	mov eax, 0
-    
+    mov eax, 1 ; Return 1 if s1 == s2
+    jmp .return
+
 .return:
     pop rbp
     ret
