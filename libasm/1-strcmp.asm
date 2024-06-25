@@ -1,60 +1,65 @@
 global asm_strcmp
 section .text
+
 asm_strcmp:
-    push rbp
-    mov rbp, rsp
-    mov rdi, rdi ; Just to align with original function structure
-
-    ; Load pointers to strings
-    mov rsi, rsi ; rsi will be s1
-    mov rdx, rdx ; rdx will be s2
-
-    ; Loop through strings
-.loop:
-    ; Load characters
-    mov al, BYTE [rsi]
-    mov bl, BYTE [rdx]
-
+	push rbp
+	mov rbp, rsp
+	mov [rbp - 8], rdi
+	mov [rbp - 16], rsi
+	jmp .test_s1_v_s2
+    
+.loop_compare:
+    ; Load characters from s1 and s2
+    mov al, byte [rdi]
+    mov dl, byte [rsi]
+    
     ; Compare characters
-    cmp al, bl
-    jne .compare_result
-
-    ; Check for end of strings
     test al, al
-    jz .compare_result
+    jz .check_s2_null   ; If *s1 is null, check if *s2 is also null
+    test dl, dl
+    jz .decide_result   ; If *s2 is null, decide result
+    
+    ; Compare *s1 and *s2
+    cmp al, dl
+    je .continue_loop   ; If characters are equal, continue loop
+    
+    ; Determine return value
+    jl .s1_less_s2      ; *s1 < *s2
+    jg .s1_greater_s2   ; *s1 > *s2
+    
+.continue_loop:
+    ; Increment pointers
+    inc rdi
+    inc rsi
+    jmp .loop_compare
 
-    ; Move to next characters
-    add rsi, 1
-    add rdx, 1
-    jmp .loop
-
-.compare_result:
-    ; Compare the characters
-    movzx eax, al
-    sub eax, ebx
-
-    ; Prepare return value
-    test eax, eax
-    jne .return
-
-    ; Check if we reached end of both strings
-    test al, al
-    jz .return_0
-
-    ; If not, determine which string is longer
-    test bl, bl
-    jz .return_1
-
-    mov eax, 1
+.check_s2_null:
+    ; Check if *s2 is null
+    test dl, dl
+    jnz .decide_result  ; *s2 is not null, decide result
+    
+    ; Both strings are null-terminated and equal
+    xor eax, eax        ; return 0
     jmp .return
 
-.return_0:
-    mov eax, 0
+.decide_result:
+    ; Decide result based on comparison
+    jl .s1_less_s2      ; *s1 < *s2
+    jg .s1_greater_s2   ; *s1 > *s2
+    
+    ; Strings are equal
+    xor eax, eax        ; return 0
     jmp .return
 
-.return_1:
-    mov eax, -1
+.s1_less_s2:
+    ; *s1 < *s2
+    mov eax, -1         ; return -1
+    jmp .return
+
+.s1_greater_s2:
+    ; *s1 > *s2
+    mov eax, 1          ; return 1
+    jmp .return
 
 .return:
-    pop rbp
     ret
