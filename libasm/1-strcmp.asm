@@ -36,15 +36,6 @@ asm_strcmp:
     mov eax, -1 ; Return -1 if s1 > s2
     jmp .return
 
-.check_s1_less_s2:
-    ; Check if s1 < s2
-    mov al, BYTE [rdi]
-    test al, al
-    jge .return_0 ; s1 is empty, so equal if s2 is also empty
-
-    mov eax, 1 ; Return 1 if s1 < s2
-    jmp .return
-
 .return_compare_result:
     ; Compare result in al (-1 if s1 < s2, 1 if s1 > s2)
     cmp al, dl
