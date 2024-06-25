@@ -3,62 +3,46 @@ section .text
 
 asm_strcmp:
     push rbp
-    mov QWORD PTR [rbp - 8], rdi
-    mov QWORD PTR [rbp - 16], rsi
-    jmp .compare_strings
+    mov rbp, rsp
+    
+    ; Function prologue
+    mov rdi, QWORD [rbp + 16]   ; First argument (s1)
+    mov rsi, QWORD [rbp + 24]   ; Second argument (s2)
 
 .compare_strings:
     ; Load and compare bytes from s1 and s2
-    mov rax, QWORD PTR [rbp - 8]
-    movzx eax, BYTE PTR [rax]
+    mov al, BYTE [rdi]
     test al, al
     je .check_s1_more_s2
 
-    mov rax, QWORD PTR [rbp - 16]
-    movzx eax, BYTE PTR [rax]
-    test al, al
+    mov dl, BYTE [rsi]
+    test dl, dl
     je .check_s1_more_s2
 
-    mov rax, QWORD PTR [rbp - 8]
-    movzx edx, BYTE PTR [rax]
+    cmp al, dl
+    jne .return_compare_result
 
-    mov rax, QWORD PTR [rbp - 16]
-    movzx eax, BYTE PTR [rax]
-
-    cmp dl, al
-    je .compare_strings
+    ; Increment pointers
+    inc rdi
+    inc rsi
+    jmp .compare_strings
 
 .check_s1_more_s2:
     ; Check if s1 > s2
-    mov rax, QWORD PTR [rbp - 8]
-    movzx edx, BYTE PTR [rax]
-
-    mov rax, QWORD PTR [rbp - 16]
-    movzx eax, BYTE PTR [rax]
-
-    cmp dl, al
-    jle .check_s1_less_s2
+    mov al, BYTE [rdi]
+    test al, al
+    jz .return_0 ; s1 is empty, so equal if s2 is also empty
 
     mov eax, 1 ; Return 1 if s1 > s2
     jmp .return
 
-.check_s1_less_s2:
-    ; Check if s1 < s2
-    mov rax, QWORD PTR [rbp - 8]
-    movzx edx, BYTE PTR [rax]
-
-    mov rax, QWORD PTR [rbp - 16]
-    movzx eax, BYTE PTR [rax]
-
-    cmp dl, al
-    jge .return_0
-
-    mov eax, -1 ; Return -1 if s1 < s2
-    jmp .return
-
-.return_0:
-    mov eax, 0 ; Return 0 if s1 == s2
+.return_compare_result:
+    ; Compare result in al (-1 if s1 < s2, 1 if s1 > s2)
+    cmp al, dl
+    setg al ; al = 1 if s1 > s2
+    setl al ; al = -1 if s1 < s2
 
 .return:
+    ; Function epilogue
     pop rbp
     ret
