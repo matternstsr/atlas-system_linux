@@ -3,11 +3,11 @@ section .text
 asm_strcmp:
     push rbp
     mov rbp, rsp
-    mov rdi, rdi
+    mov rdi, rdi ; Just to align with original function structure
 
     ; Load pointers to strings
-    mov rsi, rsi
-    mov rdx, rdx
+    mov rsi, rsi ; rsi will be s1
+    mov rdx, rdx ; rdx will be s2
 
     ; Loop through strings
 .loop:
@@ -50,6 +50,11 @@ asm_strcmp:
 
 .return_0:
     mov eax, 0
+    jmp .return
+
+.return_1:
+    mov eax, -1
+
 .return:
     pop rbp
     ret
