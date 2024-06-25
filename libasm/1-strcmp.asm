@@ -4,7 +4,7 @@ section .text
 asm_strcmp:
     push rbp
     mov rbp, rsp
-    
+
     ; Function prologue
     mov rdi, QWORD [rbp + 16]   ; First argument (s1)
     mov rsi, QWORD [rbp + 24]   ; Second argument (s2)
