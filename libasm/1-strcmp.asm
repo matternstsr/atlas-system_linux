@@ -6,31 +6,6 @@ asm_strcmp:
     mov rdi, rdi    ; rdi: s1
     mov rsi, rsi    ; rsi: s2
     
-    ; Handle empty strings case
-    test rdi, rdi
-    jz .check_s2_empty
-    test rsi, rsi
-    jz .s1_not_empty
-
-.check_s2_empty:
-    ; s2 is empty, check if s1 is also empty
-    test rdi, rdi
-    jz .strings_equal   ; Both strings are empty, return 0
-
-    ; s1 not empty, s2 is empty
-    mov eax, 1          ; return 1 (s1 is greater)
-    jmp .return
-
-.s1_not_empty:
-    ; s1 is not empty, s2 is empty
-    mov eax, -1         ; return -1 (s1 is less)
-    jmp .return
-
-.strings_equal:
-    ; Both strings are empty
-    xor eax, eax        ; return 0
-    jmp .return
-
 .loop_compare:
     ; Load characters from s1 and s2
     mov al, byte [rdi]
