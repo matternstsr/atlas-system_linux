@@ -18,23 +18,20 @@ asm_strcmp:
     mov dl, BYTE [rsi]           ; Load byte from s2 into dl
     test dl, dl                  ; Test if *s2 is null terminator
     jz .return_result            ; If s1 not empty & s2 is, ret 1 (s1 > s2)
-
 .loop_compare:
     ; Compare characters
+    cmp al, 0                    ; Check if *s1 (al) is null terminator
+    je .return_result            ; If *s1 is null, jump to return result
+    cmp dl, 0                    ; Check if *s2 (dl) is null terminator
+    je .return_result            ; If *s2 is null, jump to return result
     cmp al, dl                   ; Compare characters
     jne .decide_result           ; If chars are not equal, jump to decide result
 
     ; Increment pointers and continue loop
     inc rdi                      ; Increment s1
     mov al, BYTE [rdi]           ; Load byte from updated s1 into al
-    test al, al                  ; Test if *s1 is null terminator
-    jz .check_s2_empty           ; if s1 reaches end & s2 is empty Jump to check
-
     inc rsi                      ; Increment s2
     mov dl, BYTE [rsi]           ; Load byte from updated s2 into dl
-    test dl, dl                  ; Test if *s2 is null terminator
-    jz .return_result            ; If s1 not empty and s2 is, ret -1 (s1 < s2)
-
     jmp .loop_compare
 
 .check_s2_empty:
