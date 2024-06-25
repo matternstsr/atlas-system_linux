@@ -2,48 +2,49 @@ global asm_strcmp
 section .text
 
 asm_strcmp:
-    push rbp
-    mov rbp, rsp
-    mov rdi, QWORD [rbp + 16]  ; s1
-    mov rsi, QWORD [rbp + 24]  ; s2
-
-    ; Check if both strings are empty
-    test rdi, rdi
-    jz .check_s2_empty
-    test rsi, rsi
-    jz .s1_not_empty_s2_empty
-
-    ; Compare strings character by character
-.compare_loop:
-    mov al, BYTE [rdi]
-    cmp al, BYTE [rsi]
-    jne .strings_not_equal
-    test al, al
-    jz .strings_equal
-
-    inc rdi
-    inc rsi
-    jmp .compare_loop
-
-.strings_equal:
-    mov eax, 0
-    jmp .return
-
-.strings_not_equal:
-    movzx eax, BYTE [rdi]
-    movzx edx, BYTE [rsi]
-    sub eax, edx
-    jmp .return
-
-.check_s2_empty:
-    test rsi, rsi
-    jz .strings_equal
-    mov eax, -1
-    jmp .return
-
-.s1_not_empty_s2_empty:
-    mov eax, 1
-
+	push rbp
+	mov rbp, rsp
+	mov QWORD [rbp - 8], rdi
+	mov QWORD [rbp - 16], rsi
+	jmp .test_s1_v_s2
+.strings_to_cmp:
+	add QWORD [rbp - 8], 1
+	add QWORD [rbp - 16], 1
+.test_s1_v_s2:
+	mov rax, QWORD [rbp - 8]
+	movzx eax, BYTE [rax]
+	test al, al
+	je .test_s1_more_s2
+	mov rax, QWORD [rbp - 16]
+	movzx eax, BYTE [rax]
+	test al, al
+	je .test_s1_more_s2
+	mov rax, QWORD [rbp - 8]
+	movzx edx, BYTE [rax]
+	mov rax, QWORD [rbp - 16]
+	movzx eax, BYTE [rax]
+	cmp dl, al
+	je .strings_to_cmp
+.test_s1_more_s2:
+	mov rax, QWORD [rbp - 8]
+	movzx edx, BYTE [rax]
+	mov rax, QWORD [rbp - 16]
+	movzx eax, BYTE [rax]
+	cmp dl, al
+	jle .test_s1_less_s2
+	mov eax, 1
+	jmp .return
+.test_s1_less_s2:
+	mov rax, QWORD [rbp - 8]
+	movzx edx, BYTE [rax]
+	mov rax, QWORD [rbp - 16]
+	movzx eax, BYTE [rax]
+	cmp dl, al
+	jge .return_0
+	mov eax, -1
+	jmp .return
+.return_0:
+	mov eax, 0
 .return:
-    pop rbp
-    ret
+	pop rbp
+	ret
