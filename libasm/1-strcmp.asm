@@ -9,26 +9,50 @@ asm_strcmp:
     ; rdi = first string (S1)
     ; rsi = second string (S2)
 
-    xor eax, eax  ; Initialize eax (return value) to 0
+    xor eax, eax   ; Initialize eax (return value) to 0
 
-    .compare_loop:
-        mov al, byte [rdi]  ; Load byte from S1 into al
-        mov dl, byte [rsi]  ; Load byte from S2 into dl
+    ; Load byte from S1 and S2
+    mov al, byte [rdi]
+    mov dl, byte [rsi]
 
-        cmp al, dl          ; Compare bytes
-        jne .different_chars ; Jump if different
+    ; Check if both characters are null
+    test al, al
+    jz .end_of_s1
+    test dl, dl
+    jz .end_of_s2
 
-        test al, al         ; Check for end of S1 ('\0')
-        jz .strings_equal   ; If end of S1, strings are equal
+    ; Compare bytes
+    cmp al, dl
+    jne .not_equal
 
-        inc rdi             ; Move to next character in S1
-        inc rsi             ; Move to next character in S2
-        jmp .compare_loop   ; Repeat loop
+    ; Characters are equal, move to next
+    inc rdi
+    inc rsi
+    mov eax, 1    ; Return 1 (characters are equal)
+    jmp .exit
 
-    .different_chars:
-        sub al, dl          ; Calculate difference
-        movsx eax, al       ; Sign-extend difference to 32-bit
+.not_equal:
+    ; Characters are not equal
+    sub al, dl
+    movsx eax, al  ; Sign-extend difference to 32-bit
+    jmp .exit
 
-    .strings_equal:
-        pop rbp             ; Restore rbp
-        ret                 ; Return with result in eax
+.end_of_s1:
+    ; End of S1 reached
+    test dl, dl
+    jz .equal_and_end  ; Both are null, strings are equal
+    mov eax, -1       ; S1 is null, S2 is not null
+    jmp .exit
+
+.end_of_s2:
+    ; End of S2 reached
+    mov eax, 1        ; S1 is not null, S2 is null
+    jmp .exit
+
+.equal_and_end:
+    ; Both strings are null
+    xor eax, eax      ; Return 0 (strings are equal)
+
+.exit:
+    pop rbp
+    ret
