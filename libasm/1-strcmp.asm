@@ -31,7 +31,6 @@ asm_strcmp:
     inc rsi
     jmp .asm_strcmp_loop
 
-
 .end_of_s1:
     ; End of S1 reached
     test dl, dl
