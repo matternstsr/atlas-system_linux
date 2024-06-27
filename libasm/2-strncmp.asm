@@ -63,6 +63,7 @@ asm_strncmp:
     je .same
     cmp rdx, 0
     je .same
+    xor eax, eax
     mov eax, -1
     jmp .exit
 
@@ -70,6 +71,7 @@ asm_strncmp:
     ; End of S2 reached
     cmp rdx, 0
     je .same
+    xor eax, eax
     mov eax, 1      ; S1 is not null, S2 is null
     jmp .exit
 
