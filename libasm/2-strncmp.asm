@@ -2,7 +2,7 @@
 
 global asm_strncmp
 section .text
-    
+
 asm_strncmp:
     push rbp
     mov rbp, rsp
@@ -35,16 +35,9 @@ asm_strncmp:
     inc rdi
     inc rsi
     dec rdx
-    cmp rdx, 1
-    je .maybe
+    cmp rdx, 0
+    je .same
 
-    jmp .asm_strncmp_loop
-
-.maybe:
-    cmp byte [rdi], 0
-    je .less_than
-    cmp byte [rsi], 0
-    je .greater_than
     jmp .asm_strncmp_loop
 
 .less_than:
@@ -68,11 +61,15 @@ asm_strncmp:
     ; End of S1 reached
     cmp dl, 0
     je .same
+    cmp rdx, 0
+    je .same
     mov eax, -1
     jmp .exit
 
 .end_of_s2:
     ; End of S2 reached
+    cmp rdx, 0
+    je .same
     mov eax, 1      ; S1 is not null, S2 is null
     jmp .exit
 
