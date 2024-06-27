@@ -34,8 +34,8 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    dec rdx
     cmp rdx, 0
+    dec rdx
     je .same
 
     jmp .asm_strncmp_loop
