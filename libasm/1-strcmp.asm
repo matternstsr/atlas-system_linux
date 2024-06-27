@@ -1,4 +1,4 @@
-global asm_strncmp
+global asm_strcmp
 section .text
 
 asm_strcmp:
