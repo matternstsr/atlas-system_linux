@@ -71,14 +71,15 @@ asm_strncmp:
 
 .end_of_s2:
     ; End of S2 reached
-    cmp rdx, 0
-    je .same
     cmp rdx, 1
     je .same
+    cmp rdx, 0
+    je .same
+    cmp al, 0
+    je .same
     xor eax, eax
-    mov eax, 1      ; S1 is not null, S2 is null
+    mov eax, -1
     jmp .exit
-
 .exit:
     pop rbp
     ret
