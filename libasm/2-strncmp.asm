@@ -21,9 +21,9 @@ asm_strncmp:
     mov dl, byte [rsi]
 
     ; Compare bytes or check termination conditions
-    cmp al, 0x00       ; Check if end of S1 ('\0')
+    cmp al, 0       ; Check if end of S1 ('\0')
     je .end_of_s1
-    cmp dl, 0x00       ; Check if end of S2 ('\0')
+    cmp dl, 0       ; Check if end of S2 ('\0')
     je .end_of_s2
 
     ; Compare bytes
@@ -37,7 +37,7 @@ asm_strncmp:
     dec rdx
     cmp rdx, 0
     je .equal
-    
+
     jmp .asm_strncmp_loop
 
 .less_than:
@@ -53,9 +53,9 @@ asm_strncmp:
     jmp .exit
 
 .notequal:
-    cmp al, 0x00       ; Check if end of S1 ('\0')
+    cmp al, 0       ; Check if end of S1 ('\0')
     je .greater_than
-    cmp dl, 0x00       ; Check if end of S2 ('\0')
+    cmp dl, 0       ; Check if end of S2 ('\0')
     je .less_than
 
 .equal:
