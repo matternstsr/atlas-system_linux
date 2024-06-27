@@ -8,9 +8,9 @@ asm_strcmp:
     ; Arguments:
     ; rdi = first string (S1)
     ; rsi = second string (S2)
-
     xor eax, eax   ; Initialize eax (return value) to 0
 
+.asm_strcmp_loop
     ; Load byte from S1 and S2
     mov al, byte [rdi]
     mov dl, byte [rsi]
@@ -26,12 +26,11 @@ asm_strcmp:
     jl .end_of_s1
     jg .end_of_s2
 
-
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    mov eax, 1    ; Return 1 (characters are equal)
-    jmp .exit
+    jmp .asm_strcmp_loop
+
 
 .end_of_s1:
     ; End of S1 reached
