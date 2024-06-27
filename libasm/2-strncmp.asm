@@ -66,14 +66,14 @@ asm_strncmp:
 .end_of_s1:
     ; End of S1 reached
     cmp rdx, 0
-    je .equal
+    jz .equal
     mov eax, -1
     jmp .exit
 
 .end_of_s2:
     ; End of S2 reached
     cmp rdx, 0       ; Check if also end of S2
-    je .equal       ; Both are null, strings are equal
+    jz .equal       ; Both are null, strings are equal
     mov eax, 1      ; S1 is not null, S2 is null
     jmp .exit
 
