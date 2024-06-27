@@ -25,9 +25,6 @@ asm_strncmp:
     je .end_of_s1
     cmp dl, 0x00       ; Check if end of S2 ('\0')
     je .end_of_s2
-    dec rdx
-    cmp rdx, 0    ; Check if reached n characters
-    je .equal
 
     ; Compare bytes
     cmp al, dl
@@ -37,7 +34,10 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    inc eax         ; Increment count of compared characters
+    dec rdx
+    cmp rdx, 0    ; Check if reached n
+    je .equal
+
     jmp .asm_strncmp_loop
 
 .less_than:
