@@ -35,18 +35,18 @@ asm_strncmp:
     inc rdi
     inc rsi
     dec rdx
-    cmp rdx, 1
+    cmp rdx, 0
     je .maybe
 
 
     jmp .asm_strncmp_loop
 
 .maybe:
-    cmp al, dl
-    je .asm_strncmp_loop
     cmp al, 0
+    je .less_than
+    cmp dl, 0
     je .greater_than
-    jmp .less_than
+    jmp .same
 
 .less_than:
     ; S1 < S2
