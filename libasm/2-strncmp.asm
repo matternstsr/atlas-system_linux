@@ -52,16 +52,8 @@ asm_strncmp:
     mov eax, 1
     jmp .exit
 
-.notequal:
-    cmp al, 0       ; Check if end of S1 ('\0')
-    je .greater_than
-    cmp dl, 0       ; Check if end of S2 ('\0')
-    je .less_than
-
 .same:
     ; Strings are equal up to n characters
-    cmp rdx, 0
-    jne .notequal
     xor eax, eax
     jmp .exit
 
