@@ -18,12 +18,12 @@ asm_strncmp:
     mov al, byte [rdi]
     mov dl, byte [rsi]
 
-    ; Check if both characters are null or if reached n characters
-    test al, al
-    jz .end_of_s1
-    test dl, dl
-    jz .end_of_s2
-    cmp eax, edx    ; Compare current count with n
+    ; Compare bytes or check termination conditions
+    cmp al, 0       ; Check if end of S1 ('\0')
+    je .end_of_s1
+    cmp dl, 0       ; Check if end of S2 ('\0') prematurely
+    je .end_of_s2
+    cmp eax, edx    ; Check if reached n characters
     je .equal
 
     ; Compare bytes
