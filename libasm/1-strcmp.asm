@@ -1,7 +1,7 @@
 global asm_strncmp
 section .text
 
-asm_strncmp:
+asm_strcmp:
     push rbp
     mov rbp, rsp
 
