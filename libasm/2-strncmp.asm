@@ -61,6 +61,8 @@ asm_strncmp:
     ; End of S1 reached
     cmp dl, 0
     je .same
+    cmp rdx, 1
+    je .same
     cmp rdx, 0
     je .same
     xor eax, eax
