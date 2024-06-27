@@ -21,9 +21,9 @@ asm_strncmp:
     mov dl, byte [rsi]
 
     ; Compare bytes or check termination conditions
-    cmp al, 0       ; Check if end of S1 ('\0')
+    cmp al, 0x00       ; Check if end of S1 ('\0')
     je .end_of_s1
-    cmp dl, 0       ; Check if end of S2 ('\0')
+    cmp dl, 0x00       ; Check if end of S2 ('\0')
     je .end_of_s2
     cmp eax, edx    ; Check if reached n characters
     je .equal
