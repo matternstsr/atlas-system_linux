@@ -26,9 +26,9 @@ asm_strcmp:
         jmp .compare_loop   ; Repeat loop
 
     .different_chars:
-        pop rbp             ; Restore rbp
-        ret                 ; Return with result in eax
-
-    .strings_equal:
         sub al, dl          ; Calculate difference
         movsx eax, al       ; Sign-extend difference to 32-bit
+
+    .strings_equal:
+        pop rbp             ; Restore rbp
+        ret                 ; Return with result in eax
