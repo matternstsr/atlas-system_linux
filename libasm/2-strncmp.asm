@@ -31,7 +31,7 @@ asm_strncmp:
     jl .less_than   ; al < dl
     jg .greater_than ; al > dl
     dec rdx
-    cmp rdx, 0    ; Check if reached n
+    cmp rdx, 1    ; Check if reached n
     jz .equal
 
     ; Characters are equal, move to next
