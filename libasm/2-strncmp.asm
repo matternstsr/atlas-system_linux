@@ -41,11 +41,13 @@ asm_strncmp:
 
 .less_than:
     ; S1 < S2
+    xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
+    xor eax, eax
     mov eax, 1
     jmp .exit
 
