@@ -36,7 +36,7 @@ asm_strncmp:
     inc rsi
     dec rdx
     cmp rdx, 0    ; Check if reached n
-    je .equal
+    jz .equal
 
     jmp .asm_strncmp_loop
 
