@@ -36,7 +36,7 @@ asm_strncmp:
     inc rsi
     dec rdx
     cmp rdx, 0
-    je .equal
+    je .same
 
     jmp .asm_strncmp_loop
 
@@ -58,7 +58,7 @@ asm_strncmp:
     cmp dl, 0       ; Check if end of S2 ('\0')
     je .less_than
 
-.equal:
+.same:
     ; Strings are equal up to n characters
     cmp rdx, 0
     jne .notequal
@@ -68,14 +68,14 @@ asm_strncmp:
 .end_of_s1:
     ; End of S1 reached
     cmp rdx, 0
-    jz .equal
+    je .same
     mov eax, -1
     jmp .exit
 
 .end_of_s2:
     ; End of S2 reached
     cmp rdx, 0       ; Check if also end of S2
-    jz .equal       ; Both are null, strings are equal
+    je .same       ; Both are null, strings are equal
     mov eax, 1      ; S1 is not null, S2 is null
     jmp .exit
 
