@@ -35,7 +35,9 @@ asm_strncmp:
     inc rdi
     inc rsi
     dec rdx
-
+    cmp rdx, 0
+    je .equal
+    
     jmp .asm_strncmp_loop
 
 .less_than:
