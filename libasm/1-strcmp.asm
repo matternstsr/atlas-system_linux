@@ -9,39 +9,26 @@ asm_strcmp:
     ; rdi = first string (S1)
     ; rsi = second string (S2)
 
+    xor eax, eax  ; Initialize eax (return value) to 0
+
     .compare_loop:
-        ; Load bytes from each string
-        mov al, byte [rdi]
-        mov dl, byte [rsi]
+        mov al, byte [rdi]  ; Load byte from S1 into al
+        mov dl, byte [rsi]  ; Load byte from S2 into dl
 
-        ; Compare bytes
-        cmp al, dl
-        jne .different_chars
+        cmp al, dl          ; Compare bytes
+        jne .different_chars ; Jump if different
 
-        ; Check if end of string (null terminator)
-        test al, al
-        jz .strings_equal
+        test al, al         ; Check for end of S1 ('\0')
+        jz .strings_equal   ; If end of S1, strings are equal
 
-        ; Move to next characters
-        inc rdi
-        inc rsi
-
-        ; Repeat loop
-        jmp .compare_loop
+        inc rdi             ; Move to next character in S1
+        inc rsi             ; Move to next character in S2
+        jmp .compare_loop   ; Repeat loop
 
     .different_chars:
-        ; Calculate difference
-        sub al, dl
-        movzx eax, al  ; Zero-extend result to 32-bit
-
-        ; Exit function
-        pop rbp
-        ret
+        sub al, dl          ; Calculate difference
+        movsx eax, al       ; Sign-extend difference to 32-bit
 
     .strings_equal:
-        ; Strings are equal
-        xor eax, eax   ; Return 0
-
-        ; Exit function
-        pop rbp
-        ret
+        pop rbp             ; Restore rbp
+        ret                 ; Return with result in eax
