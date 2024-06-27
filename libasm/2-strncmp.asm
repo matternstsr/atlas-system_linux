@@ -8,44 +8,61 @@ asm_strncmp:
     ; Arguments:
     ; rdi = first string (S1)
     ; rsi = second string (S2)
+    ; rdx = size_t n (number of characters to compare)
+
     xor eax, eax   ; Initialize eax (return value) to 0
 
+    ; Loop through the strings
 .asm_strncmp_loop:
     ; Load byte from S1 and S2
     mov al, byte [rdi]
     mov dl, byte [rsi]
 
-    ; Check if both characters are null
-    test al, al
-    jz .end_of_s1
-    test dl, dl
-    jz .end_of_s2
+    ; Compare bytes or check termination conditions
+    cmp al, 0       ; Check if end of S1 ('\0')
+    je .end_of_s1
+    cmp dl, 0       ; Check if end of S2 ('\0') prematurely
+    je .end_of_s2
+    cmp eax, edx    ; Check if reached n characters
+    je .equal
 
     ; Compare bytes
     cmp al, dl
-    jl .end_of_s1
-    jg .end_of_s2
+    jl .less_than   ; al < dl
+    jg .greater_than ; al > dl
 
     ; Characters are equal, move to next
     inc rdi
     inc rsi
+    inc eax         ; Increment count of compared characters
     jmp .asm_strncmp_loop
+
+.less_than:
+    ; S1 < S2
+    mov eax, -1
+    jmp .exit
+
+.greater_than:
+    ; S1 > S2
+    mov eax, 1
+    jmp .exit
+
+.equal:
+    ; Strings are equal up to n characters
+    xor eax, eax
+    jmp .exit
 
 .end_of_s1:
     ; End of S1 reached
-    test dl, dl
-    jz .equal_and_end  ; Both are null, strings are equal
-    mov eax, -1       ; S1 is null, S2 is not null
+    cmp dl, 0       ; Check if also end of S2
+    je .equal       ; Both are null, strings are equal
+    mov eax, -1     ; S1 is null, S2 is not null
     jmp .exit
 
 .end_of_s2:
     ; End of S2 reached
-    mov eax, 1        ; S1 is not null, S2 is null
+    mov eax, 1      ; S1 is not null, S2 is null
     jmp .exit
-
-.equal_and_end:
-    ; Both strings are null
-    xor eax, eax      ; Return 0 (strings are equal)
 
 .exit:
     pop rbp
