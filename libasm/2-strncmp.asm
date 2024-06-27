@@ -1,4 +1,4 @@
-BITS 64global asm_strncmp
+global asm_strncmp
 section .text
 
 asm_strncmp:
