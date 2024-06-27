@@ -44,8 +44,8 @@ asm_strncmp:
     jmp .asm_strncmp_loop
 
 .maybe:
-    cmp al, 0
-    je .end_of_s1
+    cmp al, dl
+    je .same
     jmp .asm_strncmp_loop
 
 .less_than:
