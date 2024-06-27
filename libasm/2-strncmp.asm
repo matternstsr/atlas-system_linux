@@ -67,6 +67,8 @@ asm_strncmp:
 
 .end_of_s1:
     ; End of S1 reached
+    cmp dl, 0
+    je .same
     mov eax, -1
     jmp .exit
 
