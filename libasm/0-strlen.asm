@@ -3,7 +3,7 @@ global asm_strlen
 section .text
 
 asm_strlen:
-    xor rax, rax         ; Clear rax (set rax to zero, which will hold the length)
+    xor rax, rax          ; Clear rax (set rax to zero, which will hold the length)
 .loop_start:
     movzx rcx, BYTE [rdi] ; Load the byte at the address stored in rdi into rcx
     test rcx, rcx         ; Test if rcx (current byte) is zero
