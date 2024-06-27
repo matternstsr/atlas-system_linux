@@ -59,10 +59,14 @@ asm_strncmp:
 
 .end_of_s1:
     ; End of S1 reached
+    cmp rdx, 1
+    je .same
     cmp rdx, 0
     je .same
+    cmp dl, 0
+    je .same
     xor eax, eax
-    mov eax, 1      ; S1 is not null, S2 is null
+    mov eax, -1
     jmp .exit
 
 .end_of_s2:
