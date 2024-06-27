@@ -45,8 +45,8 @@ asm_strncmp:
     cmp al, dl
     je .asm_strncmp_loop
     cmp al, 0
-    je .less_than
-    jmp .greater_than
+    je .greater_than
+    jmp .less_than
 
 .less_than:
     ; S1 < S2
