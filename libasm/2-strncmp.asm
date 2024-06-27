@@ -36,10 +36,15 @@ asm_strncmp:
     inc rsi
     dec rdx
     cmp rdx, 0
-    je .same
+    je .maybe
 
     jmp .asm_strncmp_loop
 
+.maybe:
+    cmp al, 0
+    je .end_of_s1
+    jmp .same
+    
 .less_than:
     ; S1 < S2
     xor eax, eax
