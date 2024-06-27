@@ -19,6 +19,7 @@ asm_strncmp:
     ; Load byte from S1 and S2
     mov al, byte [rdi]
     mov dl, byte [rsi]
+    dec rdx
 
     ; Compare bytes or check termination conditions
     cmp al, 0       ; Check if end of S1 ('\0')
@@ -34,18 +35,10 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    dec rdx
     cmp rdx, 0
     je .same
 
-    cmp rdx, 1
-    je .maybe
 
-    jmp .asm_strncmp_loop
-
-.maybe:
-    cmp al, dl
-    je .same
     jmp .asm_strncmp_loop
 
 .less_than:
