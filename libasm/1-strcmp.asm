@@ -23,18 +23,14 @@ asm_strcmp:
 
     ; Compare bytes
     cmp al, dl
-    jne .not_equal
+    jl .end_of_s1
+    jg .end_of_s2
+
 
     ; Characters are equal, move to next
     inc rdi
     inc rsi
     mov eax, 1    ; Return 1 (characters are equal)
-    jmp .exit
-
-.not_equal:
-    ; Characters are not equal
-    sub al, dl
-    movsx eax, al  ; Sign-extend difference to 32-bit
     jmp .exit
 
 .end_of_s1:
