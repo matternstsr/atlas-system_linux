@@ -27,8 +27,6 @@ asm_strncmp:
     je .end_of_s2
 
     ; Compare bytes
-    cmp rdx, 0    ; Check if reached n
-    jz .equal
     cmp al, dl
     jl .less_than   ; al < dl
     jg .greater_than ; al > dl
