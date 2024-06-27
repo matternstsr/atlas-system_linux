@@ -35,8 +35,8 @@ asm_strncmp:
     inc rdi
     inc rsi
     cmp rdx, 0
-    dec rdx
     je .same
+    dec rdx
 
     jmp .asm_strncmp_loop
 
