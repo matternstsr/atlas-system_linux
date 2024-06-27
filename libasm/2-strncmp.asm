@@ -32,21 +32,22 @@ asm_strncmp:
     jg .greater_than ; al > dl
 
     ; Characters are equal, move to next
+    inc rdi
+    inc rsi
     dec rdx
     cmp rdx, 1
     je .maybe
-    inc rdi
-    inc rsi
+
 
     jmp .asm_strncmp_loop
 
 .maybe:
     cmp al, dl
-    je .same
-    inc rdi
-    inc rsi
-    jmp .asm_strncmp_loop
-    
+    je .asm_strncmp_loop
+    cmp al, 0
+    je .less_than
+    jmp .greater_than
+
 .less_than:
     ; S1 < S2
     xor eax, eax
