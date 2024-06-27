@@ -6,30 +6,30 @@ asm_strcmp:
     mov rbp, rsp
 
 .compare_strings:
-    ; Load and compare bytes from s1 and s2
-    mov al, [rdi]
-    mov dl, [rsi]
+    ; Load bytes from s1 and s2
+    mov al, [rdi]   ; Load byte from address pointed by rdi (s1)
+    mov dl, [rsi]   ; Load byte from address pointed by rsi (s2)
     
-    ; If characters differ, return difference
+    ; Compare bytes
     cmp al, dl
-    jne .return_diff
+    jne .return_diff  ; If bytes are not equal, return the difference
     
-    ; If both characters are null, strings are equal
+    ; Check for end of string (null terminator)
     test al, al
-    je .return_0
+    je .return_0  ; If al is 0, both strings are equal
     
-    ; Increment pointers and continue comparison
+    ; Move to the next characters
     inc rdi
     inc rsi
-    jmp .compare_strings
+    jmp .compare_strings  ; Continue comparison
 
 .return_diff:
-    sub eax, edx    ; Return difference between characters
+    sub eax, edx   ; Calculate the difference between characters
     jmp .return
 
 .return_0:
-    xor eax, eax    ; Return 0 (strings are equal)
-    
+    xor eax, eax   ; Return 0 (strings are equal)
+
 .return:
     pop rbp
     ret
