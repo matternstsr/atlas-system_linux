@@ -10,7 +10,7 @@ asm_strcmp:
     ; rsi = second string (S2)
     xor eax, eax   ; Initialize eax (return value) to 0
 
-.asm_strcmp_loop
+.asm_strcmp_loop:
     ; Load byte from S1 and S2
     mov al, byte [rdi]
     mov dl, byte [rsi]
