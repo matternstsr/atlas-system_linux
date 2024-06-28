@@ -35,6 +35,7 @@ asm_strncmp:
     inc rdi
     inc rsi
     dec rdx        ; Decrement counter for remaining characters
+    cmp rdx, 0
     jnz .asm_strncmp_loop  ; Continue loop if counter is not zero
 
     ; If we exit the loop, it means the strings are equal up to n characters
