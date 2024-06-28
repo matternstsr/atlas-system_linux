@@ -50,7 +50,7 @@ asm_strncmp:
     ; End of S2 reached
     cmp al, 0       ; Check if end of S1 ('\0')
     je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, 1      ; S2 is shorter (S1 > S2)
+    mov eax, 0      ; S2 is shorter (S1 > S2)
     jmp .exit
 
 .less_than:
