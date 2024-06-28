@@ -19,5 +19,5 @@ asm_putc:
     syscall              ; invoke syscall to write to stdout
 
     ; Return 1 byte written (always 1 for a single character)
-    mov rax, 1
+    ;mov rax, 1
     ret
