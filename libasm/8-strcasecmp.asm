@@ -48,7 +48,7 @@ asm_strcasecmp:
 .calc:
     ; Characters are different
 	xor rax, rax
-	sub r8, r9           ; 64 byte 
+	sub r8, r9           ; 64 byte
 	mov rax, r8          ; 64 byte
     jmp .END             ; Exit loop
 
