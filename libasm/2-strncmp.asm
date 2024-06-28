@@ -1,3 +1,5 @@
+BITS 64
+
 global asm_strncmp
 section .text
 
@@ -65,6 +67,7 @@ asm_strncmp:
 .same:
     ; Strings are equal up to n characters
     xor eax, eax
+
 
 .exit:
     pop rbp
