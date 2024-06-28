@@ -29,18 +29,18 @@ asm_strcasecmp:
 
     ; Convert characters to lowercase (assuming ASCII)
     cmp bl, 65  ; 'A'
-    jl .tolower_s1  ; If less than 'A', skip lowercase conversion
+    jl .check_next_s1  ; If less than 'A', skip lowercase conversion
     cmp bl, 90  ; 'Z'
-    jg .check_next_s1  ; If greater than 'Z', skip lowercase conversion
+    jg .tolower_s1_done  ; If greater than 'Z', skip lowercase conversion
     add bx, 32  ; Convert to lowercase
-.check_next_s1:
+.tolower_s1_done:
 
     cmp cl, 65  ; 'A'
-    jl .tolower_s2  ; If less than 'A', skip lowercase conversion
+    jl .check_next_s2  ; If less than 'A', skip lowercase conversion
     cmp cl, 90  ; 'Z'
-    jg .check_next_s2  ; If greater than 'Z', skip lowercase conversion
+    jg .tolower_s2_done  ; If greater than 'Z', skip lowercase conversion
     add cx, 32  ; Convert to lowercase
-.check_next_s2:
+.tolower_s2_done:
 
     ; Compare characters
     cmp bl, cl
