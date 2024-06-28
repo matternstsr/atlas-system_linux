@@ -18,21 +18,21 @@ asm_strcasecmp:
     xor rcx, rcx        ; Clear rcx (index)
 
 .BOOP:
-    movzx r8, BYTE [rdi+rcx]   ; Load byte from S1[rcx] into r8
-    movzx r9, BYTE [rsi+rcx]   ; Load byte from S2[rcx] into r9
+    movzx r8, BYTE [rdi]   ; Load byte from S1[rcx] into r8
+    movzx r9, BYTE [rsi]   ; Load byte from S2[rcx] into r9
 
     ; Convert r8 to lowercase if it's an uppercase letter
-    cmp r8b, 'A'
+    cmp r8b, '65'
     jl .CHECK_LOWER1
-    cmp r8b, 'Z'
+    cmp r8b, '90'
     jg .CHECK_LOWER1
     add r8b, 32
 
 .CHECK_LOWER1:
     ; Convert r9 to lowercase if it's an uppercase letter
-    cmp r9b, 'A'
+    cmp r9b, '65'
     jl .COMPARE
-    cmp r9b, 'Z'
+    cmp r9b, '90'
     jg .COMPARE
     add r9b, 32
 
@@ -56,7 +56,7 @@ asm_strcasecmp:
 
     ; Move to next character
     inc rcx
-    jmp .LOOP
+    jmp .BOOP
 
 .END:
     ret                  ; Return from function
