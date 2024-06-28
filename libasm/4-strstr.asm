@@ -33,11 +33,11 @@ asm_strstr:
     mov rdi, rdi ; rdi = haystack (string to search)
     mov rsi, rsi ; rsi = needle (substring to find)
 
-    ; If haystack or needle is NULL, return NULL
+    ; Check if both haystack and needle are empty strings
     test rdi, rdi
-    jz .return_null
+    jz .handle_both_empty
     test rsi, rsi
-    jz .return_found_empty_needle  ; Jump to handle empty needle case
+    jz .return_found_empty_needle
 
     ; Get lengths of haystack and needle
     mov rcx, rdi ; rcx = haystack (use rcx to iterate through haystack)
@@ -87,6 +87,11 @@ asm_strstr:
     mov rax, rdi
     jmp .exit
 
+.handle_both_empty:
+    ; Handle case where both haystack and needle are empty ("")
+    xor rax, rax  ; Return NULL (0)
+    jmp .exit
+
 .return_null:
     xor rax, rax  ; Return NULL (0)
     jmp .exit
@@ -98,6 +103,7 @@ asm_strstr:
     pop rbx
     pop rbp
     ret
+
 
 
 ;Correct output - case: asm_strstr("Holberton School", " Scc")
