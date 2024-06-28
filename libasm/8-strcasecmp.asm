@@ -3,51 +3,80 @@ BITS 64
 section .text
 global asm_strcasecmp
 
-;; Prototype: int asm_strcasecmp(const char *s1, const char *s2)
+; Function: asm_strcasecmp
+; Purpose: Compare two strings ignoring case
+; Arguments:
+;   rdi = s1 (string 1)
+;   rsi = s2 (string 2)
+; Returns:
+;   rax = 0 if strings are equal ignoring case
+;   rax > 0 if s1 > s2 ignoring case
+;   rax < 0 if s1 < s2 ignoring case
+;----------------------------------------
+
 asm_strcasecmp:
-    push rbp            ; Save base pointer
-    mov rbp, rsp        ; Set up base pointer
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push rdi
+    push rsi
 
-    mov rsi, rdi        ; Move s1 (first argument) to rsi
-    mov rdi, rdx        ; Move s2 (second argument) to rdi
-
+    ; Start comparing the strings
 .loop:
-    mov al, [rsi]       ; Load byte from s1 into al
-    mov dl, [rdi]       ; Load byte from s2 into dl
+    ; Load bytes from each string
+    lodsb       ; Load byte from rdi into al and increment rdi
+    xor ah, ah  ; Clear ah (for zero extension)
 
-    ; Convert characters to lowercase if they are uppercase
-    cmp al, 'A'
-    jl .check_dl
-    cmp al, 'Z'
-    jg .check_dl
-    add al, 32          ; Convert to lowercase (al = al + 32)
+    lodsb       ; Load byte from rsi into al and increment rsi
+    xor bh, bh  ; Clear bh (for zero extension)
 
-.check_dl:
-    cmp dl, 'A'
-    jl .compare_chars
-    cmp dl, 'Z'
-    jg .compare_chars
-    add dl, 32          ; Convert to lowercase (dl = dl + 32)
+    ; Convert characters to lowercase (assuming ASCII)
+    cmp al, 65  ; 'A'
+    jl .tolower_s1
+    cmp al, 90  ; 'Z'
+    jg .check_next_s1
+    add al, 32  ; Convert to lowercase
+.check_next_s1:
 
-.compare_chars:
-    cmp al, dl          ; Compare characters
-    jne .end_loop       ; Jump to end if characters are not equal
-    cmp al, 0           ; Check if end of string (null terminator)
-    je .strings_equal   ; If both strings are null-terminated, they are equal
+    cmp bl, 65  ; 'A'
+    jl .tolower_s2
+    cmp bl, 90  ; 'Z'
+    jg .check_next_s2
+    add bl, 32  ; Convert to lowercase
+.check_next_s2:
 
-    inc rsi             ; Move to next character in s1
-    inc rdi             ; Move to next character in s2
-    jmp .loop           ; Repeat loop
+    ; Compare characters
+    cmp al, bl
+    jne .done   ; If not equal, finish
 
-.strings_equal:
-    xor eax, eax        ; Return 0 (strings are equal)
-    jmp .cleanup
+    ; Check if end of strings
+    test al, al
+    jz .done    ; If end of both strings, they are equal
 
-.end_loop:
-    movsx eax, al       ; Move al to eax with sign extension
-    sub eax, edx        ; Subtract dl from eax
-    jmp .cleanup
+    jmp .loop   ; Otherwise, continue comparing
 
-.cleanup:
-    pop rbp             ; Restore base pointer
-    ret                 ; Return value in eax
+; Determine if one string is greater
+.done:
+    mov rax, 0
+    pop rsi
+    pop rdi
+    pop rbx
+    pop rbp
+    ret
+
+; Convert character to lowercase
+.tolower_s1:
+    cmp al, 65  ; 'A'
+    jl .check_next_s1
+    cmp al, 90  ; 'Z'
+    jg .check_next_s1
+    add al, 32  ; Convert to lowercase
+    jmp .check_next_s1
+
+.tolower_s2:
+    cmp bl, 65  ; 'A'
+    jl .check_next_s2
+    cmp bl, 90  ; 'Z'
+    jg .check_next_s2
+    add bl, 32  ; Convert to lowercase
+    jmp .check_next_s2

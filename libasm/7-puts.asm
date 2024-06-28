@@ -1,7 +1,6 @@
 BITS 64
 
 global asm_puts
-extern asm_strlen
 
 section .text
     ;; Prototype: size_t asm_puts(const char *str)
@@ -28,3 +27,5 @@ asm_puts:
     pop rsi             ; Restore rsi
     pop rbp             ; Restore previous base pointer
     ret                 ; Return number of bytes written in rax
+
+extern asm_strlen
