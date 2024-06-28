@@ -1,4 +1,4 @@
-/* Description: `asm_strncmp("", "Holberton", strlen("Holberton"))` */
+/* Description: `asm_putc('H');` */
 
 #include <stdlib.h>
 #include <assert.h>
@@ -7,9 +7,7 @@
 
 #include "libasm.h"
 
-#define S1	""
-#define S2	"Holberton"
-#define N	strlen(S2)
+#define C	'H'
 
 /**
  * main - Program entry point
@@ -18,8 +16,7 @@
  */
 int main(void)
 {
-	assert(strncmp(S1, S2, N) == asm_strncmp(S1, S2, N));
+	assert(asm_putc(C) == 1);
 
-	printf("All good!\n");
 	return (EXIT_SUCCESS);
 }
