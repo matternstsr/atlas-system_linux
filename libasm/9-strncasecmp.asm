@@ -14,7 +14,7 @@ asm_strncasecmp:
 
 .BOOP:
     cmp rdx, 0              ; Check if n is 0
-    je .calc
+    je .calc_result
 
     movzx r8d, BYTE [rdi]   ; Load byte from s1 into r8
     movzx r9d, BYTE [rsi]   ; Load byte from s2 into r9
@@ -22,23 +22,23 @@ asm_strncasecmp:
     cmp r8b, 0              ; Check end of s1
     jnz .convert
     cmp r9b, 0              ; Check end of s2
-    jnz .CHECK_LOWER1
+    jnz .check_lower1
 
 
 .convert:
     ; Convert r8 to lowercase if it's an uppercase letter
     cmp r8b, 'A'
-    jl .CHECK_LOWER1
+    jl .check_lower1
     cmp r8b, 'Z'
-    jg .CHECK_LOWER1
+    jg .check_lower1
     add r8w, 32
 
 .check_lower1:
     ; Convert r9 to lowercase if it's an uppercase letter
     cmp r9b, 'A'
-    jl .COMPARE
+    jl .compare
     cmp r9b, 'Z'
-    jg .COMPARE
+    jg .compare
     add r9w, 32
 
 .compare:
@@ -59,6 +59,6 @@ asm_strncasecmp:
 	mov rax, r8          ; 64 byte
     jmp .END
 
-.end:
+.END:
     pop rbp
     ret                     ; Return from function
