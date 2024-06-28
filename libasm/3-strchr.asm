@@ -1,9 +1,7 @@
-BITS 64
-
 global asm_strchr
 section .text
 
-.asm_strchr:
+asm_strchr:
     ; Arguments:
     ; rdi = const char *s (pointer to the string)
     ; rsi = int c (character to search for)
@@ -20,11 +18,11 @@ section .text
 
     ; Compare al with cl (character to find)
     cmp al, cl
-    je .found  ; Jump if equal to .found
+    je found  ; Jump if equal to found
 
     ; Check for end of string ('\0')
     test al, al
-    jz .not_found  ; Jump if end of string ('\0')
+    jz not_found  ; Jump if end of string ('\0')
 
     ; Increment pointer to next character in string
     inc rdi
@@ -32,11 +30,11 @@ section .text
     ; Continue loop
     jmp .strchr_loop
 
-.found:
+found:
     ; Return pointer to the found character (rdi currently points to it)
     mov rax, rdi
     ret
 
-.not_found:
+not_found:
     ; Return NULL (rax is already 0)
     ret
