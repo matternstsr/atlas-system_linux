@@ -22,9 +22,10 @@ asm_strncasecmp:
     cmp r8b, 0              ; Check end of s1
     jnz .convert
     cmp r9b, 0              ; Check end of s2
-    jnz .CHECK_LOWER1             ; Check end of s2
+    jnz .CHECK_LOWER1
 
 
+.convert:
     ; Convert r8 to lowercase if it's an uppercase letter
     cmp r8b, 'A'
     jl .CHECK_LOWER1
