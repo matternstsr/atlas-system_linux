@@ -12,32 +12,33 @@ asm_strncasecmp:
     ; Arguments:
     ; rdi = s1, rsi = s2, rdx = n
 
-.loop:
+.BOOP:
     cmp rdx, 0              ; Check if n is 0
-    je .end
+    je .END
 
     movzx r8d, BYTE [rdi]   ; Load byte from s1 into r8
     movzx r9d, BYTE [rsi]   ; Load byte from s2 into r9
 
     cmp r8b, 0              ; Check end of s1
-    je .calc_result
+    jnz .convert
     cmp r9b, 0              ; Check end of s2
-    je .calc_result
+    jnz .CHECK_LOWER1             ; Check end of s2
+
 
     ; Convert r8 to lowercase if it's an uppercase letter
-    cmp r8b, 65
-    jl .check_lower1
-    cmp r8b, 90
-    jg .check_lower1
-    add r8b, 32
+    cmp r8b, 'A'
+    jl .CHECK_LOWER1
+    cmp r8b, 'Z'
+    jg .CHECK_LOWER1
+    add r8w, 32
 
 .check_lower1:
     ; Convert r9 to lowercase if it's an uppercase letter
-    cmp r9b, 65
-    jl .compare
-    cmp r9b, 90
-    jg .compare
-    add r9b, 32
+    cmp r9b, 'A'
+    jl .COMPARE
+    cmp r9b, 'Z'
+    jg .COMPARE
+    add r9w, 32
 
 .compare:
     ; Compare characters after conversion
@@ -48,14 +49,14 @@ asm_strncasecmp:
     inc rdi
     inc rsi
     dec rdx
-    jmp .loop
+    jmp .BOOP
 
 .calc_result:
     ; Calculate result based on current characters
     xor eax, eax
-    sub r8b, r9b
-    movsx rax, r8b
-    jmp .end
+	sub r8, r9           ; 64 byte
+	mov rax, r8          ; 64 byte
+    jmp .END
 
 .end:
     pop rbp
