@@ -9,6 +9,17 @@ global asm_strstr
 ;   rsi = needle (substring to find)
 ; Returns:
 ;   rax = pointer to the beginning of the found substring in haystack, or NULL if not found
+;----------------------------------------
+    ; Prologue: Save necessary registers and set up stack frame
+    ; Check if either rdi (haystack) or rsi (needle) is NULL, return NULL if so
+    ; Get lengths of rdi (haystack) and rsi (needle)
+    ; Calculate initial positions and lengths for comparison
+    ; Iterate through rdi to find rsi
+        ; Compare substring starting at current position in rdi with rsi
+        ; If found, calculate and return the pointer to the start of rsi in rdi
+    ; If not found, return NULL
+    ; Epilogue: Restore registers and return
+
 
 asm_strstr:
     push rbp
@@ -26,7 +37,7 @@ asm_strstr:
     test rdi, rdi
     jz .return_null
     test rsi, rsi
-    jz .return_null
+    jz .return_found_empty_needle  ; Jump to handle empty needle case
 
     ; Get lengths of haystack and needle
     mov rcx, rdi ; rcx = haystack (use rcx to iterate through haystack)
@@ -69,6 +80,11 @@ asm_strstr:
     ; Calculate pointer to start of needle in haystack
     mov rax, rdi
     sub rax, r9
+    jmp .exit
+
+.return_found_empty_needle:
+    ; Handle case where needle is empty ("")
+    mov rax, rdi
     jmp .exit
 
 .return_null:
