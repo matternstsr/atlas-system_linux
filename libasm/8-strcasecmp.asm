@@ -16,18 +16,17 @@ asm_strcasecmp:
 
     ; Check for end of strings
     test r8b, r8b
-    jz .CHECK_END
+    jz .END              ; If r8b is 0, strings are equal
     test r9b, r9b
-    jz .CHECK_END
+    jz .END              ; If r9b is 0, strings are equal
 
     ; Convert r8 to lowercase if it's an uppercase letter
     cmp r8b, 'A'
     jl .COMPARE
     cmp r8b, 'Z'
-    jg .CHECK_LOWER1
+    jg .COMPARE
     add r8b, 32
 
-.CHECK_LOWER1:
     ; Convert r9 to lowercase if it's an uppercase letter
     cmp r9b, 'A'
     jl .COMPARE
@@ -38,21 +37,20 @@ asm_strcasecmp:
 .COMPARE:
     ; Compare characters after conversion
     cmp r8b, r9b
-    je .NEXT        ; If equal, check next characters
+    jne .DIFFERENT       ; If characters are different, exit
 
-    ; Characters are different
+    ; Move to next character
+    inc rcx              ; Move to next character index
+    jmp .LOOP            ; Repeat loop
+
+.DIFFERENT:
+    ; Calculate difference and return
     movsx eax, r8b       ; Move r8b (as signed integer) into eax
     movsx ebx, r9b       ; Move r9b (as signed integer) into ebx
     sub eax, ebx         ; Subtract ebx from eax (character difference)
     ret                  ; Exit function
 
-.NEXT:
-    ; Move to next character
-    inc rcx              ; Move to next character index
-    jmp .LOOP            ; Repeat loop
-
-.CHECK_END:
-    ; Compare lengths of strings
-    cmp r8b, r9b
+.END:
+    ; Return zero if strings are equal in length
+    xor eax, eax
     ret
-
