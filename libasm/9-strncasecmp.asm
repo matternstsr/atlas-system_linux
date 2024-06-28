@@ -14,7 +14,7 @@ asm_strncasecmp:
 
 .BOOP:
     cmp rdx, 0              ; Check if n is 0
-    je .END
+    je .calc
 
     movzx r8d, BYTE [rdi]   ; Load byte from s1 into r8
     movzx r9d, BYTE [rsi]   ; Load byte from s2 into r9
