@@ -1,44 +1,27 @@
-global asm_strchr
 section .text
+global asm_strchr
 
 asm_strchr:
-    ; Arguments:
-    ; rdi = const char *s (pointer to the string)
-    ; rsi = int c (character to search for)
+    test rdi, rdi        ; Check if s (rdi) is NULL
+    jz .not_found        ; If s is NULL, return NULL
 
-    ; Move the character to find (c) into cl (lower 8 bits of rcx)
-    mov cl, byte [rsi]
-
-    ; Handle edge case: empty string
-    test rdi, rdi
-    jz .not_found  ; If s is NULL, return NULL
-
-    ; Loop through the string pointed by rdi
-    xor rax, rax  ; Initialize rax to 0 (NULL)
+    mov bl, byte [rsi]   ; Move character to find (c) into bl
 
 .strchr_loop:
-    ; Load byte from memory address in rdi into al
-    mov al, byte [rdi]
+    mov al, byte [rdi]   ; Load byte from memory address in rdi into al
+    cmp al, bl           ; Compare al with bl (character to find)
+    je .found            ; Jump if equal to found
 
-    ; Compare al with cl (character to find)
-    cmp al, cl
-    je .found  ; Jump if equal to found
+    test al, al          ; Check for end of string ('\0')
+    jz .not_found        ; Jump if end of string ('\0')
 
-    ; Check for end of string ('\0')
-    test al, al
-    jz .not_found  ; Jump if end of string ('\0')
-
-    ; Increment pointer to next character in string
-    inc rdi
-
-    ; Continue loop
-    jmp .strchr_loop
+    inc rdi              ; Increment pointer to next character in string
+    jmp .strchr_loop     ; Continue loop
 
 .found:
-    ; Return pointer to the found character (rdi currently points to it)
-    mov rax, rdi
+    mov rax, rdi         ; Return pointer to the found character (rdi currently points to it)
     ret
 
 .not_found:
-    ; Return NULL (rax is already 0)
+    xor rax, rax         ; Return NULL (rax is already 0)
     ret
