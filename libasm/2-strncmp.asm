@@ -4,9 +4,9 @@ global asm_strncmp
 section .text
 
 asm_strncmp:
-    push rbp
+    push rbp ; Stack pointer - Points to end of the stack (lowest address)
     mov rbp, rsp
-	push rbx
+	push rbx ; Frame pointer - This reg is never auto updated & save a ptr stack frame
 
     ; Arguments:
     ; rdi = first string (S1)
