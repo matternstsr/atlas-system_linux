@@ -1,22 +1,17 @@
 BITS 64
-
 global asm_strcasecmp
 section .text
+
 ; Arguments:
 ;   rdi = pointer to first string (S1)
 ;   rsi = pointer to second string (S2)
 ;   rdx = size_t n (number of characters to compare)
 
 asm_strcasecmp:
-	push rbp
-	mov rbp, rsp
-	xor rax, rax
-	push rbx
-
     xor eax, eax        ; Clear eax (return value)
     xor rcx, rcx        ; Clear rcx (index)
 
-.BOOP:
+.LOOP:
     movzx r8, BYTE [rdi+rcx]   ; Load byte from S1[rcx] into r8
     movzx r9, BYTE [rsi+rcx]   ; Load byte from S2[rcx] into r9
 
@@ -54,10 +49,8 @@ asm_strcasecmp:
     jz .END              ; If r9b is 0, strings are equal
 
     ; Move to next character
-    ;inc rdi
-    ;inc rsi
-    inc rdx
-    jmp .BOOP
+    inc rcx              ; Move to next character index
+    jmp .LOOP            ; Repeat loop
 
 .END:
     ret                  ; Return from function
