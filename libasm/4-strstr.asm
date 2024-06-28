@@ -1,6 +1,6 @@
-global asm_strstr
-
 section .text
+
+global asm_strstr
 
 ; Function: asm_strstr
 ; Purpose: Find the first occurrence of substring needle in haystack
@@ -64,7 +64,7 @@ asm_strstr:
     je .return_found
 
     ; Move to next position in haystack
-    inc rdi
+    inc rbp
 
     ; Check if reached end of haystack
     dec rbx
@@ -75,7 +75,7 @@ asm_strstr:
 
 .return_found:
     ; Calculate pointer to start of needle in haystack
-    lea rax, [rdi - rdx]
+    lea rax, [rbp - rdx]
     jmp .exit
 
 .return_null:
@@ -88,6 +88,7 @@ asm_strstr:
     pop rbx
     pop rbp
     ret
+
 
 
 
