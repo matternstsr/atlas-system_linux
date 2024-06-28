@@ -3,6 +3,7 @@ BITS 64
 global asm_strncmp
 section .text
 
+;; int asm_strncmp(const char *s1, const char *s2, size_t n)
 asm_strncmp:
     push rbp
     mov rbp, rsp
@@ -36,7 +37,7 @@ asm_strncmp:
     movsx rax, al              ; Convert to signed
     movsx rbx, bl              ; Convert to signed
     sub rax, rbx               ; Calculate difference
-    jmp .return_diff
+    jmp .return_diff           ; Jump to return_diff
 
 .diff_true:
     cmp rax, 0
@@ -62,3 +63,6 @@ asm_strncmp:
 .return:
     leave
     ret
+
+.return_diff:
+    jmp .check_diff             ; Define the label for return_diff
