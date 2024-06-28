@@ -33,8 +33,11 @@ int main(void)
 	printf("strcase: %d\n", strcasecmp(S1, S5));
 	printf("asm: %d\n", asm_strcasecmp(S1, S5));
 	printf("\n");
-	printf("strcase: %d\n", strcasecmp(S5, ""));
-	printf("asm: %d\n", asm_strcasecmp(S5, ""));
+	printf("strcase S5, "": %d\n", strcasecmp(S5, ""));
+	printf("asm S5, "": %d\n", asm_strcasecmp(S5, ""));
+	printf("\n");
+    printf("strcase "", S5: %d\n", strcasecmp("", S5));
+	printf("asm "", S5: %d\n", asm_strcasecmp("", S5));
 	printf("\n");
 
     assert(strcasecmp(S1, S1) == asm_strcasecmp(S1, S1));
