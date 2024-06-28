@@ -11,7 +11,7 @@ global asm_memcpy
 ;;   rdx = n (number of bytes to copy)
 ;; Returns:
 ;;   rax = dest (pointer to the beginning of the destination buffer)
-memcpy:
+asm_memcpy:
     xor rcx, rcx        ; Clear rcx (counter)
     jmp .LOOP           ; Jump to start the copying loop
 
