@@ -19,7 +19,7 @@ asm_strchr:
     movzx rbx, byte [rdi]
     cmp rbx, 0
     jz .return_null ; If end of string, return NULL
-    
+
     ; Compare current character with c
     cmp bl, sil
     jz .return_found ; If match, return pointer to current character
