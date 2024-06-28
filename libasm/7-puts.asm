@@ -9,8 +9,8 @@ section .text
 asm_puts:
     push rbp
     mov rbp, rsp
-    push rdx
     push rsi
+    push rdx
 
     ; Get the length of the string using asm_strlen
     mov rsi, rdi        ; Pass the argument (str) to asm_strlen
