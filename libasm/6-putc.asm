@@ -9,15 +9,18 @@ global asm_putc
 ;;   rax = number of bytes written (always 1 in this case)
 
 asm_putc:
+    ; Move character from rdi to rsi
+    mov rsi, rdi
+
     ; Prepare arguments for write call
     mov rax, 1           ; syscall number for write
     mov rdi, 1           ; file descriptor 1 (stdout)
-    mov rsi, rsp         ; pointer to the character to print (in this case, in the lower 8 bits of rsi)
-    mov BYTE [rsp], dil  ; move the character to the lower byte of rsi
+    lea rdx, [rsi]       ; pointer to the character to print
+    mov BYTE [rdx], sil  ; move the character to the lower byte of rdx
     mov rdx, 1           ; number of bytes to write (just 1 byte)
 
     syscall              ; invoke syscall to write to stdout
 
     ; Return 1 byte written (always 1 for a single character)
-    ;mov rax, 1
+    mov rax, 1
     ret
