@@ -16,67 +16,54 @@ global asm_strcasecmp
 
 asm_strcasecmp:
     push rbp
-    mov rbp, rsp
-    push rbx
-    push rdi
-    push rsi
+    mov rbp, rsp  ; Setup stack frame
 
-    ; Start comparing the strings
+    xor rax, rax  ; Clear rax (result register)
+    push rbx      ; Preserve rbx
+    push rcx      ; Preserve rcx
+
 .loop:
     ; Load bytes from each string
-    lodsb       ; Load byte from rdi into al and increment rdi
-    xor ah, ah  ; Clear ah (for zero extension)
-
-    lodsb       ; Load byte from rsi into al and increment rsi
-    xor bh, bh  ; Clear bh (for zero extension)
+    movzx ebx, BYTE [rdi]  ; Load byte from rdi into ebx
+    movzx ecx, BYTE [rsi]  ; Load byte from rsi into ecx
 
     ; Convert characters to lowercase (assuming ASCII)
-    cmp al, 65  ; 'A'
-    jl .tolower_s1
-    cmp al, 90  ; 'Z'
-    jg .check_next_s1
-    add al, 32  ; Convert to lowercase
+    cmp bl, 65  ; 'A'
+    jl .tolower_s1  ; If less than 'A', skip lowercase conversion
+    cmp bl, 90  ; 'Z'
+    jg .check_next_s1  ; If greater than 'Z', skip lowercase conversion
+    add bx, 32  ; Convert to lowercase
 .check_next_s1:
 
-    cmp bl, 65  ; 'A'
-    jl .tolower_s2
-    cmp bl, 90  ; 'Z'
-    jg .check_next_s2
-    add bl, 32  ; Convert to lowercase
+    cmp cl, 65  ; 'A'
+    jl .tolower_s2  ; If less than 'A', skip lowercase conversion
+    cmp cl, 90  ; 'Z'
+    jg .check_next_s2  ; If greater than 'Z', skip lowercase conversion
+    add cx, 32  ; Convert to lowercase
 .check_next_s2:
 
     ; Compare characters
-    cmp al, bl
+    cmp bl, cl
     jne .done   ; If not equal, finish
 
     ; Check if end of strings
-    test al, al
-    jz .done    ; If end of both strings, they are equal
+    test bl, bl
+    jz .check_end_s2  ; s1 ended, check if s2 also ends
 
-    jmp .loop   ; Otherwise, continue comparing
+    ; Increment pointers
+    inc rdi
+    inc rsi
+    jmp .loop   ; Continue comparing
 
-; Determine if one string is greater
+.check_end_s2:
+    test cl, cl
+    jz .done    ; s1 ended, s2 also ended
+
 .done:
-    mov rax, 0
-    pop rsi
-    pop rdi
-    pop rbx
-    pop rbp
-    ret
+    sub rbx, rcx  ; Calculate difference in lengths
+    mov rax, rbx  ; Move result to rax
 
-; Convert character to lowercase
-.tolower_s1:
-    cmp al, 65  ; 'A'
-    jl .check_next_s1
-    cmp al, 90  ; 'Z'
-    jg .check_next_s1
-    add al, 32  ; Convert to lowercase
-    jmp .check_next_s1
-
-.tolower_s2:
-    cmp bl, 65  ; 'A'
-    jl .check_next_s2
-    cmp bl, 90  ; 'Z'
-    jg .check_next_s2
-    add bl, 32  ; Convert to lowercase
-    jmp .check_next_s2
+    pop rcx  ; Restore rcx
+    pop rbx  ; Restore rbx
+    pop rbp  ; Restore rbp
+    ret      ; Return
