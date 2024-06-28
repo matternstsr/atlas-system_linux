@@ -3,7 +3,7 @@ BITS 64
 global asm_strchr
 section .text
 
-asm_strchr:
+.asm_strchr:
     ; Arguments:
     ; rdi = const char *s (pointer to the string)
     ; rsi = int c (character to search for)
