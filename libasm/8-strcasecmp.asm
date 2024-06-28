@@ -1,6 +1,7 @@
-section .text
-global asm_strcasecmp
+BITS 64
 
+global asm_strcasecmp
+section .text
 ; Arguments:
 ;   rdi = pointer to first string (S1)
 ;   rsi = pointer to second string (S2)
