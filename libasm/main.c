@@ -1,3 +1,5 @@
+/* Description: `asm_strncmp("Holberton School", "Holberton", strlen("Holberton"))` */
+
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -6,7 +8,8 @@
 #include "libasm.h"
 
 #define S1	"Holberton School"
-#define N	strlen(S1)
+#define S2	"Holberton"
+#define N	strlen(S2)
 
 /**
  * main - Program entry point
@@ -15,7 +18,7 @@
  */
 int main(void)
 {
-	assert(strncmp(S1, S1, N) == asm_strncmp(S1, S1, N));
+	assert(strncmp(S1, S2, N) == asm_strncmp(S1, S2, N));
 
 	printf("All good!\n");
 	return (EXIT_SUCCESS);
