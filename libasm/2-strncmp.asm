@@ -1,5 +1,3 @@
-;int asm_strncmp(const char *s1, const char *s2, size_t n);
-
 global asm_strncmp
 section .text
 
@@ -34,52 +32,40 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    cmp rdx, 0
-    je .same
-    dec rdx
+    dec rdx        ; Decrement counter for remaining characters
+    jnz .asm_strncmp_loop  ; Continue loop if counter is not zero
 
-    jmp .asm_strncmp_loop
+    ; If we exit the loop, it means the strings are equal up to n characters
+    jmp .same
 
 .less_than:
     ; S1 < S2
-    xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
-    xor eax, eax
     mov eax, 1
     jmp .exit
 
 .same:
     ; Strings are equal up to n characters
     xor eax, eax
-    jmp .exit
+
+.exit:
+    pop rbp
+    ret
 
 .end_of_s1:
     ; End of S1 reached
-    cmp rdx, 1
-    je .same
-    cmp rdx, 0
-    je .same
-    cmp dl, 0
-    je .same
-    xor eax, eax
-    mov eax, -1
+    cmp dl, 0       ; Check if end of S2 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, -1     ; S1 is shorter (S1 < S2)
     jmp .exit
 
 .end_of_s2:
     ; End of S2 reached
-    cmp rdx, 1
-    je .same
-    cmp rdx, 0
-    je .same
-    cmp al, 0
-    je .same
-    xor eax, eax
-    mov eax, -1
+    cmp al, 0       ; Check if end of S1 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, 1      ; S2 is shorter (S1 > S2)
     jmp .exit
-.exit:
-    pop rbp
-    ret
