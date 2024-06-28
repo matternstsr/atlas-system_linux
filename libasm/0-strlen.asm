@@ -6,7 +6,7 @@ section .text
 	;; size_t asm_strlen(const char *str)
 	;; {
 	;;         size_t len = 0;
-	;;         for (; *str; str++)
+	;;         for (; *str; str ++)
 	;;                 len++;
 	;;         return (len);
 	;; }

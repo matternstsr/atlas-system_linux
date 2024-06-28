@@ -25,4 +25,5 @@ asm_puts:
     ; Cleanup and return
     pop rbp             ; Function epilogue
     pop rdx
+    pop rbp
     ret                 ; Return number of bytes written in rax
