@@ -5,16 +5,18 @@ global asm_puts
 asm_puts:
     push rbp
     mov rbp, rsp
+    push rdx
+    push rsi
 
     ; Get the length of the string using asm_strlen
-    mov rdi, rdi        ; Pass the argument (str) to asm_strlen
+    mov rsi, rdi        ; Pass the argument (str) to asm_strlen
     call asm_strlen     ; Call asm_strlen to get the length
     mov rdx, rax        ; Store the length in rdx for syscall
 
     ; Set up syscall to write the string to stdout
     mov rax, 1          ; syscall number for write
     mov rdi, 1          ; file descriptor 1 (stdout)
-    mov rsi, rdi        ; pointer to the string (already in rdi)
+    mov rdx, rax        ; pointer to the string (already in rdi)
     syscall             ; invoke syscall to write to stdout
 
     ; Cleanup and return
