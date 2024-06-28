@@ -38,6 +38,21 @@ asm_strncmp:
     ; If we exit the loop, it means the strings are equal up to n characters
     jmp .same
 
+.end_of_s1:
+    ; End of S1 reached
+    cmp dl, 0       ; Check if end of S2 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, -1     ; S1 is shorter (S1 < S2)
+    jmp .exit
+
+.end_of_s2:
+    ; End of S2 reached
+    cmp al, 0       ; Check if end of S1 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, 1      ; S2 is shorter (S1 > S2)
+    dec rdx 
+    jmp .exit
+
 .less_than:
     ; S1 < S2
     mov eax, -1
@@ -55,17 +70,3 @@ asm_strncmp:
 .exit:
     pop rbp
     ret
-
-.end_of_s1:
-    ; End of S1 reached
-    cmp dl, 0       ; Check if end of S2 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, -1     ; S1 is shorter (S1 < S2)
-    jmp .exit
-
-.end_of_s2:
-    ; End of S2 reached
-    cmp al, 0       ; Check if end of S1 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, 1      ; S2 is shorter (S1 > S2)
-    jmp .exit
