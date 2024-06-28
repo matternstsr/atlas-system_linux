@@ -20,7 +20,7 @@ global asm_strstr
     ; If not found, return NULL
     ; Epilogue: Restore registers and return
 
-
+;; char *asm_strstr(const char *haystack, const char *needle)
 asm_strstr:
     push rbp
     mov rbp, rsp
@@ -56,53 +56,55 @@ asm_strstr:
     sub rbx, r9
     inc rbx
 
-.find_needle_loop:
-    ; Compare substring starting at current position in haystack with needle
-    mov r10, r9  ; r10 = length of needle
-    mov rsi, rdi ; rsi = current position in haystack
-    mov rcx, rdx ; rcx = pointer to needle
-    repe cmpsb   ; Compare byte by byte
+    .find_needle_loop:
+        ; Compare substring starting at current position in haystack with needle
+        mov r10, r9  ; r10 = length of needle
+        mov rsi, rdi ; rsi = current position in haystack
+        mov rcx, rdx ; rcx = pointer to needle
+        repe cmpsb   ; Compare byte by byte
 
-    ; Check if needle is found
-    je .return_found
+        ; Check if needle is found
+        je .return_found
 
-    ; Move to next position in haystack
-    inc rdi
+        ; Move to next position in haystack
+        inc rdi
 
-    ; Check if reached end of haystack
-    dec rbx
-    jz .return_null
+        ; Check if reached end of haystack
+        dec rbx
+        jz .return_null
 
-    ; Continue searching
-    jmp .find_needle_loop
+        ; Continue searching
+        jmp .find_needle_loop
 
-.return_found:
-    ; Calculate pointer to start of needle in haystack
-    mov rax, rdi
-    sub rax, r9
-    jmp .exit
+    .return_found:
+        ; Calculate pointer to start of needle in haystack
+        mov rax, rdi
+        sub rax, r9
+        jmp .exit
 
-.return_found_empty_needle:
-    ; Handle case where needle is empty ("")
-    mov rax, rdi
-    jmp .exit
+    .return_found_empty_needle:
+        ; Handle case where needle is empty ("")
+        test rsi, rsi
+        mov rax, rdi
+        jmp .exit
 
-.handle_both_empty:
-    ; Handle case where both haystack and needle are empty ("")
-    xor rax, rax  ; Return NULL (0)
-    jmp .exit
+    .handle_both_empty:
+        ; Handle case where both haystack and needle are empty ("")
+        xor rax, rax  ; Return NULL (0)
+        jmp .exit
 
-.return_null:
-    xor rax, rax  ; Return NULL (0)
-    jmp .exit
+    .return_null:
+        xor rax, rax  ; Return NULL (0)
+        jmp .exit
 
-.exit:
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rbx
-    pop rbp
-    ret
+    .exit:
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rbx
+        pop rbp
+        ret
+
 
 
 
