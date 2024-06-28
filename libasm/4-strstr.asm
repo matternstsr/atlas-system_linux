@@ -82,3 +82,10 @@ asm_strstr:
     pop rbx
     pop rbp
     ret
+
+
+;Correct output - case: asm_strstr("Holberton School", " Scc")
+;Correct output - case: asm_strstr("Holberton School", "SSc")
+;Correct output - case: asm_strstr("", "Holberton")
+;Correct output - case: asm_strstr(s1, s2), s1 being a very long string and s2 a word absent from s1
+;Correct output - case: asm_strstr(s1, s2), s1 being a very long string, and s2 the same string with an extra character
