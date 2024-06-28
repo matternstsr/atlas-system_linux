@@ -19,25 +19,26 @@ asm_strcasecmp:
     movzx r9d, BYTE [rsi]   ; Load byte from S2[rcx] into r9
 
 	cmp r8b, 0x00
-	jz .calc
+	jnz .convert
 	cmp r9b, 0x00
-	jz .calc
+	jnz .CHECK_LOWER1
+    jmp .calc
 
 .convert:
     ; Convert r8 to lowercase if it's an uppercase letter
-    cmp r8b, 65
+    cmp r8b, 'A'
     jl .CHECK_LOWER1
-    cmp r8b, 90
+    cmp r8b, 'Z'
     jg .CHECK_LOWER1
-    add r8b, 32
+    add r8w, 32
 
 .CHECK_LOWER1:
     ; Convert r9 to lowercase if it's an uppercase letter
-    cmp r9b, 65
+    cmp r9b, 'A'
     jl .COMPARE
-    cmp r9b, 90
+    cmp r9b, 'Z'
     jg .COMPARE
-    add r9b, 32
+    add r9w, 32
 
 .COMPARE:
     ; Compare characters after conversion
@@ -47,8 +48,8 @@ asm_strcasecmp:
 .calc:
     ; Characters are different
 	xor rax, rax
-	sub r8b, r9b
-	movsx rax, r8b
+	sub r8, r9           ; 64 byte 
+	mov rax, r8          ; 64 byte
     jmp .END             ; Exit loop
 
 .next_chars:
@@ -61,4 +62,3 @@ asm_strcasecmp:
 	pop rbx
 	pop rbp
     ret                  ; Return from function
-
