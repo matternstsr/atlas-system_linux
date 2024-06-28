@@ -16,6 +16,11 @@ asm_strstr:
     push rbx
     push rdi
     push rsi
+    push rdx
+
+    ; Load parameters into registers
+    mov rdi, rdi ; rdi = haystack (string to search)
+    mov rsi, rsi ; rsi = needle (substring to find)
 
     ; If haystack or needle is NULL, return NULL
     test rdi, rdi
@@ -24,47 +29,34 @@ asm_strstr:
     jz .return_null
 
     ; Get lengths of haystack and needle
-    xor rcx, rcx  ; rcx = 0 (counter for haystack length)
-    xor rdx, rdx  ; rdx = 0 (counter for needle length)
+    mov rcx, rdi ; rcx = haystack (use rcx to iterate through haystack)
+    mov rdx, rsi ; rdx = needle (use rdx to iterate through needle)
 
-    ; Calculate length of haystack
-    mov rdi, rdi  ; rdi = haystack (use rdi for iteration)
-.loop_haystack_length:
-    cmp byte [rdi + rcx], 0
-    je .end_haystack_length
-    inc rcx
-    jmp .loop_haystack_length
-.end_haystack_length:
-
-    ; Calculate length of needle
-    mov rsi, rsi  ; rsi = needle (use rsi for iteration)
-.loop_needle_length:
-    cmp byte [rsi + rdx], 0
-    je .end_needle_length
-    inc rdx
-    jmp .loop_needle_length
-.end_needle_length:
+    ; Calculate lengths of haystack and needle
+    mov r8, rax  ; r8 = length of haystack
+    mov r9, rcx  ; r9 = length of needle
 
     ; If haystack length < needle length, return NULL
-    cmp rcx, rdx
+    cmp r8, r9
     jb .return_null
 
     ; Iterate through haystack to find needle
-    mov rbx, rcx  ; rbx = length of haystack
-    sub rbx, rdx  ; rbx = length of haystack - length of needle
+    mov rbx, r8  ; rbx = length of haystack - length of needle + 1
+    sub rbx, r9
+    inc rbx
 
 .find_needle_loop:
     ; Compare substring starting at current position in haystack with needle
-    mov rdi, rbp  ; reset rdi to original haystack pointer
-    mov rsi, rsi  ; rsi = needle (reset rsi)
-    mov rcx, rdx  ; rcx = length of needle
-    repe cmpsb     ; Compare byte by byte
+    mov r10, r9  ; r10 = length of needle
+    mov rsi, rdi ; rsi = current position in haystack
+    mov rcx, rdx ; rcx = pointer to needle
+    repe cmpsb   ; Compare byte by byte
 
     ; Check if needle is found
     je .return_found
 
     ; Move to next position in haystack
-    inc rbp
+    inc rdi
 
     ; Check if reached end of haystack
     dec rbx
@@ -75,7 +67,8 @@ asm_strstr:
 
 .return_found:
     ; Calculate pointer to start of needle in haystack
-    lea rax, [rbp - rdx]
+    mov rax, rdi
+    sub rax, r9
     jmp .exit
 
 .return_null:
@@ -83,14 +76,12 @@ asm_strstr:
     jmp .exit
 
 .exit:
+    pop rdx
     pop rsi
     pop rdi
     pop rbx
     pop rbp
     ret
-
-
-
 
 
 ;Correct output - case: asm_strstr("Holberton School", " Scc")
