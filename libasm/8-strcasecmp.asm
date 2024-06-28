@@ -99,3 +99,4 @@ asm_strcasecmp:
     jg .check_next_s2
     add bl, 32  ; Convert to lowercase
     jmp .check_next_s2
+
