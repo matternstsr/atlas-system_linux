@@ -25,6 +25,8 @@ asm_strncmp:
     je .end_of_s1
     cmp dl, 0       ; Check if end of S2 ('\0')
     je .end_of_s2
+    cmp rdx, 0      ; Check if n characters have been compared
+    je .same        ; If n is zero, strings are equal up to n characters
 
     ; Compare bytes
     cmp al, dl
@@ -34,12 +36,8 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    dec rdx        ; Decrement counter for remaining characters
-    cmp rdx, 0
-    jnz .asm_strncmp_loop  ; Continue loop if counter is not zero
-
-    ; If we exit the loop, it means the strings are equal up to n characters
-    jmp .same
+    dec rdx         ; Decrement counter for remaining characters
+    jmp .asm_strncmp_loop  ; Continue loop
 
 .end_of_s1:
     ; End of S1 reached
@@ -68,7 +66,6 @@ asm_strncmp:
 .same:
     ; Strings are equal up to n characters
     xor eax, eax
-
 
 .exit:
     pop rbp
