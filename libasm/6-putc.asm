@@ -1,26 +1,35 @@
 section .text
 global asm_putc
 
-;; Function: asm_putc
-;; Purpose: Print a single character to standard output and return the number of bytes written
-;; Arguments:
-;;   rdi = c (character to be printed, passed in the lower 8 bits of rdi)
-;; Returns:
-;;   rax = number of bytes written (always 1 in this case)
-
+;; size_t asm_putc(int c)
 asm_putc:
-    ; Move character from rdi to rsi
-    mov rsi, rdi
+    push rbp              ; Function prologue
+    mov rbp, rsp
 
-    ; Prepare arguments for write call
-    mov rax, 1           ; syscall number for write
-    mov rdi, 1           ; file descriptor 1 (stdout)
-    lea rdx, [rsi]       ; pointer to the character to print
-    mov BYTE [rdx], dil  ; move the character to the lower byte of rdx
-    mov rdx, 1           ; number of bytes to write (just 1 byte)
+    push rdi              ; Save rdi (character to print)
 
-    syscall              ; invoke syscall to write to stdout
+    ; Set up syscall to write character to stdout
+    mov rdi, 1            ; file descriptor 1 (stdout)
+    mov rsi, rsp          ; pointer to the character to print
+    mov BYTE [rsi], dil   ; move the character to the lower byte of rsi
+    mov rdx, 1            ; number of bytes to write (just 1 byte)
+    mov rax, 1            ; syscall number for write
 
-    ; Return 1 byte written (always 1 for a single character)
-    mov rax, 1
+    syscall               ; invoke syscall to write to stdout
+
+    ; Error handling (optional)
+    test rax, rax         ; Check if syscall returned an error
+    js .syscall_error     ; Jump if error occurred
+
+    ; Cleanup and return
+    pop rdi               ; Restore rdi
+    pop rbp               ; Function epilogue
+    ret
+
+.syscall_error:
+    ; Handle syscall error here (print error message, etc.)
+    ; Optionally, return an error code or take appropriate action
+
+    pop rdi               ; Restore rdi
+    pop rbp               ; Function epilogue
     ret
