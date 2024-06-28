@@ -22,10 +22,10 @@ asm_strncmp:
 
     ; Compare bytes or check termination conditions
     cmp al, 0       ; Check if end of S1 ('\0')
-    je .end_of_s1
+    je .found_null
     cmp dl, 0       ; Check if end of S2 ('\0')
-    je .end_of_s2
-    cmp rdx, 0      ; Check if n characters have been compared
+    je .found_null
+    cmp edx, eax      ; Check if n characters have been compared
     je .same        ; If n is zero, strings are equal up to n characters
 
     ; Compare bytes
@@ -36,37 +36,35 @@ asm_strncmp:
     ; Characters are equal, move to next
     inc rdi
     inc rsi
-    dec rdx         ; Decrement counter for remaining characters
-    cmp rdx, 0
+    inc eax       ; Increment counter for remaining characters
+    cmp edx, eax
+	je .same
     jmp .asm_strncmp_loop  ; Continue loop
 
-.end_of_s1:
-    ; End of S1 reached
-    cmp dl, 0       ; Check if end of S2 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, -1     ; S1 is shorter (S1 < S2)
-    jmp .exit
-
-.end_of_s2:
-    ; End of S2 reached
-    cmp al, 0       ; Check if end of S1 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, 1      ; S2 is shorter (S1 > S2)
-    jmp .exit
+.found_null:
+	cmp edx, eax
+	je .same
+	cmp al, dl
+	jl .less_than
+	jg .greater_than
+	jmp .same
 
 .less_than:
     ; S1 < S2
+	xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
+	xor eax, eax
     mov eax, 1
     jmp .exit
 
 .same:
     ; Strings are equal up to n characters
     xor eax, eax
+	mov eax, 0
 
 .exit:
     pop rbp
