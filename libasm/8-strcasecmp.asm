@@ -61,10 +61,3 @@ asm_strcasecmp:
 	pop rbx
 	pop rbp
     ret                  ; Return from function
-
-
-
-
-
-
-
