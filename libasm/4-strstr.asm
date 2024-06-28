@@ -1,6 +1,8 @@
-.global asm_strstr
-.section .text
+BITS 64
 
+global asm_strstr
+section .text
+    
 asm_strstr:
     push rbp
     mov rbp, rsp
