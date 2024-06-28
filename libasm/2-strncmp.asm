@@ -1,28 +1,26 @@
 BITS 64
 
-global asm_strncmp
 section .text
+global asm_strncmp
 
 asm_strncmp:
+	xor eax, eax
 	xor rcx, rcx
-loop:
-	mov r10b, BYTE [rdi]
-	mov r11b, BYTE [rsi]
-	cmp r10b, 0
-	je end
-	cmp r11b, 0
-	je end
-	cmp r10b, r11b
-	jne end
-	inc rdi
-	inc rsi
+	jmp .loop
+.move:
+	cmp bl, 0
+	je .end
 	inc rcx
+.loop:
 	cmp rdx, rcx
-	jle end
-	jmp loop
-
-end:
-	movzx rax, r10b
-	movzx rbx, r11b
-	sub rax, rbx
+	je .end
+	mov bl, BYTE [rdi+rcx]
+	mov r8b, BYTE [rsi+rcx]
+	cmp bl, r8b
+	je .move
+.notsame:
+	movsx eax, bl
+	movsx ebx, r8b
+	sub eax, ebx
+.end:
 	ret
