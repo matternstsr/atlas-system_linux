@@ -76,6 +76,10 @@ asm_strcasecmp:
     mov rax, 1        ; s1 > s2
     jmp .cleanup
 
+.check_end_s2:
+    test bl, bl
+    jz .done    ; s1 ended, s2 also ended
+
 .cleanup:
     pop rsi
     pop rdi
@@ -99,4 +103,3 @@ asm_strcasecmp:
     jg .check_next_s2
     add bl, 32  ; Convert to lowercase
     jmp .check_next_s2
-
