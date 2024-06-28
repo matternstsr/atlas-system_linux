@@ -20,15 +20,6 @@ asm_strncmp:
     mov al, byte [rdi]
     mov dl, byte [rsi]
 
-    ; Compare bytes or check termination conditions
-    cmp al, 0       ; Check if end of S1 ('\0')
-    je .found_null
-    cmp dl, 0       ; Check if end of S2 ('\0')
-    je .found_null
-    cmp edx, eax      ; Check if n characters have been compared
-    je .same        ; If n is zero, strings are equal up to n characters
-
-    ; Compare bytes
     cmp al, dl
     jl .less_than   ; al < dl
     jg .greater_than ; al > dl
@@ -37,26 +28,20 @@ asm_strncmp:
     inc rdi
     inc rsi
     inc eax       ; Increment counter for remaining characters
-    cmp edx, eax
-	je .same
     jmp .asm_strncmp_loop  ; Continue loop
-
-.found_null:
-	cmp edx, eax
-	je .same
-	cmp al, dl
-	jl .less_than
-	jg .greater_than
-	jmp .same
 
 .less_than:
     ; S1 < S2
+	cmp edx, eax
+	je .same
 	xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
+	cmp edx, eax
+	je .same
 	xor eax, eax
     mov eax, 1
     jmp .exit

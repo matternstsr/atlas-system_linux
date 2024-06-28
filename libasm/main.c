@@ -1,4 +1,4 @@
-/* Description: `asm_strncmp("Holberton School", "Holberton", strlen("Holberton"))` */
+/* Description: `asm_strncmp("Holberton School", "Holberton", strlen("Holberton School"))` */
 
 #include <stdlib.h>
 #include <assert.h>
@@ -9,7 +9,7 @@
 
 #define S1	"Holberton School"
 #define S2	"Holberton"
-#define N	strlen(S2)
+#define N	strlen(S1)
 
 /**
  * main - Program entry point
