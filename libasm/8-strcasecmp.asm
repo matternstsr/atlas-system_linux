@@ -1,76 +1,42 @@
 BITS 64
 
 section .text
-global asm_strcasecmp
+global strcasecmp
 
-; Function: asm_strcasecmp
-; Purpose: Compare two strings ignoring case
-; Arguments:
-;   rdi = s1 (string 1)
-;   rsi = s2 (string 2)
-; Returns:
-;   rax = 0 if strings are equal ignoring case
-;   rax > 0 if s1 > s2 ignoring case
-;   rax < 0 if s1 < s2 ignoring case
-;----------------------------------------
+strcasecmp:
+	xor eax, eax		; set return value to 0
+	xor rcx, rcx		; set an index to 0
+	jmp .LOOP		; goto '.LOOP'
 
-asm_strcasecmp:
-    push rbp
-    mov rbp, rsp  ; Setup stack frame
+.INCR:
+	cmp bl, 0		; id bl equal to '\0' ?
+	je .END			; if yes, goto '.END'
+	inc rcx			; index incrementation
 
-    xor rax, rax  ; Clear rax (result register)
-    push rbx      ; Preserve rbx
-    push rcx      ; Preserve rcx
+.LOOP:
+	mov bl, BYTE [rdi+rcx]	; put str1[rcx] into bl
+	mov dl, BYTE [rsi+rcx]	; put str2[rcx] into dl
+	cmp bl, 'A'		; is bl < 'A' ?
+	jl .NO_UPS1		; if yes, goto '.NO_UPPER1'
+	cmp bl, 'Z'		; is bl > 'Z' ?
+	jg .NO_UPS1		; if yes, goto '.NO_UPPER1'
+	add bl, 32		; lowercase bl
 
-.loop:
-    ; Load bytes from each string
-    movzx ebx, BYTE [rdi]  ; Load byte from rdi into ebx
-    movzx ecx, BYTE [rsi]  ; Load byte from rsi into ecx
+.NO_UPS1:
+	cmp dl, 'A'		; is dl < 'A' ?
+	jl .NO_UPS2		; if yes, goto '.NO_UPPER2'
+	cmp dl, 'Z'		; is dl > 'Z' ?
+	jg .NO_UPS2		; if yes, goto '.NO_UPPER2'
+	add dl, 32		; lowercase dl
 
-    ; Convert characters to lowercase (assuming ASCII)
-    cmp bl, 65  ; 'A'
-    jl .check_next_s1  ; If less than 'A', skip lowercase conversion
-    cmp bl, 90  ; 'Z'
-    jg .tolower_s1_done  ; If greater than 'Z', skip lowercase conversion
-    add bx, 32  ; Convert to lowercase
-.check_next_s1:
+.NO_UPS2:
+	cmp bl, dl		; is bl equal to dl ?
+	je .INCR		; if yes, goto '.INCREMENT'
 
-    cmp cl, 65  ; 'A'
-    jl .check_next_s2  ; If less than 'A', skip lowercase conversion
-    cmp cl, 90  ; 'Z'
-    jg .tolower_s2_done  ; If greater than 'Z', skip lowercase conversion
-    add cx, 32  ; Convert to lowercase
-.check_next_s2:
+.DIFF:
+	movsx eax, bl		; put bl char into eax int
+	movsx ebx, dl		; put dl char into ebx int
+	sub eax, ebx		; eax = eax - ebx
 
-    ; Compare characters
-    cmp bl, cl
-    jne .done   ; If not equal, finish
-
-    ; Check if end of strings
-    test bl, bl
-    jz .check_end_s2  ; s1 ended, check if s2 also ends
-
-    ; Increment pointers
-    inc rdi
-    inc rsi
-    jmp .loop   ; Continue comparing
-
-.check_end_s2:
-    test cl, cl
-    jz .done    ; s1 ended, s2 also ended
-
-.done:
-    sub rbx, rcx  ; Calculate difference in lengths
-    mov rax, rbx  ; Move result to rax
-
-    pop rcx  ; Restore rcx
-    pop rbx  ; Restore rbx
-    pop rbp  ; Restore rbp
-    ret      ; Return
-
-; Convert character to lowercase
-.tolower_s1_done:
-    ret
-
-.tolower_s2_done:
-    ret
+.END:
+	ret			; end
