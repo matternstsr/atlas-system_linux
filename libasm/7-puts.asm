@@ -11,12 +11,11 @@ asm_puts:
     ; Get the length of the string using asm_strlen
     mov rsi, rdi        ; Pass the argument (str) to asm_strlen
     call asm_strlen     ; Call asm_strlen to get the length
-    mov rdx, rax        ; Store the length in rdx for syscall
 
     ; Set up syscall to write the string to stdout
     mov rax, 1          ; syscall number for write
-    mov rdi, 1          ; file descriptor 1 (stdout)
     mov rdx, rax        ; pointer to the string (already in rdi)
+    mov rdi, 1          ; file descriptor 1 (stdout)
     syscall             ; invoke syscall to write to stdout
 
     ; Cleanup and return
