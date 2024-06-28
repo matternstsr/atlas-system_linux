@@ -23,7 +23,3 @@ asm_memcpy:
     INC ESI            ; Increment source pointer (ESI)
     INC EAX            ; Increment destination pointer (EAX)
     JMP .loop          ; Jump back to .loop to continue copying
-
-end:
-    mov rax, rdi
-    ret
