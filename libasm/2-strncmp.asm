@@ -18,6 +18,19 @@ asm_strncmp:
     mov al, byte [rdi]
     mov dl, byte [rsi]
 
+    ; Print current characters for debugging
+    mov rax, 1         ; syscall number for sys_write
+    mov rdi, 1         ; file descriptor stdout
+    lea rsi, [rdi + al]; address of character in S1
+    mov rdx, 1         ; number of bytes to write
+    syscall            ; invoke syscall to print character from S1
+
+    mov rax, 1         ; syscall number for sys_write
+    mov rdi, 1         ; file descriptor stdout
+    lea rsi, [rdi + dl]; address of character in S2
+    mov rdx, 1         ; number of bytes to write
+    syscall            ; invoke syscall to print character from S2
+
     ; Compare bytes or check termination conditions
     cmp al, 0       ; Check if end of S1 ('\0')
     je .end_of_s1
@@ -38,21 +51,6 @@ asm_strncmp:
     ; If we exit the loop, it means the strings are equal up to n characters
     jmp .same
 
-.end_of_s1:
-    ; End of S1 reached
-    cmp dl, 0       ; Check if end of S2 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, -1     ; S1 is shorter (S1 < S2)
-    jmp .exit
-
-.end_of_s2:
-    ; End of S2 reached
-    cmp al, 0       ; Check if end of S1 ('\0')
-    je .same        ; S1 and S2 are both at end (equal up to n)
-    mov eax, 1      ; S2 is shorter (S1 > S2)
-    dec rdx 
-    jmp .exit
-
 .less_than:
     ; S1 < S2
     mov eax, -1
@@ -70,3 +68,17 @@ asm_strncmp:
 .exit:
     pop rbp
     ret
+
+.end_of_s1:
+    ; End of S1 reached
+    cmp dl, 0       ; Check if end of S2 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, -1     ; S1 is shorter (S1 < S2)
+    jmp .exit
+
+.end_of_s2:
+    ; End of S2 reached
+    cmp al, 0       ; Check if end of S1 ('\0')
+    je .same        ; S1 and S2 are both at end (equal up to n)
+    mov eax, 1      ; S2 is shorter (S1 > S2)
+    jmp .exit
