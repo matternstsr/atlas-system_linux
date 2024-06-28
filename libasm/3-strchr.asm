@@ -18,15 +18,16 @@ asm_strchr:
     movzx ebx, BYTE [rdi]
 
     ; Compare current character (bl) with c (al)
-    cmp bl, 0
-    jz .not_found      ; If end of string ('\0'), return NULL
-
     cmp bl, al
-    jz .return_found   ; If match found, return pointer to current character
+    jz .return_found     ; If match found, return pointer to current character
+
+    ; Check for end of string ('\0')
+    test bl, bl
+    jz .not_found        ; If end of string, return NULL
 
     ; Move to the next character in the string
     inc rdi
-    jmp .get_next_char ; Repeat loop
+    jmp .get_next_char   ; Repeat loop
 
 .return_found:
     ; If match found, return pointer to the found character
