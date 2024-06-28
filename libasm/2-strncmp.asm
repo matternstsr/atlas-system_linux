@@ -24,26 +24,25 @@ asm_strncmp:
     jl .less_than   ; al < dl
     jg .greater_than ; al > dl
 
-	inc eax
-	cmp eax, edx
-	je .same
-
     ; Characters are equal, move to next
     inc rdi
     inc rsi
+    inc eax       ; Increment counter for remaining characters
+	test edx, eax
+	je .same
     jmp .asm_strncmp_loop  ; Continue loop
 
 .less_than:
     ; S1 < S2
-	cmp eax, edx
-	jg .same
+	cmp edx, eax
+	je .same
 	xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
-	cmp eax, edx
+	cmp edx, eax
 	je .same
 	xor eax, eax
     mov eax, 1
