@@ -8,10 +8,16 @@ section .text
 ;   rdx = size_t n (number of characters to compare)
 
 asm_strcasecmp:
+	push rbp
+	mov rbp, rsp
+	xor rax, rax
+	push rbx
+	push rcx
+
     xor eax, eax        ; Clear eax (return value)
     xor rcx, rcx        ; Clear rcx (index)
 
-.LOOP:
+.BOOP:
     movzx r8, BYTE [rdi+rcx]   ; Load byte from S1[rcx] into r8
     movzx r9, BYTE [rsi+rcx]   ; Load byte from S2[rcx] into r9
 
