@@ -61,9 +61,9 @@ asm_strncmp:
     jmp .exit
 
 .same:
-    ; Strings are equal up to n characters
+    ; Strings are equal up to n characters or both terminated
     xor eax, eax
-    mov eax, 0
+    jmp .exit
 
 .exit:
     pop rbp
