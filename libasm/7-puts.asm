@@ -23,6 +23,7 @@ asm_puts:
     SYSCALL             ; invoke syscall to write to stdout
 
     ; Cleanup and return
+    pop rbp             ; Function epilogue
     pop rdx
     pop rbp
     ret                 ; Return number of bytes written in rax
