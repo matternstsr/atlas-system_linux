@@ -1,6 +1,8 @@
 section .text
 global asm_puts
 
+extern asm_strlen
+
 ;; Prototype: size_t asm_puts(const char *str)
 asm_puts:
     push rbp
@@ -21,5 +23,3 @@ asm_puts:
     ; Cleanup and return
     pop rbp             ; Function epilogue
     ret                 ; Return number of bytes written in rax
-
-extern asm_strlen
