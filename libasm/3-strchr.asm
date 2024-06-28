@@ -30,7 +30,7 @@ asm_strchr:
 
 .return_null:
     xor rax, rax ; Return 0 (NULL) if s or c is NULL
-    test rsi, rsi
+    test rsi, 0
     jz .return_found
 
 .return_found:
