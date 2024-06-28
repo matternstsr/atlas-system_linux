@@ -12,21 +12,22 @@ asm_strchr:
     cmp al, bl           ; Compare al with bl (character to find)
     je .found            ; Jump if equal to found
 
-    cmp al, 0x00         ; Compare al with '\0' (end of string)
-    je .not_found        ; Jump if end of string ('\0')
+    test al, al          ; Check for end of string ('\0')
+    jz .end              ; Jump to .end if end of string ('\0')
 
     inc rdi              ; Increment pointer to next character in string
     jmp .strchr_loop     ; Continue loop
 
 .found:
     mov rax, rdi         ; Return pointer to the found character (rdi currently points to it)
-    jmp .exit            ; Jump to exit cleanup
+    ret
 
 .not_found:
     xor rax, rax         ; Return NULL (rax is already 0)
-    jmp .exit            ; Jump to exit cleanup
+    ret
 
-.exit:
-    pop rbp              ; Restore base pointer
-    pop rbx              ; Restore callee-saved register
-    ret                  ; Return from function
+.end:
+    cmp bl, 0x00         ; Check if character to find is '\0'
+    jne .not_found       ; If not '\0', return NULL (not found)
+    mov rax, rdi         ; Return pointer to the end of string ('\0')
+    ret
