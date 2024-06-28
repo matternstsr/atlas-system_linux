@@ -16,7 +16,7 @@ asm_putc:
     mov rax, 1           ; syscall number for write
     mov rdi, 1           ; file descriptor 1 (stdout)
     lea rdx, [rsi]       ; pointer to the character to print
-    mov BYTE [rdx], sil  ; move the character to the lower byte of rdx
+    mov BYTE [rdx], dil  ; move the character to the lower byte of rdx
     mov rdx, 1           ; number of bytes to write (just 1 byte)
 
     syscall              ; invoke syscall to write to stdout
