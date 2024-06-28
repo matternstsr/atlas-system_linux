@@ -1,27 +1,56 @@
+BITS 64
+
+global asm_strncmp
 section .text
-global asm_strchr
 
-asm_strchr:
-    test rdi, rdi        ; Check if s (rdi) is NULL
-    jz .not_found        ; If s is NULL, return NULL
+asm_strncmp:
+    push rbp ; Stack pointer - Points to end of the stack (lowest address)
+    mov rbp, rsp
+	push rbx ; Frame pointer - This reg is never auto updated & save a ptr stack frame
 
-    mov bl, byte [rsi]   ; Move character to find (c) into bl
+    ; Arguments:
+    ; rdi = first string (S1)
+    ; rsi = second string (S2)
+    ; rdx = size_t n (number of characters to compare)
+    ; Loop through the strings
+.asm_strncmp_loop:
+    ; Load byte from S1 and S2
+    movzx ebx, byte [rdi]
+    movzx eax, byte [rsi]
 
-.strchr_loop:
-    mov al, byte [rdi]   ; Load byte from memory address in rdi into al
-    cmp al, bl           ; Compare al with bl (character to find)
-    je .found            ; Jump if equal to found
+	cmp bl, 0x00
+	jz .null_found
 
-    cmp al, 0x00         ; Compare al with '\0' (end of string)
-    je .not_found        ; Jump if end of string ('\0')
+    cmp bl, al
+    jl .less_than   ; bl < al
+    jg .greater_than ; al > bl
 
-    inc rdi              ; Increment pointer to next character in string
-    jmp .strchr_loop     ; Continue loop
+    ; Characters are equal, move to next
+    inc rdi
+    inc rsi
+	dec rdx
+	cmp rdx, 0
+	jz .null_found
 
-.found:
-    mov rax, rdi         ; Return pointer to the found character (rdi currently points to it)
-    ret
+    jmp .asm_strncmp_loop  ; Continue loop
 
-.not_found:
-    xor rax, rax         ; Return NULL (rax is already 0)
+.null_found:
+	cmp bl, al
+	jl .less_than
+	xor rax, rax
+	jmp .exit
+
+.less_than:
+    ; S2 < S1
+    mov rax, -1
+    jmp .exit
+
+.greater_than:
+    ; S2 > S1
+    mov rax, 1
+    jmp .exit
+
+.exit:
+    pop rbp
+	pop rbx
     ret
