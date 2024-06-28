@@ -1,115 +1,91 @@
-section .text
+BITS 64  ; Set the mode to 64-bit
 
 global asm_strstr
+section .text
 
-; Function: asm_strstr
-; Purpose: Find the first occurrence of substring needle in haystack
-; Arguments:
-;   rdi = haystack (string to search)
-;   rsi = needle (substring to find)
-; Returns:
-;   rax = pointer to the beginning of the found substring in haystack, or NULL if not found
-;----------------------------------------
-    ; Prologue: Save necessary registers and set up stack frame
-    ; Check if either rdi (haystack) or rsi (needle) is NULL, return NULL if so
-    ; Get lengths of rdi (haystack) and rsi (needle)
-    ; Calculate initial positions and lengths for comparison
-    ; Iterate through rdi to find rsi
-        ; Compare substring starting at current position in rdi with rsi
-        ; If found, calculate and return the pointer to the start of rsi in rdi
-    ; If not found, return NULL
-    ; Epilogue: Restore registers and return
+;; Function: asm_strstr
+;; Purpose: Find the first occurrence of substring needle in haystack
+;; Arguments:
+;;   rdi = haystack (string to search)
+;;   rsi = needle (substring to find)
+;; Returns:
+;;   rax = pointer to the beginning of the found substring in haystack, or NULL if not found
+;;----------------------------------------
 
-;; char *asm_strstr(const char *haystack, const char *needle)
 asm_strstr:
-    push rbp
-    mov rbp, rsp
-    push rbx
-    push rdi
-    push rsi
-    push rdx
+    push rbp        ; Prologue: Save current base pointer
+    mov rbp, rsp    ; Set up base pointer
 
-    ; Load parameters into registers
-    mov rdi, rdi ; rdi = haystack (string to search)
-    mov rsi, rsi ; rsi = needle (substring to find)
+.get_first_char:
+    movzx ebx, BYTE [rdi]  ; Load first byte of haystack into ebx
+    movzx eax, BYTE [rsi]  ; Load first byte of needle into eax
+    cmp al, 0x00           ; Check if needle is empty (null terminator)
+    je .return_found       ; If needle is empty, return immediately
 
-    ; Check if both haystack and needle are empty strings
-    test rdi, rdi
-    jz .handle_both_empty
-    test rsi, rsi
-    jz .return_found_empty_needle
+.outter_loop:
+    cmp bl, 0x00           ; Check if end of haystack (null terminator)
+    jz .outter_null_found  ; If end of haystack, go to handling null found
 
-    ; Get lengths of haystack and needle
-    mov rcx, rdi ; rcx = haystack (use rcx to iterate through haystack)
-    mov rdx, rsi ; rdx = needle (use rdx to iterate through needle)
+    cmp bl, al             ; Compare current character in haystack with first character of needle
+    je .inner_loop_setup   ; If match, set up inner loop
 
-    ; Calculate lengths of haystack and needle
-    mov r8, rax  ; r8 = length of haystack
-    mov r9, rcx  ; r9 = length of needle
+    inc rdi                ; Move to next character in haystack
+    movzx ebx, BYTE [rdi]  ; Load next byte of haystack
+    jmp .outter_loop       ; Continue outer loop
 
-    ; If haystack length < needle length, return NULL
-    cmp r8, r9
-    jb .return_null
+.inner_loop_setup:
+    mov r8, rdi            ; Save current position in haystack (rdi) to r8
+    mov r9, rsi            ; Save pointer to needle (rsi) to r9
+    inc r8                 ; Move to next character in haystack
+    inc r9                 ; Move to next character in needle
+    movzx r10d, BYTE [r8]  ; Load next byte of haystack into r10d
+    movzx r11d, BYTE [r9]  ; Load next byte of needle into r11d
+    cmp r10b, r11b         ; Compare bytes
+    je .run_inner_loop     ; If equal, run inner loop
+    cmp r11b, 0x00         ; Check if end of needle (null terminator)
+    jz .return_found       ; If end of needle, needle is found
 
-    ; Iterate through haystack to find needle
-    mov rbx, r8  ; rbx = length of haystack - length of needle + 1
-    sub rbx, r9
-    inc rbx
+    jmp .back_to_outter    ; Continue outer loop
 
-    .find_needle_loop:
-        ; Compare substring starting at current position in haystack with needle
-        mov r10, r9  ; r10 = length of needle
-        mov rsi, rdi ; rsi = current position in haystack
-        mov rcx, rdx ; rcx = pointer to needle
-        repe cmpsb   ; Compare byte by byte
+.run_inner_loop:
+    cmp r10b, 0x00         ; Check if end of haystack (null terminator)
+    jz .inner_null_found   ; If end of haystack, go to handling inner null found
+    cmp r11b, 0x00         ; Check if end of needle (null terminator)
+    jz .return_found       ; If end of needle, needle is found
 
-        ; Check if needle is found
-        je .return_found
+    cmp r10b, r11b         ; Compare bytes
+    jne .back_to_outter    ; If not equal, go back to outer loop
 
-        ; Move to next position in haystack
-        inc rdi
+    inc r8                 ; Move to next character in haystack
+    inc r9                 ; Move to next character in needle
+    movzx r10d, BYTE [r8]  ; Load next byte of haystack into r10d
+    movzx r11d, BYTE [r9]  ; Load next byte of needle into r11d
+    jmp .run_inner_loop    ; Continue inner loop
 
-        ; Check if reached end of haystack
-        dec rbx
-        jz .return_null
+.back_to_outter:
+    inc rdi                ; Move to next character in haystack
+    movzx ebx, BYTE [rdi]  ; Load next byte of haystack
+    jmp .outter_loop       ; Continue outer loop
 
-        ; Continue searching
-        jmp .find_needle_loop
+.outter_null_found:
+    cmp al, 0x00           ; Check if needle is empty (null terminator)
+    je .return_found       ; If needle is empty, needle is found
+    jmp .return_0          ; Otherwise, return NULL
 
-    .return_found:
-        ; Calculate pointer to start of needle in haystack
-        mov rax, rdi
-        sub rax, r9
-        jmp .exit
+.inner_null_found:
+    cmp r11b, 0x00         ; Check if needle is empty (null terminator)
+    je .return_found       ; If needle is empty, needle is found
+    jmp .return_0          ; Otherwise, return NULL
 
-    .return_found_empty_needle:
-        ; Handle case where needle is empty ("")
-        test rsi, rsi
-        mov rax, rdi
-        jmp .exit
+.return_0:
+    xor rax, rax           ; Set rax to 0 (return NULL)
+    jmp .exit              ; Jump to exit
 
-    .handle_both_empty:
-        ; Handle case where both haystack and needle are empty ("")
-        xor rax, rax  ; Return NULL (0)
-        jmp .exit
+.return_found:
+    xor rax, rax           ; Set rax to 0
+    mov rax, rdi           ; Move haystack pointer (rdi) to rax (return pointer to found needle)
+    jmp .exit              ; Jump to exit
 
-    .return_null:
-        xor rax, rax  ; Return NULL (0)
-        jmp .exit
-
-    .exit:
-        pop rdx
-        pop rsi
-        pop rdi
-        pop rbx
-        pop rbp
-        ret
-
-
-
-
-;Correct output - case: asm_strstr("Holberton School", " Scc")
-;Correct output - case: asm_strstr("Holberton School", "SSc")
-;Correct output - case: asm_strstr("", "Holberton")
-;Correct output - case: asm_strstr(s1, s2), s1 being a very long string and s2 a word absent from s1
-;Correct output - case: asm_strstr(s1, s2), s1 being a very long string, and s2 the same string with an extra character
+.exit:
+    pop rbp                ; Epilogue: Restore base pointer
+    ret                    ; Return from function
