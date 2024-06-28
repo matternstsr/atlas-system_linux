@@ -42,28 +42,31 @@ asm_strncmp:
 .found_null:
     ; Check if both strings are terminated simultaneously
     cmp eax, edx
-    je .same
+    jne .not_same    ; If n characters haven't been compared fully, continue checking
+    xor eax, eax     ; Otherwise, strings are equal up to n characters
+    jmp .exit
+
+.not_same:
+    ; Compare the last characters
     cmp al, dl
     jl .less_than
     jg .greater_than
-    jmp .same
+    xor eax, eax     ; Strings are equal up to current position
+    jmp .exit
 
 .less_than:
     ; S1 < S2
-    xor eax, eax
     mov eax, -1
     jmp .exit
 
 .greater_than:
     ; S1 > S2
-    xor eax, eax
     mov eax, 1
     jmp .exit
 
 .same:
     ; Strings are equal up to n characters or both terminated
     xor eax, eax
-    jmp .exit
 
 .exit:
     pop rbp
