@@ -6,53 +6,59 @@ section .text
 asm_strncmp:
     push rbp
     mov rbp, rsp
+    sub rsp, 16                ; Reserve space on stack for local variables
 
-    ; Arguments:
-    ; rdi = first string (S1)
-    ; rsi = second string (S2)
-    ; rdx = size_t n (number of characters to compare)
+    mov rsi, rdi               ; s1
+    mov rdi, rsi               ; s2
+    mov rcx, rdx               ; n
 
-    xor eax, eax   ; Initialize eax (return value) to 0
+    xor rax, rax               ; diff
+    xor rdx, rdx               ; i
 
-    ; Loop through the strings
-.asm_strncmp_loop:
-    ; Load byte from S1 and S2
-    mov al, byte [rdi]
-    mov dl, byte [rsi]
+.loop:
+    cmp edx, ecx               ; Compare i with n
+    jae .end_loop
 
-    cmp al, dl
-    jl .less_than   ; al < dl
-    jg .greater_than ; al > dl
+    mov al, [rsi + rdx]        ; Load *s1
+    mov bl, [rdi + rdx]        ; Load *s2
 
-    ; Characters are equal, move to next
-    inc rdi
-    inc rsi
-    inc eax       ; Increment counter for remaining characters
-	test edx, eax
-	je .same
-    jmp .asm_strncmp_loop  ; Continue loop
+    cmp al, bl                 ; Compare characters
+    jne .check_diff
 
-.less_than:
-    ; S1 < S2
-	cmp edx, eax
-	je .same
-	xor eax, eax
-    mov eax, -1
-    jmp .exit
+    test al, al                ; Check if end of string s1
+    jz .diff_true
 
-.greater_than:
-    ; S1 > S2
-	cmp edx, eax
-	je .same
-	xor eax, eax
-    mov eax, 1
-    jmp .exit
+    inc rdx                    ; Increment i
 
-.same:
-    ; Strings are equal up to n characters
+    jmp .loop
+
+.check_diff:
+    movsx rax, al              ; Convert to signed
+    movsx rbx, bl              ; Convert to signed
+    sub rax, rbx               ; Calculate difference
+    jmp .return_diff
+
+.diff_true:
+    cmp rax, 0
+    jg .return_positive
+
+    cmp rax, 0
+    jl .return_negative
+
+.return_zero:
     xor eax, eax
-	mov eax, 0
+    jmp .return
 
-.exit:
-    pop rbp
+.return_positive:
+    mov eax, 1
+    jmp .return
+
+.return_negative:
+    mov eax, -1
+    jmp .return
+
+.end_loop:
+    mov eax, edx               ; Return i (number of characters compared)
+.return:
+    leave
     ret
