@@ -11,7 +11,7 @@ asm_strchr:
     mov rsi, rsi ; rsi = c (character)
 
     ; If s or c is NULL, return NULL (0)
-    test rdi, rdi
+    test rdi, 0
     jz .return_null
 
     ; Load the first byte of the string
