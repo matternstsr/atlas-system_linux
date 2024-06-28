@@ -1,14 +1,10 @@
-global asm_strstr
-section .text
+.global asm_strstr
+.section .text
 
 asm_strstr:
     push rbp
     mov rbp, rsp
     push rbx
-
-    ; Load parameters into registers
-    mov rdi, rdi ; rdi = haystack
-    mov rsi, rsi ; rsi = needle
 
     ; Null check for haystack or needle
     test rdi, rdi
