@@ -19,7 +19,7 @@ asm_strchr:
     ; Load the first byte of the string
 .get_next_char:
     movzx rbx, byte [rdi]
-    cmp rbx, 0x00
+    cmp rbx, 0
     jz .return_null ; If end of string, return NULL
     
     ; Compare current character with c
@@ -32,7 +32,8 @@ asm_strchr:
 
 .return_null:
     xor rax, rax ; Return 0 (NULL) if s or c is NULL
-    jmp .exit
+    test rsi, rsi
+    jz .return_found
 
 .return_found:
     mov rax, rdi ; Return pointer to current character in s
