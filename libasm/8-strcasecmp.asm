@@ -33,14 +33,14 @@ asm_strcasecmp:
     cmp bl, 90  ; 'Z'
     jg .tolower_s1_done  ; If greater than 'Z', skip lowercase conversion
     add bx, 32  ; Convert to lowercase
-.tolower_s1_done:
+.check_next_s1:
 
     cmp cl, 65  ; 'A'
     jl .check_next_s2  ; If less than 'A', skip lowercase conversion
     cmp cl, 90  ; 'Z'
     jg .tolower_s2_done  ; If greater than 'Z', skip lowercase conversion
     add cx, 32  ; Convert to lowercase
-.tolower_s2_done:
+.check_next_s2:
 
     ; Compare characters
     cmp bl, cl
@@ -67,3 +67,10 @@ asm_strcasecmp:
     pop rbx  ; Restore rbx
     pop rbp  ; Restore rbp
     ret      ; Return
+
+; Convert character to lowercase
+.tolower_s1_done:
+    ret
+
+.tolower_s2_done:
+    ret
