@@ -29,9 +29,10 @@ asm_strchr:
     jmp .get_next_char
 
 .return_null:
-    xor rax, rax ; Return 0 (NULL) if s or c is NULL
     test rsi, rsi
     jz .return_found
+    xor rax, rax ; Return 0 (NULL) if s or c is NULL
+    jmp .exit
 
 .return_found:
     mov rax, rdi ; Return pointer to current character in s
