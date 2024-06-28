@@ -9,6 +9,9 @@
 #define S2  "HOLBERTON SCHOOL"
 #define S3  "Holberton SchooL"
 #define S4  "holberton socool"
+#define S5  "Holberton"
+#define S6  "HOLBERTON"
+
 
 /**
  * main - Program entry point
@@ -26,6 +29,13 @@ int main(void)
 	printf("asm2: %d\n", asm_strcasecmp(S1, S2));
 	printf("asm3: %d\n", asm_strcasecmp(S1, S3));
 	printf("asm4: %d\n", asm_strcasecmp(S1, S4));
+	printf("\n");
+	printf("strcase: %d\n", strcasecmp(S1, S5));
+	printf("asm: %d\n", asm_strcasecmp(S1, S5));
+	printf("\n");
+	printf("strcase: %d\n", strcasecmp(S5, ""));
+	printf("asm: %d\n", asm_strcasecmp(S5, ""));
+	printf("\n");
 
     assert(strcasecmp(S1, S1) == asm_strcasecmp(S1, S1));
     assert(strcasecmp(S1, S2) == asm_strcasecmp(S1, S2));
@@ -35,12 +45,5 @@ int main(void)
     printf("All good!\n");
     return (EXIT_SUCCESS);
 }
-
-
-
-
-
-
-
 
 

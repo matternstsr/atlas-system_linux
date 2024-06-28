@@ -5,46 +5,44 @@ global asm_strcasecmp
 ;   rdi = pointer to first string (S1)
 ;   rsi = pointer to second string (S2)
 ;   rdx = size_t n (number of characters to compare)
-;   Loop through the strings
-
-;; int asm_strcasecmp(const char *s1, const char *s2);
 
 asm_strcasecmp:
     xor eax, eax        ; Clear eax (return value)
     xor rcx, rcx        ; Clear rcx (index)
-    jmp .LOOP           ; Jump to start of comparison loop
-
-.INCR:
-    cmp bl, 0           ; Check if bl (current char in str1) is '\0' (end of string)
-    je .END             ; If yes, jump to end of function
-
-    inc rcx             ; Increment index rcx
 
 .LOOP:
-    mov bl, BYTE [rdi+rcx]  ; Load byte from str1[rcx] into bl
-    mov dl, BYTE [rsi+rcx]  ; Load byte from str2[rcx] into dl
+    movzx r8, BYTE [rdi+rcx]   ; Load byte from str1[rcx] into r8
+    movzx r9, BYTE [rsi+rcx]   ; Load byte from str2[rcx] into r9
 
-    cmp bl, 'A'         ; Compare bl with 'A'
-    jl .NO_UPS1         ; Jump if bl < 'A' (not an uppercase letter)
-    cmp bl, 'Z'         ; Compare bl with 'Z'
-    jg .NO_UPS1         ; Jump if bl > 'Z' (not an uppercase letter)
-    add bl, 32          ; Convert bl to lowercase
+    test r8b, r8b        ; Check for end of string (null terminator of str1)
+    jz .END              ; If r8b is 0, strings are equal
 
-.NO_UPS1:
-    cmp dl, 'A'         ; Compare dl with 'A'
-    jl .NO_UPS2         ; Jump if dl < 'A' (not an uppercase letter)
-    cmp dl, 'Z'         ; Compare dl with 'Z'
-    jg .NO_UPS2         ; Jump if dl > 'Z' (not an uppercase letter)
-    add dl, 32          ; Convert dl to lowercase
+    cmp r8b, 'A'         ; Compare r8b with 'A'
+    jl .CHECK_LOWER1     ; If r8b < 'A', it's not uppercase
+    cmp r8b, 'Z'         ; Compare r8b with 'Z'
+    jg .CHECK_LOWER1     ; If r8b > 'Z', it's not uppercase
+    add r8b, 32          ; Convert r8b to lowercase
 
-.NO_UPS2:
-    cmp bl, dl          ; Compare bl and dl (both lowercase now)
-    je .INCR            ; If equal, jump to increment index
+.CHECK_LOWER1:
+    cmp r9b, 'A'         ; Compare r9b with 'A'
+    jl .CHECK_LOWER2     ; If r9b < 'A', it's not uppercase
+    cmp r9b, 'Z'         ; Compare r9b with 'Z'
+    jg .CHECK_LOWER2     ; If r9b > 'Z', it's not uppercase
+    add r9b, 32          ; Convert r9b to lowercase
 
-.DIFF:
-    movsx eax, bl       ; Move bl (as integer) into eax
-    movsx ebx, dl       ; Move dl (as integer) into ebx
-    sub eax, ebx        ; Subtract ebx from eax (character difference)
+.CHECK_LOWER2:
+    cmp r8b, r9b         ; Compare r8b and r9b (both lowercase now)
+    je .NEXT_CHAR        ; If equal, compare next character
+
+    ; Characters are different
+    movsx eax, r8b       ; Move r8b (as signed integer) into eax
+    movsx ebx, r9b       ; Move r9b (as signed integer) into ebx
+    sub eax, ebx         ; Subtract ebx from eax (character difference)
+    jmp .END             ; Exit loop
+
+.NEXT_CHAR:
+    inc rcx              ; Move to next character
+    jmp .LOOP            ; Repeat loop
 
 .END:
-    ret                 ; Return from function
+    ret                  ; Return from function
