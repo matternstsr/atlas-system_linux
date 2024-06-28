@@ -6,13 +6,13 @@ asm_memcpy:
     mov rbx, rdx        ; Store n in rbx (we will modify rdx)
     
     test rbx, rbx       ; Check if n == 0
-    je .done            ; If n == 0, nothing to copy
+    je .finish            ; If n == 0, nothing to copy
     
     cld                 ; Clear direction flag (ensure we copy forward)
 
 .copy_loop:
     cmp rbx, 0          ; Check if n == 0
-    je .done            ; If n == 0, exit loop
+    je .finish            ; If n == 0, exit loop
     
     mov rax, [rsi]      ; Load 8 bytes from src to rax
     mov [rdi], rax      ; Store 8 bytes from rax to dest
@@ -23,7 +23,7 @@ asm_memcpy:
     
     jmp .copy_loop      ; Repeat until all bytes copied
 
-.done:
+.finish:
     pop rbx             ; Restore rbx
     mov rax, rdi        ; Return dest (rax holds return value)
     ret
