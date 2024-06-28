@@ -1,44 +1,42 @@
 BITS 64
 
-global asm_strcspn
+global asm_strpbrk
 section .text
 
-; size_t asm_strcspn(const char *s, const char *reject)
-asm_strcspn:
+; char *asm_strpbrk(const char *s, const char *accept)
+asm_strpbrk:
     push rbp
     mov rbp, rsp
-    xor rax, rax            ; Initialize counter to 0
+    xor rax, rax            ; Initialize return pointer to NULL
     mov rcx, rdi            ; rcx = s (source string)
-    mov rdx, rsi            ; rdx = reject (reject string)
+    mov rdx, rsi            ; rdx = accept (accept string)
 
 .loop:
     movzx r8d, BYTE [rcx]   ; Load byte from s into r8
     test r8b, r8b           ; Check if end of string s ('\0')
-    jz .end
+    jz .end                 ; If end of s, exit loop
 
-    mov rsi, rdx            ; rsi = reject (reset pointer to reject string)
-    xor r9, r9              ; r9 = 0 (index for reject string)
+    mov rsi, rdx            ; rsi = accept (reset pointer to accept string)
+.check_accept:
+    movzx r9d, BYTE [rsi]   ; Load byte from accept into r9
+    test r9b, r9b           ; Check if end of accept string ('\0')
+    jz .next_char           ; If end of accept, move to next character in s
 
-.check_reject:
-    movzx r10d, BYTE [rsi + r9] ; Load byte from reject into r10
-    test r10b, r10b         ; Check if end of reject string ('\0')
-    jz .not_rejected        ; If end of reject, character not found in reject
+    cmp r8b, r9b            ; Compare s[i] with accept[j]
+    je .found_match         ; If match found, set return pointer and exit
 
-    cmp r8b, r10b           ; Compare s[i] with reject[j]
-    je .rejected            ; If match found, break and increment count
+    inc rsi                 ; Move to next character in accept
+    jmp .check_accept       ; Continue checking accept characters
 
-    inc r9                  ; Move to next character in reject
-    jmp .check_reject       ; Continue checking
-
-.rejected:
-    xor rax, rax            ; Reset counter to 0 (no matched segment)
-    jmp .end                ; Exit loop
-
-.not_rejected:
-    inc rax                 ; Increment count (length of non-rejected segment)
+.next_char:
     inc rcx                 ; Move to next character in s
     jmp .loop               ; Continue looping
 
-.end:
+.found_match:
+    mov rax, rcx            ; Set return value to pointer where match was found
     pop rbp
     ret                     ; Return from function
+
+.end:
+    pop rbp
+    ret                     ; Return NULL (end of s reached without match)
