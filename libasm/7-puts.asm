@@ -3,8 +3,10 @@ global asm_puts
 
 ;; Prototype: size_t asm_puts(const char *str)
 asm_puts:
-    push rbp            ; Function prologue
+    push rbp
     mov rbp, rsp
+    push rdx
+    push rsi
 
     ; Get the length of the string using asm_strlen
     mov rsi, rdi        ; Pass the argument (str) to asm_strlen
