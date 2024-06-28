@@ -19,7 +19,7 @@ asm_strchr:
     ; Load the first byte of the string
 .get_next_char:
     movzx rbx, byte [rdi]
-    cmp rbx, 0
+    cmp rbx, 0x00
     jz .return_null ; If end of string, return NULL
     
     ; Compare current character with c
