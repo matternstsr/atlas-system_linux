@@ -1,33 +1,43 @@
-section .text
+BITS 64
+
 global asm_strchr
+section .text
 
+;; char *asm_strchr(const char *s, int c);
 asm_strchr:
-    test rdi, rdi        ; Check if s (rdi) is NULL
-    jz .not_found        ; If s is NULL, return NULL
+    push rbp
+    mov rbp, rsp
+    push rbx
 
-    mov bl, byte [rsi]   ; Move character to find (c) into bl
+    ; Load character to find (c) into al
+    movzx eax, BYTE [rsi]
 
-.strchr_loop:
-    mov al, byte [rdi]   ; Load byte from memory address in rdi into al
-    cmp al, bl           ; Compare al with bl (character to find)
-    je .found            ; Jump if equal to found
+    ; Loop through the string
+.get_next_char:
+    ; Load byte from s (rdi) into bl
+    movzx ebx, BYTE [rdi]
 
-    test al, al          ; Check for end of string ('\0')
-    jz .end              ; Jump to .end if end of string ('\0')
+    ; Compare current character (bl) with c (al)
+    cmp bl, 0
+    jz .not_found      ; If end of string ('\0'), return NULL
 
-    inc rdi              ; Increment pointer to next character in string
-    jmp .strchr_loop     ; Continue loop
+    cmp bl, al
+    jz .return_found   ; If match found, return pointer to current character
 
-.found:
-    mov rax, rdi         ; Return pointer to the found character (rdi currently points to it)
-    ret
+    ; Move to the next character in the string
+    inc rdi
+    jmp .get_next_char ; Repeat loop
+
+.return_found:
+    ; If match found, return pointer to the found character
+    mov rax, rdi
+    jmp .exit
 
 .not_found:
-    xor rax, rax         ; Return NULL (rax is already 0)
-    ret
+    ; If end of string ('\0') is reached without finding c, return NULL
+    xor rax, rax        ; Set rax to 0 (NULL)
 
-.end:
-    cmp bl, 0x00         ; Check if character to find is '\0'
-    jne .not_found       ; If not '\0', return NULL (not found)
-    mov rax, rdi         ; Return pointer to the end of string ('\0')
+.exit:
+    pop rbx
+    pop rbp
     ret
