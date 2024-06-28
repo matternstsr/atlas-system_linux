@@ -13,8 +13,6 @@ asm_strchr:
     ; If s or c is NULL, return NULL (0)
     test rdi, rdi
     jz .return_null
-    test rsi, rsi
-    jz .return_null
 
     ; Load the first byte of the string
 .get_next_char:
