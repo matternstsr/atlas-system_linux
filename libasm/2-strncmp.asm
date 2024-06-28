@@ -28,6 +28,8 @@ asm_strncmp:
     inc rdi
     inc rsi
     inc eax       ; Increment counter for remaining characters
+	test edx, eax
+	je .same
     jmp .asm_strncmp_loop  ; Continue loop
 
 .less_than:
