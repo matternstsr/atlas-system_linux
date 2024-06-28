@@ -1,42 +1,50 @@
-BITS 64
-
 section .text
-global strcasecmp
+global asm_strcasecmp
 
-strcasecmp:
-	xor eax, eax		; set return value to 0
-	xor rcx, rcx		; set an index to 0
-	jmp .LOOP		; goto '.LOOP'
+; Arguments:
+;   rdi = pointer to first string (S1)
+;   rsi = pointer to second string (S2)
+;   rdx = size_t n (number of characters to compare)
+;   Loop through the strings
+
+;; int asm_strcasecmp(const char *s1, const char *s2);
+
+asm_strcasecmp:
+    xor eax, eax        ; Clear eax (return value)
+    xor rcx, rcx        ; Clear rcx (index)
+    jmp .LOOP           ; Jump to start of comparison loop
 
 .INCR:
-	cmp bl, 0		; id bl equal to '\0' ?
-	je .END			; if yes, goto '.END'
-	inc rcx			; index incrementation
+    cmp bl, 0           ; Check if bl (current char in str1) is '\0' (end of string)
+    je .END             ; If yes, jump to end of function
+
+    inc rcx             ; Increment index rcx
 
 .LOOP:
-	mov bl, BYTE [rdi+rcx]	; put str1[rcx] into bl
-	mov dl, BYTE [rsi+rcx]	; put str2[rcx] into dl
-	cmp bl, 'A'		; is bl < 'A' ?
-	jl .NO_UPS1		; if yes, goto '.NO_UPPER1'
-	cmp bl, 'Z'		; is bl > 'Z' ?
-	jg .NO_UPS1		; if yes, goto '.NO_UPPER1'
-	add bl, 32		; lowercase bl
+    mov bl, BYTE [rdi+rcx]  ; Load byte from str1[rcx] into bl
+    mov dl, BYTE [rsi+rcx]  ; Load byte from str2[rcx] into dl
+
+    cmp bl, 'A'         ; Compare bl with 'A'
+    jl .NO_UPS1         ; Jump if bl < 'A' (not an uppercase letter)
+    cmp bl, 'Z'         ; Compare bl with 'Z'
+    jg .NO_UPS1         ; Jump if bl > 'Z' (not an uppercase letter)
+    add bl, 32          ; Convert bl to lowercase
 
 .NO_UPS1:
-	cmp dl, 'A'		; is dl < 'A' ?
-	jl .NO_UPS2		; if yes, goto '.NO_UPPER2'
-	cmp dl, 'Z'		; is dl > 'Z' ?
-	jg .NO_UPS2		; if yes, goto '.NO_UPPER2'
-	add dl, 32		; lowercase dl
+    cmp dl, 'A'         ; Compare dl with 'A'
+    jl .NO_UPS2         ; Jump if dl < 'A' (not an uppercase letter)
+    cmp dl, 'Z'         ; Compare dl with 'Z'
+    jg .NO_UPS2         ; Jump if dl > 'Z' (not an uppercase letter)
+    add dl, 32          ; Convert dl to lowercase
 
 .NO_UPS2:
-	cmp bl, dl		; is bl equal to dl ?
-	je .INCR		; if yes, goto '.INCREMENT'
+    cmp bl, dl          ; Compare bl and dl (both lowercase now)
+    je .INCR            ; If equal, jump to increment index
 
 .DIFF:
-	movsx eax, bl		; put bl char into eax int
-	movsx ebx, dl		; put dl char into ebx int
-	sub eax, ebx		; eax = eax - ebx
+    movsx eax, bl       ; Move bl (as integer) into eax
+    movsx ebx, dl       ; Move dl (as integer) into ebx
+    sub eax, ebx        ; Subtract ebx from eax (character difference)
 
 .END:
-	ret			; end
+    ret                 ; Return from function
