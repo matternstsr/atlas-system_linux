@@ -19,17 +19,16 @@ asm_strncmp:
     mov dl, byte [rsi]
 
     ; Print current characters for debugging
-    mov rax, 1         ; syscall number for sys_write
-    mov rdi, 1         ; file descriptor stdout
-    lea rsi, [rdi + al]; address of character in S1
-    mov rdx, 1         ; number of bytes to write
-    syscall            ; invoke syscall to print character from S1
+    mov rax, 1             ; syscall number for sys_write
+    mov rdi, 1             ; file descriptor stdout
 
-    mov rax, 1         ; syscall number for sys_write
-    mov rdi, 1         ; file descriptor stdout
-    lea rsi, [rdi + dl]; address of character in S2
-    mov rdx, 1         ; number of bytes to write
-    syscall            ; invoke syscall to print character from S2
+    lea rsi, [rdi + al]    ; address of character in S1
+    mov rdx, 1             ; number of bytes to write
+    syscall                ; invoke syscall to print character from S1
+
+    lea rsi, [rdi + dl]    ; address of character in S2
+    mov rdx, 1             ; number of bytes to write
+    syscall                ; invoke syscall to print character from S2
 
     ; Compare bytes or check termination conditions
     cmp al, 0       ; Check if end of S1 ('\0')
