@@ -13,9 +13,9 @@ asm_puts:
     call asm_strlen     ; Call asm_strlen to get the length
 
     ; Set up syscall to write the string to stdout
-    mov rax, 1          ; syscall number for write
     mov rdi, 1          ; file descriptor 1 (stdout)
     mov rdx, rax        ; length of the string
+    mov rax, 1          ; syscall number for write
     syscall             ; invoke syscall to write to stdout
 
     ; Cleanup and return
