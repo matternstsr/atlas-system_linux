@@ -31,7 +31,6 @@ asm_strstr:
     ; Get lengths of haystack and needle
     mov rcx, rdi ; rcx = haystack (use rcx to iterate through haystack)
     mov rdx, rsi ; rdx = needle (use rdx to iterate through needle)
-    call asm_strlen   ; Call strlen to get lengths of both strings
 
     ; Calculate lengths of haystack and needle
     mov r8, rax  ; r8 = length of haystack
