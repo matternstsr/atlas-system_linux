@@ -4,23 +4,28 @@ section .text
 global asm_strncmp
 
 asm_strncmp:
-	xor eax, eax
-	xor rcx, rcx
-	jmp .loop
-.move:
-	cmp bl, 0
-	je .end
-	inc rcx
+    xor eax, eax
+    xor rcx, rcx
+    jmp .loop
+
 .loop:
-	cmp rdx, rcx
-	je .end
-	mov bl, BYTE [rdi+rcx]
-	mov r8b, BYTE [rsi+rcx]
-	cmp bl, r8b
-	je .move
+    cmp rcx, rdx
+    je .end
+
+    mov bl, BYTE [rdi + rcx]
+    mov r8b, BYTE [rsi + rcx]
+    cmp bl, r8b
+    je .continue
+
 .notsame:
-	movsx eax, bl
-	movsx ebx, r8b
-	sub eax, ebx
+    movsx eax, bl
+    movsx ebx, r8b
+    sub eax, ebx
+    jmp .end
+
+.continue:
+    inc rcx
+    jmp .loop
+
 .end:
-	ret
+    ret
