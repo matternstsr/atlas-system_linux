@@ -51,13 +51,32 @@ asm_strcasecmp:
 
     ; Check if end of strings
     test al, al
-    jz .done    ; If end of both strings, they are equal
+    jz .check_end_s2  ; s1 ended, check if s2 also ends
 
-    jmp .loop   ; Otherwise, continue comparing
+    ; Load next byte from s2 and check
+    lodsb
+    xor bl, bl
+    test bl, bl
+    jz .done    ; s1 and s2 are equal, s2 ended
+
+    jmp .loop   ; Both strings continue, compare next characters
 
 ; Determine if one string is greater
 .done:
-    mov rax, 0
+    test al, al
+    jnz .shorter_str  ; s1 not ended, check if s2 is shorter
+    test bl, bl
+    jz .longer_str    ; s1 ended, s2 is longer
+
+.shorter_str:
+    mov rax, -1       ; s1 < s2
+    jmp .cleanup
+
+.longer_str:
+    mov rax, 1        ; s1 > s2
+    jmp .cleanup
+
+.cleanup:
     pop rsi
     pop rdi
     pop rbx
