@@ -30,9 +30,14 @@ int main(void)
 	printf("asm3: %d\n", asm_strcasecmp(S1, S3));
 	printf("asm4: %d\n", asm_strcasecmp(S1, S4));
 	printf("\n");
+
 	printf("strcase: %d\n", strcasecmp(S1, S5));
 	printf("asm: %d\n", asm_strcasecmp(S1, S5));
 	printf("\n");
+    printf("strcase: %d\n", strcasecmp(S5, S1));
+	printf("asm: %d\n", asm_strcasecmp(S5, S1));
+	printf("\n");
+
 	printf("strcase S5, "": %d\n", strcasecmp(S5, ""));
 	printf("asm S5, "": %d\n", asm_strcasecmp(S5, ""));
 	printf("\n");
