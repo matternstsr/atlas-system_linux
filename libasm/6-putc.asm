@@ -17,19 +17,7 @@ asm_putc:
 
     syscall               ; invoke syscall to write to stdout
 
-    ; Error handling (optional)
-    test rax, rax         ; Check if syscall returned an error
-    js .syscall_error     ; Jump if error occurred
-
     ; Cleanup and return
-    pop rdi               ; Restore rdi
-    pop rbp               ; Function epilogue
-    ret
-
-.syscall_error:
-    ; Handle syscall error here (print error message, etc.)
-    ; Optionally, return an error code or take appropriate action
-
     pop rdi               ; Restore rdi
     pop rbp               ; Function epilogue
     ret
