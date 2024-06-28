@@ -1,10 +1,10 @@
-	global strncmp:
+BITS 64
 
-	section .text
+global asm_strncmp
+section .text
 
-strncmp:
+asm_strncmp:
 	xor rcx, rcx
-
 loop:
 	mov r10b, BYTE [rdi]
 	mov r11b, BYTE [rsi]
@@ -26,4 +26,3 @@ end:
 	movzx rbx, r11b
 	sub rax, rbx
 	ret
-    
