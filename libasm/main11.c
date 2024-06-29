@@ -8,6 +8,7 @@ extern size_t asm_strcspn(const char *s, const char *reject);
 #define S1  "Holberton"
 #define S2  "holberton"
 #define S3  "HOLBERTON"
+#define S4  "Holberton School"
 
 #define R1  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define R2  "abcdefghijklmnopqrstuvwxyzABCDEFGIJKLMNOPQRSTUVWXYZ"
@@ -81,7 +82,19 @@ int main(void)
     printf("strcspn result: %zu\n", result_strcspn);
     printf("Result: %s\n\n", result_asm == result_strcspn ? "Passed" : "Failed");
 
+
+    printf("Test Case: asm_strcspn(\"%s\", \"%s\")\n", S4, R4);
+    result_asm = asm_strcspn(S4, R4);
+    result_strcspn = strcspn(S4, R4);
+    printf("asm_strcspn result: %zu\n", result_asm);
+    printf("strcspn result: %zu\n", result_strcspn);
+    printf("Result: %s\n\n", result_asm == result_strcspn ? "Passed" : "Failed");
+
+
     printf("All tests completed.\n");
+
+
+
 
     return EXIT_SUCCESS;
 }

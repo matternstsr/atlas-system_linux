@@ -30,9 +30,15 @@ asm_strcspn:
 
 .rejected:
     cmp     rax, 1          ; Check if rax > 1
-    jg      .clear_counter  ; If greater than 1, clear counter
+    jl      .clear_counter  ; If greater than 1, clear counter
+    
+    cmp     rax, 2          ; Check if rax > 1
+    jg      .notclear_counter  ; If greater than 1, clear counter
 
     jmp     .end_loop_s     ; Exit loop after finding a rejected character
+
+.notclear_counter:
+    jmp     .end_loop_s     ; Exit loop
 
 .clear_counter:
     xor     rax, rax        ; Reset counter to 0 (no matched segment)
