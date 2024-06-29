@@ -40,10 +40,11 @@ void readelf_sections(FILE *fp)
 	fseek(fp, shoff, SEEK_SET);
 	shdr_size = ehdr.e_shentsize * ehdr.e_shnum;
 	shdr = malloc(shdr_size);
-	if (shdr == NULL) {
-    fprintf(stderr, "Error: Failed to allocate memory "
-                    "for section headers\n");
-    return;
+	if (shdr == NULL)
+	{
+	fprintf(stderr, "Error: Failed to allocate memory "
+					"for section headers\n");
+	return;
 	}
 	/* Read section headers */
 	fread(shdr, ehdr.e_shentsize, ehdr.e_shnum, fp);
