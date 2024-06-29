@@ -27,7 +27,7 @@ if (flags & SHF_EXCLUDE)
 {
 	flag_string[position++] = 'E';
 	flag_string[position] = '\0';
-	return flag_string;
+	return (flag_string);
 }
 if (flags & SHF_MASKOS)
 	flag_string[position++] = 'o';
@@ -37,6 +37,6 @@ if (flags & SHF_OS_NONCONFORMING)
 	flag_string[position++] = 'O';
 flag_string[position] = '\0';
 if (position == 0)
-	return " ";
-return flag_string;
+	return (" ");
+return (flag_string);
 }
