@@ -37,18 +37,17 @@ void print_program_headers(const char *filename) {
 	printf("Entry point 0x%lx\n", (unsigned long)elf_header.e_entry);
 
 	// Print number of program headers and their starting offset
-	printf("There are %d program headers, "
-			"starting at offset %lu\n\n", elf_header.e_phnum,
-			(unsigned long)elf_header.e_phoff);
+	printf("There are %d program headers, starting at offset %lu\n\n",
+			elf_header.e_phnum, (unsigned long)elf_header.e_phoff);
 
 	// Seek to the program header offset
 	fseek(file, elf_header.e_phoff, SEEK_SET);
 
-	// Read program headers
+	// Read and print program headers
 	Elf64_Phdr program_header;
 	printf("Program Headers:\n");
-	printf("  Type           Offset   VirtAddr   "
-			"PhysAddr   FileSiz MemSiz  Flg Align\n");
+	printf("  Type           Offset   VirtAddr           "
+			"PhysAddr           FileSiz  MemSiz   Flg Align\n");
 	for (int i = 0; i < elf_header.e_phnum; ++i) {
 		fread(&program_header, 1, sizeof(Elf64_Phdr), file);
 		printf("  %-14s 0x%06lx 0x%016lx 0x%016lx 0x%06lx 0x%06lx %-3s %lx\n",
