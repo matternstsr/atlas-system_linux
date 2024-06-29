@@ -2,12 +2,12 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 
 # Source files for each target
-COMMON_SRCS = elf_common.c endian.c elf_header.c
+COMMON_SRCS = 0elf_common.c 0endian.c 0elf_header.c
 0-HREADELF_SRCS = 0-hreadelf.c $(COMMON_SRCS)
-1-HREADELF_SRCS = 1-hreadelf.c elfprocess.c endianess.c print_sec_hdrs.c \
-                  print_elf_flags_key.c check_elf_magic.c convert_flags_to_string.c \
-                  res_spec_sec_type_name.c resolve_std_sec_type_name.c \
-                  map_spec_sec_type_name.c map_file_into_memory.c
+1-HREADELF_SRCS = 1-hreadelf.c 1elfprocess.c 1endianess.c 1print_sec_hdrs.c \
+                  1print_elf_flags_key.c 1check_elf_magic.c 1convert_flags_to_string.c \
+                  1res_spec_sec_type_name.c 1resolve_std_sec_type_name.c \
+                  1map_spec_sec_type_name.c 1map_file_into_memory.c
 
 # Object files
 0-HREADELF_OBJS = $(0-HREADELF_SRCS:.c=.o)
