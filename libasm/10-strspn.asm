@@ -18,40 +18,26 @@ asm_strspn:
 
     mov     rcx, r9         ; rcx = accept (reset pointer to accept string)
 
-    ; Convert edx (s[i]) to lowercase if it's an uppercase letter
-    cmp     dl, 'A'
-    jb      .check_accept   ; If character is not a letter, skip conversion
-    cmp     dl, 'Z'
-    ja      .check_accept   ; If character is not a letter, skip conversion
-    add     dl, 32          ; Convert uppercase letter to lowercase
-
 .check_accept:
     ; Check each character in accept
     movzx   ebx, byte [rcx] ; Load byte from accept into ebx
     test    bl, bl          ; Check if end of accept string ('\0')
     jz      .increment_count ; If end of accept, increment count
 
-    ; Convert ebx (accept[j]) to lowercase if it's an uppercase letter
-    cmp     bl, 'A'
-    jb      .cmp_characters ; If character is not a letter, skip conversion
-    cmp     bl, 'Z'
-    ja      .cmp_characters ; If character is not a letter, skip conversion
-    add     bl, 32          ; Convert uppercase letter to lowercase
-
-.cmp_characters:
     cmp     dl, bl          ; Compare s[i] with accept[j]
-    je      .accept_found   ; If match found, increment and continue
+    je      .char_matched   ; If match found, go to char_matched
 
     inc     rcx             ; Move to next character in accept
     jmp     .check_accept   ; Continue checking accept string
 
-.accept_found:
-    inc     rax             ; Increment count (length of matched segment)
+.char_matched:
+    inc     rax             ; Increment count (number of characters matched)
     inc     r8              ; Move to next character in s
     jmp     .loop           ; Continue looping through source string
 
 .increment_count:
-    inc     rax             ; Final increment to count if character matches accept
+    inc     r8              ; Move to next character in s (no match found)
+    jmp     .loop           ; Continue looping through source string
 
 .end:
     pop     rbp
