@@ -3,29 +3,29 @@
 /* Function to read and print ELF header for 64-bit ELF */
 void readelf_header64(const char *filename)
 {
-	Elf64_Ehdr ehdr;
+    Elf64_Ehdr ehdr;
 
-	// Open file
-	int fd = open(filename, O_RDONLY);
-	if (fd == -1) {
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
+    // Open file
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
 
-	// Read ELF header
-	if (read(fd, &ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
-		perror("read");
-		close(fd);
-		exit(EXIT_FAILURE);
-	}
-	close(fd);
+    // Read ELF header
+    if (read(fd, &ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+        perror("read");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+    close(fd);
 
-	// Print ELF header
-	printf("ELF Header:\n");
-	print_elf_identification(&ehdr);
-	print_file_information(&ehdr);
-	print_program_headers(&ehdr);
-	print_section_headers(&ehdr);
+    // Print ELF header
+    printf("ELF Header:\n");
+    print_elf_identification(&ehdr);
+    print_file_information(&ehdr);
+    print_program_headers(&ehdr);
+    print_section_headers(&ehdr);
 }
 
 /* Helper function to print ELF identification */
