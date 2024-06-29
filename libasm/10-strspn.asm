@@ -1,42 +1,43 @@
-global asm_strspn
 section .text
+global asm_strspn
 
 ; size_t asm_strspn(const char *s, const char *accept)
 asm_strspn:
-    push rbp
-    mov rbp, rsp
-    xor rax, rax            ; Initialize counter to 0
-    mov rcx, rdi            ; rcx = s (source string)
-    mov rdx, rsi            ; rdx = accept (accept string)
+    push    rbp
+    mov     rbp, rsp
+
+    xor     rax, rax        ; Initialize counter to 0
+    mov     r8, rdi         ; r8 = s (source string)
+    mov     r9, rsi         ; r9 = accept (accept string)
 
 .loop:
-    movzx r8b, BYTE [rcx]   ; Load byte from s into r8
-    test r8b, r8b           ; Check if end of string s ('\0')
-    jz .end
+    movzx   edx, byte [r8]  ; Load byte from s into edx
+    test    dl, dl          ; Check if end of string s ('\0')
+    jz      .end
 
-    mov rsi, rdx            ; rsi = accept (reset pointer to accept string)
+    mov     rcx, r9         ; rcx = accept (reset pointer to accept string)
 
 .check_accept:
-    movzx r9b, BYTE [rsi]   ; Load byte from accept into r9
-    test r9b, r9b           ; Check if end of accept string ('\0')
-    jz .increment_count     ; If end of accept, increment count
+    movzx   ebx, byte [rcx] ; Load byte from accept into ebx
+    test    bl, bl          ; Check if end of accept string ('\0')
+    jz      .increment_count ; If end of accept, increment count
 
-    cmp r8b, r9b            ; Compare s[i] with accept[j]
-    je .accept_found        ; If match found, increment and continue
+    cmp     dl, bl          ; Compare s[i] with accept[j]
+    je      .accept_found   ; If match found, increment and continue
 
-    inc rsi                 ; Move to next character in accept
-    jmp .check_accept       ; Continue checking
+    inc     rcx             ; Move to next character in accept
+    jmp     .check_accept   ; Continue checking
 
 .accept_found:
-    inc rax                 ; Increment count (length of matched segment)
-    inc rcx                 ; Move to next character in s
-    jmp .loop               ; Continue looping
+    inc     rax             ; Increment count (length of matched segment)
+    inc     r8              ; Move to next character in s
+    jmp     .loop           ; Continue looping
 
 .increment_count:
-    inc rax                 ; Final increment to count if character matches accept
+    inc     rax             ; Final increment to count if character matches accept
 
 .end:
-    pop rbp
+    pop     rbp
     ret                     ; Return from function
 
 
