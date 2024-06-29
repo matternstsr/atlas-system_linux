@@ -15,21 +15,21 @@
 
 typedef struct
 {
-  uint32_t type;
-  const char *name;
+	uint32_t type;
+	const char *name;
 } SectionTypeMapping;
 
 typedef struct {
-  uint32_t type;
-  const char *name;
+	uint32_t type;
+	const char *name;
 } SpecialSectionTypeMapping;
 
 void print_32bit_sec_hdrs(Elf32_Ehdr * ehdr,
-							  Elf32_Shdr * shdr,
-							  const char *strtab);
+							Elf32_Shdr * shdr,
+							const char *strtab);
 void print_64bit_sec_headers(Elf64_Ehdr *ehdr,
-							  Elf64_Shdr *shdr,
-							  const char *strtab);
+							Elf64_Shdr *shdr,
+							const char *strtab);
 void *map_file_into_memory(const char *filename, size_t *filesize);
 void check_elf_magic(Elf64_Ehdr *ehdr);
 void analyze_prnt_elf_hdrs(void *maps, size_t filesize);

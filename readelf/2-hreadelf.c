@@ -8,7 +8,7 @@
 */
 int main(int argc, char **argv)
 {
-    (void)argc;  /* Suppress unused parameter warning for argc */
-    (void)argv;  /* Suppress unused parameter warning for argv */
-    return (0);
+	(void)argc;  /* Suppress unused parameter warning for argc */
+	(void)argv;  /* Suppress unused parameter warning for argv */
+	return (0);
 }
