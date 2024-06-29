@@ -23,7 +23,7 @@
 #define MAX_SECTIONS 1000
 
 /* Function prototypes */
-void readelf_header32(const char *filename);
+/*void readelf_header32(const char *filename);*/
 void readelf_header64(const char *filename);
 void print_osabi(unsigned char osabi);
 void print_file_type(uint16_t type);
