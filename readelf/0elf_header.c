@@ -51,7 +51,6 @@ void print_elf_identification(const Elf64_Ehdr *ehdr)
 /* Helper function to print file information */
 void print_file_information(const Elf64_Ehdr *ehdr)
 {
-	bool swap_endian = (ehdr->e_ident[EI_DATA] == ELFDATA2MSB);
 	printf("  Version:                           0x%x\n", ehdr->e_version);
 	printf("  Entry point address:               0x%lx\n",
 		(unsigned long)ehdr->e_entry);
