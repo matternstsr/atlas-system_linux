@@ -1,5 +1,3 @@
-BITS 64
-
 global asm_strspn
 section .text
 
@@ -12,14 +10,14 @@ asm_strspn:
     mov rdx, rsi            ; rdx = accept (accept string)
 
 .loop:
-    movzx r8d, BYTE [rcx]   ; Load byte from s into r8
+    movzx r8b, BYTE [rcx]   ; Load byte from s into r8
     test r8b, r8b           ; Check if end of string s ('\0')
     jz .end
 
     mov rsi, rdx            ; rsi = accept (reset pointer to accept string)
 
 .check_accept:
-    movzx r9d, BYTE [rsi]   ; Load byte from accept into r9
+    movzx r9b, BYTE [rsi]   ; Load byte from accept into r9
     test r9b, r9b           ; Check if end of accept string ('\0')
     jz .increment_count     ; If end of accept, increment count
 
@@ -40,3 +38,13 @@ asm_strspn:
 .end:
     pop rbp
     ret                     ; Return from function
+
+
+;Correct output - case: asm_strspn("Holberton", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+;inorrect output - case: asm_strspn("Holberton", "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+;inorrect output - case: asm_strspn("Holberton", "0123456789");
+;inorrect output - case: asm_strspn("Holberton School", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+;Correct output - case: asm_strspn("Holberton School", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ");
+;inorrect output - case: asm_strspn("Holberton School", "");
+;Correct output - case: asm_strspn("", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ");
+;Correct output - case: asm_strspn(s, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,. "); s being a very long string

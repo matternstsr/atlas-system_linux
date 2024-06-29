@@ -3,15 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+// Declaration of assembly function
+extern size_t asm_strspn(const char *s, const char *accept);
 
-#define S1  "Holberton School"
-#define S2  "HOLBERTON SCHOOL"
-#define S3  "Holberton SchooL"
-#define S4  "holberton socool"
-#define S5  "Holberton"
-#define S6  "HOLBERTON"
+#define S1  "Holberton"
+#define S2  "holberton"
+#define S3  "HOLBERTON"
 
+#define A1  "abcdefghijklmnopqrstuvwxyz"
+#define A2  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 /**
  * main - Program entry point
@@ -20,38 +20,22 @@
  */
 int main(void)
 {
-	printf("strcasecmp1: %d\n", strcasecmp(S1, S1));
-	printf("strcasecmp2: %d\n", strcasecmp(S1, S2));
-	printf("strcasecmp3: %d\n", strcasecmp(S1, S3));
-	printf("strcasecmp4: %d\n", strcasecmp(S1, S4));
-	printf("\n");
-	printf("asm1: %d\n", asm_strcasecmp(S1, S1));
-	printf("asm2: %d\n", asm_strcasecmp(S1, S2));
-	printf("asm3: %d\n", asm_strcasecmp(S1, S3));
-	printf("asm4: %d\n", asm_strcasecmp(S1, S4));
-	printf("\n");
+    // Test cases with assert statements
+    assert(strspn(S2, A1) == asm_strspn(S2, A1));
+    assert(strspn(S2, A2) == asm_strspn(S2, A2));
+    assert(strspn(S3, A1) == asm_strspn(S3, A1));
+    assert(strspn(S3, A2) == asm_strspn(S3, A2));
+    assert(strspn(S1, A1) == asm_strspn(S1, A1));
+    assert(strspn(S1, A2) == asm_strspn(S1, A2));
+    assert(strspn(S1, A1 A2) == asm_strspn(S1, A1 A2));
 
-	printf("strcase: %d\n", strcasecmp(S1, S5));
-	printf("asm: %d\n", asm_strcasecmp(S1, S5));
-	printf("\n");
-    printf("strcase: %d\n", strcasecmp(S5, S1));
-	printf("asm: %d\n", asm_strcasecmp(S5, S1));
-	printf("\n");
+    // Additional test cases for coverage
+    assert(asm_strspn("", A1) == 0); // Empty source string
+    assert(asm_strspn("Holberton School", "") == 0); // Empty accept string
+    assert(asm_strspn("", "") == 0); // Both strings empty
+    assert(asm_strspn(S1, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == strlen(S1)); // Full match including space
 
-	printf("strcase S5, "": %d\n", strcasecmp(S5, ""));
-	printf("asm S5, "": %d\n", asm_strcasecmp(S5, ""));
-	printf("\n");
-    printf("strcase "", S5: %d\n", strcasecmp("", S5));
-	printf("asm "", S5: %d\n", asm_strcasecmp("", S5));
-	printf("\n");
+    printf("All tests passed!\n");
 
-    assert(strcasecmp(S1, S1) == asm_strcasecmp(S1, S1));
-    assert(strcasecmp(S1, S2) == asm_strcasecmp(S1, S2));
-    assert(strcasecmp(S1, S3) == asm_strcasecmp(S1, S3));
-    assert(strcasecmp(S1, S4) == asm_strcasecmp(S1, S4));
-
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
-
-
