@@ -18,12 +18,27 @@ asm_strspn:
 
     mov     rcx, r9         ; rcx = accept (reset pointer to accept string)
 
-    ; Check each character in accept
+    ; Convert edx (s[i]) to lowercase if it's an uppercase letter
+    cmp     dl, 'A'
+    jb      .check_accept   ; If character is not a letter, skip conversion
+    cmp     dl, 'Z'
+    ja      .check_accept   ; If character is not a letter, skip conversion
+    add     dl, 32          ; Convert uppercase letter to lowercase
+
 .check_accept:
+    ; Check each character in accept
     movzx   ebx, byte [rcx] ; Load byte from accept into ebx
     test    bl, bl          ; Check if end of accept string ('\0')
     jz      .increment_count ; If end of accept, increment count
 
+    ; Convert ebx (accept[j]) to lowercase if it's an uppercase letter
+    cmp     bl, 'A'
+    jb      .cmp_characters ; If character is not a letter, skip conversion
+    cmp     bl, 'Z'
+    ja      .cmp_characters ; If character is not a letter, skip conversion
+    add     bl, 32          ; Convert uppercase letter to lowercase
+
+.cmp_characters:
     cmp     dl, bl          ; Compare s[i] with accept[j]
     je      .accept_found   ; If match found, increment and continue
 
