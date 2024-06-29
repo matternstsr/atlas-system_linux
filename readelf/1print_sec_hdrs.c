@@ -76,4 +76,5 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
 			section_headers[section_count].sh_addralign);
 	}
 	print_elf_flags_key();/* Assuming this function prints ELF flags key */
+	/* 1print_elf_flags_key.c */
 }

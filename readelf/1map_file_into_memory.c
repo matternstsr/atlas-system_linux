@@ -24,7 +24,7 @@ void *map_file_into_memory(const char *filename, size_t *filesize)
 		return (NULL);
 	}
 	*filesize = st.st_size;
-	mapped_file = mmap(NULL, *filesize, PROT_READ, MAP_PRIVATE, fd, 0);
+	 = mmap(NULL, *filesize, PROT_READ, MAP_PRIVATE, fd, 0);
 	close(fd);
 	if (mapped_file == MAP_FAILED)
 	{

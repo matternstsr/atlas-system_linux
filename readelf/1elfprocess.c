@@ -6,13 +6,13 @@ void analyze_prnt_elf_hdrs(void *maps, size_t filesize)
 	int is_big_endian, is_64_bit;
 	(void)filesize;
 
-	check_elf_magic(ehdr);
+	check_elf_magic(ehdr); /* 1check_elf_magic.c*/
 	is_big_endian = (ehdr->e_ident[EI_DATA] == ELFDATA2MSB);
 	is_64_bit = (ehdr->e_ident[EI_CLASS] == ELFCLASS64);
 	if (is_64_bit)
-		proc_prnt_elf64_sec(ehdr, is_big_endian, maps);
+		proc_prnt_elf64_sec(ehdr, is_big_endian, maps);/* SAME FILE*/
 	else
-		proc_prnt_elf32_sec((Elf32_Ehdr *)ehdr, is_big_endian, maps);
+		proc_prnt_elf32_sec((Elf32_Ehdr *)ehdr, is_big_endian, maps);/* SAME FILE*/
 }
 
 void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps)
@@ -22,9 +22,9 @@ void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps)
 		shdr[ehdr->e_shstrndx].sh_offset);
 
 	if (is_big_endian)
-		swap_endianess_64(shdr, ehdr->e_shnum);
+		swap_endianess_64(shdr, ehdr->e_shnum); /*1endianess.c*/
 
-	print_64bit_sec_headers(ehdr, shdr, strtab);
+	print_64bit_sec_headers(ehdr, shdr, strtab);  /*1print_sec_hdrs.c*/
 }
 
 void proc_prnt_elf32_sec(Elf32_Ehdr *ehdr32, int is_big_endian, void *maps)
