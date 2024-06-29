@@ -31,7 +31,7 @@ asm_strcspn:
 .rejected:
     cmp     rax, 1          ; Check if rax > 1
     jl      .clear_counter  ; If greater than 1, clear counter
-    
+
     cmp     rax, 2          ; Check if rax > 1
     jg      .notclear_counter  ; If greater than 1, clear counter
 
