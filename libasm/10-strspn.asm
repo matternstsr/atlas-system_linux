@@ -22,7 +22,7 @@ asm_strspn:
     ; Check each character in accept
     movzx   ebx, byte [rcx] ; Load byte from accept into ebx
     test    bl, bl          ; Check if end of accept string ('\0')
-    jz      .upcount ; If end of accept, increment count
+    jz      .dontupcount ; If end of accept, increment count
 
     cmp     dl, bl          ; Compare s[i] with accept[j]
     je      .matched   ; If match found, go to char_matched
@@ -35,7 +35,7 @@ asm_strspn:
     inc     r8              ; Move to next character in s
     jmp     .Boop           ; Continue looping through source string
 
-.upcount:
+.dontupcount:
     jmp     .endit          ; If no match found, end the loop
 
 .endit:
