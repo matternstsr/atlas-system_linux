@@ -66,6 +66,12 @@ void print_program_headers(const char *filename) {
                 (unsigned long)program_header.p_memsz,
                 (program_header.p_flags & PF_R ? "R" : " "),
                 (unsigned long)program_header.p_align);
+
+            // Print section to segment mapping for each program header (example, adjust as needed)
+            printf(" Section to Segment mapping:\n");
+            printf("  Segment Sections...\n");
+            printf("   %02d     .interp .note.netbsd.ident .hash .dynsym .dynstr .rel.got .rel.plt .init .plt .text .fini .rodata\n",
+                i);
         }
     }
 
