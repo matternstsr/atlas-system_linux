@@ -49,21 +49,24 @@ void print_program_headers(const char *filename) {
     printf("  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align\n");
     for (int i = 0; i < elf_header.e_phnum; ++i) {
         fread(&program_header, 1, sizeof(Elf64_Phdr), file);
-        printf("  %-14s 0x%06lx 0x%016lx 0x%016lx 0x%06lx 0x%06lx %-3s %lx\n",
-            program_header.p_type == PT_NULL ? "NULL" :
-            (program_header.p_type == PT_LOAD ? "LOAD" :
-            (program_header.p_type == PT_DYNAMIC ? "DYNAMIC" :
-            (program_header.p_type == PT_INTERP ? "INTERP" :
-            (program_header.p_type == PT_NOTE ? "NOTE" :
-            (program_header.p_type == PT_PHDR ? "PHDR" :
-            (program_header.p_type == PT_TLS ? "TLS" : "UNKNOWN")))))),
-            (unsigned long)program_header.p_offset,
-            (unsigned long)program_header.p_vaddr,
-            (unsigned long)program_header.p_paddr,
-            (unsigned long)program_header.p_filesz,
-            (unsigned long)program_header.p_memsz,
-            (program_header.p_flags & PF_R ? "R" : " "),
-            (unsigned long)program_header.p_align);
+        
+        // Adjust printing to match desired format and filter to only desired program headers
+        if (program_header.p_type == PT_LOAD || program_header.p_type == PT_INTERP || program_header.p_type == PT_DYNAMIC || program_header.p_type == PT_NOTE || program_header.p_type == PT_PHDR) {
+            printf("  %-14s 0x%06lx 0x%016lx 0x%016lx 0x%06lx 0x%06lx %-3s %lx\n",
+                program_header.p_type == PT_NULL ? "NULL" :
+                (program_header.p_type == PT_LOAD ? "LOAD" :
+                (program_header.p_type == PT_DYNAMIC ? "DYNAMIC" :
+                (program_header.p_type == PT_INTERP ? "INTERP" :
+                (program_header.p_type == PT_NOTE ? "NOTE" :
+                (program_header.p_type == PT_PHDR ? "PHDR" : "UNKNOWN"))))),
+                (unsigned long)program_header.p_offset,
+                (unsigned long)program_header.p_vaddr,
+                (unsigned long)program_header.p_paddr,
+                (unsigned long)program_header.p_filesz,
+                (unsigned long)program_header.p_memsz,
+                (program_header.p_flags & PF_R ? "R" : " "),
+                (unsigned long)program_header.p_align);
+        }
     }
 
     fclose(file);
