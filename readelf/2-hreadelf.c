@@ -1,74 +1,54 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <elf.h>
+#include "2-hreadelf.h"
 
-void print_program_headers(FILE *file) {
-    Elf64_Ehdr elf_header;
-    Elf64_Phdr *program_headers;
-    int i;
+/**
+ * main - entry point
+ * @ac: argument count
+ * @argv: argument vector
+ * Return: 0 on success or 1+ on error
+ */
+int main(int ac, char **argv)
+{
+	int fd, exit_status = 0;
+	size_t r;
+	elf_t elf_header;
 
-    // Read ELF header
-    fread(&elf_header, 1, sizeof(Elf64_Ehdr), file);
+	memset(&elf_header, 0, sizeof(elf_header));
+	if (ac != 2)
+		return (fprintf(stderr, USAGE), EXIT_FAILURE);
 
-    // Validate ELF magic number
-    if (memcmp(elf_header.e_ident, ELFMAG, SELFMAG) != 0) {
-        fprintf(stderr, "Error: Not an ELF file\n");
-        exit(1);
-    }
+	fd = open_and_handle_file(argv[1], 0);
+	if (fd == -1)
+		return (EXIT_FAILURE);
 
-    // Read program headers
-    fseek(file, elf_header.e_phoff, SEEK_SET);
-    program_headers = malloc(elf_header.e_phnum * sizeof(Elf64_Phdr));
-    fread(program_headers, sizeof(Elf64_Phdr), elf_header.e_phnum, file);
+	r = read(fd, &elf_header.e64, sizeof(elf_header.e64));
+	if (r != sizeof(elf_header.e64) || check_elf_header((char *)&elf_header.e64))
+	{
+		fprintf(stderr, ERR_NOT_MAGIC);
+		exit_status = EXIT_FAILURE;
+	}
+	else
+	{
+		if (IS_32(elf_header.e64))
+		{
+			lseek(fd, 0, SEEK_SET);
+			r = read(fd, &elf_header.e32, sizeof(elf_header.e32));
+			if (r != sizeof(elf_header.e32) || check_elf_header((char *)&elf_header.e32))
+			{
+				fprintf(stderr, ERR_NOT_MAGIC);
+				exit_status = EXIT_FAILURE;
+			}
+		}
+		switch_all_endian(&elf_header);
+		exit_status = display_all_elf_program_headers(&elf_header, fd);
+	}
 
-    // Print ELF information
-    printf("Elf file type is %s\n", elf_header.e_type == ET_EXEC ? "EXEC (Executable file)" :
-                                    (elf_header.e_type == ET_DYN ? "DYN (Shared object file)" :
-                                    (elf_header.e_type == ET_REL ? "REL (Relocatable file)" : "Unknown")));
-    printf("Entry point 0x%lx\n", (unsigned long)elf_header.e_entry);
-    printf("There are %d program headers, starting at offset %lu\n\n", elf_header.e_phnum, (unsigned long)elf_header.e_phoff);
-
-    // Print program headers
-    printf("Program Headers:\n");
-    printf("  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align\n");
-    for (i = 0; i < elf_header.e_phnum; ++i) {
-        printf("  %-14s 0x%06lx 0x%016lx 0x%016lx 0x%06lx 0x%06lx %-3s %lx\n",
-            program_headers[i].p_type == PT_NULL ? "NULL" :
-            (program_headers[i].p_type == PT_LOAD ? "LOAD" :
-            (program_headers[i].p_type == PT_DYNAMIC ? "DYNAMIC" :
-            (program_headers[i].p_type == PT_INTERP ? "INTERP" :
-            (program_headers[i].p_type == PT_NOTE ? "NOTE" :
-            (program_headers[i].p_type == PT_PHDR ? "PHDR" :
-            (program_headers[i].p_type == PT_TLS ? "TLS" : "UNKNOWN")))))),
-            (unsigned long)program_headers[i].p_offset,
-            (unsigned long)program_headers[i].p_vaddr,
-            (unsigned long)program_headers[i].p_paddr,
-            (unsigned long)program_headers[i].p_filesz,
-            (unsigned long)program_headers[i].p_memsz,
-            (program_headers[i].p_flags & PF_R ? "R" : " "),
-            (unsigned long)program_headers[i].p_align);
-    }
-
-    // Cleanup
-    free(program_headers);
+	free(elf_header.s32);
+	free(elf_header.s64);
+	free(elf_header.p32);
+	free(elf_header.p64);
+	close(fd); /* if error? */
+	return (exit_status);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s elf_filename\n", argv[0]);
-        return 1;
-    }
+/*--------------------------------------------------------------*/
 
-    FILE *file = fopen(argv[1], "rb");
-    if (!file) {
-        perror("Error opening file");
-        return 1;
-    }
-
-    print_program_headers(file);
-
-    fclose(file);
-    return 0;
-}
