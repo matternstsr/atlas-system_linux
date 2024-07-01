@@ -38,11 +38,11 @@ char *get_elf_file_type(elf_t *elf_header)
     // Determine the ELF file type and return its corresponding string representation
     switch (EGET(e_type))
     {
-        case ET_NONE:   return "NONE (None)";
-        case ET_REL:    return "REL (Relocatable file)";
-        case ET_EXEC:   return "EXEC (Executable file)";
-        case ET_DYN:    return "DYN (Shared object file)";
-        case ET_CORE:   return "CORE (Core file)";
+        case ET_NONE:   return "ET_NONE (None)";
+        case ET_REL:    return "ET_REL (Relocatable file)";
+        case ET_EXEC:   return "ET_EXEC (Executable file)";
+        case ET_DYN:    return "ET_DYN (Shared object file)";
+        case ET_CORE:   return "ET_CORE (Core file)";
         default:
             snprintf(type_str, sizeof(type_str), "<unknown>: %x", EGET(e_type));
             return type_str;
