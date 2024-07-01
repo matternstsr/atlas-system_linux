@@ -89,14 +89,14 @@ void print_elf_section_headers_32(elf_t *elf_header, char *string_table)
         printf("Section %u:\n", (unsigned int)i);
         printf("  Name: %s\n", string_table + SGET(i, sh_name));
         printf("  Type: %s\n", get_section_type_name(SGET(i, sh_type)));
-        printf("  Address: 0x%llx\n", SGET(i, sh_addr));
-        printf("  Offset: 0x%llx\n", SGET(i, sh_offset));
-        printf("  Size: 0x%llx\n", SGET(i, sh_size));
-        printf("  Entry Size: 0x%llx\n", SGET(i, sh_entsize));
+        printf("  Address: 0x%lx\n", SGET(i, sh_addr));
+        printf("  Offset: 0x%lx\n", SGET(i, sh_offset));
+        printf("  Size: 0x%lx\n", SGET(i, sh_size));
+        printf("  Entry Size: 0x%lx\n", SGET(i, sh_entsize));
         printf("  Flags: %s\n", translate_section_flags(elf_header, i));
         printf("  Link: %u\n", SGET(i, sh_link));
         printf("  Info: %u\n", SGET(i, sh_info));
-        printf("  Address Alignment: %llu\n", SGET(i, sh_addralign));
+        printf("  Address Alignment: %lu", SGET(i, sh_addralign));
     }
 }
 
@@ -115,13 +115,13 @@ void print_elf_section_headers_64(elf_t *elf_header, char *string_table)
         printf("Section %u:\n", (unsigned int)i);
         printf("  Name: %s\n", string_table + SGET(i, sh_name));
         printf("  Type: %s\n", get_section_type_name(SGET(i, sh_type)));
-        printf("  Address: 0x%llx\n", SGET(i, sh_addr));
-        printf("  Offset: 0x%llx\n", SGET(i, sh_offset));
-        printf("  Size: 0x%llx\n", SGET(i, sh_size));
-        printf("  Entry Size: 0x%llx\n", SGET(i, sh_entsize));
+        printf("  Address: 0x%lx\n", SGET(i, sh_addr));
+        printf("  Offset: 0x%lx\n", SGET(i, sh_offset));
+        printf("  Size: 0x%lx\n", SGET(i, sh_size));
+        printf("  Entry Size: 0x%lx\n", SGET(i, sh_entsize));
         printf("  Flags: %s\n", translate_section_flags(elf_header, i));
         printf("  Link: %u\n", SGET(i, sh_link));
         printf("  Info: %u\n", SGET(i, sh_info));
-        printf("  Address Alignment: %llu\n", SGET(i, sh_addralign));
+        printf("  Address Alignment: %lu", SGET(i, sh_addralign));
     }
 }
