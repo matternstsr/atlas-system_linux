@@ -95,9 +95,6 @@
 	(ELF_SECTION_SIZE(sec_hdr, segment) > 0			\
 	&& ELF_IS_SECTION_IN_SEGMENT(sec_hdr, segment))
 
-
-
-
 /**
  * struct Elf - stores 32/64 structs and other data
  * @e64: the 64 bit struct
@@ -122,74 +119,49 @@ typedef struct Elf
 
 } elf_t;
 
-/* utils.c */
 int open_and_handle_file(char *name, int silent);
 int check_elf_header(char *elf_header);
 void print_bytes(void *ptr, size_t n);
-
-/* endian.c */
 unsigned short switch_2_byte(unsigned short n);
 unsigned int swap_endian_uint32(unsigned int n);
 unsigned long swap_endian_uint64(unsigned long n);
 void switch_all_endian(elf_t *elf_header);
 void switch_endianness_sections(elf_t *h, size_t i);
-
-/* endian2.c */
 void switch_endianness_program_headers(elf_t *h, size_t i);
 void switch_all_endian_symbol(elf_t *h, size_t i);
 void switch_all_endian_ver(elf_t *h, uint16_t *versym, size_t versym_size,
 	Elf64_Verneed *verneed, size_t verneed_size);
-
-/* print_header_1.c */
 int print_header(elf_t *elf_header);
 int print_magic(Elf64_Ehdr *elf_header);
 int print_class(Elf64_Ehdr *elf_header);
 int print_data(Elf64_Ehdr *elf_header);
 int print_version(Elf64_Ehdr *elf_header);
-
-/* print_header_2.c */
 int print_osabi(Elf64_Ehdr *elf_header);
 int print_osabi_more(Elf64_Ehdr *elf_header);
 int print_abiversion(Elf64_Ehdr *elf_header);
 int print_type(elf_t *elf_header);
 int print_entry(elf_t *elf_header);
-
-/* print_header_3.c */
 int print_machine(Elf64_Ehdr *elf_header);
 int print_e_version(elf_t *elf_header);
 int print_program_headers(elf_t *elf_header);
 char *get_machine(Elf64_Ehdr *elf_header);
 char *get_machine2(Elf64_Ehdr *elf_header);
-
-/* print_header_4.c */
 int print_section_headers(elf_t *elf_header);
 int print_flags(elf_t *elf_header);
-
-/* print_sections_1.c */
 int print_section_headers_full(elf_t *elf_header, int fd);
 void read_elf_section_headers(elf_t *elf_header, int fd);
 char *read_elf_string_table(elf_t *elf_header, int fd);
 char *get_section_type_name(unsigned int sh_type);
-
-/* print_sections_2.c */
 void print_elf_section_headers_32(elf_t *elf_header, char *string_table);
 void print_elf_section_headers_64(elf_t *elf_header, char *string_table);
 char *translate_section_flags(elf_t *elf_header, size_t i);
-
-/* elf1.c */
 char *get_elf_file_type(elf_t *elf_header);
-
-/* print_programs1.c */
 int display_all_elf_program_headers(elf_t *elf_header, int fd);
-void print_program_headers32(elf_t *elf_header, char *string_table, int fd);
+void print_program_headers_32bit(elf_t *elf_header, char *string_table, int fd);
 void print_program_headers_64bit(elf_t *elf_header, char *string_table, int fd);
 void read_program_headers_from_file(elf_t *elf_header, int fd);
 char *get_segment_type(unsigned long p_type);
-
-/* print_programs2.c */
 int print_section_segment_mappings(elf_t *elf_header, char *string_table);
-
-/* print_symbols1.c */
 int print_all_symbol_tables(elf_t *elf_header, int fd);
 void print_symbol_table(elf_t *elf_header, int fd, size_t i,
 	char *string_table);
@@ -203,7 +175,6 @@ void print_verneed_info(elf_t *elf_header, char *sym_string_table,
 	uint16_t *versym, Elf64_Verneed *verneed, size_t verneed_size, size_t i,
 	size_t size, int section);
 
-/* print_symbols2.c */
 void read_symbol_table(elf_t *elf_header, int fd, int i);
 char *read_symbol_string_table(elf_t *elf_header, int fd, int i);
 size_t find_verneed_index(Elf64_Verneed *verneed, size_t verneed_size,
@@ -211,12 +182,9 @@ size_t find_verneed_index(Elf64_Verneed *verneed, size_t verneed_size,
 void print_verneed_table(elf_t *elf_header, int fd, int i,
 	char *sym_string_table, uint16_t *versym, Elf64_Verneed *verneed);
 void *read_data(elf_t *elf_header, int fd, unsigned long offset, long size);
-
-/* print_symbols3.c */
 char *get_sym_type(elf_t *elf_header, size_t i);
 char *get_sym_bind(elf_t *elf_header, size_t i);
 char *get_sym_visibility(elf_t *elf_header, size_t i);
-
 int check_elf(char *elf_header);
 void switch_all_endian(elf_t *elf_header);
 int print_program_headers_full(elf_t *elf_header, int fd);
