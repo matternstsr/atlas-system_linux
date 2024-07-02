@@ -44,6 +44,7 @@ int read_and_validate_elf_header(int fd, elf_t *elf_header)
 int display_all_elf_program_headers(const elf_t *elf_header, int fd)
 {
 	int exit_status = (EXIT_SUCCESS);
+
 	exit_status = display_elf_program_headers(elf_header->e64,
 											elf_header->e32, fd);
 	free(elf_header->s32);
@@ -64,7 +65,7 @@ int main(int ac, char **argv)
 {
 	int fd, exit_status = 0;
 
-	if (ac != 2) 
+	if (ac != 2)
 	{
 		fprintf(stderr, USAGE);
 		return (EXIT_FAILURE);
