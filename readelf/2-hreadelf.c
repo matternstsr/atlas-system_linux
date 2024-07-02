@@ -69,7 +69,8 @@ int display_all_elf_program_headers(elf_t *elf_header, int fd)
 */
 int main(int ac, char **argv)
 {
-	int fd, exit_status = 0;
+	int fd, exit_status = EXIT_SUCCESS;
+	elf_t elf_header;
 
 	if (ac != 2)
 	{
