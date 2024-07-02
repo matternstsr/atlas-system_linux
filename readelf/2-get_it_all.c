@@ -104,7 +104,7 @@ char *get_section_type_name(unsigned int sh_type)
 * @param sh_type The unknown section type identifier.
 * @return char* Formatted string representing the unknown section type.
 */
-static char *get_unknown_section_type_name(unsigned int sh_type)
+char *get_unknown_section_type_name(unsigned int sh_type)
 {
 	static char type_name[64];
 	snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
