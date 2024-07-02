@@ -126,8 +126,9 @@ unsigned short switch_2_byte(unsigned short n);
 unsigned int swap_endian_uint32(unsigned int n);
 unsigned long swap_endian_uint64(unsigned long n);
 void switch_all_endian(elf_t *elf_header);
-void switch_endianness_sections_32(elf_t *h, size_t i);
-void switch_endianness_sections_64(elf_t *h, size_t i);
+void switch_endianness_sections_32(elf_t *elf_header, size_t index);
+void switch_endianness_sections_64(elf_t *elf_header, size_t index);
+void switch_endianness_sections(elf_t *elf_header, size_t index);
 void switch_endianness_program_headers(elf_t *h, size_t i);
 void switch_all_endian_symbol(elf_t *h, size_t i);
 void switch_all_endian_ver(elf_t *h, uint16_t *versym, size_t versym_size,

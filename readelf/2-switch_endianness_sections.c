@@ -1,6 +1,23 @@
 #include "2-hreadelf.h"
 
 /**
+ * switch_endianness_sections - Switches endianness of ELF section headers if necessary.
+ * @elf_header: Pointer to the ELF header structure.
+ * @index: Index of the section header to switch endianness.
+ */
+void switch_endianness_sections(elf_t *elf_header, size_t index)
+{
+    if (IS_BE(elf_header->e64)) {
+        if (!IS_32(elf_header->e64)) {
+            switch_endianness_sections_64(elf_header, index);
+        } else {
+            switch_endianness_sections_32(elf_header, index);
+        }
+    }
+}
+
+
+/**
 * switch_endianness_sections_64 - Switches endianness of 64-bit ELF section headers if necessary.
 * @elf_header: Pointer to the ELF header structure.
 * @index: Index of the section header to switch endianness.
