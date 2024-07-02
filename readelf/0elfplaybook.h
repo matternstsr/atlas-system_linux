@@ -31,8 +31,11 @@ void print_machine_type(uint16_t machine);
 void sparcbigendian32(const char *filename);
 
 /* Function prototypes */
-void readelf_header32(const char *filename);
+/* void readelf_header32(const char *filename);*/
+/* void readelf_header64(const char *filename);*/
 void readelf_header64(const char *filename);
+bool read_elf_header64(const char *filename, Elf64_Ehdr *ehdr, bool *swap_endian);
+void print_elf_header64(const Elf64_Ehdr *ehdr, bool swap_endian);
 
 /* Utility functions for endian swapping */
 uint16_t swap16(uint16_t val, bool swap);
