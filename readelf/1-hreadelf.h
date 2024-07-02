@@ -19,7 +19,8 @@ typedef struct
 	const char *name;
 } SectionTypeMapping;
 
-typedef struct {
+typedef struct
+{
 	uint32_t type;
 	const char *name;
 } SpecialSectionTypeMapping;
