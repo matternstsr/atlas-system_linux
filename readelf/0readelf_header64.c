@@ -25,7 +25,8 @@ void readelf_header64(const char *filename)
 * @swap_endian: Pointer to a boolean indicating if endian swapping is required.
 * @return: True if read successfully, false otherwise.
 */
-bool read_elf_header64(const char *filename, Elf64_Ehdr *ehdr, bool *swap_endian)
+bool read_elf_header64(const char *filename,
+	Elf64_Ehdr *ehdr, bool *swap_endian)
 {
 	int fd;
 
