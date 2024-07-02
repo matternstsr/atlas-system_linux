@@ -186,7 +186,7 @@ char *get_sym_type(elf_t *elf_header, size_t i);
 char *get_sym_bind(elf_t *elf_header, size_t i);
 char *get_sym_visibility(elf_t *elf_header, size_t i);
 int check_elf(char *elf_header);
-void switch_all_endian(elf_t *h);
+void switch_all_endian(elf_t *elf_header);
 int print_program_headers_full(elf_t *elf_header, int fd);
 int open_file(char *name, int silent);
 
