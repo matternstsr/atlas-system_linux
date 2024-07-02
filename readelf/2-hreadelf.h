@@ -95,6 +95,9 @@
 	(ELF_SECTION_SIZE(sec_hdr, segment) > 0			\
 	&& ELF_IS_SECTION_IN_SEGMENT(sec_hdr, segment))
 
+#define MY_UNKNOWN_SECTION_TYPE 0xFF00
+
+
 /**
  * struct Elf - stores 32/64 structs and other data
  * @e64: the 64 bit struct
