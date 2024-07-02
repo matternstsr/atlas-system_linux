@@ -119,6 +119,9 @@ typedef struct Elf
 
 } elf_t;
 
+
+int read_and_validate_elf_header(int fd, elf_t *elf_header);
+int display_all_elf_program_headers(const elf_t *elf_header, int fd);
 int open_and_handle_file(char *name, int silent);
 int check_elf_header(char *elf_header);
 void print_bytes(void *ptr, size_t n);
