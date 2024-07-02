@@ -10,11 +10,11 @@ void readelf_header64(const char *filename)
 	Elf64_Ehdr ehdr;
 	bool swap_endian = false;
 
-	if (!read_elf_header64(filename, &ehdr, &swap_endian)) {
+	if (!read_elf_header64(filename, &ehdr, &swap_endian))
+	{
 		fprintf(stderr, "Failed to read ELF header from file: %s\n", filename);
 		exit(EXIT_FAILURE);
 	}
-
 	print_elf_header64(&ehdr, swap_endian);
 }
 
@@ -30,23 +30,21 @@ bool read_elf_header64(const char *filename, Elf64_Ehdr *ehdr, bool *swap_endian
 	int fd;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1) {
+	if (fd == -1)
+	{
 		perror("open");
-		return false;
+		return (false);
 	}
-
-	if (read(fd, ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+	if (read(fd, ehdr, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr))
+	{
 		perror("read");
 		close(fd);
-		return false;
+		return (false);
 	}
-
 	close(fd);
-
 	/* Determine endianness */
 	*swap_endian = (ehdr->e_ident[EI_DATA] == ELFDATA2MSB);
-
-	return true;
+	return (true);
 }
 
 /**
