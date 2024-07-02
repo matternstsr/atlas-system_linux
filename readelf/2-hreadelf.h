@@ -130,7 +130,7 @@ int open_and_handle_file(char *name, int silent);
 int check_elf_header(char *elf_header);
 void print_bytes(void *ptr, size_t n);
 unsigned short switch_2_byte(unsigned short n);
-unsigned int swap_endian_uint32(unsigned int n);
+unsigned int seu32(unsigned int n);
 unsigned long swap_endian_uint64(unsigned long n);
 void switch_all_endian(elf_t *elf_header);
 void switch_endianness_sections_32(elf_t *elf_header, size_t index);

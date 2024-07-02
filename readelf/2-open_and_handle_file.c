@@ -18,5 +18,5 @@ int open_and_handle_file(char *filename, int quiet_mode)
 		else if (errno == ENOENT)
 			fprintf(stderr, "Error: File '%s' not found\n", filename);
 	}
-	return file_descriptor;
+	return (file_descriptor);
 }

@@ -10,9 +10,9 @@ void switch_all_endian(elf_t *h)
 	if (IS_BE(h->e64))
 	{
 		h->e64.e_machine = switch_2_byte(h->e64.e_machine);
-		h->e64.e_version = swap_endian_uint32(h->e64.e_version);
+		h->e64.e_version = seu32(h->e64.e_version);
 		h->e64.e_type = switch_2_byte(h->e64.e_type);
-		h->e64.e_flags = swap_endian_uint32(h->e64.e_flags);
+		h->e64.e_flags = seu32(h->e64.e_flags);
 		h->e64.e_ehsize = switch_2_byte(h->e64.e_ehsize);
 		h->e64.e_phentsize = switch_2_byte(h->e64.e_phentsize);
 		h->e64.e_phnum = switch_2_byte(h->e64.e_phnum);
@@ -26,27 +26,27 @@ void switch_all_endian(elf_t *h)
 	if (IS_BE(h->e64) && IS_32(h->e64))
 	{
 		h->e32.e_machine = switch_2_byte(h->e32.e_machine);
-		h->e32.e_version = swap_endian_uint32(h->e32.e_version);
+		h->e32.e_version = seu32(h->e32.e_version);
 		h->e32.e_type = switch_2_byte(h->e32.e_type);
-		h->e32.e_flags = swap_endian_uint32(h->e32.e_flags);
+		h->e32.e_flags = seu32(h->e32.e_flags);
 		h->e32.e_ehsize = switch_2_byte(h->e32.e_ehsize);
 		h->e32.e_phentsize = switch_2_byte(h->e32.e_phentsize);
 		h->e32.e_phnum = switch_2_byte(h->e32.e_phnum);
 		h->e32.e_shentsize = switch_2_byte(h->e32.e_shentsize);
 		h->e32.e_shnum = switch_2_byte(h->e32.e_shnum);
-		h->e32.e_shoff = swap_endian_uint32(h->e32.e_shoff);
-		h->e32.e_phoff = swap_endian_uint32(h->e32.e_phoff);
-		h->e32.e_entry = swap_endian_uint32(h->e32.e_entry);
+		h->e32.e_shoff = seu32(h->e32.e_shoff);
+		h->e32.e_phoff = seu32(h->e32.e_phoff);
+		h->e32.e_entry = seu32(h->e32.e_entry);
 		h->e32.e_shstrndx = switch_2_byte(h->e32.e_shstrndx);
 	}
 }
 
 /**
-* swap_endian_uint32 - Swaps endianness of a 32-bit unsigned integer.
+* seu32 - Swaps endianness of a 32-bit unsigned integer.
 * @value: The unsigned integer whose endianness to swap.
 * Return: Unsigned integer with swapped endianness.
 */
-unsigned int swap_endian_uint32(unsigned int value)
+unsigned int seu32(unsigned int value)
 {
 	return (((value >> 24) & 0x000000ff) |
 			((value >> 8)  & 0x0000ff00) |

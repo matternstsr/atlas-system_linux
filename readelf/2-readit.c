@@ -78,7 +78,7 @@ char *read_elf_string_table(elf_t *elf_header, int fd)
 		exit(EXIT_FAILURE);
 	}
 
-	return str_table;
+	return (str_table);
 }
 
 /**
@@ -118,7 +118,8 @@ void print_elf_section_headers_64(elf_t *elf_header, char *string_table)
 	size_t i;
 
 	printf("=== 64-bit Section Headers ===\n");
-	for (i = 0; i < EGET(e_shnum); i++) {
+	for (i = 0; i < EGET(e_shnum); i++)
+	{
 		printf("Section %u:\n", (unsigned int)i);
 		printf("  Name: %s\n", string_table + SGET(i, sh_name));
 		printf("  Type: %s\n", get_section_type_name(SGET(i, sh_type)));

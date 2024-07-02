@@ -14,7 +14,7 @@ int display_all_elf_program_headers(elf_t *elf_header, int fd)
 	if (!EGET(e_phnum))
 	{
 		printf("\nThere are no program headers in this file.\n");
-		return 0;
+		return (0);
 	}
 
 	printf(PROGRAM_TITLE, get_elf_file_type(elf_header), EGET(e_entry),
@@ -40,5 +40,5 @@ int display_all_elf_program_headers(elf_t *elf_header, int fd)
 	print_section_segment_mappings(elf_header, section_strings);
 
 	free(section_strings);
-	return 0;
+	return (0);
 }
