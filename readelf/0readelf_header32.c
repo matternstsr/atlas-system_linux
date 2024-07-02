@@ -1,4 +1,5 @@
 #include "1-hreadelf.h"
+#include "0elfplaybook.h"
 
 /* Function to read and print ELF header for 32-bit ELF */
 void readelf_header32(const char *filename)

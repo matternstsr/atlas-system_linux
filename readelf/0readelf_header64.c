@@ -1,4 +1,5 @@
 #include "1-hreadelf.h"
+#include "0elfplaybook.h"
 
 /**
  * readelf_header64 - Reads and prints ELF header for 64-bit ELF.
