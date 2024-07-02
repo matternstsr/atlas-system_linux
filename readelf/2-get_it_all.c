@@ -3,7 +3,7 @@
 #define MY_UNKNOWN_SECTION_TYPE 0xFF00
 
 /**
-* get_segment_type_name - Retrieves the string representation of a segment type.
+* get_segment_type_name - Retr the string represen of a segment type.
 * @p_type: The segment type identifier (p_type).
 * Return: String representation of the segment type.
 */
@@ -37,7 +37,7 @@ char *get_elf_file_type(elf_t *elf_header)
 {
 	static char type_str[64]; /*  Buffer for storing the ELF file type string */
 
-	/*  Determine the ELF file type and return its corresponding string representation */
+	/*  Determine the ELF file type and return its corresp string represen */
 	switch (EGET(e_type))
 	{
 		case ET_NONE:   return "NONE (None)";
@@ -47,7 +47,7 @@ char *get_elf_file_type(elf_t *elf_header)
 		case ET_CORE:   return "CORE (Core file)";
 		default:
 			snprintf(type_str, sizeof(type_str), "<unknown>: %x", EGET(e_type));
-			return type_str;
+			return (type_str);
 	}
 }
 
@@ -94,7 +94,7 @@ char *get_section_type_name(unsigned int sh_type)
 		case 0x6ffffff3:            return "LOOS+ffffff3";
 		case SHT_GNU_LIBLIST:       return "GNU_LIBLIST";
 		default:
-			return get_unknown_section_type_name(sh_type);
+			return (get_unknown_section_type_name(sh_type));
 	}
 }
 
@@ -108,7 +108,7 @@ char *get_unknown_section_type_name(unsigned int sh_type)
 {
 	static char type_name[64];
 	snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
-	return type_name;
+	return (type_name);
 }
 
 /**
@@ -151,7 +151,7 @@ char *translate_section_flags(elf_t *elf_header, size_t section_index)
 	/* Null-terminate the string */
 	*p = '\0';
 
-	return flags_string;
+	return (flags_string);
 }
 
 char *get_segment_type(unsigned long p_type)
