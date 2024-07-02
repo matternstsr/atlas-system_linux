@@ -43,16 +43,22 @@ int read_and_validate_elf_header(int fd, elf_t *elf_header)
 */
 int display_all_elf_program_headers(elf_t *elf_header, int fd)
 {
-	int exit_status = (EXIT_SUCCESS);
+	int exit_status = EXIT_SUCCESS;
 
-	exit_status = display_all_elf_program_headers(elf_header->e64,
-											elf_header->e32, fd);
+	if (IS_32(elf_header->e64)) {
+		print_program_headers_32bit(elf_header, NULL, fd);
+	} else {
+		print_program_headers_64bit(elf_header, NULL, fd);
+	}
+
 	free(elf_header->s32);
 	free(elf_header->s64);
 	free(elf_header->p32);
 	free(elf_header->p64);
-	return (exit_status);
+
+	return exit_status;
 }
+
 
 /**
 * @brief Main entry point.
