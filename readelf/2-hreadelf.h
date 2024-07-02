@@ -163,7 +163,7 @@ void print_elf_section_headers_32(elf_t *elf_header, char *string_table);
 void print_elf_section_headers_64(elf_t *elf_header, char *string_table);
 char *translate_section_flags(elf_t *elf_header, size_t i);
 char *get_elf_file_type(elf_t *elf_header);
-int display_all_elf_program_headers(elf_t *elf_header, int fd);
+/* int display_all_elf_program_headers(elf_t *elf_header, int fd);*/
 void print_program_headers_32bit(elf_t *elf_header,
 								char *string_table, int fd);
 void print_program_headers_64bit(elf_t *elf_header,
