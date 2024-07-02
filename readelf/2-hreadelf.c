@@ -34,31 +34,6 @@ int read_and_validate_elf_header(int fd, elf_t *elf_header)
 	return (EXIT_SUCCESS);
 }
 
-/**
-* @brief Displays all ELF program headers.
-*
-* @param elf_header Pointer to the elf_t structure containing ELF headers.
-* @param fd File descriptor of the ELF file.
-* @return int EXIT_SUCCESS on success, EXIT_FAILURE on error.
-*/
-int display_all_elf_program_headers(elf_t *elf_header, int fd)
-{
-	int exit_status = EXIT_SUCCESS;
-
-	if (IS_32(elf_header->e64)) {
-		print_program_headers_32bit(elf_header, NULL, fd);
-	} else {
-		print_program_headers_64bit(elf_header, NULL, fd);
-	}
-
-	free(elf_header->s32);
-	free(elf_header->s64);
-	free(elf_header->p32);
-	free(elf_header->p64);
-
-	return exit_status;
-}
-
 
 /**
 * @brief Main entry point.
