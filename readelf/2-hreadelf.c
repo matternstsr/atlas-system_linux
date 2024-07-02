@@ -86,3 +86,15 @@ int main(int ac, char **argv)
 	close(fd);
 	return (exit_status);
 }
+
+/* static char *get_unknown_section_type_name(unsigned int sh_type)
+{
+    // Define the function implementation here
+    // Example implementation:
+    switch (sh_type) {
+        case SHT_UNKNOWN:
+            return "Unknown";
+        default:
+            return "Unsupported";
+    }
+} */
