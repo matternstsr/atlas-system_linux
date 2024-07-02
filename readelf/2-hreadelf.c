@@ -1,11 +1,11 @@
 #include "2-hreadelf.h"
 
 /**
- * main - entry point
- * @ac: argument count
- * @argv: argument vector
- * Return: 0 on success or 1+ on error
- */
+* main - entry point
+* @ac: argument count
+* @argv: argument vector
+* Return: 0 on success or 1+ on error
+*/
 int main(int ac, char **argv)
 {
 	int fd, exit_status = 0;

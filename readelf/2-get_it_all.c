@@ -1,10 +1,10 @@
 #include "2-hreadelf.h"
 
 /**
- * get_segment_type_name - Retrieves the string representation of a segment type.
- * @p_type: The segment type identifier (p_type).
- * Return: String representation of the segment type.
- */
+* get_segment_type_name - Retrieves the string representation of a segment type.
+* @p_type: The segment type identifier (p_type).
+* Return: String representation of the segment type.
+*/
 char *get_segment_type_name(unsigned long p_type)
 {
     switch (p_type)
@@ -27,10 +27,10 @@ char *get_segment_type_name(unsigned long p_type)
 
 
 /**
- * get_elf_file_type - Retrieves the ELF file type as a string.
- * @elf_header: Pointer to the ELF header structure.
- * Return: String representation of the ELF file type.
- */
+* get_elf_file_type - Retrieves the ELF file type as a string.
+* @elf_header: Pointer to the ELF header structure.
+* Return: String representation of the ELF file type.
+*/
 char *get_elf_file_type(elf_t *elf_header)
 {
     static char type_str[64]; // Buffer for storing the ELF file type string
@@ -51,10 +51,10 @@ char *get_elf_file_type(elf_t *elf_header)
 
 
 /**
- * get_section_type_name - Returns the string name corresponding to a section type.
- * @sh_type: The section type identifier.
- * Return: String name of the section type.
- */
+* get_section_type_name - Returns the string name corresponding to a section type.
+* @sh_type: The section type identifier.
+* Return: String name of the section type.
+*/
 char *get_section_type_name(unsigned int sh_type)
 {
     static char type_name[64]; // Buffer for storing the section type name
@@ -98,11 +98,11 @@ char *get_section_type_name(unsigned int sh_type)
 
 
 /**
- * translate_section_flags - Translates section flags into a string representation.
- * @elf_header: Pointer to the ELF header structure.
- * @section_index: Index of the section whose flags to translate.
- * Return: String representation of section flags based on legend.
- */
+* translate_section_flags - Translates section flags into a string representation.
+* @elf_header: Pointer to the ELF header structure.
+* @section_index: Index of the section whose flags to translate.
+* Return: String representation of section flags based on legend.
+*/
 char *translate_section_flags(elf_t *elf_header, size_t section_index)
 {
     static char flags_string[32];
@@ -130,20 +130,20 @@ char *translate_section_flags(elf_t *elf_header, size_t section_index)
 
 char *get_segment_type(unsigned long p_type)
 {
-	switch (p_type)
-	{
-	case PT_NULL:	return ("NULL");
-	case PT_LOAD:	return ("LOAD");
-	case PT_DYNAMIC:	return ("DYNAMIC");
-	case PT_INTERP:	return ("INTERP");
-	case PT_NOTE:	return ("NOTE");
-	case PT_SHLIB:	return ("SHLIB");
-	case PT_PHDR:	return ("PHDR");
-	case PT_TLS:	return ("TLS");
-	case PT_GNU_EH_FRAME:	return ("GNU_EH_FRAME");
-	case PT_GNU_STACK:	return ("GNU_STACK");
-	case PT_GNU_RELRO:  return ("GNU_RELRO");
-	case 0x6464E550:	return ("LOOS+464e550");
-	default:	return ("UNKNOWN");
-	}
+    switch (p_type)
+    {
+    case PT_NULL:	return ("NULL");
+    case PT_LOAD:	return ("LOAD");
+    case PT_DYNAMIC:	return ("DYNAMIC");
+    case PT_INTERP:	return ("INTERP");
+    case PT_NOTE:	return ("NOTE");
+    case PT_SHLIB:	return ("SHLIB");
+    case PT_PHDR:	return ("PHDR");
+    case PT_TLS:	return ("TLS");
+    case PT_GNU_EH_FRAME:	return ("GNU_EH_FRAME");
+    case PT_GNU_STACK:	return ("GNU_STACK");
+    case PT_GNU_RELRO:  return ("GNU_RELRO");
+    case 0x6464E550:	return ("LOOS+464e550");
+    default:	return ("UNKNOWN");
+    }
 }
