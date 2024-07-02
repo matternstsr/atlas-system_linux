@@ -11,31 +11,31 @@ void read_elf_section_headers(elf_t *elf_header, int fd)
 	size_t read_size = EGET(e_shentsize) * num_sections;
 	char *headers_buffer;
 
-	// If there are no sections, return early
+	/*  If there are no sections, return early */
 	if (num_sections == 0)
 		return;
 
-	// Allocate memory for the section headers
+	/*  Allocate memory for the section headers */
 	headers_buffer = calloc(num_sections, read_size);
 	if (!headers_buffer) {
 		perror("Failed to allocate memory");
 		exit(EXIT_FAILURE);
 	}
 
-	// Seek to the section headers offset in the file
+	/*  Seek to the section headers offset in the file */
 	if (lseek(fd, EGET(e_shoff), SEEK_SET) == -1) {
 		perror("Failed to seek to section headers");
 		exit(EXIT_FAILURE);
 	}
 
-	// Read section headers from the file into the allocated buffer
+	/*  Read section headers from the file into the allocated buffer */
 	size_t bytes_read = read(fd, headers_buffer, read_size);
 	if (bytes_read < read_size) {
 		perror("Failed to read section headers");
 		exit(EXIT_FAILURE);
 	}
 
-	// Assign the section headers buffer to the appropriate field in the ELF header structure
+	/*  Assign the section headers buffer to the appropriate field in the ELF header structure */
 	if (IS_32(elf_header->e64)) {
 		elf_header->s32 = (void *)headers_buffer;
 	} else {
@@ -53,20 +53,20 @@ char *read_elf_string_table(elf_t *elf_header, int fd)
 {
 	char *str_table;
 
-	// Allocate memory for the string table
+	/*  Allocate memory for the string table */
 	str_table = calloc(1, SGET(EGET(e_shstrndx), sh_size));
 	if (!str_table) {
 		perror("Failed to allocate memory");
 		exit(EXIT_FAILURE);
 	}
 
-	// Seek to the string table offset in the file
+	 Seek to the string table offset in the file
 	if (lseek(fd, SGET(EGET(e_shstrndx), sh_offset), SEEK_SET) == -1) {
 		perror("Failed to seek to string table");
 		exit(EXIT_FAILURE);
 	}
 
-	// Read the string table from the file into the allocated buffer
+	/*  Read the string table from the file into the allocated buffer */
 	if (read(fd, str_table, SGET(EGET(e_shstrndx), sh_size)) < 0) {
 		perror("Failed to read string table");
 		exit(EXIT_FAILURE);

@@ -33,9 +33,9 @@ char *get_segment_type_name(unsigned long p_type)
 */
 char *get_elf_file_type(elf_t *elf_header)
 {
-	static char type_str[64]; // Buffer for storing the ELF file type string
+	static char type_str[64]; /*  Buffer for storing the ELF file type string */
 
-	// Determine the ELF file type and return its corresponding string representation
+	/*  Determine the ELF file type and return its corresponding string representation */
 	switch (EGET(e_type))
 	{
 		case ET_NONE:   return "NONE (None)";
@@ -57,9 +57,9 @@ char *get_elf_file_type(elf_t *elf_header)
 */
 char *get_section_type_name(unsigned int sh_type)
 {
-	static char type_name[64]; // Buffer for storing the section type name
+	static char type_name[64]; /*  Buffer for storing the section type name */
 
-	// Determine the section type and return its corresponding string name
+	/*  Determine the section type and return its corresponding string name */
 	switch (sh_type)
 	{
 		case SHT_NULL:              return "NULL";
@@ -109,7 +109,7 @@ char *translate_section_flags(elf_t *elf_header, size_t section_index)
 	unsigned long flags = SGET(section_index, sh_flags);
 	char *p = flags_string;
 
-	// Translate each flag into its corresponding character
+	/*  Translate each flag into its corresponding character */
 	if (flags & SHF_WRITE)         *p++ = 'W';
 	if (flags & SHF_ALLOC)         *p++ = 'A';
 	if (flags & SHF_EXECINSTR)     *p++ = 'X';
@@ -122,7 +122,7 @@ char *translate_section_flags(elf_t *elf_header, size_t section_index)
 	if (flags & SHF_TLS)           *p++ = 'T';
 	if (flags & SHF_EXCLUDE)       *p++ = 'E';
 
-	// Null-terminate the string
+	/*  Null-terminate the string */
 	*p = '\0';
 
 	return flags_string;

@@ -8,7 +8,7 @@
 */
 int open_and_handle_file(char *filename, int quiet_mode)
 {
-	int file_descriptor; // Renamed 'fd' to 'file_descriptor'
+	int file_descriptor; /*  Renamed 'fd' to 'file_descriptor' */
 
 	file_descriptor = open(filename, O_RDONLY);
 	if (file_descriptor == -1 && !quiet_mode)
