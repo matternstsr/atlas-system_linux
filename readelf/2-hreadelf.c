@@ -87,7 +87,7 @@ int main(int ac, char **argv)
 	return (exit_status);
 }
 
-static char *get_unknown_section_type_name(unsigned int sh_type)
+/* static char *get_unknown_section_type_name(unsigned int sh_type)
 {
 	switch (sh_type) {
 		case MY_UNKNOWN_SECTION_TYPE:
@@ -96,3 +96,4 @@ static char *get_unknown_section_type_name(unsigned int sh_type)
 			return "Unsupported";
 	}
 }
+ */
