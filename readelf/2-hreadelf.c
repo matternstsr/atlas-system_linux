@@ -41,7 +41,7 @@ int read_and_validate_elf_header(int fd, elf_t *elf_header)
 * @param fd File descriptor of the ELF file.
 * @return int EXIT_SUCCESS on success, EXIT_FAILURE on error.
 */
-int display_all_elf_program_headers(const elf_t *elf_header, int fd)
+int display_all_elf_program_headers(elf_t *elf_header, int fd)
 {
 	int exit_status = (EXIT_SUCCESS);
 
