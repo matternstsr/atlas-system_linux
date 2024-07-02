@@ -89,9 +89,8 @@ int main(int ac, char **argv)
 
 static char *get_unknown_section_type_name(unsigned int sh_type)
 {
-	switch (sh_type)
-	{
-		case SHT_UNKNOWN:
+	switch (sh_type) {
+		case MY_UNKNOWN_SECTION_TYPE:
 			return "Unknown";
 		default:
 			return "Unsupported";
