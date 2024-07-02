@@ -60,7 +60,7 @@ char *read_elf_string_table(elf_t *elf_header, int fd)
 		exit(EXIT_FAILURE);
 	}
 
-	 Seek to the string table offset in the file
+	 /* Seek to the string table offset in the file */
 	if (lseek(fd, SGET(EGET(e_shstrndx), sh_offset), SEEK_SET) == -1) {
 		perror("Failed to seek to string table");
 		exit(EXIT_FAILURE);
