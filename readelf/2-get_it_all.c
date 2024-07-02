@@ -1,5 +1,7 @@
 #include "2-hreadelf.h"
 
+#define MY_UNKNOWN_SECTION_TYPE 0xFF00
+
 /**
 * get_segment_type_name - Retrieves the string representation of a segment type.
 * @p_type: The segment type identifier (p_type).
