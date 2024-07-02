@@ -129,7 +129,9 @@ void switch_all_endian(elf_t *elf_header);
 void switch_endianness_sections_32(elf_t *elf_header, size_t index);
 void switch_endianness_sections_64(elf_t *elf_header, size_t index);
 void switch_endianness_sections(elf_t *elf_header, size_t index);
-void switch_endianness_program_headers(elf_t *h, size_t i);
+void switch_endianness_program_headers_32(elf_t *elf_header, size_t index)
+void switch_endianness_program_headers_64(elf_t *elf_header, size_t index)
+void switch_endianness_program_headers(elf_t *elf_header, size_t index)
 void switch_all_endian_symbol(elf_t *h, size_t i);
 void switch_all_endian_ver(elf_t *h, uint16_t *versym, size_t versym_size,
 	Elf64_Verneed *verneed, size_t verneed_size);
