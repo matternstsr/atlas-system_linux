@@ -45,7 +45,7 @@ int display_all_elf_program_headers(const elf_t *elf_header, int fd)
 {
 	int exit_status = (EXIT_SUCCESS);
 
-	exit_status = display_elf_program_headers(elf_header->e64,
+	exit_status = display_all_elf_program_headers(elf_header->e64,
 											elf_header->e32, fd);
 	free(elf_header->s32);
 	free(elf_header->s64);
