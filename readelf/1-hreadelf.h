@@ -25,6 +25,9 @@ typedef struct
 	const char *name;
 } SpecialSectionTypeMapping;
 
+Elf64_Shdr *read_section_headers(FILE *fp, Elf64_Ehdr *ehdr);
+void display_section_headers(Elf64_Ehdr *ehdr,
+	Elf64_Shdr *shdr, char *shstrtab);
 void print_32bit_sec_hdrs(Elf32_Ehdr * ehdr,
 							Elf32_Shdr * shdr,
 							const char *strtab);
@@ -45,7 +48,6 @@ const char *res_spec_sec_type_name(uint32_t sh_type);
 const char *resolve_std_sec_type_name(uint32_t sh_type);
 const char *map_spec_sec_type_name(uint32_t sh_type);
 void print_elf_flags_key(void);
-
 int read_sparcbigendian32(const char *filename, Elf32_Ehdr *ehdr);
 void print_elf_header(const Elf32_Ehdr *ehdr);
 void sparcbigendian32(const char *filename);

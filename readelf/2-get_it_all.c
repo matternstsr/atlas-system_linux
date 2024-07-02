@@ -51,105 +51,105 @@ char *get_elf_file_type(elf_t *elf_header)
 
 
 /**
- * @brief Returns the string name corresponding to a section type.
- *
- * @param sh_type The section type identifier.
- * @return char* String name of the section type.
- */
+* @brief Returns the string name corresponding to a section type.
+*
+* @param sh_type The section type identifier.
+* @return char* String name of the section type.
+*/
 char *get_section_type_name(unsigned int sh_type)
 {
-    static char type_name[64]; /* Buffer for storing the section type name */
+	static char type_name[64]; /* Buffer for storing the section type name */
 
-    /* Determine the section type and return its corresponding string name */
-    switch (sh_type)
-    {
-        case SHT_NULL:              return "NULL";
-        case SHT_PROGBITS:          return "PROGBITS";
-        case SHT_SYMTAB:            return "SYMTAB";
-        case SHT_STRTAB:            return "STRTAB";
-        case SHT_RELA:              return "RELA";
-        case SHT_HASH:              return "HASH";
-        case SHT_DYNAMIC:           return "DYNAMIC";
-        case SHT_NOTE:              return "NOTE";
-        case SHT_NOBITS:            return "NOBITS";
-        case SHT_REL:               return "REL";
-        case SHT_SHLIB:             return "SHLIB";
-        case SHT_DYNSYM:            return "DYNSYM";
-        case SHT_INIT_ARRAY:        return "INIT_ARRAY";
-        case SHT_FINI_ARRAY:        return "FINI_ARRAY";
-        case SHT_PREINIT_ARRAY:     return "PREINIT_ARRAY";
-        case SHT_GNU_HASH:          return "GNU_HASH";
-        case SHT_GROUP:             return "GROUP";
-        case SHT_SYMTAB_SHNDX:      return "SYMTAB SECTION INDICES";
-        case SHT_GNU_verdef:        return "VERDEF";
-        case SHT_GNU_verneed:       return "VERNEED";
-        case SHT_GNU_versym:        return "VERSYM";
-        case 0x6ffffff0:            return "VERSYM";
-        case 0x6ffffffc:            return "VERDEF";
-        case 0x7ffffffd:            return "AUXILIARY";
-        case 0x7fffffff:            return "FILTER";
-        case 0x6ffffff1:            return "LOOS+ffffff1";
-        case 0x6ffffff3:            return "LOOS+ffffff3";
-        case SHT_GNU_LIBLIST:       return "GNU_LIBLIST";
-        default:
-            return get_unknown_section_type_name(sh_type);
-    }
+	/* Determine the section type and return its corresponding string name */
+	switch (sh_type)
+	{
+		case SHT_NULL:              return "NULL";
+		case SHT_PROGBITS:          return "PROGBITS";
+		case SHT_SYMTAB:            return "SYMTAB";
+		case SHT_STRTAB:            return "STRTAB";
+		case SHT_RELA:              return "RELA";
+		case SHT_HASH:              return "HASH";
+		case SHT_DYNAMIC:           return "DYNAMIC";
+		case SHT_NOTE:              return "NOTE";
+		case SHT_NOBITS:            return "NOBITS";
+		case SHT_REL:               return "REL";
+		case SHT_SHLIB:             return "SHLIB";
+		case SHT_DYNSYM:            return "DYNSYM";
+		case SHT_INIT_ARRAY:        return "INIT_ARRAY";
+		case SHT_FINI_ARRAY:        return "FINI_ARRAY";
+		case SHT_PREINIT_ARRAY:     return "PREINIT_ARRAY";
+		case SHT_GNU_HASH:          return "GNU_HASH";
+		case SHT_GROUP:             return "GROUP";
+		case SHT_SYMTAB_SHNDX:      return "SYMTAB SECTION INDICES";
+		case SHT_GNU_verdef:        return "VERDEF";
+		case SHT_GNU_verneed:       return "VERNEED";
+		case SHT_GNU_versym:        return "VERSYM";
+		case 0x6ffffff0:            return "VERSYM";
+		case 0x6ffffffc:            return "VERDEF";
+		case 0x7ffffffd:            return "AUXILIARY";
+		case 0x7fffffff:            return "FILTER";
+		case 0x6ffffff1:            return "LOOS+ffffff1";
+		case 0x6ffffff3:            return "LOOS+ffffff3";
+		case SHT_GNU_LIBLIST:       return "GNU_LIBLIST";
+		default:
+			return get_unknown_section_type_name(sh_type);
+	}
 }
 
 /**
- * @brief Returns a formatted string for an unknown section type.
- *
- * @param sh_type The unknown section type identifier.
- * @return char* Formatted string representing the unknown section type.
- */
+* @brief Returns a formatted string for an unknown section type.
+*
+* @param sh_type The unknown section type identifier.
+* @return char* Formatted string representing the unknown section type.
+*/
 static char *get_unknown_section_type_name(unsigned int sh_type)
 {
-    static char type_name[64];
-    snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
-    return type_name;
+	static char type_name[64];
+	snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
+	return type_name;
 }
 
 /**
- * @brief Translates section flags into a string representation.
- *
- * @param elf_header Pointer to the ELF header structure.
- * @param section_index Index of the section whose flags to translate.
- * @return char* String representation of section flags based on legend.
- */
+* @brief Translates section flags into a string representation.
+*
+* @param elf_header Pointer to the ELF header structure.
+* @param section_index Index of the section whose flags to translate.
+* @return char* String representation of section flags based on legend.
+*/
 char *translate_section_flags(elf_t *elf_header, size_t section_index)
 {
-    static char flags_string[32];
-    unsigned long flags = SGET(section_index, sh_flags);
-    char *p = flags_string;
+	static char flags_string[32];
+	unsigned long flags = SGET(section_index, sh_flags);
+	char *p = flags_string;
 
-    /* Translate each flag into its corresponding character */
-    if (flags & SHF_WRITE)
+	/* Translate each flag into its corresponding character */
+	if (flags & SHF_WRITE)
 	*p++ = 'W';
-    if (flags & SHF_ALLOC)
+	if (flags & SHF_ALLOC)
 	*p++ = 'A';
-    if (flags & SHF_EXECINSTR)
+	if (flags & SHF_EXECINSTR)
 	*p++ = 'X';
-    if (flags & SHF_MERGE)
+	if (flags & SHF_MERGE)
 	*p++ = 'M';
-    if (flags & SHF_STRINGS)
+	if (flags & SHF_STRINGS)
 	*p++ = 'S';
-    if (flags & SHF_INFO_LINK)
+	if (flags & SHF_INFO_LINK)
 	*p++ = 'I';
-    if (flags & SHF_LINK_ORDER)
+	if (flags & SHF_LINK_ORDER)
 	*p++ = 'L';
-    if (flags & SHF_OS_NONCONFORMING)
+	if (flags & SHF_OS_NONCONFORMING)
 	*p++ = 'O';
-    if (flags & SHF_GROUP)
+	if (flags & SHF_GROUP)
 	*p++ = 'G';
-    if (flags & SHF_TLS)
+	if (flags & SHF_TLS)
 	*p++ = 'T';
-    if (flags & SHF_EXCLUDE)
+	if (flags & SHF_EXCLUDE)
 	*p++ = 'E';
 
-    /* Null-terminate the string */
-    *p = '\0';
+	/* Null-terminate the string */
+	*p = '\0';
 
-    return flags_string;
+	return flags_string;
 }
 
 char *get_segment_type(unsigned long p_type)
