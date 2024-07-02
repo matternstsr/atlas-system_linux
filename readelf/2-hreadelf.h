@@ -28,6 +28,9 @@
 /* #define IS_64 ((elf_header->e64).e_ident [EI_CLASS] == ELFCLASS64) */
 #define IS_64 ((elf_header->e64).e_ident[EI_CLASS] == ELFCLASS64)
 #define IS_32(x) ((x).e_ident[EI_CLASS] == ELFCLASS32)
+
+
+
 #define IS_BE(x) ((x).e_ident[EI_DATA] == ELFDATA2MSB)
 #define EGET(x) \
 	(IS_32(elf_header->e64) ? elf_header->e32.x : elf_header->e64.x)
