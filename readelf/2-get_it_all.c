@@ -51,51 +51,63 @@ char *get_elf_file_type(elf_t *elf_header)
 
 
 /**
-* get_section_type_name - Returns the string name corresponding to a section type.
-* @sh_type: The section type identifier.
-* Return: String name of the section type.
-*/
+ * @brief Returns the string name corresponding to a section type.
+ *
+ * @param sh_type The section type identifier.
+ * @return char* String name of the section type.
+ */
 char *get_section_type_name(unsigned int sh_type)
 {
-	static char type_name[64]; /*  Buffer for storing the section type name */
+    static char type_name[64]; /* Buffer for storing the section type name */
 
-	/*  Determine the section type and return its corresponding string name */
-	switch (sh_type)
-	{
-		case SHT_NULL:              return "NULL";
-		case SHT_PROGBITS:          return "PROGBITS";
-		case SHT_SYMTAB:            return "SYMTAB";
-		case SHT_STRTAB:            return "STRTAB";
-		case SHT_RELA:              return "RELA";
-		case SHT_HASH:              return "HASH";
-		case SHT_DYNAMIC:           return "DYNAMIC";
-		case SHT_NOTE:              return "NOTE";
-		case SHT_NOBITS:            return "NOBITS";
-		case SHT_REL:               return "REL";
-		case SHT_SHLIB:             return "SHLIB";
-		case SHT_DYNSYM:            return "DYNSYM";
-		case SHT_INIT_ARRAY:        return "INIT_ARRAY";
-		case SHT_FINI_ARRAY:        return "FINI_ARRAY";
-		case SHT_PREINIT_ARRAY:     return "PREINIT_ARRAY";
-		case SHT_GNU_HASH:          return "GNU_HASH";
-		case SHT_GROUP:             return "GROUP";
-		case SHT_SYMTAB_SHNDX:      return "SYMTAB SECTION INDICES";
-		case SHT_GNU_verdef:        return "VERDEF";
-		case SHT_GNU_verneed:       return "VERNEED";
-		case SHT_GNU_versym:        return "VERSYM";
-		case 0x6ffffff0:            return "VERSYM";
-		case 0x6ffffffc:            return "VERDEF";
-		case 0x7ffffffd:            return "AUXILIARY";
-		case 0x7fffffff:            return "FILTER";
-		case 0x6ffffff1:            return "LOOS+ffffff1";
-		case 0x6ffffff3:            return "LOOS+ffffff3";
-		case SHT_GNU_LIBLIST:       return "GNU_LIBLIST";
-		default:
-			snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
-			return type_name;
-	}
+    /* Determine the section type and return its corresponding string name */
+    switch (sh_type)
+    {
+        case SHT_NULL:              return "NULL";
+        case SHT_PROGBITS:          return "PROGBITS";
+        case SHT_SYMTAB:            return "SYMTAB";
+        case SHT_STRTAB:            return "STRTAB";
+        case SHT_RELA:              return "RELA";
+        case SHT_HASH:              return "HASH";
+        case SHT_DYNAMIC:           return "DYNAMIC";
+        case SHT_NOTE:              return "NOTE";
+        case SHT_NOBITS:            return "NOBITS";
+        case SHT_REL:               return "REL";
+        case SHT_SHLIB:             return "SHLIB";
+        case SHT_DYNSYM:            return "DYNSYM";
+        case SHT_INIT_ARRAY:        return "INIT_ARRAY";
+        case SHT_FINI_ARRAY:        return "FINI_ARRAY";
+        case SHT_PREINIT_ARRAY:     return "PREINIT_ARRAY";
+        case SHT_GNU_HASH:          return "GNU_HASH";
+        case SHT_GROUP:             return "GROUP";
+        case SHT_SYMTAB_SHNDX:      return "SYMTAB SECTION INDICES";
+        case SHT_GNU_verdef:        return "VERDEF";
+        case SHT_GNU_verneed:       return "VERNEED";
+        case SHT_GNU_versym:        return "VERSYM";
+        case 0x6ffffff0:            return "VERSYM";
+        case 0x6ffffffc:            return "VERDEF";
+        case 0x7ffffffd:            return "AUXILIARY";
+        case 0x7fffffff:            return "FILTER";
+        case 0x6ffffff1:            return "LOOS+ffffff1";
+        case 0x6ffffff3:            return "LOOS+ffffff3";
+        case SHT_GNU_LIBLIST:       return "GNU_LIBLIST";
+        default:
+            return get_unknown_section_type_name(sh_type);
+    }
 }
 
+/**
+ * @brief Returns a formatted string for an unknown section type.
+ *
+ * @param sh_type The unknown section type identifier.
+ * @return char* Formatted string representing the unknown section type.
+ */
+static char *get_unknown_section_type_name(unsigned int sh_type)
+{
+    static char type_name[64];
+    snprintf(type_name, sizeof(type_name), "%08x: <unknown>", sh_type);
+    return type_name;
+}
 
 /**
  * @brief Translates section flags into a string representation.
