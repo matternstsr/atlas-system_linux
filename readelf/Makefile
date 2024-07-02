@@ -11,7 +11,7 @@ COMMON_SRCS = 0elf_common.c 1endian.c 0readelf_header64.c 0readelf_header32.c
 2-HREADELF_SRCS = 2-hreadelf.c 2-open_and_handle_file.c 2-check_elf_header.c \
 2-switch_all_endian.c 2-display_all_elf_program_headers.c 2-switch_2_byte.c \
 2-readit.c 2-get_it_all.c 2-mapping.c 2-print_programs.c 2-switch_endianness_sections.c\
-2-switch_endianness_headers.c $(COMMON_SRCS)
+2-switch_endianness_headers.c 2-section_flags.c $(COMMON_SRCS)
 
 # Object files
 0-HREADELF_OBJS = $(0-HREADELF_SRCS:.c=.o)
