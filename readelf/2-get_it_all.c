@@ -60,9 +60,9 @@ char *get_elf_file_type(elf_t *elf_header)
 */
 char *get_section_type_name(unsigned int sh_type)
 {
-	/* static char type_name[64]; Buffer for storing the section type name */
-
-	/* Determine the section type and return its corresponding string name */
+	/* static char type_name[64]; Buffer for storing the section type name 
+	Determine the section type and return its corresponding string name */
+	
 	switch (sh_type)
 	{
 		case SHT_NULL:              return "NULL";
