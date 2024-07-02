@@ -56,10 +56,17 @@ void display_section_headers(Elf64_Ehdr *ehdr,
 	printf("There are %d section headers, starting at offset 0x%lx:\n\n",
 			ehdr->e_shnum, (long)ehdr->e_shoff);
 	printf("Section Headers:\n");
-	printf("  [Nr] Name              "
-	"Type            Addr     "
-	"Off    Size   ES Flg Lk "
-	"Inf Al\n");
+	printf("  [Nr] Name");
+	printf("              Type");
+	printf("            Addr");
+	printf("     Off");
+	printf("    Size");
+	printf("   ES");
+	printf(" Flg");
+	printf(" Lk");
+	printf(" Inf");
+	printf(" Al\n");
+
 	for (i = 0; i < ehdr->e_shnum; i++)
 	{
 		const char *name = &shstrtab[shdr[i].sh_name];
