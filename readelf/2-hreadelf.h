@@ -161,8 +161,10 @@ void print_elf_section_headers_64(elf_t *elf_header, char *string_table);
 char *translate_section_flags(elf_t *elf_header, size_t i);
 char *get_elf_file_type(elf_t *elf_header);
 int display_all_elf_program_headers(elf_t *elf_header, int fd);
-void print_program_headers_32bit(elf_t *elf_header, char *string_table, int fd);
-void print_program_headers_64bit(elf_t *elf_header, char *string_table, int fd);
+void print_program_headers_32bit(elf_t *elf_header,
+								char *string_table, int fd);
+void print_program_headers_64bit(elf_t *elf_header,
+								char *string_table, int fd);
 void read_program_headers_from_file(elf_t *elf_header, int fd);
 char *get_segment_type(unsigned long p_type);
 int print_section_segment_mappings(elf_t *elf_header, char *string_table);
@@ -193,5 +195,4 @@ int check_elf(char *elf_header);
 void switch_all_endian(elf_t *elf_header);
 int print_program_headers_full(elf_t *elf_header, int fd);
 int open_file(char *name, int silent);
-
 #endif

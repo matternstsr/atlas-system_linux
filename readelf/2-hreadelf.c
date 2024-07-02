@@ -32,7 +32,8 @@ int main(int ac, char **argv)
 		{
 			lseek(fd, 0, SEEK_SET);
 			r = read(fd, &elf_header.e32, sizeof(elf_header.e32));
-			if (r != sizeof(elf_header.e32) || check_elf_header((char *)&elf_header.e32))
+			if (r != sizeof(elf_header.e32) ||
+				check_elf_header((char *)&elf_header.e32))
 			{
 				fprintf(stderr, ERR_NOT_MAGIC);
 				exit_status = EXIT_FAILURE;
