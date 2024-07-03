@@ -1,5 +1,7 @@
-section .text
 global asm_puti
+extern 
+
+section .text
 
 ; Function: size_t asm_puti(int n)
 asm_puti:
@@ -61,3 +63,5 @@ asm_puti:
     add rsp, 16             ; Restore stack pointer
     pop rbp                 ; Function epilogue
     ret                     ; Return
+
+extern asm_putc
