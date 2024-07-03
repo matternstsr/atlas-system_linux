@@ -34,6 +34,7 @@ asm_puti:
     ; Convert n to string and print each character
     mov rax, qword [rbp-8]  ; Load n into rax
     mov rbx, 10             ; Divider (base 10)
+    mov rcx, 0              ; Added to clear before loop
     
 .convert_loop:
     xor rdx, rdx            ; Clear rdx for division
@@ -43,7 +44,6 @@ asm_puti:
     mov qword [rsp + rcx], rdx  ; Store the digit in the temporary buffer
     inc rcx                 ; Increment counter
     
-    mov rcx, 0              ; Added to clear before loop
     test rax, rax           ; Check if quotient is zero
     jnz .convert_loop       ; If not zero, continue conversion
     
