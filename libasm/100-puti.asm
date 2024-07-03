@@ -45,6 +45,9 @@ asm_puti:
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
+    jnz .print_loop       ; If not zero, continue conversion
+
+    test rax, rax           ; Check if quotient is zero
     jz .convert_loop       ; If not zero, continue conversion
     
     ; Print characters in reverse order
