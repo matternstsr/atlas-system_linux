@@ -43,6 +43,7 @@ asm_puti:
     mov qword [rsp + rcx], rdx  ; Store the digit in the temporary buffer
     inc rcx                 ; Increment counter
     
+    mov rcx, 0              ; Added to clear before loop
     test rax, rax           ; Check if quotient is zero
     jnz .convert_loop       ; If not zero, continue conversion
     
