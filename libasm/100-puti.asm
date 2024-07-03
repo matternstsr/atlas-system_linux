@@ -45,7 +45,7 @@ asm_puti:
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
-    jz .print_loop          ; If quotient is zero, exit loop and print
+    jnz .print_loop          ; If quotient is zero, exit loop and print
     
     ; Continue the conversion loop if quotient is not zero
     jnz .convert_loop
