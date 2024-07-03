@@ -54,16 +54,13 @@ asm_puti:
     inc rax                 ; Increment byte count
     
     cmp rcx, 0              ; Check if all characters printed
-    jg .print_loop          ; If more to print, continue
+    jl .print_loop          ; If more to print, continue
     
     ; Print newline character
     mov rdi, 0x0A           ; ASCII code for newline
     call asm_putc           ; Call asm_putc to print the newline
     inc rax                 ; Increment byte count for newline
     
-    test rax, rax           ; Check if quotient is zero
-    jnz .print_loop          ; If quotient is zero, exit loop and print
-
     add rsp, 16             ; Restore stack pointer
     pop rbp                 ; Function epilogue
     ret                     ; Return
