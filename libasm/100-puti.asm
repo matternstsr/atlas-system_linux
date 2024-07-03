@@ -1,10 +1,11 @@
-global asm_puti
-extern 
-
 section .text
 
-; Function: size_t asm_puti(int n)
+extern asm_putc
+
+global asm_puti
+
 asm_puti:
+    ; Function implementation here
     push rbp                ; Function prologue
     mov rbp, rsp
     
