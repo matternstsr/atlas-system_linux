@@ -98,7 +98,7 @@ void print_32bit_sec_hdrs_be(Elf32_Ehdr *elf_header,
 		"Name", "Type", "Addr", "Off", "Size",
 		"ES", "Flg", "Lk", "Inf", "Al");
 
-	for (sec_cnt = 0; sec_cnt <__bswap_16(elf_header->e_shnum); sec_cnt++)
+	for (sec_cnt = 0; sec_cnt < __bswap_16(elf_header->e_shnum); sec_cnt++)
 	{
 		name = (char *)(strtab + section_headers[sec_cnt].sh_name);
 		printf("  [%2d] %-17s %-15s %08x %06x %06x %02x %3s %2u %3u %2u\n",
