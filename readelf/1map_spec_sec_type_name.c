@@ -24,6 +24,3 @@ const char *map_spec_sec_type_name(uint32_t sh_type)
 	}
 	return ("UNKNOWN");  /* Default return for unknown types */
 }
-
-case SHT_GNU_verdef:        return "VERDEF";
-		case SHT_GNU_verneed:       return "VERNEED";
