@@ -11,7 +11,7 @@ void readelf_header32(const char *filename)
 	fd = open_elf_file(filename);
 	read_elf_header(fd, &ehdr);
 	swap_endian = determine_endianness(&ehdr);
-	print_elf_header(&ehdr, swap_endian);
+	print_elf_header32(&ehdr, swap_endian);
 }
 
 int open_elf_file(const char *filename)
@@ -39,7 +39,7 @@ bool determine_endianness(const Elf32_Ehdr *ehdr)
 	return (ehdr->e_ident[EI_DATA] == ELFDATA2MSB);
 }
 
-void print_elf_header(const Elf32_Ehdr *ehdr, bool swap_endian)
+void print_elf_header32(const Elf32_Ehdr *ehdr, bool swap_endian)
 {
 	int i;
 	
