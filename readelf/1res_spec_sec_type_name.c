@@ -1,5 +1,6 @@
 #include "1-hreadelf.h"
 
+// Function to resolve section type name
 const char *res_spec_sec_type_name(uint32_t sh_type)
 {
     switch (sh_type)
@@ -18,6 +19,10 @@ const char *res_spec_sec_type_name(uint32_t sh_type)
             return "FINI_ARRAY";
         case SHT_RELA:
             return "RELA";
+        case SHT_SUNW_version:
+            return "SUNW_version";
+        case SHT_SUNW_versym:
+            return "SUNW_versym";
         default:
             return "UNKNOWN";
     }

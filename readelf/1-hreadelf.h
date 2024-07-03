@@ -11,13 +11,36 @@
 #include <elf.h>
 #include <byteswap.h>
 
-#define SHT_VERDEF 0x6ffffffd
+// Define section type constants
+#define SHT_GNU_verdef    0x6ffffffd
+#define SHT_GNU_verneed   0x6ffffffe
+#define SHT_GNU_versym    0x6fffffff
+#define SHT_GNU_HASH      0x6ffffff6
+#define SHT_INIT_ARRAY    0x6ffffff0
+#define SHT_FINI_ARRAY    0x6ffffff1
+#define SHT_RELA          0x4
+#define SHT_SUNW_version  0x6ffffffd
+#define SHT_SUNW_versym   0x6ffffffe
 
-typedef struct
-{
-	uint32_t type;
-	const char *name;
+// Array of mappings
+static const SectionTypeMapping additional_section_type_mappings[] = {
+    { SHT_GNU_verdef, "VERDEF" },
+    { SHT_GNU_verneed, "VERNEED" },
+    { SHT_GNU_versym, "VERSYM" },
+    { SHT_GNU_HASH, "GNU_HASH" },
+    { SHT_INIT_ARRAY, "INIT_ARRAY" },
+    { SHT_FINI_ARRAY, "FINI_ARRAY" },
+    { SHT_RELA, "RELA" },
+    { SHT_SUNW_version, "SUNW_version" },
+    { SHT_SUNW_versym, "SUNW_versym" },
+};
+
+// Define mapping structure
+typedef struct {
+    uint32_t type;
+    const char *name;
 } SectionTypeMapping;
+
 
 typedef struct
 {
