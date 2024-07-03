@@ -8,8 +8,8 @@ static const SectionTypeMapping additional_section_type_mappings[] = {
     { SHT_INIT_ARRAY, "INIT_ARRAY" },
     { SHT_FINI_ARRAY, "FINI_ARRAY" },
     { SHT_RELA, "RELA" },
-    { SHT_SUNW_version, ".SUNW_version" },   // Added .SUNW_version mapping
-    { SHT_SUNW_versym, ".SUNW_versym" },     // Added .SUNW_versym mapping
+    { SHT_SUNW_version, "SUNW_version" },   // Added .SUNW_version mapping
+    { SHT_SUNW_versym, "SUNW_versym" },     // Added .SUNW_versym mapping
 };
 
 
