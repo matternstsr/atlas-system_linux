@@ -1,4 +1,6 @@
 #include "1-hreadelf.h"
+#include <stdio.h>
+#include <string.h>
 
 /**
  * print_32bit_sec_hdrs - Print the 32-bit ELF section headers
