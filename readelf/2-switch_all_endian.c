@@ -18,9 +18,9 @@ void switch_all_endian(elf_t *h)
 		h->e64.e_phnum = switch_2_byte(h->e64.e_phnum);
 		h->e64.e_shentsize = switch_2_byte(h->e64.e_shentsize);
 		h->e64.e_shnum = switch_2_byte(h->e64.e_shnum);
-		h->e64.e_shoff = swap_endian_uint64(h->e64.e_shoff);
-		h->e64.e_phoff = swap_endian_uint64(h->e64.e_phoff);
-		h->e64.e_entry = swap_endian_uint64(h->e64.e_entry);
+		h->e64.e_shoff = seu64(h->e64.e_shoff);
+		h->e64.e_phoff = seu64(h->e64.e_phoff);
+		h->e64.e_entry = seu64(h->e64.e_entry);
 		h->e64.e_shstrndx = switch_2_byte(h->e64.e_shstrndx);
 	}
 	if (IS_BE(h->e64) && IS_32(h->e64))
@@ -55,11 +55,11 @@ unsigned int seu32(unsigned int value)
 }
 
 /**
-* swap_endian_uint64 - Swaps endianness of a 64-bit unsigned integer.
+* seu64 - Swaps endianness of a 64-bit unsigned integer.
 * @value: The unsigned long integer whose endianness to swap.
 * Return: Unsigned long integer with swapped endianness.
 */
-unsigned long swap_endian_uint64(unsigned long value)
+unsigned long seu64(unsigned long value)
 {
 	return (((value >> 56) & 0x00000000000000ff) |
 			((value >> 40) & 0x000000000000ff00) |

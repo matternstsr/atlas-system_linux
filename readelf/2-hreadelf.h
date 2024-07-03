@@ -131,7 +131,7 @@ int check_elf_header(char *elf_header);
 void print_bytes(void *ptr, size_t n);
 unsigned short switch_2_byte(unsigned short n);
 unsigned int seu32(unsigned int n);
-unsigned long swap_endian_uint64(unsigned long n);
+unsigned long seu64(unsigned long n);
 void switch_all_endian(elf_t *elf_header);
 void switch_endianness_sections_32(elf_t *elf_header, size_t index);
 void switch_endianness_sections_64(elf_t *elf_header, size_t index);
