@@ -45,10 +45,10 @@ asm_puti:
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
-    jnz .print_loop          ; If quotient is zero, exit loop and print
+    jz .print_loop          ; If quotient is zero, exit loop and print
 
     test rax, rax           ; Check if quotient is zero
-    jz .print_loop          ; If quotient is zero, exit loop and print
+    jnz .print_loop          ; If quotient is zero, exit loop and print
 
 .print_loop:
     dec rcx                 ; Move back one character in the buffer
