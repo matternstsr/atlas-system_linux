@@ -34,6 +34,13 @@ void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header,
 			section_headers[section_count].sh_link,
 			section_headers[section_count].sh_info,
 			section_headers[section_count].sh_addralign);
+		if (strcmp(name, ".SUNW_version") == 0) {
+            // Logic for .SUNW_version
+            printf("    Special handling for .SUNW_version\n");
+        } else if (strcmp(name, ".SUNW_versym") == 0) {
+            // Logic for .SUNW_versym
+            printf("    Special handling for .SUNW_versym\n");
+        }
 	}
 	print_flag_key();/* Assuming this function prints flag keys */
 }
@@ -74,6 +81,13 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
 			section_headers[section_count].sh_link,
 			section_headers[section_count].sh_info,
 			section_headers[section_count].sh_addralign);
+		if (strcmp(name, ".SUNW_version") == 0) {
+            // Logic for .SUNW_version
+            printf("    Special handling for .SUNW_version\n");
+        } else if (strcmp(name, ".SUNW_versym") == 0) {
+            // Logic for .SUNW_versym
+            printf("    Special handling for .SUNW_versym\n");
+        }
 	}
 	print_elf_flags_key();/* Assuming this function prints ELF flags key */
 	/* 1print_elf_flags_key.c */
