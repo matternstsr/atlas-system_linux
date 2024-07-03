@@ -19,6 +19,7 @@ int read_and_validate_elf_header(int fd, elf_t *EH)
 		fprintf(stderr, ERR_NOT_MAGIC);
 		return (EXIT_FAILURE);
 	}
+
 	if (IS_32(EH->e64))
 	{
 		lseek(fd, 0, SEEK_SET);
