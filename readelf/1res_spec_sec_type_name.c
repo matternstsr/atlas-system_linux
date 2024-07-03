@@ -36,5 +36,5 @@ const char *res_spec_sec_type_name(uint32_t sh_type)
 		if (additional_section_type_mappings[i].type == sh_type)
 			return (additional_section_type_mappings[i].name);
 	}
-	return ("VERNEED?");  /* Default return for unknown types */
+	return ("VERNEED");  /* Default return for unknown types */
 }
