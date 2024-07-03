@@ -9,7 +9,7 @@ void *map_file_into_memory(const char *filename, size_t *filesize)
 {
 	int fd;
 	struct stat st;
-	void *mapped_file;
+	void *m_file;
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -24,11 +24,11 @@ void *map_file_into_memory(const char *filename, size_t *filesize)
 		return (NULL);
 	}
 	*filesize = st.st_size;
-	mapped_file = mmap(NULL, *filesize, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-	if (mapped_file == MAP_FAILED)
+	m_file = mmap(NULL, *filesize, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	if (m_file == MAP_FAILED)
 	{
 		perror("mmap");
 		return (NULL);
 	}
-	return (mapped_file);
+	return (m_file);
 }
