@@ -1,6 +1,4 @@
 #include "1-hreadelf.h"
-#include <stdio.h>
-#include <string.h>
 
 /**
  * print_32bit_sec_hdrs - Print the 32-bit ELF section headers
@@ -36,11 +34,6 @@ void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header,
 			section_headers[section_count].sh_link,
 			section_headers[section_count].sh_info,
 			section_headers[section_count].sh_addralign);
-		if (strcmp(name, ".SUNW_version") == 0) {
-            handle_sunw_version_section(section_headers + section_count, strtab);
-        } else if (strcmp(name, ".SUNW_versym") == 0) {
-            handle_sunw_versym_section(section_headers + section_count, strtab);
-        }
 	}
 	print_flag_key();/* Assuming this function prints flag keys */
 }
@@ -81,42 +74,7 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
 			section_headers[section_count].sh_link,
 			section_headers[section_count].sh_info,
 			section_headers[section_count].sh_addralign);
-		if (strcmp(name, ".SUNW_version") == 0) {
-            handle_sunw_version_section(section_headers + section_count, strtab);
-        } else if (strcmp(name, ".SUNW_versym") == 0) {
-            handle_sunw_versym_section(section_headers + section_count, strtab);
-        }
 	}
 	print_elf_flags_key();/* Assuming this function prints ELF flags key */
 	/* 1print_elf_flags_key.c */
-}
-
-void handle_sunw_version_section(Elf64_Shdr *section_header, const char *strtab)
-{
-    printf("    Special handling for .SUNW_version\n");
-    // Implement your logic for processing .SUNW_version section
-    // Example: Print each entry in the .SUNW_version section
-    int entry_size = sizeof(Elf64_Versym); // Adjust for 32-bit if necessary
-    int num_entries = section_header->sh_size / entry_size;
-    Elf64_Versym *versyms = (Elf64_Versym *)((char *)section_header + section_header->sh_offset);
-
-    printf("    .SUNW_version entries:\n");
-    for (int i = 0; i < num_entries; i++) {
-        printf("        Entry %d: Version Index = %d\n", i, versyms[i].vs_index);
-    }
-}
-
-void handle_sunw_versym_section(Elf64_Shdr *section_header, const char *strtab)
-{
-    printf("    Special handling for .SUNW_versym\n");
-    // Implement your logic for processing .SUNW_versym section
-    // Example: Print each entry in the .SUNW_versym section
-    int entry_size = sizeof(Elf64_Versym); // Adjust for 32-bit if necessary
-    int num_entries = section_header->sh_size / entry_size;
-    Elf64_Versym *versyms = (Elf64_Versym *)((char *)section_header + section_header->sh_offset);
-
-    printf("    .SUNW_versym entries:\n");
-    for (int i = 0; i < num_entries; i++) {
-        printf("        Entry %d: Version Index = %d\n", i, versyms[i].vs_index);
-    }
 }

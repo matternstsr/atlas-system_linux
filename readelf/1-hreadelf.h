@@ -51,7 +51,5 @@ void print_elf_flags_key(void);
 int read_sparcbigendian32(const char *filename, Elf32_Ehdr *ehdr);
 void print_elf_header(const Elf32_Ehdr *ehdr);
 void sparcbigendian32(const char *filename);
-void handle_sunw_version_section(Elf64_Shdr *section_header, const char *strtab);
-void handle_sunw_versym_section(Elf64_Shdr *section_header, const char *strtab);
 
 #endif
