@@ -14,8 +14,8 @@ static const SectionTypeMapping standard_section_type_mappings[] = {
 		{ SHT_LOOS + 0xffffff3, "LOOS+ffffff3" },
 		{ SHT_LOOS + 0xffffff1, "LOOS+ffffff1" },
 		{ SHT_SUNW_syminfo, "VERDEF" },
-		{ SHT_SUNW_version, "VERNEED" },
-		{ SHT_SUNW_versym, "VERSYM" },
+		{ SUN_GNU_verneed, "VERNEED" },
+		{ SUN_GNU_verdef, "VERSYM" },
 };
 
 /**
