@@ -17,7 +17,9 @@ void readelf_header32(const char *filename)
 int open_elf_file(const char *filename)
 {
 	int fd = open(filename, O_RDONLY);
-	if (fd == -1) {
+
+	if (fd == -1)
+	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
@@ -26,7 +28,8 @@ int open_elf_file(const char *filename)
 
 void read_elf_header(int fd, Elf32_Ehdr *ehdr)
 {
-	if (read(fd, ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr)) {
+	if (read(fd, ehdr, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
+	{
 		perror("read");
 		close(fd);
 		exit(EXIT_FAILURE);
@@ -42,7 +45,7 @@ bool determine_endianness(const Elf32_Ehdr *ehdr)
 void print_elf_header32(const Elf32_Ehdr *ehdr, bool swap_endian)
 {
 	int i;
-	
+
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
 	for (i = 0; i < EI_NIDENT; ++i)
