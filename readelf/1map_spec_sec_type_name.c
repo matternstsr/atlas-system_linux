@@ -19,6 +19,6 @@ const char *map_spec_sec_type_name(uint32_t sh_type)
 	case SHT_RELA:
 		return ("RELA");
 	default:
-		return ("UNKOWN");
+		return ("VERDEF");
 	}
 }
