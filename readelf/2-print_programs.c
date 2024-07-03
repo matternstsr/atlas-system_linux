@@ -2,11 +2,11 @@
 
 /**
  * print_program_headers32 - prints 32 bit program headers
- * @elf_header: address of elf header struct
+ * @EH: address of elf header struct
  * @string_table: the string table program
  * @fd: file descriptor of ELF file
  */
-void print_program_headers_32bit(elf_t *elf_header, char *string_table, int fd)
+void print_program_headers_32bit(elf_t *EH, char *string_table, int fd)
 {
 	size_t i = 0;
 
@@ -44,11 +44,11 @@ void print_program_headers_32bit(elf_t *elf_header, char *string_table, int fd)
 
 /**
  * print_program_headers64 - prints 64 bit program headers
- * @elf_header: address of elf header struct
+ * @EH: address of elf header struct
  * @string_table: the string table program
  * @fd: file descriptor of ELF file
  */
-void print_program_headers_64bit(elf_t *elf_header, char *string_table, int fd)
+void print_program_headers_64bit(elf_t *EH, char *string_table, int fd)
 {
 	size_t i = 0;
 
@@ -86,10 +86,10 @@ void print_program_headers_64bit(elf_t *elf_header, char *string_table, int fd)
 
 /**
  * read_program_headers - reads the program headers into data
- * @elf_header: the internal header
+ * @EH: the internal header
  * @fd: file descriptor to read
  */
-void read_program_headers_from_file(elf_t *elf_header, int fd)
+void read_program_headers_from_file(elf_t *EH, int fd)
 {
 	size_t i = EGET(e_phnum), r;
 	char *headers;
@@ -104,9 +104,9 @@ void read_program_headers_from_file(elf_t *elf_header, int fd)
 	r = read(fd, headers, read_size);
 	if (r < read_size)
 		exit(1); /* TODO */
-	if (IS_32(elf_header->e64))
-		elf_header->p32 = (void *)headers;
+	if (IS_32(EH->e64))
+		EH->p32 = (void *)headers;
 	else
-		elf_header->p64 = (void *)headers;
+		EH->p64 = (void *)headers;
 }
 

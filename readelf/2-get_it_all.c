@@ -30,10 +30,10 @@ char *get_segment_type_name(unsigned long p_type)
 
 /**
 * get_elf_file_type - Retrieves the ELF file type as a string.
-* @elf_header: Pointer to the ELF header structure.
+* @EH: Pointer to the ELF header structure.
 * Return: String representation of the ELF file type.
 */
-char *get_elf_file_type(elf_t *elf_header)
+char *get_elf_file_type(elf_t *EH)
 {
 	static char type_str[64]; /*  Buffer for storing the ELF file type string */
 

@@ -2,10 +2,10 @@
 
 /**
 * read_elf_section_headers - Reads ELF section headers into memory.
-* @elf_header: Pointer to the ELF header structure.
+* @EH: Pointer to the ELF header structure.
 * @fd: File descriptor of the ELF file to read from.
 */
-void read_elf_section_headers(elf_t *elf_header, int fd)
+void read_elf_section_headers(elf_t *EH, int fd)
 {
 	size_t num_sections = EGET(e_shnum);
 	size_t read_size = EGET(e_shentsize) * num_sections;
@@ -40,19 +40,19 @@ void read_elf_section_headers(elf_t *elf_header, int fd)
 	}
 
 	/*  Assign the section headers buffer to field in ELF header structure */
-	if (IS_32(elf_header->e64))
-		elf_header->s32 = (void *)headers_buffer;
+	if (IS_32(EH->e64))
+		EH->s32 = (void *)headers_buffer;
 	else
-		elf_header->s64 = (void *)headers_buffer;
+		EH->s64 = (void *)headers_buffer;
 }
 
 /**
 * read_elf_string_table - Reads the string table from an ELF file.
-* @elf_header: Pointer to the ELF header structure.
+* @EH: Pointer to the ELF header structure.
 * @fd: File descriptor of the ELF file to read from.
 * Return: Pointer to the beginning of the string table.
 */
-char *read_elf_string_table(elf_t *elf_header, int fd)
+char *read_elf_string_table(elf_t *EH, int fd)
 {
 	char *str_table;
 
@@ -83,10 +83,10 @@ char *read_elf_string_table(elf_t *elf_header, int fd)
 
 /**
 * print_elf_section_headers_32 - Prints 32-bit section headers of an ELF file.
-* @elf_header: Pointer to the ELF header structure.
+* @EH: Pointer to the ELF header structure.
 * @string_table: Pointer to the string table section.
 */
-void print_elf_section_headers_32(elf_t *elf_header, char *string_table)
+void print_elf_section_headers_32(elf_t *EH, char *string_table)
 {
 	size_t i;
 
@@ -100,7 +100,7 @@ void print_elf_section_headers_32(elf_t *elf_header, char *string_table)
 		printf("  Offset: 0x%lx\n", SGET(i, sh_offset));
 		printf("  Size: 0x%lx\n", SGET(i, sh_size));
 		printf("  Entry Size: 0x%lx\n", SGET(i, sh_entsize));
-		printf("  Flags: %s\n", translate_section_flags(elf_header, i));
+		printf("  Flags: %s\n", translate_section_flags(EH, i));
 		printf("  Link: %u\n", SGET(i, sh_link));
 		printf("  Info: %u\n", SGET(i, sh_info));
 		printf("  Address Alignment: %lu\n", SGET(i, sh_addralign));
@@ -110,10 +110,10 @@ void print_elf_section_headers_32(elf_t *elf_header, char *string_table)
 
 /**
 * print_elf_section_headers_64 - Prints 64-bit section headers of an ELF file.
-* @elf_header: Pointer to the ELF header structure.
+* @EH: Pointer to the ELF header structure.
 * @string_table: Pointer to the string table section.
 */
-void print_elf_section_headers_64(elf_t *elf_header, char *string_table)
+void print_elf_section_headers_64(elf_t *EH, char *string_table)
 {
 	size_t i;
 
@@ -127,7 +127,7 @@ void print_elf_section_headers_64(elf_t *elf_header, char *string_table)
 		printf("  Offset: 0x%lx\n", SGET(i, sh_offset));
 		printf("  Size: 0x%lx\n", SGET(i, sh_size));
 		printf("  Entry Size: 0x%lx\n", SGET(i, sh_entsize));
-		printf("  Flags: %s\n", translate_section_flags(elf_header, i));
+		printf("  Flags: %s\n", translate_section_flags(EH, i));
 		printf("  Link: %u\n", SGET(i, sh_link));
 		printf("  Info: %u\n", SGET(i, sh_info));
 		printf("  Address Alignment: %lu\n", SGET(i, sh_addralign));

@@ -3,11 +3,11 @@
 /**
 * @brief Translates section flags into a string representation.
 *
-* @param elf_header Pointer to the ELF header structure.
+* @param EH Pointer to the ELF header structure.
 * @param section_index Index of the section whose flags to translate.
 * @return char* String representation of section flags based on legend.
 */
-char *translate_section_flags(elf_t *elf_header, size_t section_index)
+char *translate_section_flags(elf_t *EH, size_t section_index)
 {
 	static char flags_string[32];
 	unsigned long flags = SGET(section_index, sh_flags);

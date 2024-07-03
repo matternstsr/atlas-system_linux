@@ -2,11 +2,11 @@
 
 /**
  * print_section_to_segment_mapping - self-documenting
- * @elf_header: the internal header
+ * @EH: the internal header
  * @string_table: the string table
  * Return: 0 on success else error
  */
-int print_section_segment_mappings(elf_t *elf_header, char *string_table)
+int print_section_segment_mappings(elf_t *EH, char *string_table)
 {
 	size_t i, j;
 
@@ -16,16 +16,16 @@ int print_section_segment_mappings(elf_t *elf_header, char *string_table)
 		printf("   %2.2lu     ", i);
 		for (j = 0; j < EGET(e_shnum); j++)
 		{
-			if (IS_32(elf_header->e64))
+			if (IS_32(EH->e64))
 			{
-				if (ELF_IS_SECTION_IN_SEGMENT_MEMORY((&elf_header->s32[j]),
-					(&elf_header->p32[i])))
+				if (ELF_IS_SECTION_IN_SEGMENT_MEMORY((&EH->s32[j]),
+					(&EH->p32[i])))
 					printf("%s ", string_table + SGET(j, sh_name));
 			}
 			else
 			{
-				if (ELF_IS_SECTION_IN_SEGMENT_MEMORY((&elf_header->s64[j]),
-					(&elf_header->p64[i])))
+				if (ELF_IS_SECTION_IN_SEGMENT_MEMORY((&EH->s64[j]),
+					(&EH->p64[i])))
 					printf("%s ", string_table + SGET(j, sh_name));
 			}
 		}
