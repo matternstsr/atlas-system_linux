@@ -1,19 +1,19 @@
 #include "1-hreadelf.h"
 
 static const SectionTypeMapping standard_section_type_mappings[] = {
-		{ SHT_NULL, "NULL" },
-		{ SHT_PROGBITS, "PROGBITS" },
-		{ SHT_NOTE, "NOTE" },
-		{ SHT_HASH, "HASH" },
-		{ SHT_DYNSYM, "DYNSYM" },
-		{ SHT_STRTAB, "STRTAB" },
-		{ SHT_REL, "REL" },
-		{ SHT_DYNAMIC, "DYNAMIC" },
-		{ SHT_NOBITS, "NOBITS" },
-		{ SHT_SYMTAB, "SYMTAB" },
-		{ SHT_LOOS + 0xffffff3, "LOOS+ffffff3" },
-		{ SHT_LOOS + 0xffffff1, "LOOS+ffffff1" },
-		{ SHT_SUNW_syminfo, "VERDEF" },
+    { SHT_NULL, "NULL" },
+    { SHT_PROGBITS, "PROGBITS" },
+    { SHT_NOTE, "NOTE" },
+    { SHT_HASH, "HASH" },
+    { SHT_DYNSYM, "DYNSYM" },
+    { SHT_STRTAB, "STRTAB" },
+    { SHT_REL, "REL" },
+    { SHT_DYNAMIC, "DYNAMIC" },
+    { SHT_NOBITS, "NOBITS" },
+    { SHT_SYMTAB, "SYMTAB" },
+    { SHT_LOOS + 0xffffff3, "LOOS+ffffff3" },
+    { SHT_LOOS + 0xffffff1, "LOOS+ffffff1" },
+    { SHT_SUNW_syminfo, "VERDEF" },
 };
 
 /**
