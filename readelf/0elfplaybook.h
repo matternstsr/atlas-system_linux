@@ -23,7 +23,12 @@
 #define MAX_SECTIONS 1000
 
 /* Function prototypes */
-void readelf_header32(const char *filename);
+/* void readelf_header32(const char *filename); changed for 40 lines*/
+int open_elf_file(const char *filename); /*40 lines*/
+void read_elf_header(int fd, Elf32_Ehdr *ehdr);/*40 lines*/
+bool determine_endianness(const Elf32_Ehdr *ehdr);/*40 lines*/
+void print_elf_header(const Elf32_Ehdr *ehdr, bool swap_endian);/*40 lines*/
+
 void readelf_header64(const char *filename);
 void print_osabi(unsigned char osabi);
 void print_file_type(uint16_t type);
