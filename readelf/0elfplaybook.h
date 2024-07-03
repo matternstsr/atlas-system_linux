@@ -24,6 +24,7 @@
 
 /* Function prototypes */
 /* void readelf_header32(const char *filename); changed for 40 lines*/
+void readelf_header32(const char *filename); /*40 lines*/
 int open_elf_file(const char *filename); /*40 lines*/
 void read_elf_header(int fd, Elf32_Ehdr *ehdr);/*40 lines*/
 bool determine_endianness(const Elf32_Ehdr *ehdr);/*40 lines*/

@@ -1,6 +1,19 @@
 #include "1-hreadelf.h"
 #include "0elfplaybook.h"
 
+/* Function to read and print ELF header for 32-bit ELF */
+void readelf_header32(const char *filename)
+{
+	int fd;
+	Elf32_Ehdr ehdr;
+	bool swap_endian = false;
+
+	fd = open_elf_file(filename);
+	read_elf_header(fd, &ehdr);
+	swap_endian = determine_endianness(&ehdr);
+	print_elf_header(&ehdr, swap_endian);
+}
+
 int open_elf_file(const char *filename)
 {
 	int fd = open(filename, O_RDONLY);
