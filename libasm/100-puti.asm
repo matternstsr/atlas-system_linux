@@ -34,29 +34,39 @@ asm_puti:
     ; Convert n to string and print each character
     mov rax, qword [rbp-8]  ; Load n into rax
     mov rbx, 10             ; Divider (base 10)
-    mov rcx, 0              ; Added to clear before loop
-
+    mov rcx, 0              ; Initialize counter to zero
+    
+    ; Edge case: if n is zero, handle it separately
+    test rax, rax
+    jz .handle_zero
+    
 .convert_loop:
     xor rdx, rdx            ; Clear rdx for division
     div rbx                 ; Divide rax by 10, quotient in rax, remainder in rdx
     
     add dl, '0'             ; Convert remainder to ASCII digit
-    mov qword [rsp + rcx], rdx  ; Store the digit in the temporary buffer
+    mov byte [rsp + rcx], dl  ; Store the digit in the temporary buffer (use byte instead of qword)
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
-    jz .convert_loop       ; If not zero, continue conversion
+    jnz .convert_loop       ; If not zero, continue conversion
+    
+.handle_zero:
+    ; If original number was zero, directly print '0'
+    cmp rcx, 0
+    jz .print_zero
     
     ; Print characters in reverse order
 .print_loop:
     dec rcx                 ; Move back one character in the buffer
-    mov rdi, qword [rsp + rcx]  ; Load character to print into rdi
+    mov rdi, byte [rsp + rcx]  ; Load character to print into rdi (use byte instead of qword)
     call asm_putc           ; Print the character
     inc rax                 ; Increment byte count
     
     cmp rcx, 0              ; Check if all characters printed
     jg .print_loop          ; If more to print, continue
     
+.print_zero:
     ; Print newline character
     mov rdi, 0x0A           ; ASCII code for newline
     call asm_putc           ; Call asm_putc to print the newline
