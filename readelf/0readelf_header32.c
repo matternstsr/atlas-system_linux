@@ -44,7 +44,7 @@ bool determine_endianness(const Elf32_Ehdr *ehdr)
 
 void print_elf_header32(const Elf32_Ehdr *ehdr, bool swap_endian)
 {
-	int i;
+	int i, p = ehdr->e_phentsize, s = ehdr->e_shentsize;
 
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
@@ -73,9 +73,9 @@ void print_elf_header32(const Elf32_Ehdr *ehdr, bool swap_endian)
 			(unsigned long)ehdr->e_shoff);
 	printf("  Flags:                             0x%x\n", ehdr->e_flags);
 	printf("  Size of this header:               %u (bytes)\n", ehdr->e_ehsize);
-	printf("  Size of program headers:           %u (bytes)\n", ehdr->e_phentsize);
+	printf("  Size of program headers:           %u (bytes)\n", p);
 	printf("  Number of program headers:         %u\n", ehdr->e_phnum);
-	printf("  Size of section headers:           %u (bytes)\n", ehdr->e_shentsize);
+	printf("  Size of section headers:           %u (bytes)\n", s);
 	printf("  Number of section headers:         %u\n", ehdr->e_shnum);
 	printf("  Section header string table index: %u\n", ehdr->e_shstrndx);
 }
