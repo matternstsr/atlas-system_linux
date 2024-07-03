@@ -14,19 +14,6 @@ void analyze_prnt_elf_hdrs(void *maps, size_t filesize)
 	else
 		proc_prnt_elf32_sec((Elf32_Ehdr *)ehdr, is_big_endian, maps);/* SAME FILE*/
 }
-
-void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps)
-{
-	Elf64_Shdr *shdr = (Elf64_Shdr *)((uint8_t *)maps + ehdr->e_shoff);
-	const char *strtab = (const char *)((uint8_t *)maps +
-		shdr[ehdr->e_shstrndx].sh_offset);
-
-	if (is_big_endian)
-		swap_endianess_64(shdr, ehdr->e_shnum); /*1endianess.c*/
-
-	print_64bit_sec_headers(ehdr, shdr, strtab);  /*1print_sec_hdrs.c*/
-}
-
 void proc_prnt_elf32_sec(Elf32_Ehdr *ehdr32, int is_big_endian, void *maps)
 {
 	Elf32_Shdr *shdr32 = (Elf32_Shdr *)((uint8_t *)maps + ehdr32->e_shoff);
@@ -41,4 +28,16 @@ void proc_prnt_elf32_sec(Elf32_Ehdr *ehdr32, int is_big_endian, void *maps)
 	strtab = (const char *)((uint8_t *)maps +
 		shdr32[e_shstrndx].sh_offset);
 	print_32bit_sec_hdrs(ehdr32, shdr32, strtab);
+}
+
+void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps)
+{
+	Elf64_Shdr *shdr = (Elf64_Shdr *)((uint8_t *)maps + ehdr->e_shoff);
+	const char *strtab = (const char *)((uint8_t *)maps +
+		shdr[ehdr->e_shstrndx].sh_offset);
+
+	if (is_big_endian)
+		swap_endianess_64(shdr, ehdr->e_shnum); /*1endianess.c*/
+
+	print_64bit_sec_headers(ehdr, shdr, strtab);  /*1print_sec_hdrs.c*/
 }
