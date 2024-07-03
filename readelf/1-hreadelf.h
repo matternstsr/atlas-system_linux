@@ -44,7 +44,6 @@ void swap_endianess_32(Elf32_Shdr *shdr, int shnum);
 void print_flag_key(void);
 const char *convert_flags_to_string(uint64_t flags);
 const char *resolve_section_type(uint32_t sh_type);
-/* 	const char *res_spec_sec_type_name(uint32_t sh_type);*/
 const char *resolve_std_sec_type_name(uint32_t sh_type);
 const char *map_spec_sec_type_name(uint32_t sh_type);
 void print_elf_flags_key(void);
