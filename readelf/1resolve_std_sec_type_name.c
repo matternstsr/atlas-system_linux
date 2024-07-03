@@ -47,5 +47,5 @@ const char *resolve_std_sec_type_name(uint32_t sh_type)
 		if (standard_section_type_mappings[i].type == sh_type)
 			return (standard_section_type_mappings[i].name);
 	}
-	return ("UNKNOWN"); /* Default return value if not found */
+	return ("VERDEF"); /* Default return value if not found */
 }
