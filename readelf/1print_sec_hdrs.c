@@ -7,9 +7,9 @@
  * @strtab: Pointer to the string table base address
  */
 void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header,
-													Elf32_Shdr *section_headers, const char *strtab)
+							Elf32_Shdr *section_headers, const char *strtab)
 {
-	int section_count;
+	int sec_cnt;
 	char *name = NULL;
 
 	printf("There are %d section headers, starting at offset 0x%x:\n",
@@ -19,21 +19,21 @@ void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header,
 		"Name", "Type", "Addr", "Off", "Size",
 		"ES", "Flg", "Lk", "Inf", "Al");
 
-	for (section_count = 0; section_count < elf_header->e_shnum; section_count++)
+	for (sec_cnt = 0; sec_cnt < elf_header->e_shnum; sec_cnt++)
 	{
-		name = (char *)(strtab + section_headers[section_count].sh_name);
+		name = (char *)(strtab + section_headers[sec_cnt].sh_name);
 		printf("  [%2d] %-17s %-15s %08x %06x %06x %02x %3s %2u %3u %2u\n",
-			section_count,
+			sec_cnt,
 			name,
-			resolve_std_sec_type_name(section_headers[section_count].sh_type),
-			section_headers[section_count].sh_addr,
-			section_headers[section_count].sh_offset,
-			section_headers[section_count].sh_size,
-			section_headers[section_count].sh_entsize,
-			convert_flags_to_string(section_headers[section_count].sh_flags),
-			section_headers[section_count].sh_link,
-			section_headers[section_count].sh_info,
-			section_headers[section_count].sh_addralign);
+			resolve_std_sec_type_name(section_headers[sec_cnt].sh_type),
+			section_headers[sec_cnt].sh_addr,
+			section_headers[sec_cnt].sh_offset,
+			section_headers[sec_cnt].sh_size,
+			section_headers[sec_cnt].sh_entsize,
+			convert_flags_to_string(section_headers[sec_cnt].sh_flags),
+			section_headers[sec_cnt].sh_link,
+			section_headers[sec_cnt].sh_info,
+			section_headers[sec_cnt].sh_addralign);
 	}
 	print_flag_key();/* Assuming this function prints flag keys */
 }
@@ -47,9 +47,9 @@ void print_32bit_sec_hdrs(Elf32_Ehdr *elf_header,
  * @strtab: Pointer to the string table base address
  */
 void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
-														Elf64_Shdr *section_headers, const char *strtab)
+								Elf64_Shdr *section_headers, const char *strtab)
 {
-	int section_count;
+	int sec_cnt;
 	char *name = NULL;
 
 	printf("There are %d section headers, starting at offset 0x%lx:\n",
@@ -59,21 +59,21 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
 		"Name", "Type", "Address", "Off", "Size",
 		"ES", "Flg", "Lk", "Inf", "Al");
 
-	for (section_count = 0; section_count < elf_header->e_shnum; section_count++)
+	for (sec_cnt = 0; sec_cnt < elf_header->e_shnum; sec_cnt++)
 	{
-		name = (char *)(strtab + section_headers[section_count].sh_name);
+		name = (char *)(strtab + section_headers[sec_cnt].sh_name);
 		printf("  [%2d] %-17s %-15s %016lx %06lx %06lx %02lx %3s %2u %3u %2lu\n",
-			section_count,
+			sec_cnt,
 			name,
-			resolve_std_sec_type_name(section_headers[section_count].sh_type),
-			section_headers[section_count].sh_addr,
-			section_headers[section_count].sh_offset,
-			section_headers[section_count].sh_size,
-			section_headers[section_count].sh_entsize,
-			convert_flags_to_string(section_headers[section_count].sh_flags),
-			section_headers[section_count].sh_link,
-			section_headers[section_count].sh_info,
-			section_headers[section_count].sh_addralign);
+			resolve_std_sec_type_name(section_headers[sec_cnt].sh_type),
+			section_headers[sec_cnt].sh_addr,
+			section_headers[sec_cnt].sh_offset,
+			section_headers[sec_cnt].sh_size,
+			section_headers[sec_cnt].sh_entsize,
+			convert_flags_to_string(section_headers[sec_cnt].sh_flags),
+			section_headers[sec_cnt].sh_link,
+			section_headers[sec_cnt].sh_info,
+			section_headers[sec_cnt].sh_addralign);
 	}
 	print_elf_flags_key();/* Assuming this function prints ELF flags key */
 	/* 1print_elf_flags_key.c */
@@ -86,9 +86,9 @@ void print_64bit_sec_headers(Elf64_Ehdr *elf_header,
  * @strtab: Pointer to the string table base address
  */
 void print_32bit_sec_hdrs_be(Elf32_Ehdr *elf_header,
-													Elf32_Shdr *section_headers, const char *strtab)
+								Elf32_Shdr *section_headers, const char *strtab)
 {
-	int section_count;
+	int sec_cnt;
 	char *name = NULL;
 
 	printf("There are %d section headers, starting at offset 0x%x:\n",
@@ -98,21 +98,21 @@ void print_32bit_sec_hdrs_be(Elf32_Ehdr *elf_header,
 		"Name", "Type", "Addr", "Off", "Size",
 		"ES", "Flg", "Lk", "Inf", "Al");
 
-	for (section_count = 0; section_count < __bswap_16(elf_header->e_shnum); section_count++)
+	for (sec_cnt = 0; sec_cnt <__bswap_16(elf_header->e_shnum); sec_cnt++)
 	{
-		name = (char *)(strtab + section_headers[section_count].sh_name);
+		name = (char *)(strtab + section_headers[sec_cnt].sh_name);
 		printf("  [%2d] %-17s %-15s %08x %06x %06x %02x %3s %2u %3u %2u\n",
-			section_count,
+			sec_cnt,
 			name,
-			resolve_std_sec_type_name(section_headers[section_count].sh_type),
-			section_headers[section_count].sh_addr,
-			section_headers[section_count].sh_offset,
-			section_headers[section_count].sh_size,
-			section_headers[section_count].sh_entsize,
-			convert_flags_to_string(section_headers[section_count].sh_flags),
-			section_headers[section_count].sh_link,
-			section_headers[section_count].sh_info,
-			section_headers[section_count].sh_addralign);
+			resolve_std_sec_type_name(section_headers[sec_cnt].sh_type),
+			section_headers[sec_cnt].sh_addr,
+			section_headers[sec_cnt].sh_offset,
+			section_headers[sec_cnt].sh_size,
+			section_headers[sec_cnt].sh_entsize,
+			convert_flags_to_string(section_headers[sec_cnt].sh_flags),
+			section_headers[sec_cnt].sh_link,
+			section_headers[sec_cnt].sh_info,
+			section_headers[sec_cnt].sh_addralign);
 	}
 	print_flag_key();/* Assuming this function prints flag keys */
 }
