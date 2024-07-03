@@ -7,12 +7,12 @@
 */
 void switch_endianness_sections(elf_t *elf_header, size_t index)
 {
-	if (IS_BE(elf_header->e64)) {
-		if (!IS_32(elf_header->e64)) {
+	if (IS_BE(elf_header->e64))
+	{
+		if (!IS_32(elf_header->e64))
 			switch_endianness_sections_64(elf_header, index);
-		} else {
+		else
 			switch_endianness_sections_32(elf_header, index);
-		}
 	}
 }
 
