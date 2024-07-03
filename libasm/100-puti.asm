@@ -45,11 +45,9 @@ asm_puti:
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
-    jz .print_loop          ; If quotient is zero, exit loop and print
+    jnz .convert_loop       ; If not zero, continue conversion
     
-    ; Continue the conversion loop if quotient is not zero
-    jnz .convert_loop
-    
+    ; Print characters in reverse order
 .print_loop:
     dec rcx                 ; Move back one character in the buffer
     mov rdi, qword [rsp + rcx]  ; Load character to print into rdi
@@ -67,5 +65,3 @@ asm_puti:
     add rsp, 16             ; Restore stack pointer
     pop rbp                 ; Function epilogue
     ret                     ; Return
-
-extern asm_putc
