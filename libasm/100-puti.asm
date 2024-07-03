@@ -45,9 +45,6 @@ asm_puti:
     inc rcx                 ; Increment counter
     
     test rax, rax           ; Check if quotient is zero
-    jz .print_loop          ; If quotient is zero, exit loop and print
-
-    test rax, rax           ; Check if quotient is zero
     jnz .print_loop          ; If quotient is zero, exit loop and print
 
 .print_loop:
@@ -64,6 +61,9 @@ asm_puti:
     call asm_putc           ; Call asm_putc to print the newline
     inc rax                 ; Increment byte count for newline
     
+    test rax, rax           ; Check if quotient is zero
+    jz .print_loop          ; If quotient is zero, exit loop and print
+
     add rsp, 16             ; Restore stack pointer
     pop rbp                 ; Function epilogue
     ret                     ; Return
