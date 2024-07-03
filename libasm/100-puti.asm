@@ -48,7 +48,7 @@ asm_puti:
     jnz .print_loop          ; If quotient is zero, exit loop and print
     
     ; Continue the conversion loop if quotient is not zero
-    jnz .convert_loop
+    jz .convert_loop
 
 .print_loop:
     dec rcx                 ; Move back one character in the buffer
