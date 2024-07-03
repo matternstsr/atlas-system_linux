@@ -50,5 +50,8 @@ void print_elf_flags_key(void);
 int read_sparcbigendian32(const char *filename, Elf32_Ehdr *ehdr);
 void print_elf_header(const Elf32_Ehdr *ehdr);
 void sparcbigendian32(const char *filename);
+void print_32bit_sec_hdrs_be(Elf32_Ehdr *ehdr,
+						Elf32_Shdr *shdr,
+						const char *strtab);
 
 #endif

@@ -122,6 +122,7 @@ typedef struct Elf
 	Elf32_Sym *y32;
 
 } elf_t;
+
 char *get_unknown_section_type_name(unsigned int sh_type);
 /* static char *get_unknown_section_type_name(unsigned int sh_type); */
 int read_and_validate_elf_header(int fd, elf_t *EH);

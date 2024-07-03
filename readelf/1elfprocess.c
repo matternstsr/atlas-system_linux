@@ -16,18 +16,26 @@ void analyze_prnt_elf_hdrs(void *maps, size_t filesize)
 }
 void proc_prnt_elf32_sec(Elf32_Ehdr *ehdr32, int is_big_endian, void *maps)
 {
-	Elf32_Shdr *shdr32 = (Elf32_Shdr *)((uint8_t *)maps + ehdr32->e_shoff);
+	Elf32_Shdr *shdr32;
 	const char *strtab = NULL;
 	uint16_t e_shstrndx = ehdr32->e_shstrndx;
 
 	if (is_big_endian)
 	{
 		e_shstrndx = __bswap_16(ehdr32->e_shstrndx);
-		swap_endianess_32(shdr32, ehdr32->e_shnum);
+		shdr32 = (Elf32_Shdr *)((uint8_t *)maps + __bswap_32(ehdr32->e_shoff));
+		swap_endianess_32(shdr32, __bswap_16(ehdr32->e_shnum));
+		strtab = (const char *)((uint8_t *)maps +
+			shdr32[e_shstrndx].sh_offset);
+		print_32bit_sec_hdrs_be(ehdr32, shdr32, strtab);
 	}
-	strtab = (const char *)((uint8_t *)maps +
+	else
+	{
+		shdr32 = (Elf32_Shdr *)((uint8_t *)maps + ehdr32->e_shoff);
+		strtab = (const char *)((uint8_t *)maps +
 		shdr32[e_shstrndx].sh_offset);
-	print_32bit_sec_hdrs(ehdr32, shdr32, strtab);
+		print_32bit_sec_hdrs(ehdr32, shdr32, strtab);
+	}
 }
 
 void proc_prnt_elf64_sec(Elf64_Ehdr *ehdr, int is_big_endian, void *maps)

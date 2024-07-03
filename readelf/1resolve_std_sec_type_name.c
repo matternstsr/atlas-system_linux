@@ -15,13 +15,13 @@ static const SectionTypeMapping standard_section_type_mappings[] = {
 	{ SHT_SYMTAB, "SYMTAB" },
 	{ SHT_LOOS + 0xffffff3, "LOOS+ffffff3" },
 	{ SHT_LOOS + 0xffffff1, "LOOS+ffffff1" },
-	#ifdef SHT_SUNW_version
-	{ SHT_SUNW_version, "VERNEED" },
-	#endif
-	#ifdef SHT_SUNW_versym
-	{ SHT_SUNW_versym, "VERSYM" },
-	#endif
-	{ SHT_SUNW_syminfo, "VERDEF" },
+	{ SHT_GNU_versym, "VERSYM" },
+	{ SHT_GNU_verdef, "VERDEF" },
+	{ SHT_GNU_verneed, "VERNEED" },
+	{ SHT_GNU_HASH, "GNU_HASH" },
+	{ SHT_INIT_ARRAY, "INIT_ARRAY" },
+	{ SHT_FINI_ARRAY, "FINI_ARRAY" },
+	{ SHT_RELA, "RELA" },
 };
 
 /**
