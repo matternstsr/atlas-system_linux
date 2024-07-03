@@ -18,7 +18,6 @@
 #define SHT_GNU_HASH      0x6ffffff6
 #define SHT_INIT_ARRAY    0x6ffffff0
 #define SHT_FINI_ARRAY    0x6ffffff1
-#define SHT_RELA          0x4
 #define SHT_SUNW_version  0x6ffffffd
 #define SHT_SUNW_versym   0x6ffffffe
 
