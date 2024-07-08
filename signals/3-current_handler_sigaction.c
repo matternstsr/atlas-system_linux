@@ -5,8 +5,11 @@
  * This function handles the SIGINT (Ctrl-C) signal by printing
  * "Gotcha! [<signum>]" to standard output and flushing the output buffer.
  */
-void sigint_handler(int signum) {
-    printf("Gotcha! [%d]\n", signum);
+void sigint_handler(int signum)
+{
+	printf("Gotcha! [%d]\n", signum);
+	fflush(stdout);
+
 }
 
 /**
@@ -18,20 +21,20 @@ void sigint_handler(int signum) {
  * using the sigaction() function. It installs `sigint_handler` as the
  * handler function for SIGINT signals.
  */
-int handle_sigaction(void) {
-    struct sigaction siggy;
+int handle_sigaction(void)
+{
+	struct sigaction siggy;
 
-    /* Set up the sigaction struct */
-    siggy.siggy_handler = sigint_handler;
-    sigemptyset(&siggy.siggy_mask);
-    siggy.siggy_flags = 0;
+	/* Set up the sigaction struct */
+	siggy.siggy_handler = sigint_handler;
+	sigemptyset(&siggy.siggy_mask);
+	siggy.siggy_flags = 0;
 
-    /* Install the SIGINT handler */
-    if (sigaction(SIGINT, &siggy, NULL) == -1) {
-        // If an error occurs while setting the handler
-        return -1;
-    }
+	/* Install the SIGINT handler */
+	if (sigaction(SIGINT, &siggy, NULL) == -1)
+		// If an error occurs while setting the handler
+		return (-1);
 
-    /* Return 0 on success */
-    return 0;
+	/* Return 0 on success */
+	return (0);
 }
