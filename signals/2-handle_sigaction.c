@@ -3,7 +3,7 @@
 /**
  * sigint_handler - Signal handler for SIGINT
  * @signum: Signal number received
- * 
+ *
  * This function handles the SIGINT (Ctrl-C) signal by printing
  * "Gotcha! [<signum>]" to standard output and flushing the output buffer.
  */
@@ -16,9 +16,9 @@ void sigint_handler(int signum)
 
 /**
  * handle_sigaction - Set up signal handler for SIGINT using sigaction
- * 
+ *
  * Return: 0 on success, -1 on error
- * 
+ *
  * This function sets up a signal handler for the SIGINT signal (Ctrl-C)
  * using the sigaction() function. It installs `sigint_handler` as the
  * handler function for SIGINT signals.
