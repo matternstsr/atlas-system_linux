@@ -28,9 +28,9 @@ int handle_sigaction(void)
 	struct sigaction siggy;
 
 	/* Set up the sigaction struct */
-	siggy.siggy_handler = sigint_handler;
-	sigemptyset(&siggy.siggy_mask);
-	siggy.siggy_flags = 0;
+	siggy.sa_handler = sigint_handler;
+	sigemptyset(&siggy.sa_mask);
+	siggy.sa_flags = 0;
 
 	/* Install the SIGINT handler */
 	if (sigaction(SIGINT, &siggy, NULL) == -1)
