@@ -1,7 +1,7 @@
 #include "signals.h"
 
 /**
- * describe - Prints the description of a given signal number
+ * main - Prints the description of a given signal number
  * @argc: Number of arguments
  * @argv: Array of arguments (including the program name and signal number)
  *
