@@ -13,6 +13,7 @@ void sigint_handler(int signum)
 void handle_sigint_and_exit(void)
 {
 	struct sigaction siggy;
+
 	siggy.sa_handler = sigint_handler;
 	sigemptyset(&siggy.sa_mask);
 	siggy.sa_flags = 0;
@@ -20,9 +21,10 @@ void handle_sigint_and_exit(void)
 	sigaction(SIGINT, &siggy, NULL);
 
 	pause();
-} 
+}
 
-int main() {
+int main(void)
+{
 	handle_sigint_and_exit(); /* Call func to setup handler & handle SIGINT */
 	return (EXIT_SUCCESS);
 }
