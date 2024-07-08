@@ -22,5 +22,5 @@ int trace_signal_sender(void)
 	siggy.sa_flags = SA_SIGINFO;
 
 	/* Install the SIGQUIT handler */
-	return (sigaction(SIGQUIT, &siggy, NULL))
+	return (sigaction(SIGQUIT, &siggy, NULL));
 }
