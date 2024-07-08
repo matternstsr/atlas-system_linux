@@ -29,6 +29,9 @@ void (*current_handler_sigaction(void))(int)
 	return (NULL);
 	}
 
+	/* Restore original handler */
+	sigaction(SIGINT, &old_siggy, NULL);
+
 	/* Return the current handler */
 	return (old_siggy.sa_handler);
 }
