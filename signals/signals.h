@@ -1,3 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <unistd.h>
+
+
 #ifndef SIGNALS_H
 #define SIGNALS_H
 

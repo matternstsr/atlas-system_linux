@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "signals.h"
 
 /* Function to handle SIGINT signal */

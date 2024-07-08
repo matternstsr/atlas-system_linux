@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "signals.h"
 
 /* Function to retrieve current handler of SIGINT */
