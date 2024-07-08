@@ -22,7 +22,10 @@ void sigint_handler(int signum);
 /* Function to retrieve current handler of SIGINT using sigaction */
 void (*current_handler_sigaction(void))(int);
 
+/* Global variable to store the PID of the sender */
+void sigquit_handler(int signum, siginfo_t *info, void *context);
 
-
+/* Function to set up signal handler for SIGQUIT */
+int trace_signal_sender(void);
 
 #endif /* SIGNALS_H */
