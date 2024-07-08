@@ -19,4 +19,10 @@ int handle_sigaction(void);
 /* Signal handler for SIGINT */
 void sigint_handler(int signum);
 
+/* Function to retrieve current handler of SIGINT using sigaction */
+void (*current_handler_sigaction(void))(int);
+
+
+
+
 #endif /* SIGNALS_H */
