@@ -17,7 +17,7 @@ void handle_sigint_and_exit(void)
 	sigemptyset(&siggy.sa_mask);
 	siggy.sa_flags = 0;
 
-	sigaction(SIGINT, &siggy, NULL);
+	return  sigaction(SIGINT, &siggy, NULL);
 }
 
 int main() {
