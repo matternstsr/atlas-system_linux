@@ -1,4 +1,4 @@
-#include "signal.h"
+#include "signals.h"
 
 /* Signal handler for SIGINT */
 void sigint_handler(int signum)
