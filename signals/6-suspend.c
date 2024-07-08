@@ -1,7 +1,7 @@
 #include "signals.h"
 
 /* Signal handler for SIGINT */
-void sigint_handler(int signum)
+int sigint_handler(int signum)
 {
 	printf("Caught %d\nSignal received\n", signum);
 	fflush(stdout);
@@ -10,7 +10,7 @@ void sigint_handler(int signum)
 }
 
 /* Function to set up signal handler for SIGINT and handle it once */
-void handle_sigint_and_exit(void)
+int handle_sigint_and_exit(int)
 {
 	struct sigaction siggy;
 	siggy.sa_handler = sigint_handler;
