@@ -1,6 +1,5 @@
 #include <sys/types.h>
 #include <signal.h>
-#include <unistd.h>
 
 /**
  * Check if a process exists given its PID.
