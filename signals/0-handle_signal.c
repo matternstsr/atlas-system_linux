@@ -2,8 +2,8 @@
 
 /*
  * Description:
- *   This function is the signal handler for SIGINT (Ctrl-C) signals. 
- *   It prints "Gotcha! [<signum>]" to standard output, where <signum> 
+ *   This function is the signal handler for SIGINT (Ctrl-C) signals.
+ *   It prints "Gotcha! [<signum>]" to standard output, where <signum>
  *   is the signal number received. It ensures the output is immediately
  *   flushed using fflush(stdout).
  *
