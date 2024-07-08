@@ -1,8 +1,4 @@
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <signals.h>
-#include <unistd.h>
+#include "signals.h"
 
 /* Global variable to store the PID of the sender */
 static volatile pid_t sender_pid;
