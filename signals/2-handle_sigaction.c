@@ -34,7 +34,7 @@ int handle_sigaction(void)
 
 	/* Install the SIGINT handler */
 	if (sigaction(SIGINT, &siggy, NULL) == -1)
-		// If an error occurs while setting the handler
+		/* If an error occurs while setting the handler */
 		return (-1);
 
 	/* Return 0 on success */
