@@ -28,4 +28,13 @@ void sigquit_handler(int signum, siginfo_t *info, void *context);
 /* Function to set up signal handler for SIGQUIT */
 int trace_signal_sender(void);
 
+/* Signal handler for SIGINT */
+void sigint_handler(int signum);
+
+/* Function to set up signal handler for SIGINT and handle it once */
+void handle_sigint_and_exit(void);
+
+
+
+
 #endif /* SIGNALS_H */
