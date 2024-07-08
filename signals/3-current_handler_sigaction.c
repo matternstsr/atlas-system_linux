@@ -16,22 +16,13 @@
  */
 void (*current_handler_sigaction(void))(int)
 {
-	struct sigaction siggy, old_siggy;
-
-	/* Prepare sigaction struct for SIGINT */
-	siggy.sa_handler = SIG_DFL;  /* Set default handler temporarily */
-	sigemptyset(&siggy.sa_mask);
-	siggy.sa_flags = 0;
-
+	struct sigaction siggy;
 	/* Get current handler using sigaction */
-	if (sigaction(SIGINT, &siggy, &old_siggy) == -1)
+	if (sigaction(SIGINT, NULL, &siggy) == -1)
 	{
 	return (NULL);
 	}
 
-	/* Restore original handler */
-	sigaction(SIGINT, &old_siggy, NULL);
-
 	/* Return the current handler */
-	return (old_siggy.sa_handler);
+	return (siggy.sa_handler);
 }
