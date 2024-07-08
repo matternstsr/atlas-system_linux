@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <signals.h>
+#include "signals.h"
 
 /* Function to handle SIGINT signal */
 void sigint_handler(int signum) {

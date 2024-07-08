@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <signals.h>
+#include "signals.h"
 
 /* Function to retrieve current handler of SIGINT */
 void (*current_handler_signal(void))(int) {
