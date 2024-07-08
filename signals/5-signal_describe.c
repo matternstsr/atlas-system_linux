@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 {
 
 	int signum;
+	const char *description;
 
 	if (argc != 2)
 	{
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	const char *description = strsignal(signum);
+	description = strsignal(signum);
 	if (description == NULL)
 	{
 		printf("%d: %s %d\n", signum, strsignal(signum), signum);
