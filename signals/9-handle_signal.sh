@@ -1,2 +1,2 @@
 #!/bin/sh
-trap "echo Nope" TERM
+trap "echo Nope" ABRT IO TERM
