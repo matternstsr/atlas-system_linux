@@ -16,7 +16,7 @@
 int main(int argc, char *argv[])
 {
 
-	int signum
+	int signum;
 
 	if (argc != 2)
 	{
