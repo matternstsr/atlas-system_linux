@@ -26,7 +26,6 @@ void (*current_handler_sigaction(void))(int)
 	/* Get current handler using sigaction */
 	if (sigaction(SIGINT, &siggy, &old_siggy) == -1)
 	{
-	perror("sigaction");
 	return (NULL);
 	}
 
