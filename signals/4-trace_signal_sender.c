@@ -3,7 +3,7 @@
 /* Signal handler for SIGQUIT */
 void sigquit_handler(int signum, siginfo_t *info, void *context)
 {
-	void context;
+	(void)context;
 	if (signum == SIGQUIT)
 	{	
 		/* Print the message */
