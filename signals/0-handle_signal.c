@@ -4,6 +4,7 @@
 void sigint_handler(int signum)
 {
 printf("Gotcha! [%d]\n", signum);
+fflush
 }
 /* Function to set up signal handler for SIGINT */
 int handle_signal(void)
