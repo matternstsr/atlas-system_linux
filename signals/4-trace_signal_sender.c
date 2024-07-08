@@ -5,7 +5,7 @@
  * @signum: Signal number received
  * @info: Pointer to siginfo_t structure containing details about the signal
  * @context: Pointer to context information (unused in this handler)
- * 
+ *
  * This function handles the SIGQUIT signal (Control-\ in a shell) by printing
  * "SIGQUIT sent by <pid>" to standard output, where <pid> is the PID of the
  * process that sent the signal.
@@ -25,7 +25,7 @@ void sigquit_handler(int signum, siginfo_t *info, void *context)
  * @signum: Signal number received
  * @info: Pointer to siginfo_t structure containing details about the signal
  * @context: Pointer to context information (unused in this handler)
- * 
+ *
  * This function handles the SIGQUIT signal (Control-\ in a shell) by printing
  * "SIGQUIT sent by <pid>" to standard output, where <pid> is the PID of the
  * process that sent the signal.
