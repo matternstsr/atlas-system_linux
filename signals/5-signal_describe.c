@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	printf("Signal %d: %s\n", signum, description);
+	printf("%d: %s\n", signum, description);
 
 	return EXIT_SUCCESS;
 }
