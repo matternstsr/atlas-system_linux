@@ -1,3 +1,5 @@
+#include "signals.h"
+
 /**
  * sigint_handler - Signal handler for SIGINT
  * @signum: Signal number received
