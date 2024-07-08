@@ -1,2 +1,2 @@
 #!/bin/sh
-trap '"echo Nope"' SIGINT
+trap "echo Nope" TERM
