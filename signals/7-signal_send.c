@@ -8,21 +8,21 @@
  * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int main(int argc, char *argv[]) {
-    pid_t pid;
+	pid_t pid;
 
-    if (argc != 2) {
-        printf("Usage: %s <pid>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+	if (argc != 2) {
+		printf("Usage: %s <pid>\n", argv[0]);
+		return EXIT_FAILURE;
+	}
 
-    pid = atoi(argv[1]);
+	pid = atoi(argv[1]);
 
-    if (pid <= 0) {
-        return EXIT_FAILURE;
-    }
-    if (kill(pid, SIGINT) == -1) {
-        return EXIT_FAILURE;
-    }
+	if (pid <= 0) {
+		return EXIT_FAILURE;
+	}
+	if (kill(pid, SIGINT) == -1) {
+		return EXIT_FAILURE;
+	}
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
