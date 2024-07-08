@@ -1,2 +1,2 @@
 #!/bin/sh
-trap '"echo Nope; exit"' SIGINT
+trap '"echo Nope"' SIGINT
