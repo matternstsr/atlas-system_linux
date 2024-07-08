@@ -3,7 +3,7 @@
 
 /**
  * current_handler_sigaction - Retrieve current handler for SIGINT using sigaction
- * 
+ *
  * This function retrieves the current handler for the SIGINT signal (Ctrl-C)
  * using the sigaction() function from <signal.h>. It temporarily sets the
  * signal handler to SIG_DFL (default handler), retrieves the current handler,
@@ -15,20 +15,20 @@
  */
 void (*current_handler_sigaction(void))(int)
 {
-    struct sigaction siggy, old_siggy;
+	struct sigaction siggy, old_siggy;
 
-    /* Prepare sigaction struct for SIGINT */
-    siggy.sa_handler = SIG_DFL;  /* Set default handler temporarily */
-    sigemptyset(&siggy.sa_mask);
-    siggy.sa_flags = 0;
+	/* Prepare sigaction struct for SIGINT */
+	siggy.sa_handler = SIG_DFL;  /* Set default handler temporarily */
+	sigemptyset(&siggy.sa_mask);
+	siggy.sa_flags = 0;
 
-    /* Get current handler using sigaction */
-    if (sigaction(SIGINT, &siggy, &old_siggy) == -1)
+	/* Get current handler using sigaction */
+	if (sigaction(SIGINT, &siggy, &old_siggy) == -1)
 	{
-        perror("sigaction");
-        return NULL;
-    }
+	perror("sigaction");
+	return NULL;
+	}
 
-    /* Return the current handler */
-    return old_siggy.sa_handler;
+	/* Return the current handler */
+	return old_siggy.sa_handler;
 }
