@@ -23,5 +23,4 @@ int trace_signal_sender(void)
 
 	/* Install the SIGQUIT handler */
 	return (sigaction(SIGQUIT, &siggy, NULL))
-	return (0);
 }
