@@ -13,21 +13,28 @@
  *
  * Return: EXIT_SUCCESS if successful, EXIT_FAILURE otherwise
  */
-int main(int argc, char *argv[]) {
-	if (argc != 2) {
+int main(int argc, char *argv[])
+{
+
+	int signum
+
+	if (argc != 2)
+	{
 		printf("Usage: %s <signum>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
-	int signum = atoi(argv[1]);
+	signum = atoi(argv[1]);
 
-	if (signum < 1 || signum >= NSIG) {
+	if (signum < 1 || signum >= NSIG)
+	{
 		printf("%d: %s\n", signum, strsignal(signum));
 		return EXIT_FAILURE;
 	}
 
 	const char *description = strsignal(signum);
-	if (description == NULL) {
+	if (description == NULL)
+	{
 		printf("%d: %s %d\n", signum, strsignal(signum), signum);
 		return EXIT_FAILURE;
 	}
