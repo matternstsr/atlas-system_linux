@@ -1,18 +1,13 @@
 #include "signals.h"
 
-/* Global variable to store the PID of the sender */
-static volatile pid_t sender_pid;
-
 /* Signal handler for SIGQUIT */
 void sigquit_handler(int signum, siginfo_t *info, void *context)
 {
+	void context;
 	if (signum == SIGQUIT)
-	{
-		/* Store the PID of the sender */
-		sender_pid = info->si_pid;
-		
+	{	
 		/* Print the message */
-		printf("SIGQUIT sent by %d\n", sender_pid);
+		printf("SIGQUIT sent by %d\n", info->si_pid);
 	}
 }
 
