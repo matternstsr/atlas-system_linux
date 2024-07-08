@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 	{
 		printf("Usage: %s <signum>\n", argv[0]);
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 
 	signum = atoi(argv[1]);
@@ -30,17 +30,17 @@ int main(int argc, char *argv[])
 	if (signum < 1 || signum >= NSIG)
 	{
 		printf("%d: %s\n", signum, strsignal(signum));
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 
 	description = strsignal(signum);
 	if (description == NULL)
 	{
 		printf("%d: %s %d\n", signum, strsignal(signum), signum);
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 
 	printf("%d: %s\n", signum, description);
 
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
