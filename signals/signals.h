@@ -34,4 +34,6 @@ void sigint_handler(int signum);
 /* Function to set up signal handler for SIGINT and handle it once */
 void handle_sigint_and_exit(void);
 
+int pid_exist(pid_t pid);
+
 #endif /* SIGNALS_H */
