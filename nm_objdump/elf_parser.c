@@ -128,7 +128,7 @@ static int parse_symbols(FILE *file)
 
 				if (sym.st_name == 0)
 				{
-					continue; /* Skip unnamed symbols */
+					continue; /* Skip unnamed symbols  */
 				}
 
 				if (num_symbols < MAX_SYMBOLS)
