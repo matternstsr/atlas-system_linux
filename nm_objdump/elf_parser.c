@@ -54,7 +54,7 @@ static int parse_symbols(FILE *file)
 	Elf64_Shdr strtab_section_header;
 	char *shstrtab;
 	SymbolEntry symbols[MAX_SYMBOLS];
-	int num_symbols = 0;
+	int num_symbols = 0, i, i, symbol_count;
 
 	if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr))
 	{
@@ -104,7 +104,7 @@ static int parse_symbols(FILE *file)
 	}
 
 	fseek(file, ehdr.e_shoff, SEEK_SET);
-	for (int i = 0; i < ehdr.e_shnum; ++i)
+	for (i = 0; i < ehdr.e_shnum; ++i)
 	{
 		if (fread(&shdr, 1, sizeof(shdr), file) != sizeof(shdr))
 		{
@@ -114,10 +114,10 @@ static int parse_symbols(FILE *file)
 
 		if (shdr.sh_type == SHT_SYMTAB || shdr.sh_type == SHT_DYNSYM)
 		{
-			int symbol_count = shdr.sh_size / sizeof(Elf64_Sym);
+			symbol_count = shdr.sh_size / sizeof(Elf64_Sym);
 			fseek(file, shdr.sh_offset, SEEK_SET);
 
-			for (int j = 0; j < symbol_count; ++j)
+			for (j = 0; j < symbol_count; ++j)
 			{
 				Elf64_Sym sym;
 				if (fread(&sym, 1, sizeof(sym), file) != sizeof(sym))
@@ -143,7 +143,7 @@ static int parse_symbols(FILE *file)
 
 	qsort(symbols, num_symbols, sizeof(SymbolEntry), compare_symbols);
 
-	for (int i = 0; i < num_symbols; ++i)
+	for (i = 0; i < num_symbols; ++i)
 	{
 		printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
 			get_symbol_type(&symbols[i].sym), symbols[i].name);
