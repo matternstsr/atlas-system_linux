@@ -49,6 +49,7 @@ static int parse_symbols(FILE *file)
 	int num_symbols = 0;
 	int i, j;
 	int symbol_count;
+	SymbolEntry symbols[MAX_SYMBOLS];
 
 	if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr))
 	{
@@ -96,8 +97,6 @@ static int parse_symbols(FILE *file)
 		fprintf(stderr, "Error reading section header\n");
 		return (-1);
 	}
-
-	SymbolEntry symbols[MAX_SYMBOLS];
 
 	fseek(file, ehdr.e_shoff, SEEK_SET);
 	for (i = 0; i < ehdr.e_shnum; ++i)
