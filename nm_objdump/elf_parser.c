@@ -1,43 +1,50 @@
-#include "elf_parser.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <elf.h>
 
 #define MAX_SYMBOLS 1024
 
-typedef struct
-{
+typedef struct {
 	Elf64_Sym sym;
 	char *name;
 } SymbolEntry;
 
-static int compare_symbols(const void *a, const void *b)
-{
-	const SymbolEntry *sa = (const SymbolEntry *)a;
-	const SymbolEntry *sb = (const SymbolEntry *)b;
-	return (strcmp(sa->name, sb->name));
-}
+static const char *get_symbol_type(Elf64_Sym *sym);
+static int compare_symbols(const void *a, const void *b);
+static int parse_symbols(FILE *file);
 
 static const char *get_symbol_type(Elf64_Sym *sym)
 {
 	switch (ELF64_ST_TYPE(sym->st_info))
 	{
-		case STT_NOTYPE:
-			return (" ");
-		case STT_OBJECT:
-			return ("B");
-		case STT_FUNC:
-			return ("T");
-		case STT_SECTION:
-			return ("S");
-		case STT_FILE:
-			return ("f");
-		case STT_COMMON:
-			return ("C");
-		case STT_TLS:
-			return ("T");
-		case STT_GNU_IFUNC:
-			return ("i");
-		default:
-			return ("?");
+	case STT_NOTYPE:
+		return (" ");
+	case STT_OBJECT:
+		return ("B");
+	case STT_FUNC:
+		return ("T");
+	case STT_SECTION:
+		return ("S");
+	case STT_FILE:
+		return ("f");
+	case STT_COMMON:
+		return ("C");
+	case STT_TLS:
+		return ("T");
+	case STT_GNU_IFUNC:
+		return "i";
+	default:
+		return ("?");
 	}
+}
+
+static int compare_symbols(const void *a, const void *b)
+{
+	const SymbolEntry *sa = (const SymbolEntry *)a;
+	const SymbolEntry *sb = (const SymbolEntry *)b;
+	return (sa->sym.st_value - sb->sym.st_value);
 }
 
 static int parse_symbols(FILE *file)
@@ -46,10 +53,8 @@ static int parse_symbols(FILE *file)
 	Elf64_Shdr shdr;
 	Elf64_Shdr strtab_section_header;
 	char *shstrtab;
-	int num_symbols = 0;
-	int i, j;
-	int symbol_count;
 	SymbolEntry symbols[MAX_SYMBOLS];
+	int num_symbols = 0;
 
 	if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr))
 	{
@@ -79,7 +84,7 @@ static int parse_symbols(FILE *file)
 	fseek(file, ehdr.e_shoff + ehdr.e_shentsize * ehdr.e_shstrndx, SEEK_SET);
 	if (fread(&strtab_section_header, 1, sizeof(strtab_section_header), file) !=
 		sizeof(strtab_section_header))
-		{
+	{
 		fprintf(stderr, "Error reading section header\n");
 		return (-1);
 	}
@@ -99,7 +104,7 @@ static int parse_symbols(FILE *file)
 	}
 
 	fseek(file, ehdr.e_shoff, SEEK_SET);
-	for (i = 0; i < ehdr.e_shnum; ++i)
+	for (int i = 0; i < ehdr.e_shnum; ++i)
 	{
 		if (fread(&shdr, 1, sizeof(shdr), file) != sizeof(shdr))
 		{
@@ -109,10 +114,10 @@ static int parse_symbols(FILE *file)
 
 		if (shdr.sh_type == SHT_SYMTAB || shdr.sh_type == SHT_DYNSYM)
 		{
-			symbol_count = shdr.sh_size / sizeof(Elf64_Sym);
+			int symbol_count = shdr.sh_size / sizeof(Elf64_Sym);
 			fseek(file, shdr.sh_offset, SEEK_SET);
 
-			for (j = 0; j < symbol_count; ++j)
+			for (int j = 0; j < symbol_count; ++j)
 			{
 				Elf64_Sym sym;
 				if (fread(&sym, 1, sizeof(sym), file) != sizeof(sym))
@@ -121,7 +126,10 @@ static int parse_symbols(FILE *file)
 					return (-1);
 				}
 
-				if (sym.st_name == 0) continue;  /* Skip unnamed symbols */
+				if (sym.st_name == 0)
+				{
+					continue; /* Skip unnamed symbols */
+				}
 
 				if (num_symbols < MAX_SYMBOLS)
 				{
@@ -135,7 +143,7 @@ static int parse_symbols(FILE *file)
 
 	qsort(symbols, num_symbols, sizeof(SymbolEntry), compare_symbols);
 
-	for (i = 0; i < num_symbols; ++i)
+	for (int i = 0; i < num_symbols; ++i)
 	{
 		printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
 			get_symbol_type(&symbols[i].sym), symbols[i].name);
@@ -144,6 +152,17 @@ static int parse_symbols(FILE *file)
 
 	free(shstrtab);
 	return (0);
+}
+
+void print_symbols(SymbolEntry *symbols, int num_symbols)
+{
+	int i;
+
+	for (i = 0; i < num_symbols; ++i)
+	{
+		printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
+			get_symbol_type(&symbols[i].sym), symbols[i].name);
+	}
 }
 
 int process_file(const char *filename)
