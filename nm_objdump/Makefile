@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
-LDFLAGS =
+LDFLAGS = -static
 
 SRC = hnm.c elf_parser.c
 OBJ = $(SRC:.c=.o)
