@@ -54,8 +54,7 @@ static int parse_symbols(FILE *file)
 	Elf64_Shdr strtab_section_header;
 	char *shstrtab;
 	SymbolEntry symbols[MAX_SYMBOLS];
-	int num_symbols = 0;
-	int i, j, symbol_count;
+	int num_symbols = 0, i, j, symbol_count;
 
 	if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr))
 	{
