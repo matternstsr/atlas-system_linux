@@ -19,7 +19,7 @@ typedef Elf64_Shdr Elf_Shdr;
 #define ELF_ST_TYPE ELF64_ST_TYPE
 #define ELF_CLASS ELFCLASS64
 #else
-#error "[stderr]: Unsupported ELF class"
+#error "Unsupported ELF class"
 #endif
 
 typedef struct {
@@ -60,12 +60,7 @@ static int compare_symbols(const void *a, const void *b)
 {
     const SymbolEntry *sa = (const SymbolEntry *)a;
     const SymbolEntry *sb = (const SymbolEntry *)b;
-    if (sa->sym.st_value < sb->sym.st_value)
-        return -1;
-    else if (sa->sym.st_value > sb->sym.st_value)
-        return 1;
-    else
-        return 0;
+    return (sa->sym.st_value > sb->sym.st_value) - (sa->sym.st_value < sb->sym.st_value);
 }
 
 static int parse_symbols(FILE *file)
@@ -167,18 +162,11 @@ static int parse_symbols(FILE *file)
 
     qsort(symbols, num_symbols, sizeof(SymbolEntry), compare_symbols);
 
-    if (num_symbols == 0)
+    for (i = 0; i < num_symbols; ++i)
     {
-        fprintf(stderr, "[stderr]: ./hnm: libperl.so.5.18: no symbols\n");
-    }
-    else
-    {
-        for (i = 0; i < num_symbols; ++i)
-        {
-            printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
-                   get_symbol_type(&symbols[i].sym), symbols[i].name);
-            free(symbols[i].name);
-        }
+        printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
+               get_symbol_type(&symbols[i].sym), symbols[i].name);
+        free(symbols[i].name);
     }
 
     free(shstrtab);
@@ -194,7 +182,6 @@ int process_file(const char *filename)
         return -1;
     }
 
-    printf("%s:\n", filename);
     int ret = parse_symbols(file);
 
     fclose(file);
