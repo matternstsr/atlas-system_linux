@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -g -Wall
-LIBS = -lelf
+CFLAGS = -g -Wall -O2
+LIBS = -lelf -lm
 
 all: hnm
 
