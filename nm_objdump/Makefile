@@ -1,21 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -g
-LDFLAGS =
-LDLIBS = -lelf   # Link with libelf
+CFLAGS = -g -Wall
+LIBS = -lelf
 
-SRCS = hnm.c elf_parser.c
-OBJS = $(SRCS:.c=.o)
-TARGET = hnm
+all: hnm
 
-.PHONY: all clean
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+hnm: hnm.c
+	$(CC) $(CFLAGS) -o $@ $< $(LIBS)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f hnm

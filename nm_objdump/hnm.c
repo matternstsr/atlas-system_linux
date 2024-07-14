@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <libelf.h>
 #include <gelf.h>
+#include "elf_parser.h"
 
 void print_symbols(Elf *elf)
 {
