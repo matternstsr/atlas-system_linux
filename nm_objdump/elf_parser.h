@@ -16,6 +16,5 @@
 #include <stddef.h>
 #include <libelf.h>
 #include <gelf.h>
-#include <libelf.h>
 
 #endif /* ELF_PARSER_H */

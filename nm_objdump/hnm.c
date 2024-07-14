@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <libelf.h>
 #include <gelf.h>
 
 void print_symbols(Elf *elf)
