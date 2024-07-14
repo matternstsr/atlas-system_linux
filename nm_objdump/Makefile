@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu90 -g
-LIBS = -lelf -lm -lpthread -ldl -lrt -lncurses -lz -lssl -lcrypto -lstdc++
+LIBS = -lm -lpthread -ldl -lrt -lncurses -lz -lssl -lcrypto -lstdc++
 
 SRC0 = hnm.c elf_parser.c
 OBJ0 = $(SRC0:.c=.o)
