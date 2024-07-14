@@ -5,7 +5,7 @@ LIBS = -lelf -lm
 all: hnm
 
 hnm: hnm.c
-	$(CC) $(CFLAGS) -o $@ $< $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $< $(LIBS) -static-libgcc -static-libstdc++
 
 clean:
 	rm -f hnm
