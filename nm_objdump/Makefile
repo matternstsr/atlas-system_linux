@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu90 -g
+CFLAGS = -Wall -g  # -Wall -Werror -Wextra -pedantic -std=gnu90 -g
 LIBS = -lelf  # Link with libelf
 
 SRC0 = hnm.c elf_parser.c
@@ -10,25 +10,25 @@ SRC1 = hobjdump.c elf_parser.c
 OBJ1 = $(SRC1:.c=.o)
 NAME1 = hobjdump
 
-.PHONY: all clean oclean flcean re
+.PHONY: all clean oclean fclean re
 
-all: $(OBJ0) $(OBJ1)
-	$(CC) $(OBJ0) -o $(NAME0)
-	$(CC) $(OBJ1) -o $(NAME1)
+all: $(NAME0) $(NAME1)
+
+$(NAME0): $(OBJ0)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
+
+$(NAME1): $(OBJ1)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
+
 clean:
-	$(RM) *~ $(NAME0)
-	$(RM) *~ $(NAME1)
+	$(RM) *~ $(OBJ0) $(OBJ1) $(NAME0) $(NAME1)
 
 oclean:
-	$(RM) $(OBJ0)
-	$(RM) $(OBJ1)
+	$(RM) $(OBJ0) $(OBJ1)
 
 fclean: clean oclean
 
-re: oclean all
+re: fclean all
 
-hnm: elf_parser.h $(OBJ0)
-	$(CC) $(OBJ0) -o $(NAME0)
-
-hobjdump: elf_parser.h $(OBJ1)
-	$(CC) $(OBJ1) -o $(NAME1)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
