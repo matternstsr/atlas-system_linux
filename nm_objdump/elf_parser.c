@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-#include <elf.h>
 #include "elf_parser.h"
 
 #define MAX_SYMBOLS 1024
