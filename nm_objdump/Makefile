@@ -1,20 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic
-LDFLAGS = -static
+CFLAGS = -g -Wall
+LIBS = -lelf
 
-SRC = hnm.c elf_parser.c
-OBJ = $(SRC:.c=.o)
-TARGET = hnm
+all: hnm
 
-.PHONY: all clean
-
-all: $(TARGET)
-
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+hnm: hnm.c
+	$(CC) $(CFLAGS) -o $@ $< $(LIBS)
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f hnm
