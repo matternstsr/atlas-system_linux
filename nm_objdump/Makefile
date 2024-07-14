@@ -27,8 +27,8 @@ fclean: clean oclean
 
 re: oclean all
 
-hnm: hreadelf.h $(OBJ0)
+hnm: elf_parser.h $(OBJ0)
 	$(CC) $(OBJ0) -o $(NAME0)
 
-hobjdump: hreadelf.h $(OBJ1)
+hobjdump: elf_parser.h $(OBJ1)
 	$(CC) $(OBJ1) -o $(NAME1)
