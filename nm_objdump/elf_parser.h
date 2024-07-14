@@ -14,7 +14,7 @@
 #include <byteswap.h>
 #include <sys/mman.h>
 #include <stddef.h>
-
+#include <libelf.h>
 #include <gelf.h>
 
 #endif /* ELF_PARSER_H */
