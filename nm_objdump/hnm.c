@@ -3,14 +3,15 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "elf_parser.h"
+#include <libelf.h>
+#include <gelf.h>
 
 void print_symbols(Elf *elf)
 {
     Elf_Scn *scn = NULL;
     GElf_Shdr shdr;
     Elf_Data *data;
-    Elf32_Sym *symtab;
+    Elf64_Sym *symtab;
     int count, i;
 
     while ((scn = elf_nextscn(elf, scn)) != NULL)
@@ -19,28 +20,43 @@ void print_symbols(Elf *elf)
         if (shdr.sh_type == SHT_SYMTAB || shdr.sh_type == SHT_DYNSYM)
         {
             data = elf_getdata(scn, NULL);
-            symtab = (Elf32_Sym *)data->d_buf;
+            symtab = (Elf64_Sym *)data->d_buf;
             count = shdr.sh_size / shdr.sh_entsize;
 
             for (i = 0; i < count; i++)
             {
-                if (ELF32_ST_TYPE(symtab[i].st_info) != STT_FILE)
+                if (ELF64_ST_TYPE(symtab[i].st_info) != STT_FILE)
                 {
-                    char bind = ELF32_ST_BIND(symtab[i].st_info);
                     char type;
+                    switch (ELF64_ST_TYPE(symtab[i].st_info))
+                    {
+                        case STT_NOTYPE:
+                            type = ' ';
+                            break;
+                        case STT_OBJECT:
+                            type = 'd';
+                            break;
+                        case STT_FUNC:
+                            type = 'T';
+                            break;
+                        case STT_SECTION:
+                            type = ' ';
+                            break;
+                        case STT_FILE:
+                            type = ' ';
+                            break;
+                        case STT_COMMON:
+                            type = ' ';
+                            break;
+                        case STT_TLS:
+                            type = 'T';
+                            break;
+                        default:
+                            type = '?';
+                            break;
+                    }
 
-                    if (bind == STB_LOCAL)
-                        type = 't';
-                    else if (bind == STB_GLOBAL)
-                        type = 'T';
-                    else if (bind == STB_WEAK)
-                        type = 'W';
-                    else if (bind == STB_GNU_UNIQUE)
-                        type = 'u';
-                    else
-                        type = '?';
-
-                    printf("%08x %c %s\n", (unsigned int)symtab[i].st_value,
+                    printf("%016lx %c %s\n", (unsigned long)symtab[i].st_value,
                            type, elf_strptr(elf, shdr.sh_link, symtab[i].st_name));
                 }
             }
