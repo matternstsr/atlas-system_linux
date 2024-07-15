@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <elf.h>
 #include "elf_parser.h"
-#include <libelf.h>
 
 #define MAX_SYMBOLS 1024
 
