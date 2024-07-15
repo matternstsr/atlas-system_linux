@@ -15,6 +15,7 @@
 #include <sys/mman.h>
 #include <stddef.h>
 #include <gelf.h>
+#include <libelf.h>
 
 int process_file(const char *filename);
 
