@@ -21,31 +21,34 @@ static int compare_symbols(const void *a, const void *b) {
     return strcmp(sa->name, sb->name);
 }
 
+static char get_symbol_binding(uint8_t info) {
+    switch (ELF32_ST_BIND(info)) {
+        case STB_LOCAL:  return 'l';
+        case STB_GLOBAL: return 'g';
+        case STB_WEAK:   return 'w';
+        default:         return '?';
+    }
+}
+
 static const char *get_symbol_type_32(Elf32_Sym *sym) {
     switch (ELF32_ST_TYPE(sym->st_info)) {
-        case STT_NOTYPE: return " ";
-        case STT_OBJECT: return "B";
-        case STT_FUNC: return "T";
-        case STT_SECTION: return "S";
-        case STT_FILE: return "f";
-        case STT_COMMON: return "C";
-        case STT_TLS: return "T";
-        case STT_GNU_IFUNC: return "i";
-        default: return "?";
+        case STT_NOTYPE: return "";
+        case STT_OBJECT: return "d";
+        case STT_FUNC:   return "t";
+        case STT_SECTION:return "n";
+        case STT_FILE:   return "f";
+        default:         return "?";
     }
 }
 
 static const char *get_symbol_type_64(Elf64_Sym *sym) {
     switch (ELF64_ST_TYPE(sym->st_info)) {
-        case STT_NOTYPE: return " ";
-        case STT_OBJECT: return "B";
-        case STT_FUNC: return "T";
-        case STT_SECTION: return "S";
-        case STT_FILE: return "f";
-        case STT_COMMON: return "C";
-        case STT_TLS: return "T";
-        case STT_GNU_IFUNC: return "i";
-        default: return "?";
+        case STT_NOTYPE: return "";
+        case STT_OBJECT: return "d";
+        case STT_FUNC:   return "t";
+        case STT_SECTION:return "n";
+        case STT_FILE:   return "f";
+        default:         return "?";
     }
 }
 
@@ -71,40 +74,58 @@ static int parse_symbols(FILE *file) {
         }
     }
 
-    fseek(file, is_64bit ? ehdr.e_shoff : ((Elf32_Ehdr*)&ehdr)->e_shoff, SEEK_SET);
+    uint16_t shnum = is_64bit ? ehdr.e_shnum : ((Elf32_Ehdr*)&ehdr)->e_shnum;
+    uint16_t shentsize = is_64bit ? ehdr.e_shentsize : ((Elf32_Ehdr*)&ehdr)->e_shentsize;
+    uint64_t shoff = is_64bit ? ehdr.e_shoff : ((Elf32_Ehdr*)&ehdr)->e_shoff;
+
     Elf64_Shdr shdr;
     Elf32_Shdr shdr32;
-    if (fread(is_64bit ? (void*)&shdr : (void*)&shdr32, 1, is_64bit ? sizeof(shdr) : sizeof(shdr32), file) != (is_64bit ? sizeof(shdr) : sizeof(shdr32))) {
-        fprintf(stderr, "Error reading section header\n");
-        return -1;
-    }
 
-    Elf64_Shdr strtab_section_header;
-    Elf32_Shdr strtab_section_header32;
-    fseek(file, is_64bit ? ehdr.e_shoff + ehdr.e_shentsize * ehdr.e_shstrndx : ((Elf32_Ehdr*)&ehdr)->e_shoff + ((Elf32_Ehdr*)&ehdr)->e_shentsize * ((Elf32_Ehdr*)&ehdr)->e_shstrndx, SEEK_SET);
-    if (fread(is_64bit ? (void*)&strtab_section_header : (void*)&strtab_section_header32, 1, is_64bit ? sizeof(strtab_section_header) : sizeof(strtab_section_header32), file) != (is_64bit ? sizeof(strtab_section_header) : sizeof(strtab_section_header32))) {
-        fprintf(stderr, "Error reading section header\n");
-        return -1;
-    }
+    fseek(file, shoff, SEEK_SET);
 
-    char *shstrtab = malloc(is_64bit ? strtab_section_header.sh_size : strtab_section_header32.sh_size);
-    if (!shstrtab) {
-        fprintf(stderr, "Memory allocation error\n");
-        return -1;
-    }
+    char *section_headers_strtab = NULL;
 
-    fseek(file, is_64bit ? strtab_section_header.sh_offset : strtab_section_header32.sh_offset, SEEK_SET);
-    if (fread(shstrtab, 1, is_64bit ? strtab_section_header.sh_size : strtab_section_header32.sh_size, file) != (is_64bit ? strtab_section_header.sh_size : strtab_section_header32.sh_size)) {
-        fprintf(stderr, "Error reading section header\n");
-        return -1;
+    for (int i = 0; i < shnum; ++i) {
+        if (fread(is_64bit ? (void*)&shdr : (void*)&shdr32, 1, shentsize, file) != shentsize) {
+            fprintf(stderr, "Error reading section header\n");
+            return -1;
+        }
+
+        if (is_64bit && shdr.sh_type == SHT_STRTAB) {
+            if (shdr.sh_flags & SHF_ALLOC) {
+                section_headers_strtab = malloc(shdr.sh_size);
+                if (!section_headers_strtab) {
+                    fprintf(stderr, "Memory allocation error\n");
+                    return -1;
+                }
+                fseek(file, shdr.sh_offset, SEEK_SET);
+                if (fread(section_headers_strtab, 1, shdr.sh_size, file) != shdr.sh_size) {
+                    fprintf(stderr, "Error reading section header string table\n");
+                    return -1;
+                }
+            }
+        } else if (!is_64bit && shdr32.sh_type == SHT_STRTAB) {
+            if (shdr32.sh_flags & SHF_ALLOC) {
+                section_headers_strtab = malloc(shdr32.sh_size);
+                if (!section_headers_strtab) {
+                    fprintf(stderr, "Memory allocation error\n");
+                    return -1;
+                }
+                fseek(file, shdr32.sh_offset, SEEK_SET);
+                if (fread(section_headers_strtab, 1, shdr32.sh_size, file) != shdr32.sh_size) {
+                    fprintf(stderr, "Error reading section header string table\n");
+                    return -1;
+                }
+            }
+        }
     }
 
     int num_symbols = 0;
     SymbolEntry symbols[MAX_SYMBOLS];
 
-    fseek(file, is_64bit ? ehdr.e_shoff : ((Elf32_Ehdr*)&ehdr)->e_shoff, SEEK_SET);
-    for (int i = 0; i < (is_64bit ? ehdr.e_shnum : ((Elf32_Ehdr*)&ehdr)->e_shnum); ++i) {
-        if (fread(is_64bit ? (void*)&shdr : (void*)&shdr32, 1, is_64bit ? sizeof(shdr) : sizeof(shdr32), file) != (is_64bit ? sizeof(shdr) : sizeof(shdr32))) {
+    fseek(file, shoff, SEEK_SET);
+    for (int i = 0; i < shnum; ++i) {
+        if (fread(is_64bit ? (void*)&shdr : (void*)&shdr32, 1, shentsize, file) != shentsize) {
             fprintf(stderr, "Error reading section header\n");
             return -1;
         }
@@ -123,7 +144,7 @@ static int parse_symbols(FILE *file) {
                     if (sym.st_name == 0) continue;
                     if (num_symbols < MAX_SYMBOLS) {
                         symbols[num_symbols].sym64 = sym;
-                        symbols[num_symbols].name = strdup(shstrtab + sym.st_name);
+                        symbols[num_symbols].name = strdup(section_headers_strtab + sym.st_name);
                         symbols[num_symbols].is_64bit = 1;
                         num_symbols++;
                     }
@@ -136,7 +157,7 @@ static int parse_symbols(FILE *file) {
                     if (sym.st_name == 0) continue;
                     if (num_symbols < MAX_SYMBOLS) {
                         symbols[num_symbols].sym32 = sym;
-                        symbols[num_symbols].name = strdup(shstrtab + sym.st_name);
+                        symbols[num_symbols].name = strdup(section_headers_strtab + sym.st_name);
                         symbols[num_symbols].is_64bit = 0;
                         num_symbols++;
                     }
@@ -149,14 +170,14 @@ static int parse_symbols(FILE *file) {
 
     for (int i = 0; i < num_symbols; ++i) {
         if (symbols[i].is_64bit) {
-            printf("%016lx %s %s\n", (unsigned long)symbols[i].sym64.st_value, get_symbol_type_64(&symbols[i].sym64), symbols[i].name);
+            printf("%016lx %c %s\n", (unsigned long)symbols[i].sym64.st_value, get_symbol_binding(symbols[i].sym64.st_info), symbols[i].name);
         } else {
-            printf("%08lx %s %s\n", (unsigned long)symbols[i].sym32.st_value, get_symbol_type_32(&symbols[i].sym32), symbols[i].name);
+            printf("%08lx %c %s\n", (unsigned long)symbols[i].sym32.st_value, get_symbol_binding(symbols[i].sym32.st_info), symbols[i].name);
         }
         free(symbols[i].name);
     }
 
-    free(shstrtab);
+    free(section_headers_strtab);
     return 0;
 }
 
