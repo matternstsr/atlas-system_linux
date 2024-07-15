@@ -5,23 +5,22 @@ SRC0 = hnm.c elf_parser.c
 OBJ0 = $(SRC0:.c=.o)
 NAME0 = hnm
 
-# SRC1 = hobjdump.c elf_parser.c
-# OBJ1 = $(SRC1:.c=.o)
-# NAME1 = hobjdump
+SRC1 = hobjdump.c elf_parser.c
+OBJ1 = $(SRC1:.c=.o)
+NAME1 = hobjdump
 
 .PHONY: all clean oclean fclean re
 
-all: $(NAME0) # $(NAME1)
+all: $(NAME0) $(NAME1)
 
 $(NAME0): $(OBJ0)
 	$(CC) $(OBJ0) -o $(NAME0)
 
-# $(NAME1): $(OBJ1)
-# 	$(CC) $(OBJ1) -o $(NAME1)
+$(NAME1): $(OBJ1)
+	$(CC) $(OBJ1) -o $(NAME1)
 
 clean:
-	$(RM) *~ $(OBJ0) $(NAME0)
-# $(OBJ1) # $(NAME1)
+	$(RM) *~ $(OBJ0) $(OBJ1) $(NAME0) $(NAME1)
 
 oclean:
 	$(RM) $(OBJ0) $(OBJ1)
