@@ -1,104 +1,143 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <libelf.h>
-#include <gelf.h>
+#include <stdint.h>
+#include <elf.h>
 #include "elf_parser.h"
 
-void print_symbols(Elf *elf)
-{
-    Elf_Scn *scn = NULL;
-    GElf_Shdr shdr;
-    Elf_Data *data;
-    Elf64_Sym *symtab;
-    int count, i;
+#define MAX_SYMBOLS 1024
 
-    while ((scn = elf_nextscn(elf, scn)) != NULL)
-    {
-        gelf_getshdr(scn, &shdr);
-        if (shdr.sh_type == SHT_SYMTAB || shdr.sh_type == SHT_DYNSYM)
-        {
-            data = elf_getdata(scn, NULL);
-            symtab = (Elf64_Sym *)data->d_buf;
-            count = shdr.sh_size / shdr.sh_entsize;
+typedef struct {
+    Elf64_Sym sym;
+    char *name;
+} SymbolEntry;
 
-            for (i = 0; i < count; i++)
-            {
-                if (ELF64_ST_TYPE(symtab[i].st_info) != STT_FILE)
-                {
-                    char type;
-                    switch (ELF64_ST_TYPE(symtab[i].st_info))
-                    {
-                        case STT_NOTYPE:
-                            type = ' ';
-                            break;
-                        case STT_OBJECT:
-                            type = 'd';
-                            break;
-                        case STT_FUNC:
-                            type = 'T';
-                            break;
-                        case STT_SECTION:
-                            type = ' ';
-                            break;
-                        case STT_FILE:
-                            type = ' ';
-                            break;
-                        case STT_COMMON:
-                            type = ' ';
-                            break;
-                        case STT_TLS:
-                            type = 'T';
-                            break;
-                        default:
-                            type = '?';
-                            break;
-                    }
+static int compare_symbols(const void *a, const void *b) {
+    const SymbolEntry *sa = (const SymbolEntry *)a;
+    const SymbolEntry *sb = (const SymbolEntry *)b;
+    return strcmp(sa->name, sb->name);
+}
 
-                    printf("%016lx %c %s\n", (unsigned long)symtab[i].st_value,
-                           type, elf_strptr(elf, shdr.sh_link, symtab[i].st_name));
+static const char *get_symbol_type(Elf64_Sym *sym) {
+    switch (ELF64_ST_TYPE(sym->st_info)) {
+        case STT_NOTYPE:
+            return " ";
+        case STT_OBJECT:
+            return "B";
+        case STT_FUNC:
+            return "T";
+        case STT_SECTION:
+            return "S";
+        case STT_FILE:
+            return "f";
+        case STT_COMMON:
+            return "C";
+        case STT_TLS:
+            return "T";
+        case STT_GNU_IFUNC:
+            return "i";
+        default:
+            return "?";
+    }
+}
+
+static int parse_symbols(FILE *file) {
+    Elf64_Ehdr ehdr;
+    if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr)) {
+        fprintf(stderr, "Error reading ELF header\n");
+        return -1;
+    }
+
+    if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
+        fprintf(stderr, "Not an ELF file\n");
+        return -1;
+    }
+
+    if (ehdr.e_ident[EI_CLASS] != ELFCLASS64) {
+        fprintf(stderr, "Only 64-bit ELF files are supported\n");
+        return -1;
+    }
+
+    fseek(file, ehdr.e_shoff, SEEK_SET);
+    Elf64_Shdr shdr;
+    if (fread(&shdr, 1, sizeof(shdr), file) != sizeof(shdr)) {
+        fprintf(stderr, "Error reading section header\n");
+        return -1;
+    }
+
+    Elf64_Shdr strtab_section_header;
+    fseek(file, ehdr.e_shoff + ehdr.e_shentsize * ehdr.e_shstrndx, SEEK_SET);
+    if (fread(&strtab_section_header, 1, sizeof(strtab_section_header), file) !=
+        sizeof(strtab_section_header)) {
+        fprintf(stderr, "Error reading section header\n");
+        return -1;
+    }
+
+    char *shstrtab = malloc(strtab_section_header.sh_size);
+    if (!shstrtab) {
+        fprintf(stderr, "Memory allocation error\n");
+        return -1;
+    }
+
+    fseek(file, strtab_section_header.sh_offset, SEEK_SET);
+    if (fread(shstrtab, 1, strtab_section_header.sh_size, file) != strtab_section_header.sh_size) {
+        fprintf(stderr, "Error reading section header\n");
+        return -1;
+    }
+
+    int num_symbols = 0;
+    SymbolEntry symbols[MAX_SYMBOLS];
+
+    fseek(file, ehdr.e_shoff, SEEK_SET);
+    for (int i = 0; i < ehdr.e_shnum; ++i) {
+        if (fread(&shdr, 1, sizeof(shdr), file) != sizeof(shdr)) {
+            fprintf(stderr, "Error reading section header\n");
+            return -1;
+        }
+
+        if (shdr.sh_type == SHT_SYMTAB || shdr.sh_type == SHT_DYNSYM) {
+            int symbol_count = shdr.sh_size / sizeof(Elf64_Sym);
+            fseek(file, shdr.sh_offset, SEEK_SET);
+
+            for (int j = 0; j < symbol_count; ++j) {
+                Elf64_Sym sym;
+                if (fread(&sym, 1, sizeof(sym), file) != sizeof(sym)) {
+                    fprintf(stderr, "Error reading symbol\n");
+                    return -1;
+                }
+
+                if (sym.st_name == 0) continue;  // Skip unnamed symbols
+
+                if (num_symbols < MAX_SYMBOLS) {
+                    symbols[num_symbols].sym = sym;
+                    symbols[num_symbols].name = strdup(shstrtab + sym.st_name);
+                    num_symbols++;
                 }
             }
         }
     }
+
+    qsort(symbols, num_symbols, sizeof(SymbolEntry), compare_symbols);
+
+    for (int i = 0; i < num_symbols; ++i) {
+        printf("%016lx %s %s\n", (unsigned long)symbols[i].sym.st_value,
+               get_symbol_type(&symbols[i].sym), symbols[i].name);
+        free(symbols[i].name);
+    }
+
+    free(shstrtab);
+    return 0;
 }
 
-int main(int argc, char *argv[])
-{
-    int fd, i;
-    Elf *elf;
-
-    if (argc < 2)
-    {
-        fprintf(stderr, "Usage: %s [objfile...]\n", argv[0]);
-        exit(EXIT_FAILURE);
+int process_file(const char *filename) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        perror("fopen");
+        return -1;
     }
 
-    elf_version(EV_CURRENT);
+    int ret = parse_symbols(file);
 
-    for (i = 1; i < argc; i++)
-    {
-        if ((fd = open(argv[i], O_RDONLY, 0)) < 0)
-        {
-            perror("open");
-            continue;
-        }
-
-        if ((elf = elf_begin(fd, ELF_C_READ, NULL)) == NULL)
-        {
-            perror("elf_begin");
-            close(fd);
-            continue;
-        }
-
-        printf("\n%s:\n", argv[i]);
-        print_symbols(elf);
-
-        elf_end(elf);
-        close(fd);
-    }
-
-    return 0;
+    fclose(file);
+    return ret;
 }

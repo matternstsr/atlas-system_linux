@@ -14,7 +14,8 @@
 #include <byteswap.h>
 #include <sys/mman.h>
 #include <stddef.h>
-#include <libelf.h>
 #include <gelf.h>
+
+int process_file(const char *filename);
 
 #endif /* ELF_PARSER_H */
