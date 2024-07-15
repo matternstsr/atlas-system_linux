@@ -129,16 +129,3 @@ static int parse_symbols(FILE *file) {
     free(shstrtab);
     return 0;
 }
-
-int process_file(const char *filename) {
-    FILE *file = fopen(filename, "rb");
-    if (!file) {
-        perror("fopen");
-        return -1;
-    }
-
-    int ret = parse_symbols(file);
-
-    fclose(file);
-    return ret;
-}
