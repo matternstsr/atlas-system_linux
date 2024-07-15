@@ -1,4 +1,4 @@
-Task Breakdown
+Task Breakdown 
 
     Understanding ELF Format:
         ELF files have sections and symbols that define the structure and executable code/data within the file.
