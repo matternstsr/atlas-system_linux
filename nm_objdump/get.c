@@ -3,7 +3,7 @@
 /**
 * get_section_type - return string type of section
 * @sh_type: the section type
-* Return: string name of type
+* return: string name of type
 */
 char *get_section_type(unsigned int sh_type)
 {
@@ -42,7 +42,7 @@ char *get_section_type(unsigned int sh_type)
 	default:
 		sprintf(buf, "%08x: <unknown>", sh_type);
 		/*Fmt unknown sec type into buf */
-		return (buf);     /* Return pointer to buf */
+		return (buf);     /* return pointer to buf */
 	}
 }
 
@@ -50,7 +50,7 @@ char *get_section_type(unsigned int sh_type)
 * get_section_flags - translates section flags to string
 * @elf_header: address of elf header struct
 * @i: the section index
-* Return: legend-based string rep of flag
+* return: legend-based string rep of flag
 */
 char *get_section_flags(elf_t *elf_header, size_t i)
 {
@@ -83,14 +83,14 @@ char *get_section_flags(elf_t *elf_header, size_t i)
 		*p++ = 'E';
 	/* if (flags & SHF_COMPRESSED) *p = 'C'; opt compressed (not enabled) */
 	*p = 0;                             /* Null-terminate the string */
-	return (buf);                       /* Return pointer to the flag string */
+	return (buf);                       /* return pointer to the flag string */
 }
 
 /**
 * get_sym_type - gets the STT type based on symbol information
 * @elf_header: the internal header struct (unused)
 * @i: index of the current symbol in the symbol table
-* Return: string representing the symbol type
+* return: string representing the symbol type
 */
 char *get_sym_type(elf_t *elf_header, size_t i)
 {
@@ -117,7 +117,7 @@ char *get_sym_type(elf_t *elf_header, size_t i)
 * get_sym_bind - gets the STB (symbol binding) type based on symbol information
 * @elf_header: the internal ELF header struct (unused)
 * @i: index of the current symbol in the symbol table
-* Return: string representing the symbol binding type
+* return: string representing the symbol binding type
 */
 char *get_sym_bind(elf_t *elf_header, size_t i)
 {
@@ -140,7 +140,7 @@ char *get_sym_bind(elf_t *elf_header, size_t i)
 * based on symbol information
 * @elf_header: the internal ELF header struct (unused)
 * @i: index of the current symbol in the symbol table
-* Return: string representing the symbol visibility type
+* return: string representing the symbol visibility type
 */
 char *get_sym_visibility(elf_t *elf_header, size_t i)
 {
@@ -158,7 +158,7 @@ char *get_sym_visibility(elf_t *elf_header, size_t i)
 * get_nm_type64 - gets type of symbol in one character for 64-bit ELF
 * @sym: the symbol struct (Elf64_Sym)
 * @shdr: the array of section header structs (Elf64_Shdr)
-* Return: the character representing the symbol type
+* return: the character representing the symbol type
 */
 char get_nm_type64(Elf64_Sym sym, Elf64_Shdr *shdr)
 {
@@ -197,14 +197,14 @@ char get_nm_type64(Elf64_Sym sym, Elf64_Shdr *shdr)
 	/* Convert to lowercase if local and not unknown */
 	if (ELF64_ST_BIND(sym.st_info) == STB_LOCAL && c != '?')
 		c += 32;
-	return (c);  /* Return the symbol type character */
+	return (c);  /* return the symbol type character */
 }
 
 /**
 * get_nm_type32 - gets type of symbol in one character for 32-bit ELF
 * @sym: the symbol struct (Elf32_Sym)
 * @shdr: the array of section header structs (Elf32_Shdr)
-* Return: the character representing the symbol type
+* return: the character representing the symbol type
 */
 char get_nm_type32(Elf32_Sym sym, Elf32_Shdr *shdr)
 {
@@ -243,5 +243,5 @@ char get_nm_type32(Elf32_Sym sym, Elf32_Shdr *shdr)
 	/* Convert to lowercase if local and not unknown */
 	if (ELF32_ST_BIND(sym.st_info) == STB_LOCAL && c != '?')
 		c += 32;
-	return (c);  /* Return the symbol type character */
+	return (c);  /* return the symbol type character */
 }

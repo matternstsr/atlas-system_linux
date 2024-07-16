@@ -4,7 +4,7 @@
 * print_section_headers_full - prints all the ELF section headers
 * @elf_header: address of elf header struct
 * @fd: the file descriptor of our ELF file
-* Return: 0 on success else exit_status
+* return: 0 on success else exit_status
 */
 int print_section_headers_full(elf_t *elf_header, int fd)
 {
@@ -15,7 +15,7 @@ int print_section_headers_full(elf_t *elf_header, int fd)
 	if (!EGET(e_shnum))
 	{
 		printf("\nThere are no sections in this file.\n");
-		return (1);   /* Return 1 indicating no sections */
+		return (1);   /* return 1 indicating no sections */
 	}
 	/* Print the number of section headers and their offset */
 	printf("There are %d section headers, starting at offset 0x%lx:\n",
@@ -38,7 +38,7 @@ int print_section_headers_full(elf_t *elf_header, int fd)
 	printf(FORMAT_LEGEND, IS_32(elf_header->e64) ? "" : ", l (large)");
 	/* Free dynamically allocated string table memory */
 	free(string_table);
-	return (0);   /* Return 0 indicating success */
+	return (0);   /* return 0 indicating success */
 }
 
 /**
@@ -100,7 +100,7 @@ void print_section_headers64(elf_t *elf_header, char *string_table)
 * @elf_header: address of elf header struct
 * @fd: the file descriptor of our ELF file
 * @num_printed: pointer to var storing number of symbols printed
-* Return: 0 on success else exit_status
+* return: 0 on success else exit_status
 */
 int print_all_symbol_tables(elf_t *elf_header, int fd, size_t *num_printed)
 {
@@ -132,7 +132,7 @@ int print_all_symbol_tables(elf_t *elf_header, int fd, size_t *num_printed)
 	}
 	/* Free dynamically allocated string table memory */
 	free(string_table);
-	return (0);   /* Return 0 indicating success */
+	return (0);   /* return 0 indicating success */
 }
 
 /**
@@ -141,7 +141,7 @@ int print_all_symbol_tables(elf_t *elf_header, int fd, size_t *num_printed)
 * @fd: the file descriptor of our ELF file
 * @i: section index of current symbol table
 * @string_table: the section header string_table
-* Return: number of symbols printed
+* return: number of symbols printed
 */
 size_t print_symbol_table(elf_t *elf_header, int fd, size_t i,
 						char *string_table)
@@ -181,7 +181,7 @@ size_t print_symbol_table(elf_t *elf_header, int fd, size_t i,
 	sym_string_table = (free(sym_string_table), NULL);
 	verneed = (free(verneed), NULL);
 	versym = (free(versym), NULL);
-	return (num_printed);   /* Return number of symbols printed */
+	return (num_printed);   /* return number of symbols printed */
 }
 
 
@@ -194,7 +194,7 @@ size_t print_symbol_table(elf_t *elf_header, int fd, size_t i,
 * @verneed: the Elf64_Verneed section array
 * @verneed_size: the size of the verneed array
 * @section: the symbol section to print
-* Return: number of symbols printed
+* return: number of symbols printed
 */
 size_t print_symbol_table32(elf_t *elf_header, char *string_table,
 							char *sym_string_table, uint16_t *versym,
@@ -224,7 +224,7 @@ size_t print_symbol_table32(elf_t *elf_header, char *string_table,
 			sym_string_table + YGET(i, st_name));/* Symbol name */
 		num_printed++;   /* Increment number of symbols printed */
 	}
-	return (num_printed);   /* Return number of symbols printed */
+	return (num_printed);   /* return number of symbols printed */
 	/* void lines are unused code; these are not used in this function */
 	(void)string_table;
 	(void)versym;
@@ -241,7 +241,7 @@ size_t print_symbol_table32(elf_t *elf_header, char *string_table,
 * @verneed: the Elf64_Verneed section array (unused)
 * @verneed_size: the size of the verneed array (unused)
 * @section: the symbol section to print
-* Return: number of symbols printed
+* return: number of symbols printed
 */
 size_t print_symbol_table64(elf_t *elf_header, char *string_table,
 							char *sym_string_table, uint16_t *versym,
@@ -271,7 +271,7 @@ size_t print_symbol_table64(elf_t *elf_header, char *string_table,
 			sym_string_table + YGET(i, st_name));      /* Symbol name */
 		num_printed++;   /* Increment number of symbols printed */
 	}
-	return (num_printed);   /* Return number of symbols printed */
+	return (num_printed);   /* return number of symbols printed */
 	/* void lines are unused code; these are not used in this function */
 	(void)string_table;
 	(void)versym;
@@ -348,9 +348,9 @@ void print_verneed_table(elf_t *elf_header, int fd, int i,
 	}
 	/* Print header for verneed table */
 	printf("VERSION COUNT FILEOFFSET  AUXOFFSET NEXTOFFSET\n");
-	/* Return if verneed array is NULL */
+	/* return if verneed array is NULL */
 	if (!verneed)
-		Return;
+		return;
 	/* Print each entry in the verneed table */
 	for (j = 0; j < SGET(i, sh_size) / sizeof(Elf64_Verneed); j++)
 	{

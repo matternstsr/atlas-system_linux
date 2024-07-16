@@ -3,7 +3,7 @@
 /**
 * is_elf_file - Check if the buffer starts with ELF magic bytes.
 * @header_buffer: Pointer to a buffer containing the ELF header.
-* Return: 1 if ELF magic bytes are found, otherwise 0.
+* return: 1 if ELF magic bytes are found, otherwise 0.
 */
 int is_elf_file(char *header_buffer)
 {

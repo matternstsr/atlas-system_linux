@@ -4,7 +4,7 @@
  * main - Entry point to process ELF files and display symbol tables.
  * @argc: Argument count
  * @argv: Argument vector
- * Return: 0 on success, 1+ on error
+ * return: 0 on success, 1+ on error
  */
 int main(int argc, char **argv)
 {

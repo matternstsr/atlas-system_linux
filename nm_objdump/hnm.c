@@ -4,7 +4,7 @@
 * main - Entry point to process ELF files and display symbol tables.
 * @argc: Argument count
 * @argv: Argument vector
-* Return: 0 on success, 1+ on error
+* return: 0 on success, 1+ on error
 */
 int main(int argc, char **argv)
 {
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 		(current_file != file_names), argv);
 		/* Accumulate exit status returned by process_file for each file */
 	}
-	return (exit_status); /* Return accumulated exit status */
+	return (exit_status); /* return accumulated exit status */
 }
 
 /**
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 * @file_name: Name of the file to process
 * @multiple: Flag indicating if multiple files are being processed
 * @argv: Argument vector passed to main
-* Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
+* return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
 */
 int process_file(char *file_name, int multiple, char **argv)
 {
@@ -45,14 +45,14 @@ int process_file(char *file_name, int multiple, char **argv)
 	fd = crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
 	{
-		return (EXIT_FAILURE); /* Return failure if file couldn't be opened */
+		return (EXIT_FAILURE); /* return failure if file couldn't be opened */
 	}
 	r = read(fd, &elf_header.e64, sizeof(elf_header.e64)); /* Read ELF header */
 	if (r != sizeof(elf_header.e64) || !is_elf_file((char *)&elf_header.e64))
 	{
 		fprintf(stderr, "%s: %s: File format not recognized\n", argv[0], file_name);
 		close(fd);
-		return (EXIT_FAILURE); /* Return failure if ELF header is not valid */
+		return (EXIT_FAILURE); /* return failure if ELF header is not valid */
 	}
 	if (IS_32(elf_header.e64))
 	{ /* Check if ELF file is 32-bit */
@@ -62,7 +62,7 @@ int process_file(char *file_name, int multiple, char **argv)
 		{
 			fprintf(stderr, "%s: %s: File format not recognized for 32-bit ELF\n", argv[0], file_name);
 			close(fd);
-			return (EXIT_FAILURE); /* Return failure if 32-bit ELF header is not valid */
+			return (EXIT_FAILURE); /* return failure if 32-bit ELF header is not valid */
 		}
 	}
 	if (multiple)
@@ -83,5 +83,5 @@ int process_file(char *file_name, int multiple, char **argv)
 	free(elf_header.p32);
 	free(elf_header.p64);
 	close(fd); /* Close the file */
-	return (exit_status); /* Return exit status */
+	return (exit_status); /* return exit status */
 }

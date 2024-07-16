@@ -6,7 +6,7 @@
 * @name: name of the file to open
 * @silent: if true, do not print error messages
 * @argv: the argument vector
-* Return: file descriptor (fd) of the opened file
+* return: file descriptor (fd) of the opened file
 */
 int crack_open_file(char *name, int silent, char **argv)
 {
@@ -36,6 +36,6 @@ int crack_open_file(char *name, int silent, char **argv)
 		/* Exit the program with a failure status */
 		exit(EXIT_FAILURE);
 	}
-	/* Return the file descriptor (fd) of the opened file */
+	/* return the file descriptor (fd) of the opened file */
 	return (fd);
 }

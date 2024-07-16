@@ -3,7 +3,7 @@
 /**
 * get_elf_file_type - Retrieves a string representation of the ELF file type.
 * @elf_header: Pointer to the ELF header structure (elf_t).
-* Return: A constant string describing the ELF file type.
+* return: A constant string describing the ELF file type.
 * This function determines and returns a human-readable string representation
 * of the ELF file type based on the e_type field of the provided elf_header.
 * It uses a static buffer to store and return the string for efficiency, and

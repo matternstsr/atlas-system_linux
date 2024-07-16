@@ -14,7 +14,7 @@ void read_section_headers(elf_t *elf_header, int fd)
 	/* Calculate total size to read */
 	/* If there are no section headers, return */
 	if (!i)
-		Return;
+		return;
 	/* Allocate memory to store section headers */
 	headers = calloc(i, read_size);
 	if (!headers)
@@ -37,7 +37,7 @@ void read_section_headers(elf_t *elf_header, int fd)
 * read_string_table - reads the string table
 * @elf_header: the internal header
 * @fd: file descriptor to read
-* Return: pointer to beginning of table
+* return: pointer to beginning of table
 */
 char *read_string_table(elf_t *elf_header, int fd)
 {
@@ -50,7 +50,7 @@ char *read_string_table(elf_t *elf_header, int fd)
 	lseek(fd, SGET(EGET(e_shstrndx), sh_offset), SEEK_SET);
 	/* Read the string table from file */
 	read(fd, str, SGET(EGET(e_shstrndx), sh_size));
-	return (str);   /* Return pointer to the beginning of the table */
+	return (str);   /* return pointer to the beginning of the table */
 }
 
 /**
@@ -90,7 +90,7 @@ void read_symbol_table(elf_t *elf_header, int fd, int i)
 * @elf_header: the internal header
 * @fd: file descriptor to read
 * @i: the current symbol section index
-* Return: pointer to the beginning of the symbol string table
+* return: pointer to the beginning of the symbol string table
 */
 char *read_symbol_string_table(elf_t *elf_header, int fd, int i)
 {
@@ -103,7 +103,7 @@ char *read_symbol_string_table(elf_t *elf_header, int fd, int i)
 	/* Seek to the offset of the symbol string table and read data */
 	lseek(fd, SGET(i, sh_offset), SEEK_SET);
 	read(fd, str, SGET(i, sh_size));
-	return (str);  /* Return a ptr to the beginning of the symbol string table */
+	return (str);  /* return a ptr to the beginning of the symbol string table */
 }
 
 
@@ -122,7 +122,7 @@ size_t find_verneed_index(Elf64_Verneed *verneed, size_t verneed_size,
 		if (verneed[i].vn_file == index)
 			ret = i;
 	}
-	return (ret);  /* Return the index of verneed entry, or 0 if not found */
+	return (ret);  /* return the index of verneed entry, or 0 if not found */
 }
 
 /**
@@ -131,7 +131,7 @@ size_t find_verneed_index(Elf64_Verneed *verneed, size_t verneed_size,
 * @fd: the descriptor to read from
 * @offset: offset to start reading from
 * @size: number of bytes to read
-* Return: pointer to the allocated data block
+* return: pointer to the allocated data block
 */
 void *read_data(elf_t *elf_header, int fd, unsigned long offset, long size)
 {
@@ -149,6 +149,6 @@ void *read_data(elf_t *elf_header, int fd, unsigned long offset, long size)
 		fprintf(stderr, "Read error.\n");
 		exit(1);  /* Exit if read fails */
 	}
-	return (str);  /* Return the pointer to the allocated data block */
+	return (str);  /* return the pointer to the allocated data block */
 	(void)elf_header;  /* Unused parameter (suppress compiler warning) */
 }
