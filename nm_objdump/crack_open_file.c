@@ -37,5 +37,5 @@ int crack_open_file(char *name, int silent, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	/* Return the file descriptor (fd) of the opened file */
-	return fd;
+	return (fd);
 }

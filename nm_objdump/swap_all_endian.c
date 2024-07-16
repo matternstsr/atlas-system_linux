@@ -222,7 +222,7 @@ void swap_all_endian_verneed(elf_t *h, uint16_t *versym, size_t versym_size,
 	size_t i = 0;
 
 	if (!Is_BigE(h->e64))  /* Check if ELF header is big-endian */
-		return;
+		return();
 	for (i = 0; i < versym_size; i++)
 		versym[i] = swap_endian_uint16(versym[i]);
 	/* Swap endianness of version symbols */

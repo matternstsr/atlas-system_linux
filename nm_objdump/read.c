@@ -14,7 +14,7 @@ void read_section_headers(elf_t *elf_header, int fd)
 	/* Calculate total size to read */
 	/* If there are no section headers, return */
 	if (!i)
-		return;
+		return();
 	/* Allocate memory to store section headers */
 	headers = calloc(i, read_size);
 	if (!headers)
@@ -103,7 +103,7 @@ char *read_symbol_string_table(elf_t *elf_header, int fd, int i)
 	/* Seek to the offset of the symbol string table and read data */
 	lseek(fd, SGET(i, sh_offset), SEEK_SET);
 	read(fd, str, SGET(i, sh_size));
-	return str;  /* Return a ptr to the beginning of the symbol string table */
+	return (str);  /* Return a ptr to the beginning of the symbol string table */
 }
 
 

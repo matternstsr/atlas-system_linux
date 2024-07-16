@@ -350,7 +350,7 @@ void print_verneed_table(elf_t *elf_header, int fd, int i,
 	printf("VERSION COUNT FILEOFFSET  AUXOFFSET NEXTOFFSET\n");
 	/* Return if verneed array is NULL */
 	if (!verneed)
-		return;
+		return();
 	/* Print each entry in the verneed table */
 	for (j = 0; j < SGET(i, sh_size) / sizeof(Elf64_Verneed); j++)
 	{
