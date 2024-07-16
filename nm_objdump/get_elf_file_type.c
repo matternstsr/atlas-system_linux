@@ -1,3 +1,5 @@
+#include "hnm.h"
+
 /**
  * get_elf_file_type - Retrieves a string representation of the ELF file type.
  * @elf_header: Pointer to the ELF header structure (elf_t).
