@@ -14,7 +14,7 @@ void read_section_headers(elf_t *elf_header, int fd)
 	/* Calculate total size to read */
 	/* If there are no section headers, return */
 	if (!i)
-		return();
+		Return;
 	/* Allocate memory to store section headers */
 	headers = calloc(i, read_size);
 	if (!headers)
