@@ -66,7 +66,7 @@ int process_file(char *file_name, int multiple, char **argv)
     if (exit_status != EXIT_SUCCESS) {
         fprintf(stderr, "%s: %s: failed to print symbol tables\n", argv[0], file_name);
     } else if (num_printed == 0) {
-        fprintf(stderr, "%s: %s: no symbols \n", argv[0], file_name);/*took found out of this print*/
+        fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);/*took found out of this print*/
     }
     free(elf_header.s32); /* Free allocated memory */
     free(elf_header.s64);
