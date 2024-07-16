@@ -35,6 +35,31 @@
 #define WP_TEXT 0x80
 #define D_PAGED 0x100
 
+   /* Define multi-line string for format legend */
+#define FORMAT_LEGEND \
+	"Key to Flags:\n" \
+	"  W (write), A (alloc), X (execute), M (merge), S (strings)%s\n" \
+	"  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n" \
+	"  O (extra OS processing required) o (OS specific), p (processor specific)\n"
+   /* Define title format for 32-bit sections */
+#define TITLE_SECTION_32 \
+    "  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n"
+   /* Define format for 32-bit sections */
+#define FORMAT_SECTION_32 \
+    "  [%2u] %-17s %-15.15s %8.8lx %6.6lx %6.6lx %2.2lx %3s %2u %3u %2lu\n"
+   /* Define title format for 64-bit sections */
+#define TITLE_SECTION_64 \
+    "  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n"
+   /* Define format for 64-bit sections */
+#define FORMAT_SECTION_64 \
+    "  [%2u] %-17s %-15.15s %16.16lx %6.6lx %6.6lx %2.2lx %3s %2u %3u %2lu\n"
+   /* Define format for 64-bit symbols */
+#define FORMAT_SYMBOL_64 \
+    "%16.16lx %c %s"
+   /* Define format for 32-bit symbols */
+#define FORMAT_SYMBOL_32 \
+    "%8.8lx %c %s"
+
 /**
  * struct Elf - stores 32/64 structs and other data
  * @e64: the 64 bit struct
