@@ -14,6 +14,7 @@
 const char *get_elf_file_type(elf_t *elf_header)
 {
 	static char buf[32]; /* Static buffer to hold the result string */
+
 	switch (EGET(e_type)) /* Switch based on e_type field of the elf_header */
 	{
 		case ET_NONE:

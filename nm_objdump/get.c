@@ -12,7 +12,7 @@ char *get_section_type(unsigned int sh_type)
 	switch (sh_type)
 	{
 	case SHT_NULL:          return ("NULL");
-	case SHT_PROGBITS:      return ("PROGBITS"); 
+	case SHT_PROGBITS:      return ("PROGBITS");
 	case SHT_SYMTAB:        return ("SYMTAB");
 	case SHT_STRTAB:        return ("STRTAB");
 	case SHT_RELA:          return ("RELA");
