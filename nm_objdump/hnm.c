@@ -41,7 +41,7 @@ int process_file(char *file_name, int multiple, char **argv)
 	size_t r, num_printed = 0;
 	elf_t elf_header;
 
-	memset(&elf_header, 0, sizeof(elf_header)); /* Initialize elf_header to zero */
+	memset(&elf_header, 0, sizeof(elf_header)); /* Init elf_header to zero */
 	fd = crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
 	{
@@ -50,33 +50,40 @@ int process_file(char *file_name, int multiple, char **argv)
 	r = read(fd, &elf_header.e64, sizeof(elf_header.e64)); /* Read ELF header */
 	if (r != sizeof(elf_header.e64) || !is_elf_file((char *)&elf_header.e64))
 	{
-		fprintf(stderr, "%s: %s: File format not recognized\n", argv[0], file_name);
+		fprintf(stderr, "%s: %s: File format not recognized\n",
+		argv[0], file_name);
 		close(fd);
 		return (EXIT_FAILURE); /* return failure if ELF header is not valid */
 	}
 	if (IS_32(elf_header.e64))
 	{ /* Check if ELF file is 32-bit */
 		lseek(fd, 0, SEEK_SET); /* Rewind file pointer */
-		r = read(fd, &elf_header.e32, sizeof(elf_header.e32)); /* Read 32-bit ELF header */
-		if (r != sizeof(elf_header.e32) || !is_elf_file((char *)&elf_header.e32))
+		r = read(fd, &elf_header.e32, sizeof(elf_header.e32));/*Read 32ELF hdr*/
+		if (r != sizeof(elf_header.e32) ||
+		!is_elf_file((char *)&elf_header.e32))
 		{
-			fprintf(stderr, "%s: %s: File format not recognized for 32-bit ELF\n", argv[0], file_name);
+			fprintf(stderr,
+			"%s: %s: File format not recognized for 32-bit ELF\n",
+			argv[0], file_name);
 			close(fd);
-			return (EXIT_FAILURE); /* return failure if 32-bit ELF header is not valid */
+			return (EXIT_FAILURE); /* ret fail if 32 ELF hdr is not valid */
 		}
 	}
 	if (multiple)
 	{
-		printf("\n%s:\n", file_name); /* Print file name if processing multiple files */
+		printf("\n%s:\n", file_name); /* Print filename if prc mult files */
 	}
 	swap_all_endian(&elf_header); /* Swap endianness of ELF header */
-	exit_status = print_all_symbol_tables(&elf_header, fd, &num_printed); /* Print symbol tables */
+	exit_status = print_all_symbol_tables(&elf_header, fd, &num_printed);
+	/* Print symbol tables */
 	if (exit_status != EXIT_SUCCESS)
 	{
-		fprintf(stderr, "%s: %s: failed to print symbol tables\n", argv[0], file_name);
+		fprintf(stderr, "%s: %s: failed to print symbol tables\n",
+		argv[0], file_name);
 	} else if (num_printed == 0)
 	{
-		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);/*took found out of this print*/
+		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
+		/*took found out of this print*/
 	}
 	free(elf_header.s32); /* Free allocated memory */
 	free(elf_header.s64);
