@@ -19,19 +19,19 @@ const char *get_elf_file_type(elf_t *elf_header)
 		case ET_NONE:
 			return ("NONE (None)"); /* Rtrn str lit indic "NONE (None)" */
 		case ET_REL:
-			return ("REL (Relocatable file)"); 
+			return ("REL (Relocatable file)");
 			/* Rtrn str lit indic "REL (Relocatable file)" */
 		case ET_EXEC:
-			return ("EXEC (Executable file)"); 
+			return ("EXEC (Executable file)");
 			/* Rtrn str lit indic "EXEC (Executable file)" */
 		case ET_DYN:
-			return ("DYN (Shared object file)"); 
+			return ("DYN (Shared object file)");
 			/* Rtrn str lit indic "DYN (Shared object file)" */
 		case ET_CORE:
-			return ("CORE (Core file)"); 
+			return ("CORE (Core file)");
 			/* Rtrn str lit indic "CORE (Core file)" */
 		default:
-			sprintf(buf, "<unknown>: %x", EGET(e_type)); 
+			sprintf(buf, "<unknown>: %x", EGET(e_type));
 			/* Format a custom message into buf for unknown types */
 	}
 	return (buf); /* Ret buffer, which now contains the formatted string */
