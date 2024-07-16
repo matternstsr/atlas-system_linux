@@ -1,4 +1,4 @@
-#include "hnm.h"     /* Include header file hnm.h */
+#include "hnm.h"
 
 /**
 * get_section_type - return string type of section

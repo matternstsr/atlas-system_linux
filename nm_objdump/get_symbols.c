@@ -1,4 +1,4 @@
-#include "hnm.h"     /* Include header file hnm.h */
+#include "hnm.h"
 
 /**
 * get_sym_type - gets the STT type based on symbol information

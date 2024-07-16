@@ -1,4 +1,4 @@
-#include "hnm.h"     /* Include header file hnm.h */
+#include "hnm.h"
 
 /**
 * read_section_headers - reads the section headers into data

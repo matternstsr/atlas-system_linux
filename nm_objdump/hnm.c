@@ -1,5 +1,4 @@
-#include "hnm.h" /* Include the header file hnm.h */
-
+#include "hnm.h"
 /**
 * main - Entry point to process ELF files and display symbol tables.
 * @argc: Argument count
