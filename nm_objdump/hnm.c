@@ -52,8 +52,8 @@ int process_file(char *file_name, int multiple, char **argv)
 		close(fd);
 		return (EXIT_FAILURE); /* return failure if ELF header is not valid */
 	}
-	if (IS_32(elf_header.e64))
-	{ /* Check if ELF file is 32-bit */
+	if (IS_32(elf_header.e64))/* Check if ELF file is 32-bit */
+	{
 		lseek(fd, 0, SEEK_SET); /* Rewind file pointer */
 		r = read(fd, &elf_header.e32, sizeof(elf_header.e32));/*Read 32ELF hdr*/
 		if (r != sizeof(elf_header.e32) ||
