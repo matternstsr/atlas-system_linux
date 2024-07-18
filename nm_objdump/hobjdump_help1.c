@@ -1,6 +1,7 @@
 #include "hnm.h"
 
-/* readElfFileHeader - reads ELF file header and determines its type
+/**
+* readElfFileHeader - reads ELF file header and determines its type
 * @state: struct containing file data and error info
 * Return: 1 on failure, 0 on success
 */
@@ -22,7 +23,8 @@ int readElfFileHeader(objdump_state *state)
 }
 
 
-/* readElf64Header - reads and processes 64-bit ELF file header
+/**
+* readElf64Header - reads and processes 64-bit ELF file header
 * @state: struct containing file data and error info
 * Return: 1 on failure, 0 on success
 */
@@ -53,7 +55,8 @@ int readElf64Header(objdump_state *state)
 }
 
 
-/* readElf32Header - reads and processes 32-bit ELF file header
+/**
+* readElf32Header - reads and processes 32-bit ELF file header
 * @state: struct containing file data and error info
 * Return: 1 on failure, 0 on success
 */
@@ -84,7 +87,8 @@ int readElf32Header(objdump_state *state)
 }
 
 
-/* swapEndianElf64Header - swaps little-endian to big-endian in Elf64_Ehdr
+/**
+* swapEndianElf64Header - swaps little-endian to big-endian in Elf64_Ehdr
 * @ehdr64: struct to byte swap
 */
 void swapEndianElf64Header(Elf64_Ehdr *ehdr64)
@@ -105,7 +109,8 @@ void swapEndianElf64Header(Elf64_Ehdr *ehdr64)
 }
 
 
-/* swapEndianElf32Header - swaps little-endian to big-endian in Elf32_Ehdr
+/**
+* swapEndianElf32Header - swaps little-endian to big-endian in Elf32_Ehdr
 * @ehdr32: struct to byte swap
 */
 void swapEndianElf32Header(Elf32_Ehdr *ehdr32)
