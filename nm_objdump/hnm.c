@@ -71,7 +71,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 		fprintf(stderr, "%s: %s: File format not recognized\n",
 				argv[0], file_name);
 		close(fd);
-		return -1; /* return failure if ELF header is not valid */
+		return (-1); /* return failure if ELF header is not valid */
 	}
 	if (IS_32(elf_header->e64))
 	{ /* Check if ELF file is 32-bit */

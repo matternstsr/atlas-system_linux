@@ -164,7 +164,8 @@ char get_nm_type32(Elf32_Sym sym, Elf32_Shdr *shdr);
 char get_nm_type64(Elf64_Sym sym, Elf64_Shdr *shdr);
 int process_file(char *file_name, int multiple, char **argv);
 int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv);
-int process_and_print_symbols(elf_t *elf_header, int fd, char **argv, char *file_name);
+int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
+							char *file_name);
 
 
 #endif
