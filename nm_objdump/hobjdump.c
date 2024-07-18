@@ -128,8 +128,6 @@ void ef_flags(unsigned long flags)
 {
     int first = 1;/* Flag for first item */
 	/* Print flags */
-    if (!first)
-        printf("\n");/* Print newline if flags were printed */
 	if (flags & WP_TEXT)
         first = (printf("%s%s", first ? "" : ", ", "WP_TEXT"), 0);
     if (flags & EXEC_P)
@@ -149,6 +147,8 @@ void ef_flags(unsigned long flags)
 	if (flags & HAS_LOCALS)
         first = (printf("%s%s", first ? "" : ", ", "HAS_LOCALS"), 0);
     if (flags & HAS_RELOC)
+	if (!first)
+        printf("\n");/* Print newline if flags were printed */
 }
 
 /*
