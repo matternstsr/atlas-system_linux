@@ -28,59 +28,92 @@ int main(int argc, char **argv)
 }
 
 /**
-* process_file - Process an ELF file and print its symbol tables.
-* @file_name: Name of the file to process
-* @multiple: Flag indicating if multiple files are being processed
-* @argv: Argument vector passed to main
-* return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
-*/
-int process_file(char *file_name, int multiple, char **argv)
+ * open_and_read_elf - Opens an ELF file, reads its header, and prep elf_header.
+ * @file_name: Name of the file to process
+ * @elf_header: Pointer to elf_t struct to store ELF header information
+ * @argv: Argument vector passed to main
+ * @multiple: Flag indicating if multiple files are being processed
+ * Return: File descriptor on success, -1 on failure
+ */
+static int open_and_read_elf(char *file_name, elf_t *elf_header,
+							char **argv, int multiple)
 {
-	int fd, exit_status = EXIT_SUCCESS;
-	size_t r, num_printed = 0;
-	elf_t elf_header;
+    int fd;
+    size_t r;
 
-	memset(&elf_header, 0, sizeof(elf_header)); /* Init elf_header to zero */
-	fd = crack_open_file(file_name, 0, argv); /* Open the file */
-	if (fd == -1)
-		return (EXIT_FAILURE); /* return failure if file couldn't be opened */
-	r = read(fd, &elf_header.e64, sizeof(elf_header.e64)); /* Read ELF header */
-	if (r != sizeof(elf_header.e64) || !is_elf_file((char *)&elf_header.e64))
-	{
-		fprintf(stderr, "%s: %s: File format not recognized\n",
-		argv[0], file_name);
-		close(fd);
-		return (EXIT_FAILURE); /* return failure if ELF header is not valid */
-	}
-	if (IS_32(elf_header.e64))/* Check if ELF file is 32-bit */
-	{
-		lseek(fd, 0, SEEK_SET); /* Rewind file pointer */
-		r = read(fd, &elf_header.e32, sizeof(elf_header.e32));/*Read 32ELF hdr*/
-		if (r != sizeof(elf_header.e32) ||
-		!is_elf_file((char *)&elf_header.e32))
-		{
-			fprintf(stderr,
-			"%s: %s: File format not recognized for 32-bit ELF\n",
-			argv[0], file_name);
-			close(fd);
-			return (EXIT_FAILURE); /* ret fail if 32 ELF hdr is not valid */
-		}
-	}
-	if (multiple)
-		printf("\n%s:\n", file_name); /* Print filename if prc mult files */
-	swap_all_endian(&elf_header); /* Swap endianness of ELF header */
-	exit_status = print_all_symbol_tables(&elf_header, fd, &num_printed);
-	if (exit_status != EXIT_SUCCESS)/* Print symbol tables */
-	{
-		fprintf(stderr, "%s: %s: failed to print symbol tables\n",
-		argv[0], file_name);
-	}
-	else if (num_printed == 0)/*took found out of this print*/
-		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
-	free(elf_header.s32); /* Free allocated memory */
-	free(elf_header.s64);
-	free(elf_header.p32);
-	free(elf_header.p64);
-	close(fd); /* Close the file */
-	return (exit_status); /* return exit status */
+    memset(elf_header, 0, sizeof(elf_t)); /* Init elf_header to zero */
+    fd = crack_open_file(file_name, 0, argv); /* Open the file */
+    if (fd == -1)
+    {
+        fprintf(stderr, "%s: %s: File could not be opened\n",
+				argv[0], file_name);
+        return -1; /* return failure if file couldn't be opened */
+    }
+
+    r = read(fd, &elf_header->e64, sizeof(elf_header->e64)); /* ReadELFhdr */
+    if (r != sizeof(elf_header->e64) || !is_elf_file((char *)&elf_header->e64))
+    {
+        fprintf(stderr, "%s: %s: File format not recognized\n",
+				argv[0], file_name);
+        close(fd);
+        return -1; /* return failure if ELF header is not valid */
+    }
+
+    if (IS_32(elf_header->e64)) /* Check if ELF file is 32-bit */
+    {
+        lseek(fd, 0, SEEK_SET); /* Rewind file pointer */
+        r = read(fd, &elf_header->e32, sizeof(elf_header->e32)); /* R32ELFhdr*/
+        if (r != sizeof(elf_header->e32) ||
+						!is_elf_file((char *)&elf_header->e32))
+        {
+            fprintf(stderr, "%s: %s: File format not recognized for 32-bit " \
+					"ELF\n", argv[0], file_name);
+            close(fd);
+            return -1; /* return failure if 32-bit ELF header is not valid */
+        }
+    }
+
+    if (multiple)
+        printf("\n%s:\n", file_name); /* Print filename if proc mult files */
+
+    swap_all_endian(elf_header); /* Swap endianness of ELF header */
+
+    return fd; /* Return file descriptor */
+}
+
+/**
+ * process_and_print_symbols - Process an ELF file and print its symbol tables.
+ * @file_name: Name of the file to process
+ * @multiple: Flag indicating if multiple files are being processed
+ * @argv: Argument vector passed to main
+ * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
+int process_and_print_symbols(char *file_name, int multiple, char **argv)
+{
+    elf_t elf_header;
+    int fd, exit_status = EXIT_SUCCESS;
+    size_t num_printed = 0;
+
+    fd = open_and_read_elf(file_name, &elf_header, argv, multiple);
+    if (fd == -1)
+        return EXIT_FAILURE; /* Return fail if opening & reading ELF failed */
+		/* Print symbol tables */
+    exit_status = print_all_symbol_tables(&elf_header, fd, &num_printed);
+    if (exit_status != EXIT_SUCCESS)
+    {
+        fprintf(stderr, "%s: %s: failed to print symbol tables\n",
+				argv[0], file_name);
+    }
+    else if (num_printed == 0)
+    {
+        fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
+    }
+
+    free(elf_header.s32); /* Free allocated memory */
+    free(elf_header.s64);
+    free(elf_header.p32);
+    free(elf_header.p64);
+    close(fd); /* Close the file */
+
+    return exit_status; /* Return exit status */
 }
