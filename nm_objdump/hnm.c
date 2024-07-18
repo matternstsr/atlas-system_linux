@@ -41,11 +41,11 @@ int process_file(char *file_name, int multiple, char **argv)
 
 	fd = open_and_validate_elf(file_name, &elf_header, argv);
 	if (fd == -1)
-		return EXIT_FAILURE; /* return failure if ELF file couldn't be proc */
+		return (EXIT_FAILURE); /* return failure if ELF file couldn't be proc */
 	if (multiple)
 		printf("\n%s:\n", file_name); /* Print filename if proc mult files */
 	exit_status = process_and_print_symbols(&elf_header, fd, argv, file_name);
-	return exit_status; /* return exit status */
+	return (exit_status); /* return exit status */
 }
 
 /**
@@ -64,7 +64,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 
 	fd = crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
-		return -1; /* return failure if file couldn't be opened */
+		return (-1); /* return failure if file couldn't be opened */
 	r = read(fd, &elf_header->e64, sizeof(elf_header->e64)); /* ReadELFheader */
 	if (r != sizeof(elf_header->e64) || !is_elf_file((char *)&elf_header->e64))
 	{
@@ -83,10 +83,10 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 			fprintf(stderr, "%s: %s: File format not recognized for " \
 			"32-bit ELF\n", argv[0], file_name);
 			close(fd);
-			return -1; /* return failure if 32-bit ELF header is not valid */
+			return (-1); /* return failure if 32-bit ELF header is not valid */
 		}
 	}
-	return fd; /* return file descriptor on success */
+	return (fd); /* return file descriptor on success */
 }
 
 /**
@@ -107,12 +107,11 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 
 	exit_status = print_all_symbol_tables(elf_header, fd, &num_printed);
 	/*Print symbol tables */
-	if (exit_status != EXIT_SUCCESS) {
+	if (exit_status != EXIT_SUCCESS)
 		fprintf(stderr, "%s: %s: failed to print symbol tables\n",
 				argv[0], file_name);
-	} else if (num_printed == 0) {
+	else if (num_printed == 0)
 		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
-	}
 
 	free(elf_header->s32); /* Free allocated memory */
 	free(elf_header->s64);
@@ -120,5 +119,5 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 	free(elf_header->p64);
 
 	close(fd); /* Close the file */
-	return exit_status; /* return exit status */
+	return (exit_status); /* return exit status */
 }
