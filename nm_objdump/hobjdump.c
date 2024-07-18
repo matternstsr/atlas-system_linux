@@ -43,6 +43,7 @@ int process_file(char *file_name, int multiple, char **argv)
 	if (r != sizeof(elf_header.e64) || is_elf_file((char *)&elf_header.e64))
 	{
 		fprintf(stderr, fString, argv[0], file_name);
+		exit_status = EXIT_FAILURE;
 	}
 	else
 	{
