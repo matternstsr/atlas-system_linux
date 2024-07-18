@@ -89,7 +89,6 @@ typedef struct Elf
 	Elf32_Phdr *p32;
 	Elf64_Sym *y64;
 	Elf32_Sym *y32;
-	char *file_name;
 } elf_t;
 
 typedef struct Elff
