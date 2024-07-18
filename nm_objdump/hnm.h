@@ -92,6 +92,11 @@ typedef struct Elf
 	char *file_name;
 } elf_t;
 
+typedef struct Elff
+{
+	char *file_name;
+} elff_t;
+
 int crack_open_file(char *name, int silent, char **argv);
 int is_elf_file(char *elf_header);
 void print_hex_memory(void *ptr, size_t n);
