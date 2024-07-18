@@ -89,12 +89,8 @@ typedef struct Elf
 	Elf32_Phdr *p32;
 	Elf64_Sym *y64;
 	Elf32_Sym *y32;
-} elf_t;
-
-typedef struct Elff
-{
 	char *file_name;
-} elff_t;
+} elf_t;
 
 int crack_open_file(char *name, int silent, char **argv);
 int is_elf_file(char *elf_header);
