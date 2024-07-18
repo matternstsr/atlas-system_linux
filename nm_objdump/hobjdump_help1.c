@@ -94,9 +94,9 @@ int name_search(elf_t *elf_header, char *string_table, char *section_name)
 	for (i = 1; i < EGET(e_shnum); i++)
 	{
 		if (!strcmp(string_table + SGET(i, sh_name), section_name))
-			return 1;  /* Return true if section found */
+			return (1);  /* Return true if section found */
 	}
-	return 0;  /* Return false if section not found */
+	return (0);  /* Return false if section not found */
 }
 
 /*
@@ -114,5 +114,5 @@ char *check_format(elf_t *elf_header)
 	*ffbuf = 0;  /* Initialize buffer */
 	sprintf(ffbuf, "elf%d-%s", IS_64 ? 64 : 32,
 			Is_BigE(elf_header->e64) ? "big" : IS_64 ? "x86-64" : "i386");
-	return ffbuf;  /* Return formatted string */
+	return (ffbuf);  /* Return formatted string */
 }

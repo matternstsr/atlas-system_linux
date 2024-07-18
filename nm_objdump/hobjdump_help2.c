@@ -23,7 +23,7 @@ size_t empty_section(elf_t *elf_header, int fd, size_t i, char *string_table)
 	data = read_data(elf_header, fd, SGET(i, sh_offset), SGET(i, sh_size));
 	/* Read section data */
 	if (!data)
-		return 0;  /* Return if data read fails */
+		return (0);  /* Return if data read fails */
 	addr_len = MAX(4, sprintf(buf, "%lx", SGET(i, sh_addr) + SGET(i, sh_size)));
 	/* Calculate address length */
 	for (i_off = 0; i_off < SGET(i, sh_size); i_off += 0x10)
@@ -45,7 +45,7 @@ size_t empty_section(elf_t *elf_header, int fd, size_t i, char *string_table)
 		printf("\n");
 	}
 	free(data);  /* Free data buffer */
-	return numps;  /* Return number of symbols printed */
+	return (numps);  /* Return number of symbols printed */
 	(void)fd;  /* Suppress unused parameter warning */
 }
 
@@ -68,7 +68,7 @@ int empty_sections(elf_t *elf_header, int fd, size_t *num_printed)
 	if (!EGET(e_shnum))
 	{
 		printf("\nThere are no section headers in this file.\n");
-		return 0;
+		return (0);
 	}
 
 	read_section_headers(elf_header, fd);  /* Read section headers */
@@ -91,5 +91,5 @@ int empty_sections(elf_t *elf_header, int fd, size_t *num_printed)
 		/* Dump section */
 	}
 	free(string_table);  /* Free string table */
-	return 0;  /* Return success */
+	return (0);  /* Return success */
 }
