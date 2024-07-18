@@ -58,8 +58,8 @@ int process_file(char *file_name, int multiple, char **argv)
 		}
 		swap_all_endian(&elf_header);/* Adjust endianness if necessary */
 		printf("\n%s:     file format %s\n",/* Print file format */
-			file_name, get_file_format(&elf_header));
-		exit_status = dump_all_sections(&elf_header, fd, &num_printed);
+			file_name, check_format(&elf_header));
+		exit_status = empty_sections(&elf_header, fd, &num_printed);
 		/* Dump sections */
 	}
 	/* Free allocated memory */
