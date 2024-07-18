@@ -21,12 +21,12 @@
 #define IS_64 ((elf_header->e64).e_ident[EI_CLASS] == ELFCLASS64)
 #define Is_BigE(x) ((x).e_ident[EI_DATA] == ELFDATA2MSB)
 #define EGET(x) (IS_32(elf_header->e64) ? elf_header->e32.x : elf_header->e64.x)
-#define SGET(i, x) (IS_32(elf_header->e64) ?
-					elf_header->s32[i].x : elf_header->s64[i].x)
-#define PGET(i, x) (IS_32(elf_header->e64) ?
-					elf_header->p32[i].x : elf_header->p64[i].x)
-#define YGET(i, x) (IS_32(elf_header->e64) ?
-					elf_header->y32[i].x : elf_header->y64[i].x)
+#define SGET(i, x) (IS_32(elf_header->e64) ? elf_header->s32[i].x :
+					elf_header->s64[i].x)
+#define PGET(i, x) (IS_32(elf_header->e64) ? elf_header->p32[i].x :
+					elf_header->p64[i].x)
+#define YGET(i, x) (IS_32(elf_header->e64) ? elf_header->y32[i].x :
+					elf_header->y64[i].x)
 #define BFD_NO_FLAGS 0x00
 #define HAS_RELOC 0x01
 #define EXEC_P 0x02
