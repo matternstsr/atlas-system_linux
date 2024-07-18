@@ -89,7 +89,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 
 	memset(elf_header, 0, sizeof(elf_t)); /* Init elf_header to zero */
 
-	fd = crack_crack_open_file(file_name, 0, argv); /* Open the file */
+	fd = crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
 		return (-1); /* return failure if file couldn't be opened */
 	r = read(fd, &elf_header->e64, sizeof(elf_header->e64)); /* ReadELFheader */
