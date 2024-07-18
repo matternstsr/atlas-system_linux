@@ -163,5 +163,7 @@ char *get_sym_visibility(elf_t *elf_header, size_t i);
 char get_nm_type32(Elf32_Sym sym, Elf32_Shdr *shdr);
 char get_nm_type64(Elf64_Sym sym, Elf64_Shdr *shdr);
 int process_file(char *file_name, int multiple, char **argv);
+int process_file_helper(elf_t *elf_header, int fd, size_t *num_printed,
+                        char **argv);
 
 #endif
