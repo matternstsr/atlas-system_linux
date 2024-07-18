@@ -21,44 +21,23 @@ int main(int ac, char **argv)
 	return (retstatus);/* Return cumulative status */
 }
 
+/**
+* process_file - Process an ELF file and print its symbol tables.
+* @file_name: Name of the file to process
+* @multiple: Flag indicating if multiple files are being processed
+* @argv: Argument vector passed to main
+* return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
+*/
 int process_file(char *file_name, int multiple, char **argv)
 {
-	int fd, exit_status = 0;
-	size_t r, num_printed = 0;
 	elf_t elf_header;
-	const char *fString = "%s: %s: File format not recognized\n";
+	int fd, exit_status;
 
-
-	memset(&elf_header, 0, sizeof(elf_header));
-	fd = open_file(file_name, 0, argv);
+	fd = open_and_validate_elf(file_name, &elf_header, argv);
 	if (fd == -1)
-		return (EXIT_FAILURE);
-	r = read(fd, &elf_header.e64, sizeof(elf_header.e64));
-	if (r != sizeof(elf_header.e64) || check_elf((char *)&elf_header.e64))
-	{
-		fprintf(stderr, fString, argv[0], file_name);
-		exit_status = EXIT_FAILURE;
-	}
-	else
-	{
-		if (IS_32(elf_header.e64))
-		{
-			lseek(fd, 0, SEEK_SET);
-			r = read(fd, &elf_header.e32, sizeof(elf_header.e32));
-			if (r != sizeof(elf_header.e32) ||
-							check_elf((char *)&elf_header.e32))
-				exit_status = fprintf(stderr, ENM, argv[0]), EXIT_FAILURE;
-		}
-		switch_all_endian(&elf_header);
-		printf("\n%s:     file format %s\n",
-			file_name, get_file_format(&elf_header));
-		exit_status = dump_all_sections(&elf_header, fd, &num_printed);
-	}
-	free(elf_header.s32);
-	free(elf_header.s64);
-	free(elf_header.p32);
-	free(elf_header.p64);
-	close(fd);
-	return (exit_status);
-	(void)multiple;
+		return (EXIT_FAILURE); /* return failure if ELF file couldn't be proc */
+	if (multiple)
+		printf("\n%s:\n", file_name); /* Print filename if proc mult files */
+	exit_status = process_and_print_symbols(&elf_header, fd, argv, file_name);
+	return (exit_status); /* return exit status */
 }
