@@ -59,7 +59,7 @@ int process_file(char *file_name, int multiple, char **argv) {
  * @argv: Argument vector passed to main
  * return: File descriptor on success, -1 on failure
  */
-static int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv) {
+int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv) {
     int fd;
     size_t r;
 
@@ -97,7 +97,7 @@ static int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv
  * @file_name: Name of the file to process
  * return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
-static int process_and_print_symbols(elf_t *elf_header, int fd, char **argv, char *file_name) {
+int process_and_print_symbols(elf_t *elf_header, int fd, char **argv, char *file_name) {
     int exit_status = EXIT_SUCCESS;
     size_t num_printed = 0;
 
