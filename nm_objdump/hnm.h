@@ -44,7 +44,7 @@
 	"  W (write), A (alloc), X (execute), M (merge), S (strings)%s\n" \
 	"  I (info), L (link order), G (group), T (TLS)," \
 	"  E (exclude), x (unknown)\n" \
-	"  O (extra OS processing required) o (OS specific), \"
+	"  O (extra OS processing required) o (OS specific)," \
 	"  p (processor specific)\n"
 /* Define title format for 32-bit sections */
 #define TITLE_SECTION_32 \
