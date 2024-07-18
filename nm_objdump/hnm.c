@@ -36,7 +36,7 @@ int main(int argc, char **argv)
  * Return: File descriptor on success, -1 on failure
  */
 static int open_and_read_elf(char *file_name, elf_t *elf_header,
-							char **argv, int multiple)
+								char **argv, int multiple)
 {
     int fd;
     size_t r;
