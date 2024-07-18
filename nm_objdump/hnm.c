@@ -43,9 +43,7 @@ int process_file(char *file_name, int multiple, char **argv)
 	memset(&elf_header, 0, sizeof(elf_header)); /* Init elf_header to zero */
 	fd = crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
-	{
 		return (EXIT_FAILURE); /* return failure if file couldn't be opened */
-	}
 	r = read(fd, &elf_header.e64, sizeof(elf_header.e64)); /* Read ELF header */
 	if (r != sizeof(elf_header.e64) || !is_elf_file((char *)&elf_header.e64))
 	{
@@ -69,21 +67,16 @@ int process_file(char *file_name, int multiple, char **argv)
 		}
 	}
 	if (multiple)
-	{
 		printf("\n%s:\n", file_name); /* Print filename if prc mult files */
-	}
 	swap_all_endian(&elf_header); /* Swap endianness of ELF header */
 	exit_status = print_all_symbol_tables(&elf_header, fd, &num_printed);
-	/* Print symbol tables */
-	if (exit_status != EXIT_SUCCESS)
+	if (exit_status != EXIT_SUCCESS)/* Print symbol tables */
 	{
 		fprintf(stderr, "%s: %s: failed to print symbol tables\n",
 		argv[0], file_name);
-	} else if (num_printed == 0)
-	{
-		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
-		/*took found out of this print*/
 	}
+	else if (num_printed == 0)/*took found out of this print*/
+		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
 	free(elf_header.s32); /* Free allocated memory */
 	free(elf_header.s64);
 	free(elf_header.p32);
