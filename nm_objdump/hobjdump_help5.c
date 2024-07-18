@@ -101,6 +101,7 @@ void printFileFlags(uint32_t flags)
 	char *flag_names[] = { "HAS_RELOC", "EXEC_P", "HAS_SYMS",
 						"DYNAMIC", "D_PAGED" };
 	int i, flag_ct = 5;
+	
 	for (i = 0; i < flag_ct; i++)
 	{
 		if (flags & flag_set[i])

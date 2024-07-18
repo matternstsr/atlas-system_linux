@@ -45,11 +45,9 @@ void printSecBuff(unsigned char *buff, Elf64_Shdr *section)
 
 	/* Measure printed length of last address in section */
 	addr_width = snprintf(NULL, 0, "%lx", section->sh_addr + section->sh_size);
-	if (addr_width < 0) {
+	if (addr_width < 0)
 		/* Handle error (though not likely in practical cases) */
 		return;
-	}
-
 	/* Generate the format string with appropriate width */
 	snprintf(addr_fmt, sizeof(addr_fmt), " %%0%ilx", addr_width > 4 ?
 				addr_width : 4);
