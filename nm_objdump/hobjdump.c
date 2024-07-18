@@ -97,16 +97,16 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 							char *file_name)
 {
 	int exit_status = EXIT_SUCCESS;
-	size_t numps = 0;
+	size_t num_printed = 0;
 
 	swap_all_endian(elf_header); /* Swap endianness of ELF header */
 
-	exit_status = print_all_symbol_tables(elf_header, fd, &numps);
+	exit_status = print_all_symbol_tables(elf_header, fd, &num_printed);
 	/*Print symbol tables */
 	if (exit_status != EXIT_SUCCESS)
 		fprintf(stderr, "%s: %s: failed to print symbol tables\n",
 				argv[0], file_name);
-	else if (numps == 0)
+	else if (num_printed == 0)
 		fprintf(stderr, "%s: %s: no symbols\n", argv[0], file_name);
 
 	free(elf_header->s32); /* Free allocated memory */
@@ -117,8 +117,6 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 	close(fd); /* Close the file */
 	return (exit_status); /* return exit status */
 }
-
-
 
 /*
  * ef_flags - Prints the list of flags for the ELF file.
@@ -308,10 +306,10 @@ int empty_sections(elf_t *elf_header, int fd, size_t *num_printed)
     read_section_headers(elf_header, fd);  /* Read section headers */
 
     for (i = 0; i < EGET(e_shnum); i++)
-        swap_all_endian_section(elf_header, i);  /* Swap endianness of each section */
+        swap_all_endian_section(elf_header, i);  /* Swap endianness each sec */
 
     string_table = read_string_table(elf_header, fd);  /* Read string table */
-    essential_information(elf_header, string_table);  /* Print ELF header information */
+    essential_information(elf_header, string_table);  /* Print ELF hdr info*/
 
     for (i = 1; i < EGET(e_shnum); i++)
     {
