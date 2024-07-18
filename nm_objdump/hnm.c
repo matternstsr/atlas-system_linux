@@ -59,6 +59,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 {
 	int fd;
 	size_t r;
+	const char *fString = "%s: %s: File format not recognized for 32-bit ELF\n";
 
 	memset(elf_header, 0, sizeof(elf_t)); /* Init elf_header to zero */
 
@@ -80,7 +81,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 		if (r != sizeof(elf_header->e32) ||
 						!is_elf_file((char *)&elf_header->e32))
 		{
-			fprintf(stderr, "%s: %s: File format not recognized for 32-bit ELF\n", argv[0], file_name);
+			fprintf(stderr, fString, argv[0], file_name);
 			close(fd);
 			return (-1); /* return failure if 32-bit ELF header is not valid */
 		}
