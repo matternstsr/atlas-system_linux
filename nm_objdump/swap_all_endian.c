@@ -34,7 +34,7 @@ void swap_all_endian(elf_t *h)
 		h->e32.e_phentsize = swap_endian_uint16(h->e32.e_phentsize);/*p hdr sz*/
 		h->e32.e_phnum = swap_endian_uint16(h->e32.e_phnum);/*nump headers */
 		h->e32.e_shentsize = swap_endian_uint16(h->e32.e_shentsize);/*sechdrsz*/
-		h->e32.e_shnum = swap_endian_uint16(h->e32.e_shnum);//*nump sec hdrs */
+		h->e32.e_shnum = swap_endian_uint16(h->e32.e_shnum);/*nump sec hdrs */
 		h->e32.e_shoff = swap_endian_uint32(h->e32.e_shoff);/*sec hdr tbl off */
 		h->e32.e_phoff = swap_endian_uint32(h->e32.e_phoff);/*prog hdr tbl off*/
 		h->e32.e_entry = swap_endian_uint32(h->e32.e_entry);/*entry point */
@@ -95,26 +95,26 @@ void swap_all_endian_program(elf_t *h, size_t i)
 	if (Is_BigE(h->e64) && !IS_32(h->e64))
 	/* Check if ELF header is big-endian and 64-bit */
 	{
-		h->p64[i].p_type = swap_endian_uint32(h->p64[i].p_type)/*prog hdr type*/
-		h->p64[i].p_offset = swap_endian_uint64(h->p64[i].p_offset)/*prog hdr offset*/
-		h->p64[i].p_vaddr = swap_endian_uint64(h->p64[i].p_vaddr)/*prog hdr virtual address*/
-		h->p64[i].p_paddr = swap_endian_uint64(h->p64[i].p_paddr)/*prog hdr physical address*/
-		h->p64[i].p_filesz = swap_endian_uint64(h->p64[i].p_filesz)/*prog hdr file size*/
-		h->p64[i].p_memsz = swap_endian_uint64(h->p64[i].p_memsz)/*prog hdr memory size*/
-		h->p64[i].p_align = swap_endian_uint64(h->p64[i].p_align)/*prog hdr alignment*/
-		h->p64[i].p_flags = swap_endian_uint32(h->p64[i].p_flags)/*prog hdr flags*/
+		h->p64[i].p_type = swap_endian_uint32(h->p64[i].p_type);/*proghdrtype*/
+		h->p64[i].p_offset = swap_endian_uint64(h->p64[i].p_offset);/*prohdoff*/
+		h->p64[i].p_vaddr = swap_endian_uint64(h->p64[i].p_vaddr);/*prhdrviadd*/
+		h->p64[i].p_paddr = swap_endian_uint64(h->p64[i].p_paddr);/*prhdrphadd*/
+		h->p64[i].p_filesz = swap_endian_uint64(h->p64[i].p_filesz);/*prhdrfls*/
+		h->p64[i].p_memsz = swap_endian_uint64(h->p64[i].p_memsz);/*prohdrmems*/
+		h->p64[i].p_align = swap_endian_uint64(h->p64[i].p_align);/*prohdralig*/
+		h->p64[i].p_flags = swap_endian_uint32(h->p64[i].p_flags);/*prohdrflgs*/
 	}
 	if (Is_BigE(h->e64) && IS_32(h->e64))
 	/* Check if ELF header is big-endian and 32-bit*/
 	{
-		h->p32[i].p_type = swap_endian_uint32(h->p32[i].p_type)/*proghdrtype*/
-		h->p32[i].p_offset = swap_endian_uint32(h->p32[i].p_offset)/*prohdroff*/
-		h->p32[i].p_vaddr = swap_endian_uint32(h->p32[i].p_vaddr)/*prhdrviradd*/
-		h->p32[i].p_paddr = swap_endian_uint32(h->p32[i].p_paddr)/*prhdrphyadd*/
-		h->p32[i].p_filesz = swap_endian_uint32(h->p32[i].p_filesz)/*prhdrflsz*/
-		h->p32[i].p_memsz = swap_endian_uint32(h->p32[i].p_memsz)/*prohdrmemsz*/
-		h->p32[i].p_align = swap_endian_uint32(h->p32[i].p_align)/*proghdralig*/
-		h->p32[i].p_flags = swap_endian_uint32(h->p32[i].p_flags)/*proghdrflgs*/
+		h->p32[i].p_type = swap_endian_uint32(h->p32[i].p_type);/*proghdrtype*/
+		h->p32[i].p_offset = swap_endian_uint32(h->p32[i].p_offset);/*prohdoff*/
+		h->p32[i].p_vaddr = swap_endian_uint32(h->p32[i].p_vaddr);/*prhdrviadd*/
+		h->p32[i].p_paddr = swap_endian_uint32(h->p32[i].p_paddr);/*prhdrphadd*/
+		h->p32[i].p_filesz = swap_endian_uint32(h->p32[i].p_filesz);/*prhdrfls*/
+		h->p32[i].p_memsz = swap_endian_uint32(h->p32[i].p_memsz);/*prohdrmems*/
+		h->p32[i].p_align = swap_endian_uint32(h->p32[i].p_align);/*prohdralig*/
+		h->p32[i].p_flags = swap_endian_uint32(h->p32[i].p_flags);/*prohdrflgs*/
 	}
 }
 
