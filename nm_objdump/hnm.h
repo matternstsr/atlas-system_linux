@@ -21,9 +21,12 @@
 #define IS_64 ((elf_header->e64).e_ident[EI_CLASS] == ELFCLASS64)
 #define Is_BigE(x) ((x).e_ident[EI_DATA] == ELFDATA2MSB)
 #define EGET(x) (IS_32(elf_header->e64) ? elf_header->e32.x : elf_header->e64.x)
-#define SGET(i, x) (IS_32(elf_header->e64) ? elf_header->s32[i].x : elf_header->s64[i].x)
-#define PGET(i, x) (IS_32(elf_header->e64) ? elf_header->p32[i].x :	elf_header->p64[i].x)
-#define YGET(i, x) (IS_32(elf_header->e64) ? elf_header->y32[i].x :	elf_header->y64[i].x)
+#define SGET(i, x) (IS_32(elf_header->e64) ? elf_header->s32[i].x : \
+                    elf_header->s64[i].x)
+#define PGET(i, x) (IS_32(elf_header->e64) ? elf_header->p32[i].x : \
+                    elf_header->p64[i].x)
+#define YGET(i, x) (IS_32(elf_header->e64) ? elf_header->y32[i].x : \
+                    elf_header->y64[i].x)
 #define BFD_NO_FLAGS 0x00
 #define HAS_RELOC 0x01
 #define EXEC_P 0x02
@@ -39,17 +42,21 @@
 #define FORMAT_LEGEND \
 	"Key to Flags:\n" \
 	"  W (write), A (alloc), X (execute), M (merge), S (strings)%s\n" \
-	"  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n" \
-	"  O (extra OS processing required) o (OS specific), p (processor specific)\n"
+	"  I (info), L (link order), G (group), T (TLS)," \
+	"  E (exclude), x (unknown)\n" \
+	"  O (extra OS processing required) o (OS specific), \"
+	"  p (processor specific)\n"
 /* Define title format for 32-bit sections */
 #define TITLE_SECTION_32 \
-	"  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n"
+	"  [Nr] Name              Type            Addr     Off    Size   " \
+	"ES Flg Lk Inf Al\n"
 /* Define format for 32-bit sections */
 #define FORMAT_SECTION_32 \
 	"  [%2u] %-17s %-15.15s %8.8lx %6.6lx %6.6lx %2.2lx %3s %2u %3u %2lu\n"
 /* Define title format for 64-bit sections */
 #define TITLE_SECTION_64 \
-	"  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n"
+	"  [Nr] Name              Type            Address          Off    Size   " \
+	"ES Flg Lk Inf Al\n"
 /* Define format for 64-bit sections */
 #define FORMAT_SECTION_64 \
 	"  [%2u] %-17s %-15.15s %16.16lx %6.6lx %6.6lx %2.2lx %3s %2u %3u %2lu\n"
