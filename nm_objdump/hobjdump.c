@@ -166,7 +166,7 @@ void essential_information(elf_t *elf_header, char *string_table)
 
     printf("architecture: ");  /* Print architecture label */
 
-    if (IS_BE(elf_header->e64))
+    if (Is_BigE(elf_header->e64))
         printf("UNKNOWN!");  /* Print "UNKNOWN!" for big endian format */
     else if (IS_64)
         printf("i386:x86-64");  /* Print "i386:x86-64" for 64-bit format */
@@ -345,6 +345,6 @@ char *check_format(elf_t *elf_header)
 
     *ffbuf = 0;  /* Initialize buffer */
     sprintf(ffbuf, "elf%d-%s", IS_64 ? 64 : 32,
-            IS_BE(elf_header->e64) ? "big" : IS_64 ? "x86-64" : "i386");
+            Is_BigE(elf_header->e64) ? "big" : IS_64 ? "x86-64" : "i386");
     return ffbuf;  /* Return formatted string */
 }
