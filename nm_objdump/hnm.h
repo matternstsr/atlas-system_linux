@@ -98,15 +98,15 @@ typedef struct Elf
 /** Structure to hold the state of the objdump tool */
 typedef struct objdump_state_s
 {
-    char *exec_name;    /* Name of the executable */
-    char *f_name;       /* Name of the file being analyzed */
-    FILE *f_stream;     /* File stream pointer */
-    int f_size;         /* Size of the file */
-    bool big_endian;    /* Indicates big endian format */
-    bool ELF_32bit;     /* Indicates ELF 32-bit format */
-    Elf64_Ehdr f_header;/* ELF header structure */
-    Elf64_Shdr *s_headers; /* Section headers */
-    char *sh_strtab;    /* String table for section headers */
+	char *exec_name;    /* Name of the executable */
+	char *f_name;       /* Name of the file being analyzed */
+	FILE *f_stream;     /* File stream pointer */
+	int f_size;         /* Size of the file */
+	bool big_endian;    /* Indicates big endian format */
+	bool ELF_32bit;     /* Indicates ELF 32-bit format */
+	Elf64_Ehdr f_header;/* ELF header structure */
+	Elf64_Shdr *s_headers; /* Section headers */
+	char *sh_strtab;    /* String table for section headers */
 } objdump_state;
 
 int empty_sections(elf_t *elf_header, int fd, size_t *num_printed);
