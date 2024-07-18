@@ -82,13 +82,13 @@ static int open_and_read_elf(char *file_name, elf_t *elf_header,
 }
 
 /**
- * process_and_print_symbols - Process an ELF file and print its symbol tables.
+ * process_file - Process an ELF file and print its symbol tables.
  * @file_name: Name of the file to process
  * @multiple: Flag indicating if multiple files are being processed
  * @argv: Argument vector passed to main
  * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
-int process_and_print_symbols(char *file_name, int multiple, char **argv)
+int process_file(char *file_name, int multiple, char **argv)
 {
     elf_t elf_header;
     int fd, exit_status = EXIT_SUCCESS;
