@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
 
-SRC0 = hnm.c hnm_helper.c read_tables.c print_tables.c get_symbols.c swap_all_endian.c print.c get_elf_file_type.c swap_endian_uint64.c swap_endian_uint16.c swap_endian_uint32.c is_elf_file.c crack_open_file.c get.c read.c
+SRC0 = hnm.c hnm_process.c hnm_helper.c read_tables.c print_tables.c get_symbols.c swap_all_endian.c print.c get_elf_file_type.c swap_endian_uint64.c swap_endian_uint16.c swap_endian_uint32.c is_elf_file.c crack_open_file.c get.c read.c
 OBJ0 = $(SRC0:.c=.o)
 NAME0 = hnm
 
