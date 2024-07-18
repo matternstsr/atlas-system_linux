@@ -56,7 +56,7 @@ int process_file(char *file_name, int multiple, char **argv)
 				exit_status = EXIT_FAILURE;
 			fprintf(stderr, ERR_NOT_MAGIC, argv[0]);/* Print error message */
 		}
-		switch_all_endian(&elf_header);/* Adjust endianness if necessary */
+		swap_all_endian(&elf_header);/* Adjust endianness if necessary */
 		printf("\n%s:     file format %s\n",/* Print file format */
 			file_name, get_file_format(&elf_header));
 		exit_status = dump_all_sections(&elf_header, fd, &num_printed);
