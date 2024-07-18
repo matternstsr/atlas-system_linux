@@ -1,22 +1,46 @@
 #include "hnm.h"
 
 /**
-* main - Entry point to process ELF files and display symbol tables.
-* @argc: Argument count
-* @argv: Argument vector
-* return: 0 on success, 1+ on error
-*/
-int main(int ac, char **argv)
+ * main - entry point to hobjdump
+ * @argc: argument count from command line
+ * @argv: argument array from command line
+ * Return: 1 if any file processing fails, 0 otherwise
+ */
+int main(int argc, char **argv)
 {
-	int retstatus = EXIT_SUCCESS;/* Initialize return status */
-	char **_argv = argv;/* Pointer to iterate through arguments */
+    char *default_args[] = {"a.out"};
+    char **args = argc > 1 ? argv + 1 : default_args;
+    objdump_state state;
+    int i, retval, ac = argc > 1 ? argc - 1 : 1;
 
-	if (ac < 2)
-		return (fprintf(stderr, USAGE), EXIT_FAILURE);/*Print use on insu args*/
-	if (ac == 2)
-		return (process_file(argv[1], 0, argv));/*Proc single file only 1 arg*/
-	/* Process multiple files */
-	while (*++_argv)
-		retstatus += process_file(*_argv, 1, argv);
-	return (retstatus);/* Return cumulative status */
+    /* hobjdump processes one or more ELF files */
+    /* Each file failure results in overall failure (exit code 1) */
+    for (i = 0, retval = 0; i < ac; i++)
+    {
+        initState(&state);
+        state.exec_name = argv[0];
+        state.f_name = args[i];
+
+        if (openELF(&state) == 0)
+        {
+            if (readElfFileHeader(&state) == 0)
+            {
+                if (!(getSecHeaders(&state) == 0 &&
+                      getSecHeadStrTab(&state) == 0 &&
+                      printFileInfo(&state) == 0 &&
+                      printSections(&state) == 0))
+                    retval = 1;
+            }
+            else
+            {
+                errorMsg("%s: File format not recognized\n",
+                         NULL, &state);
+                retval = 1;
+            }
+        }
+        else
+            retval = 1;
+        closeState(&state);
+    }
+    return (retval);
 }
