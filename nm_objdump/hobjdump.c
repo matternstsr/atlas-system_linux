@@ -142,7 +142,7 @@ int dump_all_sections(elf_t *elf_header, int fd, size_t *num_printed)
     }
     read_section_headers(elf_header, fd);/* Read section headers */
     for (i = 0; i < EGET(e_shnum); i++)
-        switch_all_endian_section(elf_header, i);/* Switch endianness each sec*/
+        swap_all_endian_section(elf_header, i);/* swap endianness each sec*/
     string_table = read_string_table(elf_header, fd);/* Read string table */
     print_f_header(elf_header, string_table);/* Print header */
     for (i = 1; i < EGET(e_shnum); i++)
