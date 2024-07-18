@@ -128,10 +128,29 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
  */
 void ef_flags(unsigned long flags)
 {
-    int first = 1;  /* Flag for first item */
-
+    int first = 1;/* Flag for first item */
+	/* Print flags */
     if (!first)
-        printf("\n");  /* Print newline */
+        printf("\n");/* Print newline if flags were printed */
+	if (flags & WP_TEXT)
+        first = (printf("%s%s", first ? "" : ", ", "WP_TEXT"), 0);
+    if (flags & EXEC_P)
+        first = (printf("%s%s", first ? "" : ", ", "EXEC_P"), 0);
+    if (flags & HAS_LINENO)
+        first = (printf("%s%s", first ? "" : ", ", "HAS_LINENO"), 0);
+    if (flags & HAS_DEBUG)
+        first = (printf("%s%s", first ? "" : ", ", "HAS_DEBUG"), 0);
+    if (flags & HAS_SYMS)
+        first = (printf("%s%s", first ? "" : ", ", "HAS_SYMS"), 0);
+    if (flags & HAS_RELOC)
+        first = (printf("%s%s", first ? "" : ", ", "HAS_RELOC"), 0);
+	if (flags & DYNAMIC)
+        first = (printf("%s%s", first ? "" : ", ", "DYNAMIC"), 0);
+    if (flags & D_PAGED)
+        first = (printf("%s%s", first ? "" : ", ", "D_PAGED"), 0);
+	if (flags & HAS_LOCALS)
+        first = (printf("%s%s", first ? "" : ", ", "HAS_LOCALS"), 0);
+    if (flags & HAS_RELOC)
 }
 
 /*
