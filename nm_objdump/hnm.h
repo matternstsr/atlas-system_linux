@@ -67,7 +67,6 @@
 /* Define format for 32-bit symbols */
 #define FORMAT_SYMBOL_32 \
 	"%8.8lx %c %s"
-#define E(fmt, ...) fprintf(stderr, "%s: %s: " fmt "\n", argv[0], file_name, ##__VA_ARGS__)
 
 /**
 * struct Elf - stores 32/64 structs and other data
