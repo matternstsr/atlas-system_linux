@@ -121,211 +121,211 @@ int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 
 
 /*
- * dump_all_sections - objdumps each section
- * @elf_header: address of elf header struct
- * @fd: the file descriptor of our ELF file
- * @num_printed: pointer to var storing number of symbols printed
+ * ef_flags - Prints the list of flags for the ELF file.
+ * @flags: Flags for the ELF file.
  *
- * This function dumps the contents of each section of an ELF file.
- *
- * Return: 0 on success else exit_status
+ * This function prints a list of flags associated with the ELF file.
  */
-int dump_all_sections(elf_t *elf_header, int fd, size_t *num_printed)
+void ef_flags(unsigned long flags)
 {
-    char *string_table = NULL;/* Section header string table */
-    size_t i;/* Loop index */
+    int first = 1;  /* Flag for first item */
+
+    if (!first)
+        printf("\n");  /* Print newline */
+}
+
+/*
+ * essential_information - Prints the header information for the ELF file.
+ * @elf_header: The internal ELF header.
+ * @string_table: The header string table.
+ *
+ * This function prints essential header information for the ELF file.
+ */
+void essential_information(elf_t *elf_header, char *string_table)
+{
+    unsigned long flags = 0;  /* Flags for ELF file */
+
+    printf("architecture: ");  /* Print architecture label */
+
+    if (IS_BE(elf_header->e64))
+        printf("UNKNOWN!");  /* Print "UNKNOWN!" for big endian format */
+    else if (IS_64)
+        printf("i386:x86-64");  /* Print "i386:x86-64" for 64-bit format */
+    else
+        printf("i386");  /* Print "i386" for default format */
+
+    if (EGET(e_type) == ET_REL)
+        flags |= HAS_RELOC;  /* Set HAS_RELOC flag if type is relocatable */
+    else if (EGET(e_type) == ET_EXEC)
+        flags |= EXEC_P;  /* Set EXEC_P flag if type is executable */
+    else if (EGET(e_type) == ET_DYN)
+        flags |= DYNAMIC;  /* Set DYNAMIC flag if type is dynamic */
+
+    if (EGET(e_phnum) > 0)
+        flags |= D_PAGED;  /* Set D_PAGED flag if program header table exists */
+
+    if (name_search(elf_header, string_table, ".symtab"))
+        flags |= HAS_SYMS;  /* Set HAS_SYMS flag if .symtab section exists */
+
+    if (name_search(elf_header, string_table, ".dynsym"))
+        flags |= HAS_SYMS;  /* Set HAS_SYMS flag if .dynsym section exists */
+
+    if (name_search(elf_header, string_table, ".locals"))
+        flags |= HAS_LOCALS;  /* Set HAS_LOCALS flag if .locals section exists */
+
+    if (name_search(elf_header, string_table, ".lineno"))
+        flags |= HAS_LINENO;  /* Set HAS_LINENO flag if .lineno section exists */
+
+    if (name_search(elf_header, string_table, ".debug"))
+        flags |= HAS_DEBUG;  /* Set HAS_DEBUG flag if .debug section exists */
+
+    printf(", flags 0x%08lx:\n", flags);  /* Print flags */
+    ef_flags(flags);  /* Print flag details */
+    printf("start address 0x%0*lx\n\n", IS_64 ? 16 : 8, EGET(e_entry));  /* Print start address */
+}
+
+
+/*
+ * name_search - Checks if an ELF file has a given section by name.
+ * @elf_header: The internal ELF header.
+ * @string_table: The header string table.
+ * @section_name: The name of the section to find.
+ *
+ * This function searches for a section with the specified name in the ELF file.
+ *
+ * Return: 1 if section is found, 0 otherwise.
+ */
+int name_search(elf_t *elf_header, char *string_table, char *section_name)
+{
+    size_t i = 0;  /* Loop index */
+
+    section_name = strdup(section_name);  /* Duplicate section name */
+
+    for (i = 1; i < EGET(e_shnum); i++)
+    {
+        if (!strcmp(string_table + SGET(i, sh_name), section_name))
+            return 1;  /* Return true if section found */
+    }
+
+    return 0;  /* Return false if section not found */
+}
+
+/*
+ * empty_section - Dumps the contents of a single section in an ELF file.
+ * @elf_header: Address of the ELF header struct.
+ * @fd: File descriptor of the ELF file.
+ * @i: Section index of the current symbol table.
+ * @string_table: The section header string table.
+ *
+ * This function prints the hexadecimal and ASCII representation of the
+ * contents of a specific section in the ELF file.
+ *
+ * Return: Number of symbols printed.
+ */
+size_t empty_section(elf_t *elf_header, int fd, size_t i, char *string_table)
+{
+    size_t numps = 0, i_off = 0, j, j_max, addr_len;  /* Variables for iteration */
+    unsigned char *data;  /* Data buffer */
+    char buf[32] = {0};  /* Buffer for formatting */
+
+    printf("Contents of section %s:\n", string_table + SGET(i, sh_name));  /* Print section name */
+
+    data = read_data(elf_header, fd, SGET(i, sh_offset), SGET(i, sh_size));  /* Read section data */
+    if (!data)
+        return 0;  /* Return if data read fails */
+
+    addr_len = MAX(4, sprintf(buf, "%lx", SGET(i, sh_addr) + SGET(i, sh_size)));  /* Calculate address length */
+
+    for (i_off = 0; i_off < SGET(i, sh_size); i_off += 0x10)
+    {
+        j_max = MIN(0x10, SGET(i, sh_size) - i_off);  /* Calculate maximum bytes to print */
+
+        printf(" %0*lx ", (int)addr_len, SGET(i, sh_addr) + i_off);  /* Print starting address */
+
+        for (j = 0; j < j_max; j++)
+            printf("%02x%s", data[i_off + j], !((j + 1) % 4) ? " " : "");  /* Print hex bytes */
+
+        for (j = j_max; j < 0x10; j++)
+            printf("%s%s", "  ", !((j + 1) % 4) ? " " : "");  /* Print padding */
+
+        printf(" ");
+        
+        for (j = 0; j < j_max; j++)
+            printf("%c", (data[i_off + j] >= 32 && data[i_off + j] <= 126) ? data[i_off + j] : '.');  /* Print ASCII representation */
+
+        for (j = j_max; j < 0x10; j++)
+            printf("%c", ' ');  /* Print ASCII padding */
+        
+        printf("\n");
+    }
+
+    free(data);  /* Free data buffer */
+    return numps;  /* Return number of symbols printed */
+    (void)fd;  /* Suppress unused parameter warning */
+}
+
+/*
+ * empty_sections - Dumps the contents of each section in an ELF file.
+ * @elf_header: Address of the ELF header struct.
+ * @fd: File descriptor of the ELF file.
+ * @num_printed: Pointer to variable storing number of symbols printed.
+ *
+ * This function iterates through each section of the ELF file, skips certain
+ * sections based on predefined criteria, and dumps the contents of the rest.
+ *
+ * Return: 0 on success, or exit status on failure.
+ */
+int empty_sections(elf_t *elf_header, int fd, size_t *num_printed)
+{
+    char *string_table = NULL;  /* Section header string table */
+    size_t i;  /* Loop index */
 
     if (!EGET(e_shnum))
     {
         printf("\nThere are no section headers in this file.\n");
-        return (0);
+        return 0;
     }
-    read_section_headers(elf_header, fd);/* Read section headers */
+
+    read_section_headers(elf_header, fd);  /* Read section headers */
+
     for (i = 0; i < EGET(e_shnum); i++)
-        swap_all_endian_section(elf_header, i);/* swap endianness each sec*/
-    string_table = read_string_table(elf_header, fd);/* Read string table */
-    print_f_header(elf_header, string_table);/* Print header */
+        swap_all_endian_section(elf_header, i);  /* Swap endianness of each section */
+
+    string_table = read_string_table(elf_header, fd);  /* Read string table */
+    essential_information(elf_header, string_table);  /* Print ELF header information */
+
     for (i = 1; i < EGET(e_shnum); i++)
     {
         if (strcmp(string_table + SGET(i, sh_name), ".dynstr") &&
-		/* Check if section name is not ".dynstr" */
             ((!strncmp(string_table + SGET(i, sh_name), ".rel", 4) &&
-			/* Check if section name starts with ".rel" and sh_addr is 0 */
             !SGET(i, sh_addr))
-            || SGET(i, sh_type) == SHT_SYMTAB || /*Chck sec type is symbol tbl*/
-            SGET(i, sh_type) == SHT_NOBITS /*Chck sec type is unititial data */
-            || SGET(i, sh_type) == SHT_STRTAB  /*Chck sec type is str tbl */
-            || !SGET(i, sh_size)))    /* Chck sec is size is zero */
-            continue; /* Skip this iteration of the loop */
-        *num_printed += dump_section(elf_header, fd, i, string_table);/* Dump section */
+            || SGET(i, sh_type) == SHT_SYMTAB ||
+            SGET(i, sh_type) == SHT_NOBITS ||
+            SGET(i, sh_type) == SHT_STRTAB ||
+            !SGET(i, sh_size)))
+            continue;  /* Skip sections that do not meet the criteria */
+
+        *num_printed += empty_section(elf_header, fd, i, string_table);  /* Dump section */
     }
-    free(string_table);/* Free string table */
-    return (0);/* Return success */
+
+    free(string_table);  /* Free string table */
+    return 0;  /* Return success */
 }
 
 /*
- * dump_section - dumps just one section
- * @elf_header: address of elf header struct
- * @fd: the file descriptor of our ELF file
- * @i: section index of current symbol table
- * @string_table: the section header string_table
+ * check_format - Retrieves the string representation of the ELF file format.
+ * @elf_header: The internal ELF header.
  *
- * This function dumps the contents of a single section of an ELF file.
+ * This function returns a string describing the ELF file format.
  *
- * Return: number of symbols printed
+ * Return: String representing the ELF file format.
  */
-size_t dump_section(elf_t *elf_header, int fd, size_t i,
-                    char *string_table)
+char *check_format(elf_t *elf_header)
 {
-    size_t numps = 0, i_off = 0, j, j_max, addr_len;/*vars for iteration*/
-    unsigned char *data;/* Data buffer */
-    char buf[32] = {0};/* Buffer for formatting */
+    static char ffbuf[32];  /* Static buffer for return value */
 
-    printf("Contents of section %s:\n", string_table + SGET(i, sh_name));
-	/* Print section name */
-    data = read_data(elf_header, fd, SGET(i, sh_offset), SGET(i, sh_size));
-	/* Read section data */
-    if (!data)
-        return (0);/* Return on data read failure */
-    addr_len = MAX(4, sprintf(buf, "%lx", SGET(i, sh_addr) + SGET(i, sh_size)));
-	/* Calculate address length */
-    for (i_off = 0; i_off < SGET(i, sh_size); i_off += 0x10)
-    {
-        j_max = MIN(0x10, SGET(i, sh_size) - i_off);
-		/* Calculate maximum bytes to print */
-        printf(" %0*lx ", (int)addr_len, SGET(i, sh_addr) + i_off);
-		/* Print starting address */
-
-        for (j = 0; j < j_max; j++)
-            printf("%02x%s", data[i_off + j], !((j + 1) % 4) ? " " : "");
-		/* Print hex bytes */
-        for (j = j_max; j < 0x10; j++)
-            printf("%s%s", "  ", !((j + 1) % 4) ? " " : "");/* Print padding */
-        printf(" ");
-        for (j = 0; j < j_max; j++)
-            printf("%c", (data[i_off + j] >= 32
-                         && data[i_off + j] <= 126) ? data[i_off + j] : '.');
-						 /* Print ASCII representation */
-        for (j = j_max; j < 0x10; j++)
-            printf("%c", ' ');/* Print ASCII padding */
-        printf("\n");
-    }
-    free(data);/* Free data buffer */
-    return (numps);/* Return number of symbols printed */
-    (void)fd;/* Suppress unused parameter warning */
-}
-
-/*
- * get_file_format - gets the string format type
- * @elf_header: the internal header
- *
- * This function retrieves the string representation of the ELF file format.
- *
- * Return: string type
- */
-char *get_file_format(elf_t *elf_header)
-{
-    static char ffbuf[32];/* Static buffer for return value */
-
-    *ffbuf = 0;/* Initialize buffer */
-    sprintf(ffbuf, "elf%d-%s", IS_64 ? 64 : 32,/* Format string */
+    *ffbuf = 0;  /* Initialize buffer */
+    sprintf(ffbuf, "elf%d-%s", IS_64 ? 64 : 32,
             IS_BE(elf_header->e64) ? "big" : IS_64 ? "x86-64" : "i386");
-    return (ffbuf);/* Return formatted string */
-}
-
-/*
- * print_f_header - prints the -f style header
- * @elf_header: the internal header
- * @string_table: the header str table
- *
- * This function prints the -f style header for the ELF file.
- */
-void print_f_header(elf_t *elf_header, char *string_table)
-{
-    unsigned long flags = 0;/* Flags for ELF file */
-
-    printf("architecture: ");/* Print the architecture label */
-
-    if (IS_BE(elf_header->e64))
-        printf("UNKNOWN!");/* Print "UNKNOWN!" if IS_BE(e64) */
-    else if (IS_64)
-        printf("i386:x86-64");/* Print "i386:x86-64" if IS_64 */
-    else
-        printf("i386");/* Print "i386" by default */
-    if (EGET(e_type) == ET_REL)
-        flags |= HAS_RELOC;/* Set HAS_RELOC flag if e_type is ET_REL */
-    else if (EGET(e_type) == ET_EXEC)
-        flags |= EXEC_P;/* Set EXEC_P flag if e_type is ET_EXEC */
-    else if (EGET(e_type) == ET_DYN)
-        flags |= DYNAMIC;/* Set DYNAMIC flag if e_type is ET_DYN */
-    if (EGET(e_phnum) > 0)
-        flags |= D_PAGED;/* Set D_PAGED flag if e_phnum is greater than 0 */
-    if (has_section(elf_header, string_table, ".symtab"))
-        flags |= HAS_SYMS;/* Set HAS_SYMS flag if .symtab section exists */
-    if (has_section(elf_header, string_table, ".dynsym"))
-        flags |= HAS_SYMS;/* Set HAS_SYMS flag if .dynsym section exists */
-    if (has_section(elf_header, string_table, ".locals"))
-        flags |= HAS_LOCALS;/* Set HAS_LOCALS flag if .locals section exists */
-    if (has_section(elf_header, string_table, ".lineno"))
-        flags |= HAS_LINENO;/* Set HAS_LINENO flag if .lineno section exists */
-    if (has_section(elf_header, string_table, ".debug"))
-        flags |= HAS_DEBUG;/* Set HAS_DEBUG flag if .debug section exists */
-    printf(", flags 0x%08lx:\n", flags);/* Print flags */
-    print_f_flags(flags);/* Print flag details */
-    printf("start address 0x%0*lx\n\n", IS_64 ? 16 : 8, EGET(e_entry));
-	/* Print start address */
-}
-
-/*
- * has_section - checks is objfile has given section name
- * @elf_header: the internal header
- * @string_table: the header str table
- * @section_name: the name to find
- *
- * This function checks if an ELF file has a given section by name.
- *
- * Return: 1 if found else 0
- */
-int has_section(elf_t *elf_header, char *string_table, char *section_name)
-{
-    size_t i = 0;/* Loop index */
-
-    section_name = strdup(section_name);/* Duplicate section name */
-    for (i = 1; i < EGET(e_shnum); i++)
-        if (!strcmp(string_table + SGET(i, sh_name), section_name))
-            return (1);/* Return true if section found */
-    return (0);/* Return false if section not found */
-}
-
-/*
- * print_f_flags - prints the string flag list
- * @flags: the flags for this file
- *
- * This function prints the list of flags for the ELF file.
- */
-void print_f_flags(unsigned long flags)
-{
-    int first = 1;/* Flag for first item */
-	/* Print flags */
-    if (!first)
-        printf("\n");/* Print newline if flags were printed */
-	if (flags & WP_TEXT)
-        first = (printf("%s%s", first ? "" : ", ", "WP_TEXT"), 0);
-    if (flags & EXEC_P)
-        first = (printf("%s%s", first ? "" : ", ", "EXEC_P"), 0);
-    if (flags & HAS_LINENO)
-        first = (printf("%s%s", first ? "" : ", ", "HAS_LINENO"), 0);
-    if (flags & HAS_DEBUG)
-        first = (printf("%s%s", first ? "" : ", ", "HAS_DEBUG"), 0);
-    if (flags & HAS_SYMS)
-        first = (printf("%s%s", first ? "" : ", ", "HAS_SYMS"), 0);
-    if (flags & HAS_RELOC)
-        first = (printf("%s%s", first ? "" : ", ", "HAS_RELOC"), 0);
-	if (flags & DYNAMIC)
-        first = (printf("%s%s", first ? "" : ", ", "DYNAMIC"), 0);
-    if (flags & D_PAGED)
-        first = (printf("%s%s", first ? "" : ", ", "D_PAGED"), 0);
-	if (flags & HAS_LOCALS)
-        first = (printf("%s%s", first ? "" : ", ", "HAS_LOCALS"), 0);
-    if (flags & HAS_RELOC)
+    return ffbuf;  /* Return formatted string */
 }

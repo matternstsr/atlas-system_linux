@@ -91,6 +91,12 @@ typedef struct Elf
 	Elf32_Sym *y32;
 } elf_t;
 
+int empty_sections(elf_t *elf_header, int fd, size_t *num_printed);
+size_t empty_section(elf_t *elf_header, int fd, size_t i, char *string_table);
+char *check_format(elf_t *elf_header);
+void essential_information(elf_t *elf_header, char *string_table);
+int name_search(elf_t *elf_header, char *string_table, char *section_name);
+void ef_flags(unsigned long flags);
 int crack_open_file(char *name, int silent, char **argv);
 int is_elf_file(char *elf_header);
 void print_hex_memory(void *ptr, size_t n);
@@ -166,6 +172,5 @@ int process_file(char *file_name, int multiple, char **argv);
 int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv);
 int process_and_print_symbols(elf_t *elf_header, int fd, char **argv,
 							char *file_name);
-
 
 #endif
