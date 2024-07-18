@@ -36,11 +36,11 @@ int process_file(char *file_name, int multiple, char **argv)
 	const char *fString = "%s: %s: File format not recognized\n";
 
 	memset(&elf_header, 0, sizeof(elf_header));/* Initialize ELF header */
-	fd = open_file(file_name, 0, argv);/* Open file */
+	fd = crack_open_file(file_name, 0, argv);/* Open file */
 	if (fd == -1)
 		return (EXIT_FAILURE);/* Return on file open failure */
 	r = read(fd, &elf_header.e64, sizeof(elf_header.e64));/* Read ELF header */
-	if (r != sizeof(elf_header.e64) || check_elf((char *)&elf_header.e64))
+	if (r != sizeof(elf_header.e64) || is_elf_file((char *)&elf_header.e64))
 	{
 		fprintf(stderr, fString, argv[0], file_name);
 		exit_status = EXIT_FAILURE;
@@ -52,7 +52,7 @@ int process_file(char *file_name, int multiple, char **argv)
 			lseek(fd, 0, SEEK_SET);/* Seek to the beginning of the file */
 			r = read(fd, &elf_header.e32, sizeof(elf_header.e32));/*ReadELFhdr*/
 			if (r != sizeof(elf_header.e32) ||
-							check_elf((char *)&elf_header.e32))
+							is_elf_file((char *)&elf_header.e32))
 				exit_status = EXIT_FAILURE;
 			fprintf(stderr, ERR_NOT_MAGIC, argv[0]);/* Print error message */
 		}
@@ -89,7 +89,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 
 	memset(elf_header, 0, sizeof(elf_t)); /* Init elf_header to zero */
 
-	fd = crack_open_file(file_name, 0, argv); /* Open the file */
+	fd = crack_crack_open_file(file_name, 0, argv); /* Open the file */
 	if (fd == -1)
 		return (-1); /* return failure if file couldn't be opened */
 	r = read(fd, &elf_header->e64, sizeof(elf_header->e64)); /* ReadELFheader */
