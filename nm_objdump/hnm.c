@@ -35,8 +35,7 @@ int main(int argc, char **argv)
  * @multiple: Flag indicating if multiple files are being processed
  * Return: File descriptor on success, -1 on failure
  */
-static int open_and_read_elf(char *file_name, elf_t *elf_header,
-								char **argv, int multiple)
+static int open_and_read_elf(char *file_name, elf_t *elf_header, char **argv, int multiple)
 {
     int fd;
     size_t r;
