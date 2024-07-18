@@ -80,8 +80,7 @@ int open_and_validate_elf(char *file_name, elf_t *elf_header, char **argv)
 		if (r != sizeof(elf_header->e32) ||
 						!is_elf_file((char *)&elf_header->e32))
 		{
-			fprintf(stderr, "%s: %s: File format not recognized for " \
-			"32-bit ELF\n", argv[0], file_name);
+			E("File format not recognized for 32-bit ELF");
 			close(fd);
 			return (-1); /* return failure if 32-bit ELF header is not valid */
 		}
