@@ -8,7 +8,7 @@
 #include <stdbool.h>     /* Boolean type and values */
 #include <stdint.h>      /* Integer types */
 #include <string.h>      /* String manipulation functions */
-#include <stdio.h>       /* std func (fseek, fread, printf, sprintf, putchar) */
+#include <stdio.h>       /* std func (fseek, fread, printf, sprintf, putchar)*/
 #include <stdlib.h>      /* General utilities (memory management functions) */
 #include <sys/types.h>   /* Data types */
 #include <sys/stat.h>    /* File status (stat, S_ISREG macro) */
