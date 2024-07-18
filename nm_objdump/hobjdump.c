@@ -8,7 +8,7 @@
 */
 int main(int ac, char **argv)
 {
-	int ret = EXIT_SUCCESS;/* Initialize return status */
+	int retstatus = EXIT_SUCCESS;/* Initialize return status */
 	char **_argv = argv;/* Pointer to iterate through arguments */
 
 	if (ac < 2)
@@ -17,8 +17,8 @@ int main(int ac, char **argv)
 		return (process_file(argv[1], 0, argv));/*Proc single file only 1 arg*/
 	/* Process multiple files */
 	while (*++_argv)
-		ret += process_file(*_argv, 1, argv);
-	return (ret);/* Return cumulative status */
+		retstatus += process_file(*_argv, 1, argv);
+	return (retstatus);/* Return cumulative status */
 }
 
 /**
@@ -31,7 +31,7 @@ int main(int ac, char **argv)
 int process_file(char *file_name, int multiple, char **argv)
 {
 	int fd, exit_status = 0;/* File descriptor and exit status */
-	size_t r, num_printed = 0;/* Read size, number of symbols printed */
+	size_t r, numps = 0;/* Read size, number of symbols printed */
 	elf_t elf_header;/* ELF header structure */
 	const char *fString = "%s: %s: File format not recognized\n";
 
@@ -43,7 +43,6 @@ int process_file(char *file_name, int multiple, char **argv)
 	if (r != sizeof(elf_header.e64) || is_elf_file((char *)&elf_header.e64))
 	{
 		fprintf(stderr, fString, argv[0], file_name);
-		exit_status = EXIT_FAILURE;
 	}
 	else
 	{
@@ -59,7 +58,7 @@ int process_file(char *file_name, int multiple, char **argv)
 		swap_all_endian(&elf_header);/* Adjust endianness if necessary */
 		printf("\n%s:     file format %s\n",/* Print file format */
 			file_name, check_format(&elf_header));
-		exit_status = empty_sections(&elf_header, fd, &num_printed);
+		exit_status = empty_sections(&elf_header, fd, &numps);
 		/* Dump sections */
 	}
 	/* Free allocated memory */
