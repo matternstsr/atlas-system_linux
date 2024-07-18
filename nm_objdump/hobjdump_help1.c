@@ -1,9 +1,9 @@
 #include "hnm.h"
 
 /* readElfFileHeader - reads ELF file header and determines its type
- * @state: struct containing file data and error info
- * Return: 1 on failure, 0 on success
- */
+* @state: struct containing file data and error info
+* Return: 1 on failure, 0 on success
+*/
 int readElfFileHeader(objdump_state *state)
 {
 	/* Read full identity array */
@@ -23,15 +23,15 @@ int readElfFileHeader(objdump_state *state)
 
 
 /* readElf64Header - reads and processes 64-bit ELF file header
- * @state: struct containing file data and error info
- * Return: 1 on failure, 0 on success
- */
+* @state: struct containing file data and error info
+* Return: 1 on failure, 0 on success
+*/
 int readElf64Header(objdump_state *state)
 {
 	Elf64_Ehdr ehdr64;
 
 	if (fread(&(ehdr64.e_type), (sizeof(ehdr64) - EI_NIDENT),
-		  1, state->f_stream) != 1)
+		1, state->f_stream) != 1)
 		return (1);
 	if (state->big_endian)
 		swapEndianElf64Header(&ehdr64);
@@ -54,15 +54,15 @@ int readElf64Header(objdump_state *state)
 
 
 /* readElf32Header - reads and processes 32-bit ELF file header
- * @state: struct containing file data and error info
- * Return: 1 on failure, 0 on success
- */
+* @state: struct containing file data and error info
+* Return: 1 on failure, 0 on success
+*/
 int readElf32Header(objdump_state *state)
 {
 	Elf32_Ehdr ehdr32;
 
 	if (fread(&(ehdr32.e_type), (sizeof(ehdr32) - EI_NIDENT),
-		  1, state->f_stream) != 1)
+		1, state->f_stream) != 1)
 		return (1);
 	if (state->big_endian)
 		swapEndianElf32Header(&ehdr32);
@@ -85,8 +85,8 @@ int readElf32Header(objdump_state *state)
 
 
 /* swapEndianElf64Header - swaps little-endian to big-endian in Elf64_Ehdr
- * @ehdr64: struct to byte swap
- */
+* @ehdr64: struct to byte swap
+*/
 void swapEndianElf64Header(Elf64_Ehdr *ehdr64)
 {
 	ehdr64->e_type      = __builtin_bswap16(ehdr64->e_type);
@@ -106,8 +106,8 @@ void swapEndianElf64Header(Elf64_Ehdr *ehdr64)
 
 
 /* swapEndianElf32Header - swaps little-endian to big-endian in Elf32_Ehdr
- * @ehdr32: struct to byte swap
- */
+* @ehdr32: struct to byte swap
+*/
 void swapEndianElf32Header(Elf32_Ehdr *ehdr32)
 {
 	ehdr32->e_type      = __builtin_bswap16(ehdr32->e_type);

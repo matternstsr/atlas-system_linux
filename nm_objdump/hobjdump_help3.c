@@ -1,11 +1,11 @@
 #include "hnm.h"
 
 /**
- * getSecHeaders - Determines whether to retrieve 32-bit or 64-bit ELF section
- * headers based on the file's configuration.
- * @state: Pointer to the object dump state containing file data and error info.
- * Return: 1 on failure, 0 on success
- */
+* getSecHeaders - Determines whether to retrieve 32-bit or 64-bit ELF section
+* headers based on the file's configuration.
+* @state: Pointer to the object dump state containing file data and error info.
+* Return: 1 on failure, 0 on success
+*/
 int getSecHeaders(objdump_state *state)
 {
 	if (state->f_header.e_shoff)
@@ -20,11 +20,11 @@ int getSecHeaders(objdump_state *state)
 }
 
 /**
- * get64bitSecHeaders - Reads and stores 64-bit ELF section headers in the
- * provided object dump state.
- * @state: Pointer to the object dump state containing file data and error info.
- * Return: 1 on failure, 0 on success
- */
+* get64bitSecHeaders - Reads and stores 64-bit ELF section headers in the
+* provided object dump state.
+* @state: Pointer to the object dump state containing file data and error info.
+* Return: 1 on failure, 0 on success
+*/
 int get64bitSecHeaders(objdump_state *state)
 {
 	Elf64_Shdr *s_headers = NULL;
@@ -36,7 +36,7 @@ int get64bitSecHeaders(objdump_state *state)
 	if (fseek(state->f_stream, state->f_header.e_shoff, SEEK_SET) == -1)
 		return (1);
 	if (fread(s_headers, sizeof(Elf64_Shdr), state->f_header.e_shnum,
-		  state->f_stream) != state->f_header.e_shnum)
+		state->f_stream) != state->f_header.e_shnum)
 		return (1);
 	if (state->big_endian)
 	{
@@ -50,11 +50,11 @@ int get64bitSecHeaders(objdump_state *state)
 
 /* Dynamically allocate memory and read 32-bit ELF section headers */
 /**
- * get32bitSecHeaders - Reads and stores 32-bit ELF section headers in the
- * provided object dump state.
- * @state: Pointer to the object dump state containing file data and error info.
- * Return: 1 on failure, 0 on success
- */
+* get32bitSecHeaders - Reads and stores 32-bit ELF section headers in the
+* provided object dump state.
+* @state: Pointer to the object dump state containing file data and error info.
+* Return: 1 on failure, 0 on success
+*/
 int get32bitSecHeaders(objdump_state *state)
 {
 	Elf32_Shdr *s_headers32 = NULL, *curr32 = NULL;
@@ -68,7 +68,7 @@ int get32bitSecHeaders(objdump_state *state)
 	if (fseek(state->f_stream, state->f_header.e_shoff, SEEK_SET) == -1)
 		return (1);
 	if (fread(s_headers32, sizeof(Elf32_Shdr), state->f_header.e_shnum,
-		  state->f_stream) != state->f_header.e_shnum)
+		state->f_stream) != state->f_header.e_shnum)
 		return (1);
 	if (state->big_endian)
 	{
@@ -97,10 +97,10 @@ int get32bitSecHeaders(objdump_state *state)
 }
 
 /**
- * bswapElf64_Shdr - Byte swaps all little-endian values in an Elf64_Shdr
- * structure to their big-endian counterparts.
- * @shdr64: Pointer to the Elf64_Shdr structure to byte swap.
- */
+* bswapElf64_Shdr - Byte swaps all little-endian values in an Elf64_Shdr
+* structure to their big-endian counterparts.
+* @shdr64: Pointer to the Elf64_Shdr structure to byte swap.
+*/
 void bswapElf64_Shdr(Elf64_Shdr *shdr64)
 {
 	shdr64->sh_name      = __builtin_bswap32(shdr64->sh_name);
@@ -116,10 +116,10 @@ void bswapElf64_Shdr(Elf64_Shdr *shdr64)
 }
 
 /**
- * bswapElf32_Shdr - Byte swaps all little-endian values in an Elf32_Shdr
- * structure to their big-endian counterparts.
- * @shdr32: Pointer to the Elf32_Shdr structure to byte swap.
- */
+* bswapElf32_Shdr - Byte swaps all little-endian values in an Elf32_Shdr
+* structure to their big-endian counterparts.
+* @shdr32: Pointer to the Elf32_Shdr structure to byte swap.
+*/
 void bswapElf32_Shdr(Elf32_Shdr *shdr32)
 {
 	shdr32->sh_name      = __builtin_bswap32(shdr32->sh_name);

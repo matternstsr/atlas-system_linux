@@ -1,10 +1,10 @@
 #include "hnm.h"
 
 /**
- * openELF - Attempts to open and validate an ELF file for parsing.
- * @state: Pointer to the objdump_state struct containing file info
- * Return: 1 on failure, 0 on success
- */
+* openELF - Attempts to open and validate an ELF file for parsing.
+* @state: Pointer to the objdump_state struct containing file info
+* Return: 1 on failure, 0 on success
+*/
 int openELF(objdump_state *state)
 {
     struct stat statbuf;            /* Structure to hold file status */
@@ -22,7 +22,7 @@ int openELF(objdump_state *state)
     if (!S_ISREG(statbuf.st_mode))
     {
         errorMsg("Warning: '%s' is not an ordinary file\n",
-                 NULL, state);
+                NULL, state);
         return (1);
     }
     /* nm skips files of size 0 with an exit code of 1 */
@@ -40,7 +40,7 @@ int openELF(objdump_state *state)
         memcmp(ELFMAG, magic, SELFMAG) != 0)
     {
         errorMsg("%s: File format not recognized\n",
-                 NULL, state);
+                NULL, state);
         return (1);
     }
     rewind(state->f_stream);
@@ -48,11 +48,11 @@ int openELF(objdump_state *state)
 }
 
 /**
- * errorMsg - Formats error messages for printing to stderr.
- * @format: Error format string
- * @err_str: Optional second string containing additional error info
- * @state: Pointer to the objdump_state struct for context
- */
+* errorMsg - Formats error messages for printing to stderr.
+* @format: Error format string
+* @err_str: Optional second string containing additional error info
+* @state: Pointer to the objdump_state struct for context
+*/
 void errorMsg(char *format, char *err_str, objdump_state *state)
 {
     fprintf(stderr, "%s: ", state->exec_name);
@@ -63,9 +63,9 @@ void errorMsg(char *format, char *err_str, objdump_state *state)
 }
 
 /**
- * initState - Initializes the objdump_state struct at the start.
- * @state: Pointer to the objdump_state struct to be initialized
- */
+* initState - Initializes the objdump_state struct at the start.
+* @state: Pointer to the objdump_state struct to be initialized
+*/
 void initState(objdump_state *state)
 {
     state->exec_name = NULL;
@@ -79,9 +79,9 @@ void initState(objdump_state *state)
 }
 
 /**
- * closeState - Closes the file stream and frees allocated memory in state.
- * @state: Pointer to the objdump_state struct containing file info
- */
+* closeState - Closes the file stream and frees allocated memory in state.
+* @state: Pointer to the objdump_state struct containing file info
+*/
 void closeState(objdump_state *state)
 {
     if (state->f_stream != NULL)

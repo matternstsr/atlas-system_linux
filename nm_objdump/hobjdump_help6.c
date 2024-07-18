@@ -2,11 +2,11 @@
 
 /* Allocate memory for section contents and read into buffer */
 /**
- * getSecBuff - read ELF section into buffer as raw bytes
- * @state: struct containing file data and info for error printing
- * @section: pointer to section header to read into buffer
- * Return: NULL on failure, buffer on success
- */
+* getSecBuff - read ELF section into buffer as raw bytes
+* @state: struct containing file data and info for error printing
+* @section: pointer to section header to read into buffer
+* Return: NULL on failure, buffer on success
+*/
 unsigned char *getSecBuff(objdump_state *state, Elf64_Shdr *section)
 {
     unsigned char *buff = NULL;
@@ -22,18 +22,18 @@ unsigned char *getSecBuff(objdump_state *state, Elf64_Shdr *section)
         return (NULL);
 
     if (fread(buff, sizeof(unsigned char), section->sh_size,
-              state->f_stream) != section->sh_size)
+            state->f_stream) != section->sh_size)
         return (NULL);
 
     return (buff);
 }
 
 /**
- * printSecBuff - print formatted contents of ELF section buffer
- *
- * @buff: buffer containing ELF section contents as raw bytes
- * @section: pointer to section header containing section information
- */
+* printSecBuff - print formatted contents of ELF section buffer
+*
+* @buff: buffer containing ELF section contents as raw bytes
+* @section: pointer to section header containing section information
+*/
 void printSecBuff(unsigned char *buff, Elf64_Shdr *section)
 {
     int addr_width;
@@ -72,12 +72,12 @@ void printSecBuff(unsigned char *buff, Elf64_Shdr *section)
 }
 
 /**
- * printSecBuffRow - print formatted row of ELF section buffer
- *
- * @buff: buffer containing ELF section contents as raw bytes
- * @row: current row of formatted printing in calling function
- * @bytes: amount of bytes to print in this row
- */
+* printSecBuffRow - print formatted row of ELF section buffer
+*
+* @buff: buffer containing ELF section contents as raw bytes
+* @row: current row of formatted printing in calling function
+* @bytes: amount of bytes to print in this row
+*/
 void printSecBuffRow(unsigned char *buff, uint32_t row, uint32_t bytes)
 {
     unsigned int col;
@@ -106,7 +106,7 @@ void printSecBuffRow(unsigned char *buff, uint32_t row, uint32_t bytes)
         if (col >= bytes)
             putchar(' ');
         else if (buff[(row * 16) + col] < ' ' ||
-                 buff[(row * 16) + col] > '~')
+                buff[(row * 16) + col] > '~')
             putchar('.');
         else
             putchar(buff[(row * 16) + col]);
@@ -115,10 +115,10 @@ void printSecBuffRow(unsigned char *buff, uint32_t row, uint32_t bytes)
 }
 
 /**
- * printSections - print contents of all ELF sections in a file
- * @state: struct containing file data and info for error printing
- * Return: 0 on success, 1 on failure
- */
+* printSections - print contents of all ELF sections in a file
+* @state: struct containing file data and info for error printing
+* Return: 0 on success, 1 on failure
+*/
 int printSections(objdump_state *state)
 {
     Elf64_Shdr *section = NULL;
@@ -142,17 +142,17 @@ int printSections(objdump_state *state)
             continue;
         if (state->f_header.e_type == ET_REL &&
             (section->sh_type == SHT_RELA ||
-             section->sh_type == SHT_REL))
+            section->sh_type == SHT_REL))
             continue;
         if (bss_reached &&
             (section->sh_type == SHT_SYMTAB ||
-             section->sh_type == SHT_STRTAB))
+            section->sh_type == SHT_STRTAB))
             continue;
         sec_buf = getSecBuff(state, section);
         if (!sec_buf)
             return (1);
         printf("Contents of section %s:\n",
-               state->sh_strtab + section->sh_name);
+            state->sh_strtab + section->sh_name);
         printSecBuff(sec_buf, section);
         free(sec_buf);
     }

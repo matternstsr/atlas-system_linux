@@ -1,10 +1,10 @@
 #include "hnm.h"
 
 /**
- * getSecHeadStrTab - Reads ELF file and retrieves section header string table.
- * @state: Pointer to the object dump state structure.
- * Return: 1 on failure, 0 on success
- */
+* getSecHeadStrTab - Reads ELF file and retrieves section header string table.
+* @state: Pointer to the object dump state structure.
+* Return: 1 on failure, 0 on success
+*/
 int getSecHeadStrTab(objdump_state *state)
 {
     Elf64_Shdr st_shdr;

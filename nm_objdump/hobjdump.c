@@ -1,11 +1,11 @@
 #include "hnm.h"
 
 /**
- * main - entry point to hobjdump
- * @argc: argument count from command line
- * @argv: argument array from command line
- * Return: 1 if any file processing fails, 0 otherwise
- */
+* main - entry point to hobjdump
+* @argc: argument count from command line
+* @argv: argument array from command line
+* Return: 1 if any file processing fails, 0 otherwise
+*/
 int main(int argc, char **argv)
 {
     char *default_args[] = {"a.out"};
@@ -26,15 +26,15 @@ int main(int argc, char **argv)
             if (readElfFileHeader(&state) == 0)
             {
                 if (!(getSecHeaders(&state) == 0 &&
-                      getSecHeadStrTab(&state) == 0 &&
-                      printFileInfo(&state) == 0 &&
-                      printSections(&state) == 0))
+                    getSecHeadStrTab(&state) == 0 &&
+                    printFileInfo(&state) == 0 &&
+                    printSections(&state) == 0))
                     retval = 1;
             }
             else
             {
                 errorMsg("%s: File format not recognized\n",
-                         NULL, &state);
+                        NULL, &state);
                 retval = 1;
             }
         }
