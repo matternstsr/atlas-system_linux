@@ -109,10 +109,10 @@ int name_search(elf_t *elf_header, char *string_table, char *section_name)
 */
 char *check_format(elf_t *elf_header)
 {
-	static char ffbuf[32];  /* Static buffer for return value */
+	static char buf[32];  /* Static buffer for return value */
 
-	*ffbuf = 0;  /* Initialize buffer */
-	sprintf(ffbuf, "elf%d-%s", IS_64 ? 64 : 32,
+	*buf = 0;  /* Initialize buffer */
+	sprintf(buf, "elf%d-%s", IS_64 ? 64 : 32,
 			Is_BigE(elf_header->e64) ? "big" : IS_64 ? "x86-64" : "i386");
-	return (ffbuf);  /* Return formatted string */
+	return (buf);  /* Return formatted string */
 }
