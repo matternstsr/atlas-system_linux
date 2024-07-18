@@ -107,10 +107,11 @@ void print_section_headers64(elf_t *elf_header, char *string_table)
 * @section: the symbol section to print
 */
 void print_verneed_info(elf_t *elf_header, char *sym_string_table,
-						uint16_t *versym, Elf64_Verneed *verneed, size_t verneed_size, size_t i,
+						uint16_t *versym, Elf64_Verneed *verneed,
+						size_t verneed_size, size_t i,
 						size_t size, int section)
 {
-	/* Check if verneed array exists and versym value is greater than or equal to 2 */
+	/* Check verneed array exists & versym value greater > or = to 2 */
 	if (verneed && versym[i] >= 2)
 	{
 		int save_versym = versym[i];   /* Save the original versym value */
@@ -132,9 +133,11 @@ void print_verneed_info(elf_t *elf_header, char *sym_string_table,
 		index = find_verneed_index(verneed, verneed_size, (size_t)versym[i]);
 		/* If index is not found, calculate it */
 		if (!index)
-			index = ((SGET(section + 3, sh_size) / sizeof(Elf64_Verneed) - 1) - (versym[i] - 2));
+			index = ((SGET(section + 3, sh_size) /
+					sizeof(Elf64_Verneed) - 1) - (versym[i] - 2));
 		/* Print the version information */
 		if (versym[i] < size)
-			printf("@%s (%d)", sym_string_table + verneed[index].vn_aux, save_versym);
+			printf("@%s (%d)", sym_string_table +
+					verneed[index].vn_aux, save_versym);
 	}
 }
