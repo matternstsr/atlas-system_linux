@@ -11,28 +11,22 @@ void print_python_int(PyObject *p)
     /* Cast p to PyLongObject pointer */
     PyLongObject *num = (PyLongObject *) p;
 
-    /* Extract the size of the Python integer */
-    ssize_t size = num->ob_size;
-
-    /* Check if the Python integer is negative */
+    /* Initialize variables */
     int neg = 0;
-    if (size < 0)
-    {
-        neg = 1;
-        size = -size;
-    }
-
-    /* Check for overflow (size > 3 is considered overflow) */
-    if (size > 3)
-        printf("C unsigned long int overflow\n");
-
-    /* Calculate the value of the Python integer manually */
     unsigned long long total = 0;
-    for (ssize_t i = size - 1; i >= 0; i--)
-        total = (total << PyLong_SHIFT) + num->ob_digit[i];
+
+    /* Determine if the number is negative */
+    if (num->ob_digit[num->ob_size - 1] >> (PyLong_SHIFT - 1))
+        neg = 1;
 
     /* Print the value with appropriate sign */
     if (neg)
         printf("-");
+
+    /* Calculate the total value of the Python integer */
+    for (ssize_t i = num->ob_size - 1; i >= 0; i--)
+        total = (total << PyLong_SHIFT) + num->ob_digit[i];
+
+    /* Print the calculated value */
     printf("%llu\n", total);
 }
