@@ -24,7 +24,7 @@ void print_python_list(PyObject *p)
     }
 
     /* Retrieve size (number of elements) & allocated memory of the list */
-    size = PyList_Size(p);
+    size = PyObject_Length(p);
     allocated = ((PyListObject *)p)->allocated;
     list = (PyListObject *)p;
 
