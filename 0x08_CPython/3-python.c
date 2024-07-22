@@ -103,6 +103,6 @@ void print_python_float(PyObject *p)
     value = PyFloat_AsDouble(p);
 
     /* Print float object information */
-    printf("  [.] float object info\n");
+    printf("[.] float object info\n");
     printf("  value: %f\n", value);
 }
