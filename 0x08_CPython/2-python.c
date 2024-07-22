@@ -60,7 +60,7 @@ void print_python_bytes(PyObject *p)
     str = PyBytes_AsString(p);
     printf("  trying string: %s\n", str);  /* Use PyBytes_AsString directly */
     /* Print the first 10 bytes of the bytes object in hexadecimal format */
-    printf("  first %zd bytes: ", size < 10 ? size : 10); 
+    printf("  first %zd bytes: ", size < 10 ? size +1 : 10); 
     /* Adjusted to print up to 10 bytes */
     for (i = 0; i < (size < 10 ? size : 10); i++)
     {
