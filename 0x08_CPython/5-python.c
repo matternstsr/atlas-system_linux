@@ -4,7 +4,7 @@
 void print_python_int(PyObject *p)
 {
     /* Check if p is a Python integer */
-    if (!PyLong_Check(p))
+    if (!p || !PyLong_Check(p))
         printf("Invalid Int Object\n");
 
     /* Extract the value of the Python integer */
@@ -12,7 +12,6 @@ void print_python_int(PyObject *p)
     if (x == (unsigned long)-1 && PyErr_Occurred())
     {
         /* PyErr_Occurred() returns true if prob in PyLong_AsUnsignedLong */
-        PyErr_Clear(); /* Clear the error indicator */
         printf("C unsigned long int overflow\n");
     }
     else
