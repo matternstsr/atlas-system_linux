@@ -7,9 +7,9 @@ void print_python_string(PyObject *p)
     Py_UNICODE *unicode_str;
     char *ascii, printstr;
 
-    printstr = "[.] string object info\n"
-    printtype = "  type: compact unicode object\n"
-    printobj = "  [ERROR] Invalid String Object\n"
+    printstr = "[.] string object info\n";
+    printtype = "  type: compact unicode object\n";
+    printobj = "  [ERROR] Invalid String Object\n";
 
     if (!PyUnicode_Check(p))
     {
