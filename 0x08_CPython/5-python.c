@@ -11,10 +11,10 @@ void print_python_int(PyObject *p)
     }
 
     /* Convert Python integer to C long long */
-    unsigned long long x = PyLong_AsUnsignedLongLong(p);
+    unsigned long x = PyLong_AsUnsignedLongLong(p);
 
     /* Check for overflow or underflow */
-    if (x == (unsigned long long)-1 && PyErr_Occurred())
+    if (x == (unsigned long)-1 && PyErr_Occurred())
     {
         PyErr_Clear();
         printf("C long long overflow\n");
