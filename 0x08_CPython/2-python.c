@@ -68,5 +68,4 @@ void print_python_bytes(PyObject *p)
         if (i < size - 1) /* Changed to iterate up to size */
             printf(" ");
     }
-    printf(" 00\n");  /* Add the extra '00' byte at the end */
 }
