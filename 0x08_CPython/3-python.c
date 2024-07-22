@@ -92,8 +92,9 @@ void print_python_float(PyObject *p)
 {
     char* value;
     PyFloatObject *floater;
-    
+
     floater = (PyFloatObject *)p;
+    setbuf(stdout, NULL);
 
     /* Check if p is a valid PyFloatObject */
     if (!PyFloat_Check(p)) {
