@@ -63,7 +63,7 @@ void print_python_bytes(PyObject *p)
     Py_XDECREF(repr);  // Release the reference to the repr object
 
     /* Print the first 10 bytes of the bytes object in hexadecimal format */
-    printf("  first %zd bytes: ", size < 9 ? size +1);
+    printf("  first %zd bytes: ", size < 9 ? size + 1:10);
     str = PyBytes_AsString(p);
     for (i = 0; i < (size < 10 ? size : 10); i++)
     {
