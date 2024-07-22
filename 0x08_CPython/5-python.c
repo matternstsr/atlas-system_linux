@@ -14,7 +14,10 @@ void print_python_int(PyObject *p)
 
     /* Check if p is NULL or not a PyLongObject */
     if (!p || !PyLong_Check(p))
+    {
         printf("Invalid Int Object\n");
+        return;
+    }
 
     /* Cast p to PyLongObject */
     num = (PyLongObject *)p;
@@ -29,8 +32,10 @@ void print_python_int(PyObject *p)
 
     /* Check for overflow condition */
     if (size > 3 || (size == 3 && num->ob_digit[2] > 0xf))
+    {
         printf("C unsigned long int overflow\n");
-
+        return;
+    }
     /* Calculate the integer value from ob_digit array */
     for (i = 0; i < size; i++)
     {
