@@ -76,10 +76,9 @@ void print_python_bytes(PyObject *p)
     /* Add a terminating 00 if the actual size is less than 10 */
     if (size < 10)
     {
+        printf(" 00");
+    else if
         printf("00");
     }
-    else if
-        printf(" 00");
-
     printf("\n");
 }
