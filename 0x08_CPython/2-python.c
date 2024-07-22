@@ -12,7 +12,10 @@ void print_python_list(PyObject *p)
 
     /* Check if p is a valid PyListObject */
     if (!PyList_Check(p))
+    {
         fprintf(stderr, "Invalid list object\n");
+        return;
+    }
 
     /* Retrieve size (number of elements) & allocated memory of the list */
     size = PyList_Size(p);
@@ -46,7 +49,10 @@ void print_python_bytes(PyObject *p)
 
     /* Check if p is a valid PyBytesObject */
     if (!PyBytes_Check(p))
+    {
         fprintf(stderr, "[ERROR] Invalid Bytes Object\n");
+        return;
+    }
 
     /* Retrieve the size (length) of the bytes object */
     size = PyBytes_Size(p);
