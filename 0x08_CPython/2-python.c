@@ -66,9 +66,7 @@ void print_python_bytes(PyObject *p)
     {
         printf("%02x", (unsigned char)str[i]);
         if (i + 1 < size)  /* Changed to iterate up to size */
-            {
             printf(" ");
-            }
         else if (i + 1 == 10)
             printf(" ");
     }
@@ -76,7 +74,7 @@ void print_python_bytes(PyObject *p)
     /* Add a terminating 00 if the actual size is less than 10 */
     if (size < 10)
         printf(" 00");
-    else if
+    else
         printf("00");
     printf("\n");
 }
