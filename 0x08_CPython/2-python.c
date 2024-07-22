@@ -1,9 +1,6 @@
 #include <Python.h>
 #include <stdio.h>
 
-PyListObject *list = NULL;
-const char *type = NULL;
-
 void print_python_bytes(PyObject *p);
 void print_python_list(PyObject *p);
 
@@ -16,6 +13,7 @@ void print_python_list(PyObject *p)
 {
     Py_ssize_t size, allocated, i;
     PyObject *elem;
+    PyListObject *list = NULL;
 
     /* Check if p is a valid PyListObject */
     if (!PyList_Check(p)) {
@@ -36,7 +34,7 @@ void print_python_list(PyObject *p)
     /* Iterate through each element of the list and print its type */
     for (i = 0; i < size; i++)
     {
-        item = list->ob_item[i];
+        elem = list->ob_item[i];
         printf("Element %zd: %s\n", i, Py_TYPE(elem)->tp_name);
         if (elem->ob_type == &PyBytes_Type)
 			print_python_bytes(elem);
