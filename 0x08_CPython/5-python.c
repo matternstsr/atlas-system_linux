@@ -8,15 +8,16 @@ void print_python_int(PyObject *p) {
         return;
     }
 
-    /* Extract the value of the Python integer */
-    unsigned long x = PyLong_AsUnsignedLong(p);
-    if (x == (unsigned long)-1 && PyErr_Occurred()) {
-        /* PyErr_Occurred() returns true if a prob PyLong_AsUnsignedLong */
-        PyErr_Clear(); /* Clear the error indicator */
-        printf("C unsigned long int overflow\n");
-    } else {
-        /* Print the value of x */
-        printf("%lu\n", x);
-    }
-}
+    /* Convert Python integer to C long long */
+    long long x = PyLong_AsLongLong(p);
 
+    /* Check for overflow or underflow */
+    if (x == -1 && PyErr_Occurred()) {
+        PyErr_Clear();
+        printf("C long long overflow\n");
+        return;
+    }
+
+    /* Print the value */
+    printf("%lld\n", x);
+}
