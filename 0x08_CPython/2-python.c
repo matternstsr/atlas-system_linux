@@ -50,7 +50,7 @@ void print_python_bytes(PyObject *p)
 
     /* Check if p is a valid PyBytesObject */
     if (!PyBytes_Check(p)) {
-        fprintf(stderr, "[ERROR] Invalid Bytes Object\n");
+        fprintf("[ERROR] Invalid Bytes Object\n");
         return;
     }
 
