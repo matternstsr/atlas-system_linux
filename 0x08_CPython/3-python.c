@@ -22,7 +22,7 @@ void print_python_list(PyObject *p)
     /* Check if p is a valid PyListObject */
     if (!p || !PyList_Check(p))
     {
-        printf( "  [ERROR] Invalid List Object\n");
+        printf("  [ERROR] Invalid List Object\n");
         return;
     }
 
