@@ -91,6 +91,9 @@ void print_python_bytes(PyObject *p)
 void print_python_float(PyObject *p)
 {
     char* value;
+    
+    PyFloatObject *floater;
+    floater = (PyFloatObject *)p;
 
     /* Check if p is a valid PyFloatObject */
     if (!PyFloat_Check(p)) {
