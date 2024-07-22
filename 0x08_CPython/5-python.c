@@ -17,10 +17,10 @@ void print_python_int(PyObject *p)
     if (x == (unsigned long)-1 && PyErr_Occurred())
     {
         PyErr_Clear();
-        printf("C long long overflow\n");
+        printf("C long overflow\n");
         return;
     }
 
     /* Print the value */
-    printf("%lld\n", x);
+    printf("%ld\n", x);
 }
