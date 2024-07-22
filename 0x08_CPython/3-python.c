@@ -53,7 +53,7 @@ void print_python_list(PyObject *p)
 void print_python_bytes(PyObject *p)
 {
     Py_ssize_t size, i;
-    const char *str;
+    const char PyBytesObject *str;
 
     printf("[.] bytes object info\n");
     /* Check if p is a valid PyBytesObject */
@@ -69,15 +69,15 @@ void print_python_bytes(PyObject *p)
     printf("  size: %zd\n", size);
 
     /* Print the string representation of the bytes object */
-    str = PyBytes_AsString(p);
-    printf("  trying string: %s\n", str);  /* Use PyBytes_AsString directly */
+    str = (PyBytesObject *)p;
+    printf("  trying string: %s\n", str->ob_sval);  /* Cant Use PyBytes_AsString */
     size =  size < 9 ? size + 1 : 10;
     /* Print the first 10 bytes of the bytes object in hexadecimal format */
     printf("  first %zd bytes: ", size); 
     /* Adjusted to print up to 10 bytes */
     for (i = 0; i < size; i++)
     {
-        printf("%02x", (unsigned char)str[i]);
+        printf("%02x", (unsigned char)str->ob_sval[i]);
         if (i + 1 < size)  /* Changed to iterate up to size */
             printf(" ");
     }
