@@ -6,7 +6,8 @@
  *    p: PyObject pointer representing the Python list object.
  */
 
-void print_python_list(PyObject *p) {
+void print_python_list(PyObject *p)
+{
     Py_ssize_t size, allocated, i;
     PyObject *elem;
 
@@ -26,7 +27,8 @@ void print_python_list(PyObject *p) {
     printf("[*] Allocated = %zd\n", allocated);
 
     /* Iterate through each element of the list and print its type */
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < size; i++)
+    {
         elem = PyList_GetItem(p, i);
         printf("Element %zd: %s\n", i, Py_TYPE(elem)->tp_name);
     }
@@ -36,7 +38,8 @@ void print_python_list(PyObject *p) {
  *  Arguments:
  *    p: PyObject pointer representing the Python bytes object.
  */
-void print_python_bytes(PyObject *p) {
+void print_python_bytes(PyObject *p)
+{
     Py_ssize_t size, i;
     const char *str;
 
@@ -62,7 +65,8 @@ void print_python_bytes(PyObject *p) {
     /* Print the first 10 bytes of the bytes object in hexadecimal format */
     printf("  first %zd bytes: ", size < 10 ? size : 10);
     str = PyBytes_AsString(p);
-    for (i = 0; i < (size < 10 ? size : 10); i++) {
+    for (i = 0; i < (size < 10 ? size : 10); i++)
+    {
         printf("%02x", (unsigned char)str[i]);
         if (i < (size < 10 ? size : 10) - 1)
             printf(" ");
