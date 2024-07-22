@@ -17,10 +17,10 @@ void print_python_list(PyObject *p)
     PyListObject *list = NULL;
     const char *type = NULL;
 
-    printf("[*] Python list info\n");
 
     /* Check if p is a valid PyListObject */
-    if (!PyList_Check(p)) {
+    if (!p || PyList_Check(p))
+    {
         fprintf(stderr, "[ERROR] Invalid List Object\n");
         return;
     }
@@ -31,6 +31,7 @@ void print_python_list(PyObject *p)
     list = (PyListObject *)p;
 
     /* Print Python list information */
+    printf("[*] Python list info\n");
     printf("[*] Size of the Python List = %zd\n", size);
     printf("[*] Allocated = %zd\n", allocated);
 
@@ -58,7 +59,8 @@ void print_python_bytes(PyObject *p)
 
     printf("[.] bytes object info\n");
     /* Check if p is a valid PyBytesObject */
-    if (!PyBytes_Check(p)) {
+    if (!p || !PyBytes_Check(p))
+    {
         printf("  [ERROR] Invalid Bytes Object\n");
         return;
     }
@@ -98,7 +100,8 @@ void print_python_float(PyObject *p)
     setbuf(stdout, NULL);
 
     /* Check if p is a valid PyFloatObject */
-    if (!PyFloat_Check(p)) {
+    if (!p || !PyFloat_Check(p))
+    {
         printf("[.] float object info\n");
         printf("  [ERROR] Invalid Float Object\n");
         return;
