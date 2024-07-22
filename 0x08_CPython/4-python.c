@@ -18,7 +18,7 @@ void print_python_string(PyObject *p)
 
     length = PyUnicode_GET_LENGTH(p);
 
-    if (str->state.ascii(p))
+    if (str->state.ascii)
     {
         ascii = PyUnicode_AsUTF8(p);
         wprintf(L"[.] string object info\n");
