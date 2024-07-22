@@ -31,10 +31,9 @@ void print_python_list(PyObject *p)
     {
         elem = PyList_GetItem(p, i);
         printf("Element %zd: %s\n", i, Py_TYPE(elem)->tp_name);
-        if (item->ob_type == &PyBytes_Type)
-			p(item);
     }
 }
+
 
 #include <Python.h>
 #include <stdio.h>
