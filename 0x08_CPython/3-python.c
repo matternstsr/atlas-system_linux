@@ -53,7 +53,7 @@ void print_python_list(PyObject *p)
 void print_python_bytes(PyObject *p)
 {
     Py_ssize_t size, i;
-    const char PyBytesObject *str;
+    PyBytesObject *str;
 
     printf("[.] bytes object info\n");
     /* Check if p is a valid PyBytesObject */
