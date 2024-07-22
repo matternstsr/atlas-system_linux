@@ -78,6 +78,8 @@ void print_python_bytes(PyObject *p)
     {
         printf("00");
     }
+    else if
+        printf(" 00");
 
     printf("\n");
 }
