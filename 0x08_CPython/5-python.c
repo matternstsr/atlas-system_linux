@@ -8,8 +8,8 @@ void print_python_int(PyObject *p)
     if (!p || !PyLong_Check(p))
         printf("Invalid Int Object\n");
 
-    /* Cast p to PyLongObject pointer */
-    PyLongObject *num = (PyLongObject *) p;
+    /* Cast p to PyVarObject pointer */
+    PyVarObject *num = (PyVarObject *) p;
 
     /* Initialize variables */
     int neg = 0;
