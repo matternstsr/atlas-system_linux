@@ -4,9 +4,7 @@
 void print_python_string(PyObject *p)
 {
     Py_ssize_t length;
-    Py_UNICODE *unicode_str;
     PyASCIIObject *str;
-    char *ascii;
     
     str = (PyASCIIObject *)p;
     
