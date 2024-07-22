@@ -63,7 +63,11 @@ void print_python_bytes(PyObject *p)
     printf("  first %zd bytes: ", size < 10 ? size +1 : 10); 
     /* Adjusted to print up to 10 bytes */
     for (i = 0; i < (size < 10 ? size : 10); i++)
+    {
         printf("%02x", (unsigned char)str[i]);
+        if (i + 1 < size)  /* Changed to iterate up to size */
+            printf(" ");
+    }
 
     /* Add a terminating 00 if the actual size is less than 10 */
     if (size < 10)
