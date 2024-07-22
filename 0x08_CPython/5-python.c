@@ -14,25 +14,24 @@ void print_python_int(PyObject *p)
     PyLongObject *num = (PyLongObject *) p;
 
     /* Initialize variables */
-    int neg = 0;
+    int neg = (num->ob_size < 0);
     unsigned long int total = 0;
-    unsigned long int base = 1;
+    const unsigned long int base = (1UL << PyLong_SHIFT);
 
-    /* Determine if the number is negative */
-    if (num->ob_digit[num->ob_size - 1] >> (PyLong_SHIFT - 1))
-        neg = 1;
-
-    /* Calculate the total value of the Python integer */
-    for (ssize_t i = 0; i < num->ob_size; i++)
-    {
-        total += num->ob_digit[i] * base;
-        base <<= PyLong_SHIFT;
+    /* Iterate through the digits of the number */
+    ssize_t i;
+    for (i = 0; i < ABS(num->ob_size); ++i) {
+        /* Check for overflow */
+        if (total > (ULONG_MAX - ((unsigned long int)num->ob_digit[i] * base)) / base) {
+            printf("C unsigned long int overflow\n");
+            return;
+        }
+        total = total * base + (unsigned long int)num->ob_digit[i];
     }
 
     /* Print the value with appropriate sign */
-    if (neg)
+    if (neg) {
         printf("-");
-
-    /* Print the calculated value */
+    }
     printf("%lu\n", total);
 }
