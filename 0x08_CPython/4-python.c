@@ -5,8 +5,11 @@ void print_python_string(PyObject *p)
 {
     Py_ssize_t length;
     Py_UNICODE *unicode_str;
+    PyASCIIObject *str;
     char *ascii;
-
+    
+    str = (PyASCIIObject *)p;
+    
     if (!PyUnicode_Check(p))
     {
         wprintf(L"[.] string object info\n");
@@ -15,7 +18,7 @@ void print_python_string(PyObject *p)
 
     length = PyUnicode_GET_LENGTH(p);
 
-    if (PyUnicode_IS_ASCII(p))
+    if (str->state.ascii(p))
     {
         ascii = PyUnicode_AsUTF8(p);
         wprintf(L"[.] string object info\n");
