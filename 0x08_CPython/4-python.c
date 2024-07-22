@@ -15,7 +15,7 @@ void print_python_string(PyObject *p)
 
     length = PyUnicode_GET_LENGTH(p);
 
-    if (PyUnicode_AS_UNICODE(p))
+    if (PyUnicode_IS_ASCII(p))
     {
         ascii = PyUnicode_AsUTF8(p);
         wprintf(L"[.] string object info\n");
@@ -27,7 +27,7 @@ void print_python_string(PyObject *p)
     {
         unicode_str = PyUnicode_AsUnicode(p);
         wprintf(L"[.] string object info\n");
-        wprintf(L"  type: compact ascii\n");
+        wprintf(L"  type: compact unicode object\n");
         wprintf(L"  length: %ld\n", length);
         wprintf(L"  value: L");
         for (Py_ssize_t i = 0; i < length; ++i)
