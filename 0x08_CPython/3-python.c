@@ -59,8 +59,7 @@ void print_python_bytes(PyObject *p)
 
     printf("[.] bytes object info\n");
     /* Check if p is a valid PyBytesObject */
-    if (!p || !PyBytes_Check(p))
-    {
+    if (!PyBytes_Check(p)) {
         printf("  [ERROR] Invalid Bytes Object\n");
         return;
     }
@@ -100,8 +99,7 @@ void print_python_float(PyObject *p)
     setbuf(stdout, NULL);
 
     /* Check if p is a valid PyFloatObject */
-    if (!p || !PyFloat_Check(p))
-    {
+    if (!PyFloat_Check(p)) {
         printf("[.] float object info\n");
         printf("  [ERROR] Invalid Float Object\n");
         return;
