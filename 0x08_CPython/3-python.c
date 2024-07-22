@@ -1,8 +1,9 @@
 #include <Python.h>
 #include <stdio.h>
 
-void print_python_bytes(PyObject *p);
 void print_python_list(PyObject *p);
+void print_python_bytes(PyObject *p);
+void print_python_float(PyObject *p);
 
 /** Print basic information about a Python list object.
  *  Arguments:
@@ -40,6 +41,8 @@ void print_python_list(PyObject *p)
         printf("Element %zd: %s\n", i, type);
         if (elem->ob_type == &PyBytes_Type)
 			print_python_bytes(elem);
+        else if (elem->ob_type == &PyFloat_Type)
+			print_python_float(elem);
     }
 }
 
@@ -79,4 +82,27 @@ void print_python_bytes(PyObject *p)
             printf(" ");
     }
     printf("\n");
+}
+
+/** Print basic information about a Python float object.
+ *  Arguments:
+ *    p: PyObject pointer representing the Python float object.
+ */
+void print_python_float(PyObject *p)
+{
+    double value;
+
+    /* Check if p is a valid PyFloatObject */
+    if (!PyFloat_Check(p)) {
+        printf("[.] float object info\n");
+        printf("  [ERROR] Invalid Float Object\n");
+        return;
+    }
+
+    /* Retrieve the float value */
+    value = PyFloat_AsDouble(p);
+
+    /* Print float object information */
+    printf("  [.] float object info\n");
+    printf("  value: %f\n", value);
 }
