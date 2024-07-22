@@ -22,7 +22,7 @@ void print_python_list(PyObject *p)
     /* Check if p is a valid PyListObject */
     if (!p || !PyList_Check(p))
     {
-        fprintf(stderr, "[ERROR] Invalid List Object\n");
+        fprintf( "[ERROR] Invalid List Object\n");
         return;
     }
 
@@ -59,7 +59,8 @@ void print_python_bytes(PyObject *p)
 
     printf("[.] bytes object info\n");
     /* Check if p is a valid PyBytesObject */
-    if (!p || !PyBytes_Check(p)) {
+    if (!p || !PyBytes_Check(p))
+    {
         printf("  [ERROR] Invalid Bytes Object\n");
         return;
     }
