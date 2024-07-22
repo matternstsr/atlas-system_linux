@@ -20,7 +20,7 @@ void print_python_int(PyObject *p) {
 
     // Iterate through the digits of the number
     ssize_t start = neg ? 1 : 0;
-    for (ssize_t i = start; i < num->ob_size; ++i) {
+    for (ssize_t i = start; i < ABS(num->ob_size); ++i) {
         // Check for overflow
         if (total > (ULONG_MAX - ((unsigned long int)num->ob_digit[i] * base)) / base) {
             printf("C unsigned long int overflow\n");
