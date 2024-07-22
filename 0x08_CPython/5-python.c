@@ -13,7 +13,7 @@ void print_python_int(PyObject *p)
 
     /* Initialize variables */
     int neg = 0;
-    unsigned long long total = 0;
+    unsigned long int total = 0;
 
     /* Determine if the number is negative */
     if (num->ob_digit[num->ob_size - 1] >> (PyLong_SHIFT - 1))
@@ -28,5 +28,5 @@ void print_python_int(PyObject *p)
         total = (total << PyLong_SHIFT) + num->ob_digit[i];
 
     /* Print the calculated value */
-    printf("%llu\n", total);
+    printf("%lu\n", total);
 }
