@@ -100,7 +100,7 @@ void print_python_float(PyObject *p)
     }
 
     /* Retrieve the float value */
-    value = PyFloat_AsDouble(p);
+    value = PyOS_double_to_string(floater->ob_fval, 'g', 16, 0, NULL);
 
     /* Print float object information */
     printf("[.] float object info\n");
