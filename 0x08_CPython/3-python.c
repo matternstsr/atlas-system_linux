@@ -20,7 +20,7 @@ void print_python_list(PyObject *p)
     printf("[*] Python list info\n");
 
     /* Check if p is a valid PyListObject */
-    if (!p || PyList_Check(p))
+    if (!p || !PyList_Check(p))
     {
         fprintf(stderr, "[ERROR] Invalid List Object\n");
         return;
