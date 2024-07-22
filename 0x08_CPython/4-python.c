@@ -32,7 +32,7 @@ void print_python_string(PyObject *p)
         wprintf(L"[.] string object info\n");
         wprintf(L"  type: compact unicode object\n");
         wprintf(L"  length: %ld\n", length);
-        wprintf(L"  value: ");
+        fprintf(stdout, "  value: %s\n", ascii);
         for (Py_ssize_t i = 0; i < length; ++i)
             wprintf(L"%c", unicode_str[i]);
         wprintf(L"\n");
