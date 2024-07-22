@@ -17,6 +17,8 @@ void print_python_list(PyObject *p)
     PyListObject *list = NULL;
     const char *type = NULL;
 
+    printf("[*] Python list info\n");
+
     /* Check if p is a valid PyListObject */
     if (!PyList_Check(p)) {
         fprintf(stderr, "[ERROR] Invalid List Object\n");
@@ -29,7 +31,6 @@ void print_python_list(PyObject *p)
     list = (PyListObject *)p;
 
     /* Print Python list information */
-    printf("[*] Python list info\n");
     printf("[*] Size of the Python List = %zd\n", size);
     printf("[*] Allocated = %zd\n", allocated);
 
