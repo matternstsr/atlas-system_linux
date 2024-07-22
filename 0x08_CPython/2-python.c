@@ -1,6 +1,9 @@
 #include <Python.h>
 #include <stdio.h>
 
+PyListObject *list = NULL;
+const char *type = NULL;
+
 void print_python_bytes(PyObject *p);
 void print_python_list(PyObject *p);
 
@@ -23,6 +26,7 @@ void print_python_list(PyObject *p)
     /* Retrieve size (number of elements) & allocated memory of the list */
     size = PyList_Size(p);
     allocated = ((PyListObject *)p)->allocated;
+    list = (PyListObject *)p;
 
     /* Print Python list information */
     printf("[*] Python list info\n");
@@ -32,7 +36,7 @@ void print_python_list(PyObject *p)
     /* Iterate through each element of the list and print its type */
     for (i = 0; i < size; i++)
     {
-        elem = PyList_GetItem(p, i);
+        item = list->ob_item[i];
         printf("Element %zd: %s\n", i, Py_TYPE(elem)->tp_name);
         if (elem->ob_type == &PyBytes_Type)
 			print_python_bytes(elem);
