@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <Python.h>
 
-void print_python_int(PyObject *p) {
+void print_python_int(PyObject *p)
+{
     /* Check if p is a Python integer */
-    if (!p || !PyLong_Check(p)) {
+    if (!p || !PyLong_Check(p))
+    {
         printf("Invalid Int Object\n");
         return;
     }
@@ -12,7 +14,8 @@ void print_python_int(PyObject *p) {
     long long x = PyLong_AsLongLong(p);
 
     /* Check for overflow or underflow */
-    if (x == -1 && PyErr_Occurred()) {
+    if (x == -1 && PyErr_Occurred())
+    {
         PyErr_Clear();
         printf("C long long overflow\n");
         return;
