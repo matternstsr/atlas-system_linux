@@ -104,5 +104,5 @@ void print_python_float(PyObject *p)
 
     /* Print float object information */
     printf("[.] float object info\n");
-    printf("  value: %f\n", value);
+    printf("  value: %s%s\n", value, strchr(value, '.') ? "" : ".0");
 }
