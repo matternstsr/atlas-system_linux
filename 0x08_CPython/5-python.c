@@ -3,6 +3,10 @@
 
 void print_python_int(PyObject *p)
 {
+
+    longnum = (PyLongObject *)p;
+    PyLongObject *longnum;
+
     /* Check if p is a Python integer */
     if (!p || !PyLong_Check(p))
         printf("Invalid Int Object\n");
