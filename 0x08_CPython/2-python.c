@@ -37,7 +37,7 @@ void print_python_list(PyObject *p)
     {
         elem = list->ob_item[i];
         type = item->ob_type->tp_name;
-        printf("Element %zd: %s\n", i, type(elem)->tp_name);
+        printf("Element %zd: %s\n", i, type);
         if (elem->ob_type == &PyBytes_Type)
 			print_python_bytes(elem);
     }
