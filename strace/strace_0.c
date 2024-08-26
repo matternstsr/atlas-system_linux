@@ -8,12 +8,16 @@
 #include <errno.h>
 #include <string.h>
 
+/**
+ * print_syscall - Prints the syscall number
+ * @syscall_num: The number of the syscall
+ */
 void print_syscall(long syscall_num)
 {
     printf("%ld\n", syscall_num);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *const envp[])
 {
     pid_t child;
     int status;
@@ -23,12 +27,14 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
         return 1;
     }
+
     // Create process
     if ((child = fork()) == -1)
     {
         perror("fork");
         return 1;
     }
+
     if (child == 0)
     { // If child process
         // Make sure its searchable
@@ -38,17 +44,19 @@ int main(int argc, char *argv[])
             return 1;
         }
         // Replace old with the new processes
-        execvp(argv[1], &argv[1]);
-        perror("execvp");
+        execve(argv[1], &argv[1], envp);
+        perror("execve");
         return 1;
     }
     else // If its a parent process
     {
-        // Stop and wait for the slow child
         while (1)
         {
+        // Stop and wait for the slow child
             waitpid(child, &status, 0);
-            if (WIFEXITED(status)) break;
+
+            if (WIFEXITED(status))
+                break;
             if (WIFSIGNALED(status))
             {
                 fprintf(stderr, "Child process terminated by signal\n");
