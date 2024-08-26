@@ -8,71 +8,70 @@
 #include <errno.h>
 #include <string.h>
 
-void print_syscall(long syscall_num)
-{
+void print_syscall(long syscall_num) {
     printf("%ld\n", syscall_num);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     pid_t child;
     int status;
 
-    if (argc < 2)
-    {
+    if (argc < 2) {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
         return 1;
     }
-    // Create process
-    if ((child = fork()) == -1)
-    {
+
+    // Create a new process
+    if ((child = fork()) == -1) {
         perror("fork");
         return 1;
     }
-    if (child == 0)
-    { // If child process
-        // Make sure its searchable
-        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
-        {
+
+    if (child == 0) { // Child process
+        // Make the child process traceable
+        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
             perror("ptrace");
             return 1;
         }
-        // Replace old with the new processes
+        // Replace the child process image with a new process
         execvp(argv[1], &argv[1]);
         perror("execvp");
         return 1;
-    }
-    else // If its a parent process
-    {
-        // Stop and wait for the slow child
-        while (1)
-        {
+    } else { // Parent process
+        // Wait for the child process to stop
+        while (1) {
             waitpid(child, &status, 0);
             if (WIFEXITED(status)) break;
-            if (WIFSIGNALED(status))
-            {
+            if (WIFSIGNALED(status)) {
                 fprintf(stderr, "Child process terminated by signal\n");
                 return 1;
             }
-            if (WIFSTOPPED(status))
-            {
-                // Grab the call number
+            if (WIFSTOPPED(status)) {
+                // Get the syscall number
                 struct user_regs_struct regs;
-                if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
-                {
+                if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
                     perror("ptrace");
                     return 1;
                 }
-                // Print the call number
+
+                // Print the syscall number
+                #if defined(__x86_64__)
                 print_syscall(regs.orig_rax);
-                // Continue child process
-                if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
-                {
+                #elif defined(__i386__)
+                print_syscall(regs.orig_eax);
+                #else
+                fprintf(stderr, "Unsupported architecture\n");
+                return 1;
+                #endif
+
+                // Continue the child process
+                if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
                     perror("ptrace");
                     return 1;
                 }
             }
         }
     }
+
     return 0;
 }
