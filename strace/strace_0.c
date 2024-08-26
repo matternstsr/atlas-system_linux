@@ -36,44 +36,47 @@ int main(int argc, char *argv[], char *const envp[])
     }
 
     if (child == 0)
-    { // If child process
-        // Make sure its searchable
+    {
+        // If child process
         if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
         {
             perror("ptrace");
             return 1;
         }
-        // Replace old with the new processes
+        // Replace old process with new
         execve(argv[1], &argv[1], envp);
         perror("execve");
         return 1;
     }
-    else // If its a parent process
+    else // If parent process
     {
         while (1)
         {
-        // Stop and wait for the slow child
+            // Wait for the child to stop
             waitpid(child, &status, 0);
 
             if (WIFEXITED(status))
                 break;
+
             if (WIFSIGNALED(status))
             {
                 fprintf(stderr, "Child process terminated by signal\n");
                 return 1;
             }
+
             if (WIFSTOPPED(status))
             {
-                // Grab the call number
                 struct user_regs_struct regs;
                 if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
                 {
                     perror("ptrace");
                     return 1;
                 }
-                // Print the call number
+
+                // Print the syscall number
                 print_syscall(regs.orig_rax);
-                // Continue child process
+
+                // Continue the child process to the next syscall
                 if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
                 {
                     perror("ptrace");
@@ -82,5 +85,6 @@ int main(int argc, char *argv[], char *const envp[])
             }
         }
     }
+
     return 0;
 }
