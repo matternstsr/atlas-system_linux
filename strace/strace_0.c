@@ -22,7 +22,7 @@
 int main(int argc, char **argv, char **envp)
 {
     pid_t child;
-    int status, check = 0;
+    int status, print_check = 0;
     user_regs regs;
 
     if (argc < 2) {
@@ -51,11 +51,11 @@ int main(int argc, char **argv, char **envp)
                 break;
 
             // Use get_regs to retrieve the system call numbers
-            if (get_regs(child, &regs) == 0 && should_print(check)) {
+            if (get_regs(child, &regs) == 0 && should_print(print_check)) {
                 fprintf(stderr, "%lu\n", (unsigned long)regs.orig_rax);
                 fflush(stderr); // Flush stderr to ensure output is written
             }
-            check++;
+            print_check++;
         }
     }
     return 0;
