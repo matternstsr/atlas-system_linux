@@ -11,10 +11,11 @@
 #include <string.h>
 
 // Define syscall_struct as a typedef for user_regs_struct
+
 typedef struct user_regs_struct syscall_struct;
 
 // Function prototypes
-static inline int get_regs(pid_t child, syscall_struct *regs);
+static inline int get_regs(pid_t pid, syscall_struct *regs);
 static inline int should_print(int alt);
 
 // x86-64 syscall numbers for Linux

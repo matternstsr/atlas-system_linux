@@ -19,44 +19,27 @@ int main(int argc, char **argv, char **envp)
     int status, alt = 0;
     syscall_struct regs;
 
-    // if (argc < 2)
-    // {
-    //     fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-    //     return 1;
-    // }
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+        return 1;
+    }
 
-    // Create the child process
-    if ((child = fork()) == -1)
-    {
+    if ((child = fork()) == -1) {
         perror("fork");
         return 1;
     }
-    else if (child == 0)
-    {
-        // In child process
+    if (child == 0) {
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-        if (execve(argv[1], &argv[1], envp) == -1)
-        {
+        if (execve(argv[1], &argv[1], envp) == -1) {
             perror("execve");
             return 1;
         }
-    }
-    else
-    {
-        // In parent process
-        while (1)
-        {
-            // Wait for child to stop
+    } else {
+        while (1) {
             wait(&status);
             if (WIFEXITED(status))
                 break;
-            // if (WIFSIGNALED(status))
-            // {
-            //     fprintf(stderr, "Child process terminated by signal\n");
-            //     return 1;
-            // }
-            if (get_regs(child, &regs) == 0 && should_print(alt))
-            {
+            if (get_regs(child, &regs) == 0 && should_print(alt)) {
                 printf("%lu\n", (unsigned long)regs.orig_rax);
                 fflush(stdout);
             }
@@ -67,9 +50,9 @@ int main(int argc, char **argv, char **envp)
     return 0;
 }
 
-static inline int get_regs(pid_t child, syscall_struct *regs)
+static inline int get_regs(pid_t pid, syscall_struct *regs)
 {
-    return ptrace(PTRACE_GETREGS, child, NULL, regs);
+    return ptrace(PTRACE_GETREGS, pid, NULL, regs);
 }
 
 static inline int should_print(int alt)
