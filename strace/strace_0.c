@@ -36,6 +36,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		while (1)
         {
+            ptrace(PTRACE_SYSCALL, child, NULL, NULL);
             wait(&status);
             if (WIFEXITED(status))
                 break;
@@ -43,7 +44,6 @@ int main(int argc, char **argv, char **envp)
 			if (check == 0 || check % 2 != 0)
 				fprintf(stderr, "%lu\n", (size_t)regs.orig_rax);
                 fflush(stdout);
-            ptrace(PTRACE_SYSCALL, child, NULL, NULL);
             check++;
         }
         
