@@ -15,8 +15,8 @@
 typedef struct user_regs_struct user_regs;
 
 // Function prototypes
-static inline int get_regs(pid_t pid, struct user_regs_struct *regs);
-static inline int should_print(int alt);
+// static inline int get_regs(pid_t pid, struct user_regs_struct *regs);
+// static inline int should_print(int alt);
 
 // x86-64 syscall numbers for Linux
 #define SYSCALL_READ       0

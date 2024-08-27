@@ -61,3 +61,25 @@ int main(int argc, const char *argv[], char *const envp[])
     }
     return 0;
 }
+// /**
+//  * get_regs - Retrieve the registers of the child process using ptrace
+//  * @child: The PID of the child process to retrieve registers from.
+//  * @regs: A pointer to a user_regs_struct to store the register values.
+//  * 
+//  * Return: 0 on success, or -1 on failure.
+//  */
+// static inline int get_regs(pid_t child, user_regs *regs)
+// {
+//     return ptrace(PTRACE_GETREGS, child, NULL, regs);
+// }
+
+// /**
+//  * should_print - Determine if the system call number should be printed
+//  * @check: The current check value to decide printing logic.
+//  * 
+//  * Return: 1 if the system call number should be printed, 0 otherwise.
+//  */
+// static inline int should_print(int check)
+// {
+//     return !check || (check & 1);
+// }
