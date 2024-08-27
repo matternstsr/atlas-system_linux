@@ -5,6 +5,11 @@
 #include <sys/user.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <string.h>
+
+#define SYSCALL_EXECVE 59
+#define SYSCALL_EXIT 60
+#define SYSCALL_EXIT_GROUP 231
 
 /**
  * main - The entry point of the program.
@@ -50,8 +55,11 @@ int main(int argc, char **argv, char **envp)
             }
 
             if (get_regs(child, &regs) == 0) {
-                fprintf(stderr, "%lu\n", (unsigned long)regs.orig_rax);
-                fflush(stderr);
+                unsigned long syscall_num = (unsigned long)regs.orig_rax;
+                if (syscall_num == SYSCALL_EXECVE || syscall_num == SYSCALL_EXIT || syscall_num == SYSCALL_EXIT_GROUP) {
+                    fprintf(stderr, "%lu\n", syscall_num);
+                    fflush(stderr);
+                }
             }
         }
     }
@@ -65,7 +73,7 @@ int main(int argc, char **argv, char **envp)
  * 
  * Return: 0 on success, or -1 on failure.
  */
-static inline int get_regs(pid_t child, struct user_regs_struct *regs) // Correct type name
+static inline int get_regs(pid_t child, struct user_regs_struct *regs)
 {
     return ptrace(PTRACE_GETREGS, child, NULL, regs);
 }
