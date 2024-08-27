@@ -19,11 +19,11 @@ int main(int argc, char **argv, char **envp)
     int status, alt = 0;
     syscall_struct regs;
 
-    if (argc < 2)
-    {
-        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-        return 1;
-    }
+    // if (argc < 2)
+    // {
+    //     fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+    //     return 1;
+    // }
 
     // Create the child process
     if ((child = fork()) == -1)
@@ -50,11 +50,11 @@ int main(int argc, char **argv, char **envp)
             wait(&status);
             if (WIFEXITED(status))
                 break;
-            if (WIFSIGNALED(status))
-            {
-                fprintf(stderr, "Child process terminated by signal\n");
-                return 1;
-            }
+            // if (WIFSIGNALED(status))
+            // {
+            //     fprintf(stderr, "Child process terminated by signal\n");
+            //     return 1;
+            // }
             if (get_regs(child, &regs) == 0 && should_print(alt))
             {
                 printf("%lu\n", (unsigned long)regs.orig_rax);
