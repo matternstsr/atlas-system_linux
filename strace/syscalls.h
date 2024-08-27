@@ -108,6 +108,10 @@ static inline int should_print(int alt);
 /* Normally, MAX_PARAMS is always 6 */
 # define MAX_PARAMS	6
 
+#define SYSNAME syscalls_64_g[regs.orig_rax].name
+#define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params
+#define SYSTYPE syscalls_64_g[regs.orig_rax].params[i]
+
 /**
  * enum type_e - Enumerates the different types present in the different
  * syscall parameters and return types
