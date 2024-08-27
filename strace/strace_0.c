@@ -16,36 +16,37 @@
 int main(int argc, char **argv, char **envp)
 {
     pid_t child;
-	int status, alt = 0;
+	int status, check = 0;
 	user_regs regs;
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-        return 1;
-    }
+		return (-1);
+	}
 
 	child = fork();
 	if (child == -1)
 		perror(argv[1]), exit(1);
 	else if (child == 0)
 	{
-		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-		if (execve(argv[1], &argv[1], envp) == -1)
-			perror(argv[1]), exit(1);
+		ptrace(PTRACE_TRACEME, child, NULL, NULL);
+		execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
 	}
 	else
 	{
-		while (1) {
+		while (1)
+        {
             wait(&status);
             if (WIFEXITED(status))
                 break;
-            if (get_regs(child, &regs) == 0 && should_print(alt)) {
-                printf("%lu\n", (unsigned long)regs.orig_rax);
+            ptrace(PTRACE_GETREGS, child, NULL, &regs);
+			if (check == 0 || check % 2 != 0)
+				fprintf(stderr, "%lu\n", (size_t)regs.orig_rax);
                 fflush(stdout);
-            }
             ptrace(PTRACE_SYSCALL, child, NULL, NULL);
-            alt++;
+            check++;
         }
+        
     }
     return 0;
 }
@@ -56,7 +57,7 @@ static inline int get_regs(pid_t child, user_regs *regs)
     return ptrace(PTRACE_GETREGS, child, NULL, regs);
 }
 
-static inline int should_print(int alt)
+static inline int should_print(int check)
 {
-    return !alt || (alt & 1);
+    return !check || (check & 1);
 }
