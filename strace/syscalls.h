@@ -10,12 +10,12 @@
 #include <errno.h>
 #include <string.h>
 
-// Define syscall_struct as a typedef for user_regs_struct
+// Define user_regs as a typedef for user_regs_struct
 
-typedef struct user_regs_struct syscall_struct;
+typedef struct user_regs_struct user_regs;
 
 // Function prototypes
-static inline int get_regs(pid_t pid, syscall_struct *regs);
+static inline int get_regs(pid_t pid, user_regs *regs);
 static inline int should_print(int alt);
 
 // x86-64 syscall numbers for Linux
