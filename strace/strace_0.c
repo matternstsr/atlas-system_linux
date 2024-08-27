@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **envp)
     if (child == 0) {
         // In the child process
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-        execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
+        execve(argv[1], argv + 1, envp);
         perror("execve"); // Handle execve error
         return 1; // Return 1 to indicate an error in execve
     } else {
@@ -49,9 +49,9 @@ int main(int argc, char **argv, char **envp)
             wait(&status);
             if (WIFEXITED(status))
                 break;
-            ptrace(PTRACE_GETREGS, child, NULL, &regs);
 
-            if (check == 0 || check % 2 != 0) {
+            // Use get_regs to retrieve the system call numbers
+            if (get_regs(child, &regs) == 0 && should_print(check)) {
                 fprintf(stderr, "%lu\n", (unsigned long)regs.orig_rax);
                 fflush(stderr); // Flush stderr to ensure output is written
             }
