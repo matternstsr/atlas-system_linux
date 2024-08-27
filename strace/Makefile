@@ -1,20 +1,31 @@
 # Define the compiler and flags
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic
+CFLAGS = -Wall -Werror -Wextra -pedantic -g
 
 # Define the source files and targets
 SRC = $(wildcard *.c)
-TARGETS = strace_0 strace_1 strace_2 strace_3
+OBJ_0 = $(patsubst %.c, %.o, $(wildcard 0-*.c))
+OBJ_1 = $(patsubst %.c, %.o, $(wildcard 1-*.c))
+OBJ_2 = $(patsubst %.c, %.o, $(wildcard 2-*.c))
+OBJ_3 = $(patsubst %.c, %.o, $(wildcard 3-*.c))
 
-# Pattern for object files
-OBJ = $(SRC:.c=.o)
+TARGETS = strace_0 strace_1 strace_2 strace_3
 
 # Default rule to build all targets
 all: $(TARGETS)
 
-# Rule to build each target
-$(TARGETS): %: %.o
-	$(CC) $(CFLAGS) -o $@ $^
+# Rules to build each target
+strace_0: $(OBJ_0)
+	$(CC) $(CFLAGS) $(OBJ_0) -o strace_0
+
+strace_1: $(OBJ_1)
+	$(CC) $(CFLAGS) $(OBJ_1) -o strace_1
+
+strace_2: $(OBJ_2)
+	$(CC) $(CFLAGS) $(OBJ_2) -o strace_2
+
+strace_3: $(OBJ_3)
+	$(CC) $(CFLAGS) $(OBJ_3) -o strace_3
 
 # Rule to build object files
 %.o: %.c
