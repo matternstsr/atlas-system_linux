@@ -1,53 +1,43 @@
 #include "syscalls.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/ptrace.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdint.h>
 
 /**
- * main - Entry point of the program
- * @argc: Number of command-line arguments
- * @argv: Array of command-line arguments
- * @envp: Array of environment variables
- * 
- * Return: Returns -1 on error, otherwise 0
- */
-int main(int argc, char *argv[], char *envp[])
+ * main - entrance to program
+ * @argc: Number of arguments
+ * @argv: array of arguments
+ * @envp: Environ variable
+ * Return: returns -1 on fail, else 0
+*/
+
+int main(int argc, const char *argv[], char *const envp[])
 {
-    pid_t pid;
-    int status, counter = 0;
-    struct user_regs_struct regs;
+	pid_t child;
+	int status, print_check = 0;
+	struct user_regs_struct regs;
 
-    if (argc < 2)
-    {
-        fprintf(stderr, "Error: Insufficient arguments\n");
-        return -1;
-    }
-
-    pid = fork();
-    if (pid == 0)
-    {
-        ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-        execve(argv[1], argv + 1, envp);
-        perror("execve");
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        while (1)
-        {
-            ptrace(PTRACE_SYSCALL, pid, NULL, NULL);
-            wait(&status);
-            if (WIFEXITED(status))
-                break;
-            ptrace(PTRACE_GETREGS, pid, NULL, &regs);
-            if (counter % 2 == 0)
-                fprintf(stderr, "%lu\n", (unsigned long)regs.orig_rax);
-            counter++;
-        }
-    }
-    return 0;
+	if (argc < 2)
+	{
+		fprintf(stderr, "Unsupported number of Arguments\n");
+		return (-1);
+	}
+	child = fork();
+	if (child == 0)
+	{
+		ptrace(PTRACE_TRACEME, child, NULL, NULL);
+		execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
+	}
+	else
+	{
+		while (1)
+		{
+			ptrace(PT_SYSCALL, child, NULL, NULL);
+			wait(&status);
+			if (WIFEXITED(status))
+				break;
+			ptrace(PTRACE_GETREGS, child, NULL, &regs);
+			if (print_check == 0 || print_check % 2 != 0)
+				fprintf(stderr, "%lu\n", (size_t)regs.orig_rax);
+			print_check++;
+		}
+	}
+	return (0);
 }
