@@ -5,24 +5,24 @@ CFLAGS = -Wall -Werror -Wextra -pedantic
 # Define the executables
 TARGETS = strace_0 strace_1 strace_2 strace_3
 
-# Default rule
+# Default rule to build all targets
 all: $(TARGETS)
 
 # Rule to build strace_0
 strace_0: strace_0.o
-	$(CC) $(CFLAGS) -o strace_0 strace_0.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Rule to build strace_1
 strace_1: strace_1.o
-	$(CC) $(CFLAGS) -o strace_1 strace_1.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Rule to build strace_2
 strace_2: strace_2.o
-	$(CC) $(CFLAGS) -o strace_2 strace_2.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Rule to build strace_3
 strace_3: strace_3.o
-	$(CC) $(CFLAGS) -o strace_3 strace_3.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Generic rule for building object files
 %.o: %.c
