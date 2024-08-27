@@ -2,27 +2,30 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -g
 
-# Define the source files and targets
-SRC = $(wildcard *.c)
-TARGETS = strace_0 strace_1 strace_2 strace_3
-
-# Pattern for object files
-OBJ = $(SRC:.c=.o)
+# Add source files for each version if they are different
+SRC_0 = strace_0.c
+SRC_1 = strace_1.c
+SRC_2 = strace_2.c
+SRC_3 = strace_3.c
 
 # Default rule to build all targets
-all: $(TARGETS)
+all: strace_0 strace_1 strace_2 strace_3
 
-# Rule to build each target
-$(TARGETS): %: %.o
+strace_0: $(SRC_0)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Rule to build object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+strace_1: $(SRC_1)
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Rule to clean the build
+strace_2: $(SRC_2)
+	$(CC) $(CFLAGS) -o $@ $^
+
+strace_3: $(SRC_3)
+	$(CC) $(CFLAGS) -o $@ $^
+
 clean:
-	rm -f $(TARGETS) *.o
+	rm -f strace_0 strace_1 strace_2 strace_3
+
 
 # Rule to check for memory leaks using Valgrind
 valgrind: $(TARGETS)
