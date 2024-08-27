@@ -1,27 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/ptrace.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/user.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
+#include "syscalls.h"
 
 /**
- * print_syscall - Prints the syscall number
- * @syscall_num: The number of the syscall
+ * main - The entry point of the program
+ * @argc: The number of command-line arguments passed to the program.
+ * @argv: An array of strings representing the command-line arguments.
+ * @envp: An array of strings representing the environment variables.
+ * 
+ * This function creates a child process, attaches a tracer to it, and executes
+ * the specified program within the child process. The parent process monitors
+ * the child process, prints the system call numbers made by the child, and 
+ * handles termination of the child process.
+ * 
+ * Return: Returns 0 on successful execution, or exits with status 1 if an error occurs.
  */
-void print_syscall(long syscall_num)
-{
-    printf("%ld\n", syscall_num);
-}
-
-int main(int argc, char *argv[], char *const envp[])
+int main(int argc, char **argv, char **envp)
 {
     pid_t child;
-    int status;
-    int syscall_in_progress = 0;
+    int status, alt = 0;
+    syscall_struct regs;
 
     if (argc < 2)
     {
@@ -35,18 +31,15 @@ int main(int argc, char *argv[], char *const envp[])
         perror("fork");
         return 1;
     }
-
-    if (child == 0)
+    else if (child == 0)
     {
         // In child process
-        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
+        ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+        if (execve(argv[1], &argv[1], envp) == -1)
         {
-            perror("ptrace");
+            perror("execve");
             return 1;
         }
-        execve(argv[1], &argv[1], envp);
-        perror("execve");
-        return 1;
     }
     else
     {
@@ -54,55 +47,32 @@ int main(int argc, char *argv[], char *const envp[])
         while (1)
         {
             // Wait for child to stop
-            if (waitpid(child, &status, 0) == -1)
-            {
-                perror("waitpid");
-                return 1;
-            }
-
+            wait(&status);
             if (WIFEXITED(status))
                 break;
-
             if (WIFSIGNALED(status))
             {
                 fprintf(stderr, "Child process terminated by signal\n");
                 return 1;
             }
-
-            if (WIFSTOPPED(status))
+            if (get_regs(child, &regs) == 0 && should_print(alt))
             {
-                // Get the syscall number
-                struct user_regs_struct regs;
-                if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
-                {
-                    perror("ptrace");
-                    return 1;
-                }
-
-                // Print the syscall number if a syscall is in progress
-                if (syscall_in_progress)
-                {
-                    print_syscall(regs.orig_rax);
-                }
-
-                // Toggle the syscall_in_progress flag
-                // The ptrace(PTRACE_SYSCALL, child, NULL, NULL) call sets the child process to stop at both syscall entry and exit points. To handle this properly, you need a way to distinguish between these two events. The syscall_in_progress flag helps manage this by toggling its state each time you stop at a syscall.
-                // Without this flag, the same syscall could be reported multiple times or out of sequence. By toggling the flag, you ensure that each syscall is reported once per entry (and optionally per exit if needed).
-                // Initialization: When starting, the flag (syscall_in_progress) is initialized to 0 (false), meaning no syscall is currently being tracked.
-                // Handling Syscall Events:
-                // On Syscall Entry: When ptrace stops the child process at a syscall entry, the flag is toggled to 1 (true), indicating that the syscall number should be printed on subsequent stops.
-                // On Syscall Exit: The flag is toggled back to 0 (false) when the process stops at the syscall exit. This means the syscall number won't be printed again during this stop.
-                
-                syscall_in_progress = !syscall_in_progress;
-
-                // Continue to the next syscall
-                if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
-                {
-                    perror("ptrace");
-                    return 1;
-                }
+                printf("%lu\n", (unsigned long)regs.orig_rax);
+                fflush(stdout);
             }
+            ptrace(PTRACE_SYSCALL, child, NULL, NULL);
+            alt++;
         }
     }
     return 0;
+}
+
+static inline int get_regs(pid_t child, syscall_struct *regs)
+{
+    return ptrace(PTRACE_GETREGS, child, NULL, regs);
+}
+
+static inline int should_print(int alt)
+{
+    return !alt || (alt & 1);
 }
