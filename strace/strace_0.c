@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <sys/user.h>
+#include <sys/user.h>  // Include this to use user_regs_struct
 
 /**
  * main - The entry point of the program
@@ -24,7 +24,7 @@ int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
     int status, print_check = 0;
-    user_regs regs;
+    struct user_regs_struct regs;  // Use struct user_regs_struct here
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
@@ -65,10 +65,12 @@ int main(int argc, const char *argv[], char *const envp[])
     }
     return 0;
 }
-static inline int get_regs(pid_t child, user_regs *regs)
+
+static inline int get_regs(pid_t child, struct user_regs_struct *regs)
 {
     return ptrace(PTRACE_GETREGS, child, NULL, regs) == -1 ? -1 : 0;
 }
+
 static inline int should_print(int check)
 {
     return check == 0 || (check % 2 != 0);

@@ -8,15 +8,18 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <sys/user.h>
-#include <sys/reg.h>
+#include <sys/user.h>  // Include this to use user_regs_struct
 
 #define SYSNAME syscalls_64_g[regs.orig_rax].name
 #define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params
 #define SYSTYPE syscalls_64_g[regs.orig_rax].params[i]
 
-/* Normally, MAX_PARAMS is always 6 */
-# define MAX_PARAMS	6
+#define MAX_PARAMS 6
+
+/* Function prototypes */
+static inline int get_regs(pid_t child, struct user_regs_struct *regs);
+static inline int should_print(int check);
+
 
 /**
  * enum type_e - Enumerates the different types present in the different
@@ -973,4 +976,4 @@ static syscall_t const syscalls_32_g[] = {
 	{"seccomp", 354, -1, 0, {-1, -1, -1, -1, -1, -1}}
 };
 
-#endif /* !_SYSCALLS_H_ */
+#endif /* _SYSCALLS_H_ */
