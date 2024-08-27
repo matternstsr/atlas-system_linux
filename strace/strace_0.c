@@ -6,7 +6,6 @@
 #include <sys/user.h>
 #include <unistd.h>
 #include <errno.h>
-#include <string.h>
 
 /**
  * print_syscall - Prints the syscall number
@@ -17,7 +16,7 @@ void print_syscall(long syscall_num)
     printf("%ld\n", syscall_num);
 }
 
-int main(int argc, char *argv[], char *const envp[])
+int main(int argc, char *argv[])
 {
     pid_t child;
     int status;
@@ -28,7 +27,6 @@ int main(int argc, char *argv[], char *const envp[])
         return 1;
     }
 
-    // Create process
     if ((child = fork()) == -1)
     {
         perror("fork");
@@ -37,33 +35,27 @@ int main(int argc, char *argv[], char *const envp[])
 
     if (child == 0)
     {
-        // If child process
         if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
         {
             perror("ptrace");
             return 1;
         }
-        // Replace old process with new
-        execve(argv[1], &argv[1], envp);
+        execve(argv[1], &argv[1], NULL);
         perror("execve");
         return 1;
     }
-    else // If parent process
+    else
     {
         while (1)
         {
-            // Wait for the child to stop
             waitpid(child, &status, 0);
-
             if (WIFEXITED(status))
                 break;
-
             if (WIFSIGNALED(status))
             {
                 fprintf(stderr, "Child process terminated by signal\n");
                 return 1;
             }
-
             if (WIFSTOPPED(status))
             {
                 struct user_regs_struct regs;
@@ -72,11 +64,7 @@ int main(int argc, char *argv[], char *const envp[])
                     perror("ptrace");
                     return 1;
                 }
-
-                // Print the syscall number
                 print_syscall(regs.orig_rax);
-
-                // Continue the child process to the next syscall
                 if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
                 {
                     perror("ptrace");
@@ -85,6 +73,5 @@ int main(int argc, char *argv[], char *const envp[])
             }
         }
     }
-
     return 0;
 }
