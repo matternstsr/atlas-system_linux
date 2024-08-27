@@ -1,116 +1,22 @@
-#ifndef SYSCALLS_H
+#ifndef _SYSCALLS_H_
+#define _SYSCALLS_H_
 
-#include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/ptrace.h>
-#include <sys/user.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <errno.h>
-#include <string.h>
-
-// Define user_regs as a typedef for user_regs_struct
-
-typedef struct user_regs_struct user_regs;
-
-// Function prototypes
-// static inline int get_regs(pid_t pid, struct user_regs_struct *regs);
-// static inline int should_print(int alt);
-
-// x86-64 syscall numbers for Linux
-#define SYSCALL_READ       0
-#define SYSCALL_WRITE      1
-#define SYSCALL_OPEN       2
-#define SYSCALL_CLOSE      3
-#define SYSCALL_STAT       4
-#define SYSCALL_FSTAT      5
-#define SYSCALL_LSTAT      6
-#define SYSCALL_POLL       7
-#define SYSCALL_LSEEK      8
-#define SYSCALL_MMAP       9
-#define SYSCALL_MPROTECT  10
-#define SYSCALL_MUNMAP    11
-#define SYSCALL_BRK       12
-#define SYSCALL_RT_SIGACTION 13
-#define SYSCALL_RT_SIGPROCMASK 14
-#define SYSCALL_RT_SIGRETURN 15
-#define SYSCALL_IOCTL     16
-#define SYSCALL_PREAD64   17
-#define SYSCALL_PWRITE64  18
-#define SYSCALL_READV     19
-#define SYSCALL_WRITEV    20
-#define SYSCALL_ACCESS    21
-#define SYSCALL_PIPE      22
-#define SYSCALL_SELECT    23
-#define SYSCALL_SCHED_YIELD 24
-#define SYSCALL_MREMAP    25
-#define SYSCALL_MSYNC     26
-#define SYSCALL_MINCORE   27
-#define SYSCALL_MADVISE   28
-#define SYSCALL_SHMGET    29
-#define SYSCALL_SHMAT     30
-#define SYSCALL_SHMCTL    31
-#define SYSCALL_SEMGET    32
-#define SYSCALL_SEMOP     33
-#define SYSCALL_SEMCTL    34
-#define SYSCALL_MSGGET    35
-#define SYSCALL_MSGSND    36
-#define SYSCALL_MSGRCV    37
-#define SYSCALL_MSGCTL    38
-#define SYSCALL_FCNTL     39
-#define SYSCALL_FLOCK     40
-#define SYSCALL_FSYNC     41
-#define SYSCALL_FDATASYNC 42
-#define SYSCALL_TRUNCATE  43
-#define SYSCALL_FTRUNCATE 44
-#define SYSCALL_GETDENTS  45
-#define SYSCALL_GETCWD    46
-#define SYSCALL_CHDIR     47
-#define SYSCALL_FCHDIR    48
-#define SYSCALL_RENAME    49
-#define SYSCALL_MKDIR     50
-#define SYSCALL_RMDIR     51
-#define SYSCALL_CREAT     52
-#define SYSCALL_LINK      53
-#define SYSCALL_UNLINK    54
-#define SYSCALL_SYMLINK   55
-#define SYSCALL_READLINK  56
-#define SYSCALL_CHMOD     57
-#define SYSCALL_FCHMOD    58
-#define SYSCALL_CHOWN     59
-#define SYSCALL_FCHOWN    60
-#define SYSCALL_LCHOWN    61
-#define SYSCALL_STATFS    62
-#define SYSCALL_FSTATFS   63
-#define SYSCALL_AF_INET   64
-#define SYSCALL_GETTID    65
-#define SYSCALL_TGKILL    66
-#define SYSCALL_TIME      67
-#define SYSCALL_FUTEX     68
-#define SYSCALL_SENDFILE  69
-#define SYSCALL_SETSID    70
-#define SYSCALL_CLONE     71
-#define SYSCALL_SETNS     72
-#define SYSCALL_EXIT_GROUP 73
-#define SYSCALL_EPOLL_CREATE 74
-#define SYSCALL_EPOLL_CTL 75
-#define SYSCALL_EPOLL_WAIT 76
-#define SYSCALL_SET_TID_ADDRESS 77
-#define SYSCALL_TIMER_CREATE 78
-#define SYSCALL_TIMER_SETTIME 79
-#define SYSCALL_TIMER_GETTIME 80
-#define SYSCALL_TKILL     81
-#define SYSCALL_SIGNALT   82
-#define SYSCALL_UNSIGNAL  83
-#define SYSCALL_PROTECT   84
-
-/* Normally, MAX_PARAMS is always 6 */
-# define MAX_PARAMS	6
+#include <sys/user.h>
+#include <sys/reg.h>
 
 #define SYSNAME syscalls_64_g[regs.orig_rax].name
 #define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params
 #define SYSTYPE syscalls_64_g[regs.orig_rax].params[i]
+
+/* Normally, MAX_PARAMS is always 6 */
+# define MAX_PARAMS	6
 
 /**
  * enum type_e - Enumerates the different types present in the different
