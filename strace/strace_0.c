@@ -18,7 +18,7 @@ int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
     int status, print_check = 0;
-    struct user_regs_struct regs;
+    user_regs_struct regs;
 
     if (argc < 2)
     {

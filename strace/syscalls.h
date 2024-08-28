@@ -15,11 +15,16 @@
 // #define SYSNAME (syscalls_64_g[regs.orig_rax].name)
 // #define SYSPARAM (syscalls_64_g[regs.orig_rax].nb_params)
 // #define SYSTYPE(i) (syscalls_64_g[regs.orig_rax].params[i])
-#define SYSNAME syscalls_64_g[regs.orig_rax].name
+#define SYSNAME syscalls_64_g[regs->orig_rax].name
 #define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params
 #define SYSTYPE syscalls_64_g[regs.orig_rax].params[i]
-
+// #define SYSNAME "SomeSyscallName"
 #define MAX_PARAMS 6
+
+/* Function prototypes */
+static inline void handle_ptrace_error(const char *msg);
+static inline void print_syscall_number(struct user_regs_struct *regs, int syscall_count);
+
 
 /**
  * enum type_e - Enumerates the different types present in the different
