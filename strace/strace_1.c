@@ -27,6 +27,7 @@ int main(int argc, const char *argv[], char *const envp[]) {
         return EXIT_FAILURE;
     } else {
         while (1) {
+            wait(&status);
             if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
                 perror("ptrace");
                 // return EXIT_FAILURE;
