@@ -2,7 +2,8 @@
 
 extern const char *syscall_names[];
 
-int main(int argc, char *argv[])
+// int main(int argc, char *argv[])
+int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
     int status;
@@ -11,23 +12,31 @@ int main(int argc, char *argv[])
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-        return 1;
+        return 1; // Return 1 to indicate an error in usage
     }
 
     child = fork();
     if (child == -1)
     {
         perror("fork");
-        return 1;
+        return 1; // Return 1 to indicate an error in fork
     }
 
+    // if (child == 0)
+    // {
+    //     // In child process
+    //     ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+    //     execvp(argv[1], argv + 1);
+    //     perror("execvp");
+    //     return 1;
+    // }
     if (child == 0)
     {
-        // In child process
+        // In the child process
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-        execvp(argv[1], argv + 1);
-        perror("execvp");
-        return 1;
+        execve(argv[1], (char *const *)(argv + 1), (char *const *)envp);
+        perror("execve"); // Handle execve error
+        return 1; // Return 1 to indicate an error in execve
     }
     else
     {
