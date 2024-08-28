@@ -131,9 +131,10 @@ static inline void print_syscall_number(struct user_regs_struct *regs, int sysca
     if (syscall_count == 0 || syscall_count % 2 != 0) {
         if (regs->orig_rax < PT_SYSCALL && syscalls_64_g[regs->orig_rax].name) {
             fprintf(stderr, "%s", SYSNAME);
-        } else {
-            fprintf(stderr, "Unknown syscall %lld", regs->orig_rax);
         }
+        // else {
+        //     fprintf(stderr, "Unknown syscall %lld", regs->orig_rax);
+        // }
     }
 
     if (syscall_count % 2 == 0 && regs->orig_rax < PT_SYSCALL && syscalls_64_g[regs->orig_rax].name) {
