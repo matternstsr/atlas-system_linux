@@ -15,44 +15,60 @@
  */
 int main(int argc, const char *argv[], char *const envp[])
 {
-	pid_t child;
-	int status, print_check = 0;
-	struct user_regs_struct regs;
+    pid_t child;
+    int status, syscall_count = 0;
+    struct user_regs_struct regs;
+    // long syscall_num;
+    // size_t num_syscalls = sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0]);
 
-	if (argc < 2)
-	{
-		fprintf(stderr, "Unsupported number of Arguments\n");
-		return (-1);
-	}
-	child = fork();
-	if (child == 0)
-	{
-		ptrace(PTRACE_TRACEME, child, NULL, NULL);
-		execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
-	}
-	else
-	{
-		while (1)
-		{
-			ptrace(PT_SYSCALL, child, NULL, NULL);
-			wait(&status);
-			ptrace(PTRACE_GETREGS, child, NULL, &regs);
-			if (WIFEXITED(status))
-			{
-				fprintf(stderr, " = ?\n");
-				break;
-			}
-			if (print_check == 0 || print_check % 2 != 0)
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+        return 1; // Return 1 to indicate an error in usage
+    }
+
+    child = fork();
+    if (child == -1)
+    {
+        perror("fork");
+        return 1; // Return 1 to indicate an error in fork
+    }
+
+    if (child == 0)
+    {
+        // In the child process
+        // if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
+        // {
+        //     perror("ptrace");
+        //     return 1; // Return 1 to indicate an error in ptrace
+        // }
+        ptrace(PTRACE_TRACEME, child, NULL, NULL);
+        execve(argv[1], (char *const *)(argv + 1), (char *const *)envp);
+        // perror("execve"); // Handle execve error
+        // return 1; // Return 1 to indicate an error in execve
+    }
+    else
+    {
+        while (2)
+        {
+            ptrace(PTRACE_SYSCALL, child, NULL, NULL);
+            wait(&status);
+            ptrace(PTRACE_GETREGS, child, NULL, &regs);
+            if (WIFEXITED(status))
+                break;
+
+            if (syscall_count == 0 || syscall_count % 2 != 0)
 				fprintf(stderr, "%s", NAMES);
-			if (print_check % 2 == 0)
+			if (syscall_count % 2 == 0)
 			{
 				if (regs.orig_rax != 1)
 					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
 				else
 					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
 			}
-			print_check++;
-		}
-	}
-	return (0);
+            syscall_count++;
+        }
+    }
+
+    return 0;
 }
