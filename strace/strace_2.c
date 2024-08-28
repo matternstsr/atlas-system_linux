@@ -19,6 +19,7 @@ int main(int argc, const char *argv[], char *const envp[])
     int status, syscall_count = 0;
     struct user_regs_struct regs;
     long syscall_num;
+    size_t num_syscalls = sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0]);
 
     if (argc < 2)
     {
@@ -62,9 +63,16 @@ int main(int argc, const char *argv[], char *const envp[])
             if (syscall_count % 2 == 0)
             {
                 // System call has just started
-                if (syscall_num < (long)(sizeof(syscalls_64_g)/sizeof(syscalls_64_g[0])) && syscalls_64_g[syscall_num].name)
+                if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
                 {
-                    fprintf(stderr, "%s", syscalls_64_g[syscall_num].name);
+                    if (syscalls_64_g[syscall_num].name)
+                    {
+                        fprintf(stderr, "%s", syscalls_64_g[syscall_num].name);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "syscall_%ld", syscall_num);
+                    }
                 }
                 else
                 {
@@ -75,9 +83,16 @@ int main(int argc, const char *argv[], char *const envp[])
             {
                 // System call has just returned
                 long ret_value = regs.rax;
-                if (syscall_num < (long)(sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0])) && syscalls_64_g[syscall_num].name)
+                if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
                 {
-                    fprintf(stderr, " = 0x%lx\n", ret_value);
+                    if (syscalls_64_g[syscall_num].name)
+                    {
+                        fprintf(stderr, " = 0x%lx\n", ret_value);
+                    }
+                    else
+                    {
+                        fprintf(stderr, " = 0x%lx\n", ret_value);
+                    }
                 }
                 else
                 {
