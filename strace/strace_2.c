@@ -18,8 +18,8 @@ int main(int argc, const char *argv[], char *const envp[])
     pid_t child;
     int status, syscall_count = 0;
     struct user_regs_struct regs;
-    long syscall_num;
-    size_t num_syscalls = sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0]);
+    // long syscall_num;
+    // size_t num_syscalls = sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0]);
 
     if (argc < 2)
     {
@@ -42,75 +42,30 @@ int main(int argc, const char *argv[], char *const envp[])
         //     perror("ptrace");
         //     return 1; // Return 1 to indicate an error in ptrace
         // }
-        {
-		ptrace(PTRACE_TRACEME, child, NULL, NULL);
-		execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
-        }
+        ptrace(PTRACE_TRACEME, child, NULL, NULL);
         execve(argv[1], (char *const *)(argv + 1), (char *const *)envp);
         perror("execve"); // Handle execve error
         return 1; // Return 1 to indicate an error in execve
     }
     else
     {
-        while (1)
+        while (2)
         {
             ptrace(PTRACE_SYSCALL, child, NULL, NULL);
             wait(&status);
-
+            ptrace(PTRACE_GETREGS, child, NULL, &regs);
             if (WIFEXITED(status))
                 break;
 
-            ptrace(PTRACE_GETREGS, child, NULL, &regs);
-
-            syscall_num = regs.orig_rax;
-
-            if (syscall_count % 2 == 0)
-            {
-                // System call has just started
-                if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
-                {
-                    if (syscalls_64_g[syscall_num].name)
-                    {
-                        fprintf(stderr, "%s", syscalls_64_g[syscall_num].name);
-                    }
-                    else
-                    {
-                        fprintf(stderr, "syscall_%ld", syscall_num);
-                    }
-                }
-                else
-                {
-                    fprintf(stderr, "syscall_%ld", syscall_num);
-                }
-            }
-            if (syscall_count % 2 == 0)
+            if (syscall_count == 0 || syscall_count % 2 != 0)
+				fprintf(stderr, "%s", NAMES);
+			if (syscall_count % 2 == 0)
 			{
 				if (regs.orig_rax != 1)
 					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
 				else
 					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
 			}
-            // else
-            // {
-            //     // System call has just returned
-            //     long ret_value = regs.rax;
-            //     if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
-            //     {
-            //         if (syscalls_64_g[syscall_num].name)
-            //         {
-            //             fprintf(stderr, " = %#lx\n", ret_value);
-            //         }
-            //         else
-            //         {
-            //             fprintf(stderr, " = %#lx\n", ret_value);
-            //         }
-            //     }
-            //     else
-            //     {
-            //         fprintf(stderr, " = %#lx\n", ret_value);
-            //     }
-            // }
-            
             syscall_count++;
         }
     }
