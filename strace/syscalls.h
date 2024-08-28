@@ -12,10 +12,10 @@
 #include <errno.h>
 
 
-#define SYSNAME (syscalls_64_g[regs.orig_rax].name)
-#define SYSPARAM (syscalls_64_g[regs.orig_rax].nb_params)
+#define NAMES (syscalls_64_g[regs.orig_rax].name)
+#define PARAMETERS (syscalls_64_g[regs.orig_rax].nb_params)
 #define SYSTYPE(i) (syscalls_64_g[regs.orig_rax].params[i])
-// #define SYSNAME "SomeSyscallName"
+// #define NAMES "SomeSyscallName"
 #define MAX_PARAMS 6
 
 // /* Function prototypes */

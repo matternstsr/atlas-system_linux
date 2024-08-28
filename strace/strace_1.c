@@ -58,9 +58,9 @@ int main(int argc, const char *argv[], char *const envp[]) {
 
             if (syscall_count == 0 || syscall_count % 2 != 0) {
                 if (regs.orig_rax != 1) {
-                    fprintf(stderr, "%s\n", SYSNAME);
+                    fprintf(stderr, "%s\n", NAMES);
                 } else {
-                    fprintf(stderr, "%s", SYSNAME);
+                    fprintf(stderr, "%s", NAMES);
                 }
             }
 
