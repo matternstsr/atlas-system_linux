@@ -123,7 +123,7 @@ int main(int argc, const char *argv[], char *const envp[]) {
 
 
 static inline void handle_ptrace_error(const char *msg) {
-    // perror(msg);
+    perror(msg);
     // _exit(1); // Use _exit to avoid additional cleanup by stdio
 }
 
