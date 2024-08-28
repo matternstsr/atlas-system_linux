@@ -37,10 +37,14 @@ int main(int argc, const char *argv[], char *const envp[])
     if (child == 0)
     {
         // In the child process
-        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
+        // if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
+        // {
+        //     perror("ptrace");
+        //     return 1; // Return 1 to indicate an error in ptrace
+        // }
         {
-            perror("ptrace");
-            return 1; // Return 1 to indicate an error in ptrace
+		ptrace(PTRACE_TRACEME, child, NULL, NULL);
+		execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
         }
         execve(argv[1], (char *const *)(argv + 1), (char *const *)envp);
         perror("execve"); // Handle execve error
