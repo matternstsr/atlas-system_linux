@@ -13,58 +13,74 @@
  * 
  * Return: Returns 0 on successful execution, or exits with status 1 if an error occurs.
  */
-int main(int argc, const char *argv[], char *const envp[]) {
+int main(int argc, const char *argv[], char *const envp[])
+{
     pid_t child;
     int status, syscall_count = 0;
     struct user_regs_struct regs;
 
-    if (argc < 2) {
+    if (argc < 2)
+    {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
         return 1; // Return 1 to indicate an error in usage
     }
 
     child = fork();
-    // if (child == -1) {
+    // if (child == -1)
+    // {
     //     perror("fork");
     //     return -1;
     // }
 
-    if (child == 0) {
+    if (child == 0)
+    {
         // In the child process
-        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
+        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1)
+        {
             perror("ptrace");
             return 1; // Return 1 to indicate an error in ptrace
         }
         execve(argv[1], (char *const *)(argv + 1), (char *const *)envp);
         perror("execve"); // Handle execve error
         return 1; // Return 1 to indicate an error in execve
-    } else {
-        while (2) {
+    }
+    else
+    {
+        while (2)
+        {
             ptrace(PT_SYSCALL, child, NULL, NULL);
             wait(&status);
-            // if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
+            // if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
+            // {
             //     perror("ptrace");
             //     // return -1;
             // }
 
-            if (WIFEXITED(status)) {
+            if (WIFEXITED(status))
+            {
                 break;
             }
             ptrace(PTRACE_GETREGS, child, NULL, &regs);
-            // if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
+            // if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
+            // {
             //     perror("ptrace");
             //     // return -1;
             // }
 
-            if (syscall_count == 0 || syscall_count % 2 != 0) {
-                if (regs.orig_rax != 1) {
+            if (syscall_count == 0 || syscall_count % 2 != 0)
+            {
+                if (regs.orig_rax != 1)
+                {
                     fprintf(stderr, "%s\n", NAMES);
-                } else {
+                }
+                else
+                {
                     fprintf(stderr, "%s", NAMES);
                 }
             }
 
-            if (syscall_count % 2 == 0 && regs.orig_rax == 1) {
+            if (syscall_count % 2 == 0 && regs.orig_rax == 1)
+            {
                 fprintf(stderr, "\n");
             }
 
