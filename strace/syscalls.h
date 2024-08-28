@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <sys/user.h>  // Include this to use user_regs_struct
+#include <sys/user.h>
 
 #define SYSNAME syscalls_64_g[regs.orig_rax].name
 #define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params
