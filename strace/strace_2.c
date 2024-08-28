@@ -24,15 +24,15 @@ int main(int argc, const char *argv[], char *const envp[])
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-        return 1; // Return 1 to indicate an error in usage
+        return (-1); // Return 1 to indicate an error in usage
     }
 
     child = fork();
-    if (child == -1)
-    {
-        perror("fork");
-        return 1; // Return 1 to indicate an error in fork
-    }
+    // if (child == -1)
+    // {
+    //     perror("fork");
+    //     return 1; // Return 1 to indicate an error in fork
+    // }
 
     if (child == 0)
     {
