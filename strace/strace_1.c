@@ -33,18 +33,13 @@ int main(int argc, const char *argv[], char *const envp[]) {
                 // return EXIT_FAILURE;
             }
 
-            if (waitpid(child, &status, 0) == -1) {
-                perror("waitpid");
-                return EXIT_FAILURE;
-            }
-
             if (WIFEXITED(status)) {
                 break;
             }
 
             if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
                 perror("ptrace");
-                return EXIT_FAILURE;
+                // return EXIT_FAILURE;
             }
 
             if (syscall_count == 0 || syscall_count % 2 != 0) {
@@ -63,5 +58,5 @@ int main(int argc, const char *argv[], char *const envp[]) {
         }
     }
 
-    return EXIT_SUCCESS;
+    return 0;
 }
