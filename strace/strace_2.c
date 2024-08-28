@@ -62,9 +62,9 @@ int main(int argc, const char *argv[], char *const envp[])
 			if (syscall_count % 2 == 0)
 			{
 				if (regs.orig_rax != 1)
-					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
+					fprintf(stderr, " = 0x%lx\n", (size_t)regs.rax);
 				else
-					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
+					fprintf(stderr, " = 0x%lx\n", (size_t)regs.rax);
 			}
             syscall_count++;
         }
