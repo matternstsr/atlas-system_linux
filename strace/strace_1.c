@@ -6,7 +6,7 @@ extern const char *syscall_names[];
 int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
-    int status;
+    int status, check = 0;
     struct user_regs_struct regs;
 
     if (argc < 2)
@@ -32,27 +32,46 @@ int main(int argc, const char *argv[], char *const envp[])
     }
     else
     {
-        // In parent process
-        while (1)
-        {
-            ptrace(PTRACE_SYSCALL, child, NULL, NULL);
-            wait(&status);
-            if (WIFEXITED(status))
-                break;
+        // // In parent process
+        // while (1)
+        // {
+        //     ptrace(PTRACE_SYSCALL, child, NULL, NULL);
+        //     wait(&status);
+        //     if (WIFEXITED(status))
+        //         break;
 
-            // Print syscall name
-            if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
-            {
-                perror("ptrace(GETREGS)");
-                return 1;
-            }
-            size_t syscall_nr = (size_t)regs.orig_rax;
-            if (syscall_nr < sizeof(syscall_names) / sizeof(syscall_names[0])) {
-                printf("%s\n", syscall_names[syscall_nr]);
-            } else {
-                printf("unknown syscall %zu\n", syscall_nr);
-            }
-        }
+        //     // Print syscall name
+        //     if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
+        //     {
+        //         perror("ptrace(GETREGS)");
+        //         return 1;
+        //     }
+        //     size_t syscall_nr = (size_t)regs.orig_rax;
+        //     if (syscall_nr < sizeof(syscall_names) / sizeof(syscall_names[0])) {
+        //         printf("%s\n", syscall_names[syscall_nr]);
+        //     } else {
+        //         printf("unknown syscall %zu\n", syscall_nr);
+        //     }
+        // }
+        while (1)
+		{
+			ptrace(PT_SYSCALL, child, NULL, NULL);
+			wait(&status);
+			if (WIFEXITED(status))
+				break;
+			ptrace(PTRACE_GETREGS, child, NULL, &regs);
+			
+			if (check == 0 || check % 2 != 0)
+			{
+				if (regs.orig_rax !=1)
+					fprintf(stderr, "%s\n", SYSNAME);
+				else
+					fprintf(stderr, "%s", SYSNAME);
+			}
+			if (check % 2 == 0 && regs.orig_rax == 1)
+				fprintf(stderr, "\n");
+			check++;
+		}
     }
     return 0;
 }
