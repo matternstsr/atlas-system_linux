@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <sys/user.h>
 #include <errno.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
 #define NAMES (syscalls_64_g[syscall_num].name)
 // #define NAMES (syscalls_64_g[regs.orig_rax].name)
@@ -21,7 +23,7 @@
 // /* Function prototypes */
 // static inline void handle_ptrace_error(const char *msg);
 // static inline void print_syscall_number(struct user_regs_struct *regs, int syscall_count);
-
+// void print_error(const char *syscall_name, long ret_value);
 
 /**
  * enum type_e - Enumerates the different types present in the different

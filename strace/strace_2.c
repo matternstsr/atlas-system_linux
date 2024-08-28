@@ -79,27 +79,34 @@ int main(int argc, const char *argv[], char *const envp[])
                     fprintf(stderr, "syscall_%ld", syscall_num);
                 }
             }
-            else
-            {
-                // System call has just returned
-                long ret_value = regs.rax;
-                if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
-                {
-                    if (syscalls_64_g[syscall_num].name)
-                    {
-                        fprintf(stderr, " = 0x%lx\n", ret_value);
-                    }
-                    else
-                    {
-                        fprintf(stderr, " = 0x%lx\n", ret_value);
-                    }
-                }
-                else
-                {
-                    fprintf(stderr, " = 0x%lx\n", ret_value);
-                }
-            }
-
+            if (syscall_count % 2 == 0)
+			{
+				if (regs.orig_rax != 1)
+					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
+				else
+					fprintf(stderr, " = %#lx\n", (size_t)regs.rax);
+			}
+            // else
+            // {
+            //     // System call has just returned
+            //     long ret_value = regs.rax;
+            //     if (syscall_num >= 0 && syscall_num < (long)num_syscalls)
+            //     {
+            //         if (syscalls_64_g[syscall_num].name)
+            //         {
+            //             fprintf(stderr, " = %#lx\n", ret_value);
+            //         }
+            //         else
+            //         {
+            //             fprintf(stderr, " = %#lx\n", ret_value);
+            //         }
+            //     }
+            //     else
+            //     {
+            //         fprintf(stderr, " = %#lx\n", ret_value);
+            //     }
+            // }
+            
             syscall_count++;
         }
     }
