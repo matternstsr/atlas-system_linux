@@ -55,7 +55,10 @@ int main(int argc, const char *argv[], char *const envp[])
             wait(&status);
             ptrace(PTRACE_GETREGS, child, NULL, &regs);
             if (WIFEXITED(status))
-                break;
+            {
+				fprintf(stderr, " = ?\n");
+				break;
+			}
 
             if (syscall_count == 0 || syscall_count % 2 != 0)
 				fprintf(stderr, "%s", NAMES);
