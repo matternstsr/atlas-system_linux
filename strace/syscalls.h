@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <sys/user.h>
+#include <errno.h>
 
 #define SYSNAME syscalls_64_g[regs.orig_rax].name
 #define SYSPARAM syscalls_64_g[regs.orig_rax].nb_params

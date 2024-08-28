@@ -22,14 +22,6 @@ int main(int argc, const char *argv[], char *const envp[])
         return 1; // Return 1 to indicate an error in fork
     }
 
-    // if (child == 0)
-    // {
-    //     // In child process
-    //     ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-    //     execvp(argv[1], argv + 1);
-    //     perror("execvp");
-    //     return 1;
-    // }
     if (child == 0)
     {
         // In the child process
@@ -48,7 +40,7 @@ int main(int argc, const char *argv[], char *const envp[])
             if (WIFEXITED(status))
                 break;
 
-            // Print call name
+            // Print syscall name
             if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
             {
                 perror("ptrace(GETREGS)");
