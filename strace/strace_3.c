@@ -1,89 +1,103 @@
 #include "syscalls.h"
 
-int main(int argc, char *argv[])
+// Function prototypes for printing registers
+void print_rdi(struct user_regs_struct *regs);
+void print_rsi(struct user_regs_struct *regs);
+void print_rdx(struct user_regs_struct *regs);
+void print_r10(struct user_regs_struct *regs);
+void print_r8(struct user_regs_struct *regs);
+void print_r9(struct user_regs_struct *regs);
+
+// Array of function pointers to print specific registers
+void (*print_param_functions[MAX_PARAMS])(struct user_regs_struct *) = {
+    print_rdi,
+    print_rsi,
+    print_rdx,
+    print_r10,
+    print_r8,
+    print_r9
+};
+
+// Main function
+int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
-    int status;
+    int status, print_check = 0;
+    size_t i = 0;
     struct user_regs_struct regs;
 
-    // Argument Parsing:
     if (argc < 2)
     {
-        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
-        return 1;
+        fprintf(stderr, "Unsupported number of Arguments\n");
+        return (-1);
     }
-    // Forking the Process:
+
     child = fork();
-    if (child == -1)
-    {
-        perror("fork");
-        return 1;
-    }
-    // Child Process Setup:
     if (child == 0)
     {
-        // In child process
-        ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-        execvp(argv[1], argv + 1);
-        perror("execvp");
-        return 1;
+        ptrace(PTRACE_TRACEME, child, NULL, NULL);
+        execve(argv[1], (char * const *)(argv + 1), (char * const *)envp);
     }
     else
     {
-        // In parent process
         while (1)
         {
             ptrace(PTRACE_SYSCALL, child, NULL, NULL);
             wait(&status);
+            ptrace(PTRACE_GETREGS, child, NULL, &regs);
             if (WIFEXITED(status))
-                break;
-
-            // Print call name and parameters
-            // Syscall Information Extraction:
-            if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
             {
-                perror("ptrace(GETREGS)");
-                return 1;
+                fprintf(stderr, ") = ?\n");
+                break;
             }
-
-            // Ensure the syscall number is within bounds
-            // Syscall Name and Parameters:
-            size_t syscall_num = (size_t)regs.orig_rax;
-            if (syscall_num < sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0])) {
-                printf("%s(", syscalls_64_g[syscall_num].name);
-
-                // Print parameters based on call number and type
-                for (int i = 0; i < (int)PARAMETERS; i++)
+            if (print_check == 0 || print_check % 2 != 0)
+            {
+                fprintf(stderr, "%s(", NAMES);
+                for (i = 0; i < PARAMETERS; i++)
                 {
-                    if (i > 0)
-                        printf(", ");
-
-                    switch (i)
-                    {
-                        case 0: printf("%lx", (unsigned long)regs.rdi); break;
-                        case 1: printf("%lx", (unsigned long)regs.rsi); break;
-                        case 2: printf("%lx", (unsigned long)regs.rdx); break;
-                        case 3: printf("%lx", (unsigned long)regs.r10); break;
-                        case 4: printf("%lx", (unsigned long)regs.r8); break;
-                        case 5: printf("%lx", (unsigned long)regs.r9); break;
-                        default: break; // You can handle more cases if needed
-                    }
+                    if (TYPES == VOID)
+                        continue;
+                    if (TYPES == VARARGS)
+                        fprintf(stderr, ", ...");
+                    else
+                        print_param_functions[i](&regs);
                 }
-                printf(") = %lx\n", (unsigned long)regs.rax);
-            } else {
-                printf("unknown_syscall(%lx) = %lx\n", (unsigned long)regs.orig_rax, (unsigned long)regs.rax);
             }
+            if (print_check % 2 == 0)
+                fprintf(stderr, ") = %#lx\n", (size_t)regs.rax);
+            print_check++;
         }
     }
-    return 0;
+    return (0);
 }
 
-static inline int get_regs(pid_t child, struct user_regs_struct *regs)
+// Functions to print specific registers
+void print_rdi(struct user_regs_struct *regs)
 {
-    return ptrace(PTRACE_GETREGS, child, NULL, regs) == -1 ? -1 : 0;
+    fprintf(stderr, "%#lx", (size_t)regs->rdi);
 }
 
-static inline int should_print(int check)
+void print_rsi(struct user_regs_struct *regs)
 {
-    return check == 0 || (check % 2 != 0);
+    fprintf(stderr, ", %#lx", (size_t)regs->rsi);
+}
+
+void print_rdx(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->rdx);
+}
+
+void print_r10(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r10);
+}
+
+void print_r8(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r8);
+}
+
+void print_r9(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r9);
 }

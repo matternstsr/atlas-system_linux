@@ -16,7 +16,7 @@
 // #define NAMES (syscalls_64_g[syscall_num].name)
 #define NAMES (syscalls_64_g[regs.orig_rax].name)
 #define PARAMETERS (syscalls_64_g[regs.orig_rax].nb_params)
-#define SYSTYPE(i) (syscalls_64_g[regs.orig_rax].params[i])
+#define TYPES (syscalls_64_g[regs.orig_rax].params[i])
 // #define NAMES "SomeSyscallName"
 #define MAX_PARAMS 6
 
