@@ -122,3 +122,13 @@ void print_r9(struct user_regs_struct *regs)
 {
     fprintf(stderr, ", %#lx", (size_t)regs->r9);
 }
+
+static inline int get_regs(pid_t child, struct user_regs_struct *regs)
+{
+    return ptrace(PTRACE_GETREGS, child, NULL, regs) == -1 ? -1 : 0;
+}
+
+static inline int should_print(int check)
+{
+    return check == 0 || (check % 2 != 0);
+}

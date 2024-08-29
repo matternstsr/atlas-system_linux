@@ -43,6 +43,10 @@ void (*print_param_functions[MAX_PARAMS])(struct user_regs_struct *) = {
     print_r9
 };
 
+/* Function prototypes */
+static inline int get_regs(pid_t child, struct user_regs_struct *regs);
+static inline int should_print(int check);
+
 /**
  * enum type_e - Enumerates the different types present in the different
  * syscall parameters and return types
