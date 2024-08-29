@@ -69,6 +69,37 @@ int main(int argc, const char *argv[], char *const envp[])
     return 0;
 }
 
+// Functions to print specific registers
+void print_rdi(struct user_regs_struct *regs)
+{
+    fprintf(stderr, "%#lx", (size_t)regs->rdi);
+}
+
+void print_rsi(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->rsi);
+}
+
+void print_rdx(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->rdx);
+}
+
+void print_r10(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r10);
+}
+
+void print_r8(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r8);
+}
+
+void print_r9(struct user_regs_struct *regs)
+{
+    fprintf(stderr, ", %#lx", (size_t)regs->r9);
+}
+
 static inline int get_regs(pid_t child, struct user_regs_struct *regs)
 {
     return ptrace(PTRACE_GETREGS, child, NULL, regs) == -1 ? -1 : 0;
