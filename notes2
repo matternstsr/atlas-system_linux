@@ -1,0 +1,228 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ptrace.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/user.h>
+#include <unistd.h>
+#include <errno.h>
+
+void print_syscall(long syscall_num) {
+    printf("%ld\n", syscall_num);
+}
+
+int main(int argc, char *argv[]) {
+    pid_t child;
+    int status;
+
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+        return 1;
+    }
+
+    if ((child = fork()) == -1) {
+        perror("fork");
+        return 1;
+    }
+
+    if (child == 0) {
+        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
+            perror("ptrace");
+            return 1;
+        }
+        execve(argv[1], &argv[1], NULL);
+        perror("execve");
+        return 1;
+    } else {
+        while (1) {
+            waitpid(child, &status, 0);
+            if (WIFEXITED(status))
+                break;
+            if (WIFSIGNALED(status)) {
+                fprintf(stderr, "Child process terminated by signal\n");
+                return 1;
+            }
+            if (WIFSTOPPED(status)) {
+                struct user_regs_struct regs;
+                if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
+                    perror("ptrace");
+                    return 1;
+                }
+                print_syscall(regs.orig_rax);
+                if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
+                    perror("ptrace");
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef SYSCALLS_H
+#define SYSCALLS_H
+
+#define SYSCALL_TABLE_SIZE 333
+
+static const char *syscall_names[SYSCALL_TABLE_SIZE] = {
+    [0] = "read",
+    [1] = "write",
+    [2] = "open",
+    // Add all syscall names here
+};
+
+#endif // SYSCALLS_H
+
+
+
+
+
+#include "syscalls.h"
+
+// Inside your main tracing loop
+if (WIFSTOPPED(status)) {
+    struct user_regs_struct regs;
+    if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
+        perror("ptrace");
+        return 1;
+    }
+    long syscall_num = regs.orig_rax;
+    if (syscall_num < SYSCALL_TABLE_SIZE) {
+        printf("%s\n", syscall_names[syscall_num]);
+    } else {
+        printf("unknown\n");
+    }
+    if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
+        perror("ptrace");
+        return 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+#include "syscalls.h"
+
+// Inside your main tracing loop
+if (WIFSTOPPED(status)) {
+    struct user_regs_struct regs;
+    if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
+        perror("ptrace");
+        return 1;
+    }
+    long syscall_num = regs.orig_rax;
+    long ret_val = regsrax; // For return value
+
+    if (syscall_num < SYSCALL_TABLE_SIZE) {
+        printf("%s = 0x%lx\n", syscall_names[syscall_num], ret_val);
+    } else {
+        printf("unknown = 0x%lx\n", ret_val);
+    }
+    if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
+        perror("ptrace");
+        return 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+#include "syscalls.h"
+
+// Example function to print syscall parameters
+void print_syscall_params(struct user_regs_struct *regs, long syscall_num) {
+    switch (syscall_num) {
+        case 0: // Example for 'read'
+            printf("read(0x%lx, 0x%lx, 0x%lx)", regs->rdi, regs->rsi, regs->rdx);
+            break;
+        case 1: // Example for 'write'
+            printf("write(0x%lx, 0x%lx, 0x%lx)", regs->rdi, regs->rsi, regs->rdx);
+            break;
+        // Add more cases for different syscalls
+        default:
+            printf("unknown");
+            break;
+    }
+}
+
+int main(int argc, char *argv[]) {
+    pid_t child;
+    int status;
+
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+        return 1;
+    }
+
+    if ((child = fork()) == -1) {
+        perror("fork");
+        return 1;
+    }
+
+    if (child == 0) {
+        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
+            perror("ptrace");
+            return 1;
+        }
+        execve(argv[1], &argv[1], NULL);
+        perror("execve");
+        return 1;
+    } else {
+        while (1) {
+            waitpid(child, &status, 0);
+            if (WIFEXITED(status))
+                break;
+            if (WIFSIGNALED(status)) {
+                fprintf(stderr, "Child process terminated by signal\n");
+                return 1;
+            }
+            if (WIFSTOPPED(status)) {
+                struct user_regs_struct regs;
+                if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1) {
+                    perror("ptrace");
+                    return 1;
+                }
+                long syscall_num = regs.orig_rax;
+                if (syscall_num < SYSCALL_TABLE_SIZE) {
+                    print_syscall_params(&regs, syscall_num);
+                    printf(" = 0x%lx\n", regs.rax);
+                } else {
+                    printf("unknown = 0x%lx\n", regs.rax);
+                }
+                if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1) {
+                    perror("ptrace");
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
