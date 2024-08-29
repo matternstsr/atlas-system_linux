@@ -1,7 +1,5 @@
 #include "syscalls.h"
 
-extern const char *syscall_names[];  // Array of calls names indexed by syscall number
-
 int main(int argc, char *argv[])
 {
     pid_t child;
@@ -39,23 +37,39 @@ int main(int argc, char *argv[])
             if (WIFEXITED(status))
                 break;
 
-            // Print calls name and paras
+            // Print call name and parameters
             if (ptrace(PTRACE_GETREGS, child, NULL, &regs) == -1)
             {
                 perror("ptrace(GETREGS)");
                 return 1;
             }
-            
-            printf("%s(", syscall_names[(size_t)regs.orig_rax]);
-            
-            for (int i = 0; i < PARAMETERS; i++)
-            {
-                if (i > 0)
-                    printf(", ");
-                // Print params based on call num and type
-                printf("%lx", (unsigned long)((void*)&regs.rdi)[i]);
+
+            // Ensure the syscall number is within bounds
+            size_t syscall_num = (size_t)regs.orig_rax;
+            if (syscall_num < sizeof(syscalls_64_g) / sizeof(syscalls_64_g[0])) {
+                printf("%s(", syscalls_64_g[syscall_num].name);
+
+                // Print parameters based on call number and type
+                for (int i = 0; i < (int)PARAMETERS; i++)
+                {
+                    if (i > 0)
+                        printf(", ");
+
+                    switch (i)
+                    {
+                        case 0: printf("%lx", (unsigned long)regs.rdi); break;
+                        case 1: printf("%lx", (unsigned long)regs.rsi); break;
+                        case 2: printf("%lx", (unsigned long)regs.rdx); break;
+                        case 3: printf("%lx", (unsigned long)regs.r10); break;
+                        case 4: printf("%lx", (unsigned long)regs.r8); break;
+                        case 5: printf("%lx", (unsigned long)regs.r9); break;
+                        default: break; // You can handle more cases if needed
+                    }
+                }
+                printf(") = %lx\n", (unsigned long)regs.rax);
+            } else {
+                printf("unknown_syscall(%lx) = %lx\n", (unsigned long)regs.orig_rax, (unsigned long)regs.rax);
             }
-            printf(") = %lx\n", (unsigned long)regs.rax);
         }
     }
     return 0;
