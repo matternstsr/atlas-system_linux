@@ -1,7 +1,5 @@
 #include "syscalls.h"
 
-
-
 // Main function
 int main(int argc, const char *argv[], char *const envp[])
 {
