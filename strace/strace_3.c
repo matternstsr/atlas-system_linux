@@ -1,28 +1,12 @@
 #include "syscalls.h"
 
-// Function prototypes for printing registers
-void print_rdi(struct user_regs_struct *regs);
-void print_rsi(struct user_regs_struct *regs);
-void print_rdx(struct user_regs_struct *regs);
-void print_r10(struct user_regs_struct *regs);
-void print_r8(struct user_regs_struct *regs);
-void print_r9(struct user_regs_struct *regs);
 
-// Array of function pointers to print specific registers
-void (*print_param_functions[MAX_PARAMS])(struct user_regs_struct *) = {
-    print_rdi,
-    print_rsi,
-    print_rdx,
-    print_r10,
-    print_r8,
-    print_r9
-};
 
 // Main function
 int main(int argc, const char *argv[], char *const envp[])
 {
     pid_t child;
-    int status, print_check = 0;
+    int status, syscall_count = 0;
     size_t i = 0;
     struct user_regs_struct regs;
 
@@ -50,7 +34,7 @@ int main(int argc, const char *argv[], char *const envp[])
                 fprintf(stderr, ") = ?\n");
                 break;
             }
-            if (print_check == 0 || print_check % 2 != 0)
+            if (syscall_count == 0 || syscall_count % 2 != 0)
             {
                 fprintf(stderr, "%s(", NAMES);
                 for (i = 0; i < PARAMETERS; i++)
@@ -63,9 +47,9 @@ int main(int argc, const char *argv[], char *const envp[])
                         print_param_functions[i](&regs);
                 }
             }
-            if (print_check % 2 == 0)
+            if (syscall_count % 2 == 0)
                 fprintf(stderr, ") = %#lx\n", (size_t)regs.rax);
-            print_check++;
+            syscall_count++;
         }
     }
     return (0);

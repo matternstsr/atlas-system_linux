@@ -25,6 +25,24 @@
 // static inline void print_syscall_number(struct user_regs_struct *regs, int syscall_count);
 // void print_error(const char *syscall_name, long ret_value);
 
+// Function prototypes for printing registers
+void print_rdi(struct user_regs_struct *regs);
+void print_rsi(struct user_regs_struct *regs);
+void print_rdx(struct user_regs_struct *regs);
+void print_r10(struct user_regs_struct *regs);
+void print_r8(struct user_regs_struct *regs);
+void print_r9(struct user_regs_struct *regs);
+
+// Array of function pointers to print specific registers
+void (*print_param_functions[MAX_PARAMS])(struct user_regs_struct *) = {
+    print_rdi,
+    print_rsi,
+    print_rdx,
+    print_r10,
+    print_r8,
+    print_r9
+};
+
 /**
  * enum type_e - Enumerates the different types present in the different
  * syscall parameters and return types
