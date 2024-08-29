@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
             
             printf("%s(", syscall_names[(size_t)regs.orig_rax]);
             
-            for (int i = 0; i < PARAMS_COUNT; i++)
+            for (int i = 0; i < PARAMETERS; i++)
             {
                 if (i > 0)
                     printf(", ");
