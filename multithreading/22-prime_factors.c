@@ -26,7 +26,7 @@ task_t *create_task(task_entry_t entry, void *param)
 	task->status = PENDING;
 	task->result = NULL;
 	pthread_mutex_init(&task->lock, NULL);
-	task->id = next_task_id++;  // Assign a unique ID
+	task->id = next_task_id++;  /* Assign a unique ID */
 
 	return (task);
 }
@@ -72,7 +72,7 @@ void *exec_tasks(const list_t *tasks)
 		if (task->status == PENDING)
 		{
 			task->status = STARTED;
-			tprintf("[%02d] Started\n", task->id);  // Use ID with zero-padding
+			tprintf("[%02d] Started\n", task->id);  /* Use ID with zero-padding */
 			pthread_mutex_unlock(&print_mutex);
 
 			/* Execute the task */
@@ -80,8 +80,8 @@ void *exec_tasks(const list_t *tasks)
 
 			pthread_mutex_lock(&print_mutex);
 			task->status = SUCCESS;
-			tprintf("[%02d] Success\n", task->id);  // Use ID with zero-padding
-		}
+			tprintf("[%02d] Success\n", task->id);  /* Use ID with zero-padding
+		} */
 		else
 		{
 			pthread_mutex_unlock(&print_mutex);
