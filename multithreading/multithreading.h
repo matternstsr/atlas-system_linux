@@ -2,7 +2,7 @@
 #define MULTITHREADING_H
 
 #include <stddef.h>
-#include <stdint.h>
+#include <stdint.h>  /* For uintptr_t */
 #include <pthread.h>
 
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
@@ -115,5 +115,20 @@ void blur_image(img_t *img_blur, img_t const *img, kernel_t const *kernel);
 /* static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel, size_t x_start, size_t y_start, size_t width, size_t height); */
 void blur_portion(blur_portion_t const *portion);
 
+
+
+/* List structure definition */
+typedef struct list_s
+{
+    void **data;
+    size_t size;
+    size_t capacity;
+} list_t;
+
+/* Function prototypes */
+list_t *list_create(size_t initial_capacity);
+void list_add(list_t *list, void *value);
+void list_free(list_t *list);
+void list_destroy(list_t *list, void (*free_func)(void *));
 
 #endif /* MULTITHREADING_H */

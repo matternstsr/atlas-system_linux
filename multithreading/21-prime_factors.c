@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
-#include <ctype.h>
 #include "list.h"
 
 /* Helper function to convert string to unsigned long */
@@ -55,7 +53,3 @@ list_t *prime_factors(char const *s)
     unsigned long number = string_to_ulong(s);
     return factorize_number(number);
 }
-
-
-
-
