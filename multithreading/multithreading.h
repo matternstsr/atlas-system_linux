@@ -162,6 +162,31 @@ void blur_portion(blur_portion_t const *portion);
  **/
 list_t *prime_factors(char const *s);
 
+/**
+* create_task - Create a new task with a specified entry function and parameter.
+* @entry: Function pointer to the task entry function.
+* @param: Parameter for the entry function.
+*
+* Return: Pointer to the newly created task structure.
+*/
+task_t *create_task(task_entry_t entry, void *param);
 
+/**
+* destroy_task - Free resources associated with a task.
+* @task: Pointer to the task to destroy.
+*
+* Cleans up and deallocates the memory for the specified task.
+*/
+void destroy_task(task_t *task);
+
+/**
+* exec_tasks - Execute a list of tasks in a thread-safe manner.
+* @tasks: List of tasks to execute.
+*
+* Each task is processed by multiple threads, ensuring thread safety.
+*
+* Return: Always returns NULL.
+*/
+void *exec_tasks(const list_t *tasks);
 
 #endif /* MULTITHREADING_H */
