@@ -44,9 +44,9 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
     }
 
     /* Normalize and clamp values */
-/*     blurred_pixel.r = (uint8_t)fminf(fmaxf(sum_r, 0.0f), 255.0f);
-    blurred_pixel.g = (uint8_t)fminf(fmaxf(sum_g, 0.0f), 255.0f);
-    blurred_pixel.b = (uint8_t)fminf(fmaxf(sum_b, 0.0f), 255.0f); */
+    blurred_pixel.r = (uint8_t)CLAMP(sum_r, 0.0f, 255.0f);
+    blurred_pixel.g = (uint8_t)CLAMP(sum_g, 0.0f, 255.0f);
+    blurred_pixel.b = (uint8_t)CLAMP(sum_b, 0.0f, 255.0f);
 
     return blurred_pixel;
 }

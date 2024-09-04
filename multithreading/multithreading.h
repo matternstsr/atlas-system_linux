@@ -6,6 +6,8 @@
 #include <pthread.h>
 
 #define num_pix(img) ((img)->w * (img)->h)
+#define CLAMP(value, min_val, max_val) ((value) < (min_val) ? (min_val) : ((value) > (max_val) ? (max_val) : (value)))
+
 
 
 /**
