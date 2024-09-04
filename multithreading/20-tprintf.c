@@ -7,6 +7,7 @@ static pthread_mutex_t print_mutex;
 
 /* Constructor function to initialize the mutex. */
 __attribute__((constructor))
+
 /* Initializes the global mutex. */
 static void init_mutex(void)
 {
@@ -15,6 +16,7 @@ static void init_mutex(void)
 
 /* Destructor function to destroy the mutex. */
 __attribute__((destructor))
+
 /* Destroys the global mutex. */
 static void destroy_mutex(void)
 {
