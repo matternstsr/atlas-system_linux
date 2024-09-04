@@ -116,4 +116,12 @@ void blur_image(img_t *img_blur, img_t const *img, kernel_t const *kernel);
 /* static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel, size_t x_start, size_t y_start, size_t width, size_t height); */
 void blur_portion(blur_portion_t const *portion);
 
+/**
+ * prime_factors - Factors a given number into a list containing prime factors
+ *
+ * @s: string of the number to factor
+ * Return: list of prime factors
+ **/
+list_t *prime_factors(char const *s)
+
 #endif /* MULTITHREADING_H */
