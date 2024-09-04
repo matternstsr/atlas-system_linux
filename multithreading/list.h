@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>  /* For uintptr_t */
+#include "task.h"
 
 typedef struct list_s
 {
