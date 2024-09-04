@@ -8,7 +8,13 @@ static pthread_mutex_t print_mutex;
 /* Constructor function to initialize the mutex. */
 __attribute__((constructor))
 
-/* Initializes the global mutex. */
+/**
+ * init_mutex - Initializes the global mutex.
+ *
+ * This function is automatically called before the main function
+ * when the program starts. It initializes the global mutex used
+ * for thread-safe printing.
+ */
 static void init_mutex(void)
 {
 	pthread_mutex_init(&print_mutex, NULL);
@@ -17,7 +23,13 @@ static void init_mutex(void)
 /* Destructor function to destroy the mutex. */
 __attribute__((destructor))
 
-/* Destroys the global mutex. */
+/**
+ * destroy_mutex - Destroys the global mutex.
+ *
+ * This function is automatically called after the main function
+ * when the program exits. It destroys the global mutex to clean up
+ * resources.
+ */
 static void destroy_mutex(void)
 {
 	pthread_mutex_destroy(&print_mutex);
