@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>  /* For uintptr_t */
 #include <pthread.h>
+#include "list.h"
 
 #define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
 
