@@ -30,12 +30,12 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
             int img_x = (int)x + i - half_size;
             int img_y = (int)y + j - half_size;
 
-            // Debug print to verify coordinates
+            /* Debug print to verify coordinates */
             printf("Processing pixel (%d, %d)\n", img_x, img_y);
 
             if (img_x < 0 || img_x >= (int)img->w || img_y < 0 || img_y >= (int)img->h)
             {
-                continue; // Skip out-of-range pixels
+                continue; /* Skip out-of-range pixels */
             }
 
             size_t idx = img_y * img->w + img_x;
@@ -46,7 +46,7 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
         }
     }
 
-    // Clamp values
+    /* Clamp values */
     if (sum_r < 0) sum_r = 0;
     if (sum_r > 255) sum_r = 255;
     if (sum_g < 0) sum_g = 0;
