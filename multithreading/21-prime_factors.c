@@ -11,7 +11,7 @@
 **/
 list_t *prime_factors(char const *s)
 {
-	unsigned long num = strtoul(s, NULL, 10),*temp,primenum = 2;
+	unsigned long num = strtoul(s, NULL, 10), *temp, primenum = 2;
 	list_t *prime_list = malloc(sizeof(list_t));
 	list_init(prime_list);
 
