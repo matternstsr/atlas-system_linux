@@ -56,12 +56,11 @@ void destroy_task(task_t *task)
 * Return: Always returns NULL.
 */
 
-pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 void *exec_tasks(const list_t *tasks)
 {
 	node_t *current_node;
 	task_t *task;
+	pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	/* Start from the head of the list */
 	current_node = tasks->head;
