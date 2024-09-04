@@ -12,11 +12,12 @@
 list_t *prime_factors(char const *s)
 {
 	unsigned long num = strtoul(s, NULL, 10);
-	if (num == 0) {
+
+	if (num == 0)
+	{
 		fprintf(stderr, "Invalid number: %s\n", s);
 		return NULL;
 	}
-
 	unsigned long *temp;
 	unsigned long primenum = 2;
 	list_t *prime_list = malloc(sizeof(list_t));
@@ -27,7 +28,8 @@ list_t *prime_factors(char const *s)
 		while (num % primenum == 0)
 		{
 			temp = malloc(sizeof(unsigned long));
-			if (!temp) {
+			if (!temp)
+			{
 				perror("Failed to allocate memory for prime factor");
 				list_destroy(prime_list, free);
 				exit(EXIT_FAILURE);
@@ -36,14 +38,13 @@ list_t *prime_factors(char const *s)
 			list_add(prime_list, temp);
 			num /= primenum;
 		}
-
 		primenum += 1 + (primenum != 2);
 	}
-
 	if (num >= 2)
 	{
 		temp = malloc(sizeof(unsigned long));
-		if (!temp) {
+		if (!temp)
+		{
 			perror("Failed to allocate memory for prime factor");
 			list_destroy(prime_list, free);
 			exit(EXIT_FAILURE);
@@ -51,6 +52,5 @@ list_t *prime_factors(char const *s)
 		*temp = num;
 		list_add(prime_list, temp);
 	}
-
 	return prime_list;
 }
