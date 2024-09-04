@@ -13,19 +13,22 @@ pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
 *
 * Return: Pointer to the newly created task structure.
 */
+static int next_task_id = 0;
+
 task_t *create_task(task_entry_t entry, void *param)
 {
-	task_t *task = malloc(sizeof(task_t));
-	if (!task)
-		return NULL;
+    task_t *task = malloc(sizeof(task_t));
+    if (!task)
+        return NULL;
 
-	task->entry = entry;
-	task->param = param;
-	task->status = PENDING;
-	task->result = NULL;
-	pthread_mutex_init(&task->lock, NULL);
+    task->entry = entry;
+    task->param = param;
+    task->status = PENDING;
+    task->result = NULL;
+    pthread_mutex_init(&task->lock, NULL);
+    task->id = next_task_id++;  // Assign a unique ID
 
-	return task;
+    return task;
 }
 
 /**
@@ -68,7 +71,7 @@ void *exec_tasks(const list_t *tasks)
         if (task->status == PENDING)
         {
             task->status = STARTED;
-            tprintf("[%p] Started\n", (void *)task);
+            tprintf("[%02d] Started\n", task->id);  // Use ID with zero-padding
             pthread_mutex_unlock(&print_mutex);
 
             /* Execute the task */
@@ -76,7 +79,7 @@ void *exec_tasks(const list_t *tasks)
 
             pthread_mutex_lock(&print_mutex);
             task->status = SUCCESS;
-            tprintf("[%p] Success\n", (void *)task);
+            tprintf("[%02d] Success\n", task->id);  // Use ID with zero-padding
         }
         else
         {

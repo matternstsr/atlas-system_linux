@@ -105,6 +105,7 @@ typedef struct task_s
     task_status_t   status;
     void        *result;
     pthread_mutex_t lock;
+	int id;
 } task_t;
 
 
