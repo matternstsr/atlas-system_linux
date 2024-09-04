@@ -122,6 +122,6 @@ void blur_portion(blur_portion_t const *portion);
  * @s: string of the number to factor
  * Return: list of prime factors
  **/
-list_t *prime_factors(char const *s)
+list_t *prime_factors(char const *s);
 
 #endif /* MULTITHREADING_H */
