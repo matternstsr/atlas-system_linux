@@ -21,7 +21,6 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
     size_t i, j;
     float sum_r = 0, sum_g = 0, sum_b = 0;
     size_t half_size = kernel->size / 2;
-    pixel_t blurred_pixel;
 
     for (i = 0; i < kernel->size; i++)
     {
@@ -40,19 +39,14 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
             sum_r += img->pixels[idx].r * weight;
             sum_g += img->pixels[idx].g * weight;
             sum_b += img->pixels[idx].b * weight;
-
-            // Debugging prints
-            printf("Applying kernel: pixel(%zu, %zu) -> img_x: %d, img_y: %d, weight: %f\n", x, y, img_x, img_y, weight);
         }
     }
 
     /* Normalize and clamp values */
+    pixel_t blurred_pixel;
     blurred_pixel.r = (uint8_t)CLAMP(sum_r, 0.0f, 255.0f);
     blurred_pixel.g = (uint8_t)CLAMP(sum_g, 0.0f, 255.0f);
     blurred_pixel.b = (uint8_t)CLAMP(sum_b, 0.0f, 255.0f);
-
-    // Debugging prints
-    printf("Blurred pixel(%zu, %zu) -> r: %u, g: %u, b: %u\n", x, y, blurred_pixel.r, blurred_pixel.g, blurred_pixel.b);
 
     return blurred_pixel;
 }
@@ -86,10 +80,10 @@ void blur_portion(const blur_portion_t *portion)
 
             /* Apply the Gaussian kernel to the pixel */
             pixel_t blurred_pixel = apply_kernel(portion->img, portion->kernel, x, y);
-            size_t idx = y * portion->img_blur->w + x;
+            size_t idx = y * portion->img->w + x;
 
             /* Ensure the index is within bounds for the blurred image */
-            if (idx < num_pix(portion->img_blur))
+            if (idx < portion->img_blur->w * portion->img_blur->h)
             {
                 portion->img_blur->pixels[idx] = blurred_pixel;
             }
