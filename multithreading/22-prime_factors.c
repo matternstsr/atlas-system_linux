@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "list.h"
-#include "20-tprintf.c"
-#include "list.c"
 #include "multithreading.h"
 
 /**
