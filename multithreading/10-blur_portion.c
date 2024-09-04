@@ -5,6 +5,8 @@
 #include <math.h>
 #include "multithreading.h"
 
+#define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
+
 /**
  * apply_kernel - Apply a convolution kernel (2D filter) to a pixel.
  * @img: Source image.
