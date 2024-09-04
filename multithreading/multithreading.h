@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <pthread.h>
 
+#define num_pixels(img) ((img)->w * (img)->h)
+
+
 /**
 * struct pixel_s - RGB pixel
 *
