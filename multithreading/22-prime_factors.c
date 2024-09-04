@@ -44,45 +44,50 @@ void destroy_task(task_t *task)
 }
 
 /**
-* exec_tasks - Execute a list of tasks in a thread-safe manner.
-* @tasks: List of tasks to execute.
-*
-* Each task is processed by multiple threads, ensuring thread safety.
-*
-* Return: Always returns NULL.
-*/
+ * exec_tasks - Execute a list of tasks in a thread-safe manner.
+ * @tasks: List of tasks to execute.
+ *
+ * Each task is processed by multiple threads, ensuring thread safety.
+ *
+ * Return: Always returns NULL.
+ */
 void *exec_tasks(const list_t *tasks)
 {
-	size_t i;
-	size_t num_tasks = tasks->size;
-	task_t *task;
+    node_t *current_node;
+    task_t *task;
 
-	for (i = 0; i < num_tasks; ++i)
-	{
-		pthread_mutex_lock(&print_mutex);
+    /* Start from the head of the list */
+    current_node = tasks->head;
 
-		task = (task_t *)tasks->data[i];
+    while (current_node)
+    {
+        pthread_mutex_lock(&print_mutex);
 
-		if (task->status == PENDING)
-		{
-			task->status = STARTED;
-			tprintf("Task started: %p\n", (void *)task);
-			pthread_mutex_unlock(&print_mutex);
+        task = (task_t *)current_node->content;
 
-			// Execute the task
-			task->result = task->entry(task->param);
+        if (task->status == PENDING)
+        {
+            task->status = STARTED;
+            tprintf("Task started: %p\n", (void *)task);
+            pthread_mutex_unlock(&print_mutex);
 
-			pthread_mutex_lock(&print_mutex);
-			task->status = SUCCESS;
-			tprintf("Task completed: %p\n", (void *)task);
-		}
-		else
-		{
-			pthread_mutex_unlock(&print_mutex);
-		}
-		
-		pthread_mutex_unlock(&print_mutex);
-	}
+            Execute the task
+            task->result = task->entry(task->param);
 
-	return NULL;
+            pthread_mutex_lock(&print_mutex);
+            task->status = SUCCESS;
+            tprintf("Task completed: %p\n", (void *)task);
+        }
+        else
+        {
+            pthread_mutex_unlock(&print_mutex);
+        }
+
+        pthread_mutex_unlock(&print_mutex);
+
+        /* Move to the next node */
+        current_node = current_node->next;
+    }
+
+    return NULL;
 }
