@@ -2,17 +2,17 @@
 #include <stdarg.h>
 #include <pthread.h>
 
-Global mutex variable
+/* Global mutex variable */
 static pthread_mutex_t print_mutex;
 
-Constructor function to initialize the mutex
+/* Constructor function to initialize the mutex */
 __attribute__((constructor))
 static void init_mutex(void)
 {
 	pthread_mutex_init(&print_mutex, NULL);
 }
 
-Destructor function to destroy the mutex
+/* Destructor function to destroy the mutex */
 __attribute__((destructor))
 static void destroy_mutex(void)
 {
