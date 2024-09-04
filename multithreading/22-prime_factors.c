@@ -39,11 +39,13 @@ task_t *create_task(task_entry_t entry, void *param)
 */
 void destroy_task(task_t *task)
 {
-	if (task)
-	{
-		pthread_mutex_destroy(&task->lock);
-		free(task);
-	}
+    if (task)
+    {
+        if (task->result)
+            free(task->result);
+        pthread_mutex_destroy(&task->lock);
+        free(task);
+    }
 }
 
 /**
