@@ -28,7 +28,7 @@ list_t *factorize_number(unsigned long number)
 	/* Factor out the number by 2 */
 	while (number % 2 == 0)
 	{
-		list_add(factors, 2);
+		list_add(factors, (void *)(uintptr_t)2);
 		number /= 2;
 	}
 
