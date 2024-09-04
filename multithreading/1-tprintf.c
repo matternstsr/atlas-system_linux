@@ -23,15 +23,15 @@ int tprintf(const char *format, ...)
 	/* Print the thread ID */
 	printf("[%lu] ", (unsigned long)thread_id);
 
-	/* Initialize variable argument list */
+	/* var arg list */
 	va_start(args, format);
 
 	/* Print the formatted string */
 	ret = vprintf(format, args);
 
-	/* End variable argument list */
+	/* End var arg list */
 	va_end(args);
 
-	/* Return the number of characters printed */
+	/* Return the number of chars printed */
 	return ret;
 }

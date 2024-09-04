@@ -67,7 +67,45 @@ typedef struct blur_portion_s
 	kernel_t const *kernel;
 } blur_portion_t;
 
-/* Thread entry point function */
+/**
+ * thread_entry - Entry point for the thread
+ * @arg: Argument passed to the thread
+ *
+ * Return: NULL
+ */
 void *thread_entry(void *arg);
+
+/**
+ * tprintf - Print a formatted string with the thread ID
+ * @format: Format string
+ *
+ * Return: The number of characters printed (same as `printf`)
+ */
+int tprintf(char const *format, ...);
+
+/**
+ * apply_kernel - Apply the convolution kernel to a pixel in the image
+ * @img: Source image
+ * @kernel: Convolution kernel
+ * @x: X coordinate of the pixel to blur
+ * @y: Y coordinate of the pixel to blur
+ *
+ * Return: The blurred pixel
+ */
+pixel_t apply_kernel(img_t const *img, kernel_t const *kernel, size_t x, size_t y);
+
+/**
+ * blur_portion - Blur a portion of an image
+ * @portion: Information needed to blur a portion of an image
+ */
+void blur_portion(blur_portion_t const *portion);
+
+/**
+ * blur_image - Blur the entire image using Gaussian Blur with multithreading
+ * @img_blur: Destination image
+ * @img: Source image
+ * @kernel: Convolution kernel
+ */
+void blur_image(img_t *img_blur, img_t const *img, kernel_t const *kernel);
 
 #endif /* MULTITHREADING_H */
