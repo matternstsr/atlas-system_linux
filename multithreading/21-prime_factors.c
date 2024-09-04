@@ -18,25 +18,25 @@ list_t *prime_factors(char const *s)
     }
 
     unsigned long *temp;
-    unsigned long prime = 2;
+    unsigned long primenum = 2;
     list_t *prime_list = list_init();
 
-    while (prime * prime <= num)
+    while (primenum * primenum <= num)
     {
-        while (num % prime == 0)
+        while (num % primenum == 0)
         {
             temp = malloc(sizeof(unsigned long));
             if (!temp) {
                 perror("Failed to allocate memory for prime factor");
-                list_destroy(prime_list, free);
+                list_destroy(primenum_list, free);
                 exit(EXIT_FAILURE);
             }
-            *temp = prime;
+            *temp = primenum;
             list_add(prime_list, temp);
-            num /= prime;
+            num /= primenum;
         }
 
-        prime += 1 + (prime != 2);
+        primenum += 1 + (primenum != 2);
     }
 
     if (num >= 2)
