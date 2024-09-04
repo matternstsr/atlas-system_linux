@@ -5,19 +5,6 @@
 #include <math.h>
 #include "multithreading.h"
 
-typedef struct {
-    uint8_t r, g, b;
-} pixel_t;
-
-typedef struct {
-    size_t w, h;
-    pixel_t *pixels;
-} img_t;
-
-typedef struct {
-    size_t size;
-    float **matrix;
-} kernel_t;
 
 /**
  * apply_kernel - Apply a convolution kernel to a pixel.
