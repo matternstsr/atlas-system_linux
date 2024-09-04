@@ -39,7 +39,7 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
             int img_x = (int)x + i - half_size;
             int img_y = (int)y + j - half_size;
 
-            // Skip out-of-bounds pixels
+            /* Skip out-of-bounds pixels */
             if (img_x < 0 || img_x >= (int)img->w || img_y < 0 || img_y >= (int)img->h) {
                 continue;
             }
@@ -52,7 +52,7 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
         }
     }
 
-    // Clamp values
+    /* Clamp values */
     blurred_pixel.r = (uint8_t)fminf(fmaxf(sum_r, 0.0f), 255.0f);
     blurred_pixel.g = (uint8_t)fminf(fmaxf(sum_g, 0.0f), 255.0f);
     blurred_pixel.b = (uint8_t)fminf(fmaxf(sum_b, 0.0f), 255.0f);
