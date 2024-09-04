@@ -1,55 +1,55 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 #include "list.h"
 
-/* Helper function to convert string to unsigned long */
-unsigned long string_to_ulong(char const *s)
-{
-    char *endptr;
-    unsigned long number = strtoul(s, &endptr, 10);
-    if (*endptr != '\0')
-    {
-        fprintf(stderr, "Invalid number: %s\n", s);
-        exit(EXIT_FAILURE);
-    }
-    return number;
-}
-
-/* Helper function to factorize the number */
-list_t *factorize_number(unsigned long number)
-{
-    list_t *factors = list_create(10);
-    if (!factors)
-        return NULL;
-
-    /* Factor out the number by 2 */
-    while (number % 2 == 0)
-    {
-        list_add(factors, (void *)(uintptr_t)2);
-        number /= 2;
-    }
-
-    /* Factor out the number by odd factors */
-    for (unsigned long i = 3; i * i <= number; i += 2)
-    {
-        while (number % i == 0)
-        {
-            list_add(factors, (void *)(uintptr_t)i);
-            number /= i;
-        }
-    }
-
-    /* If number is a prime larger than 2 */
-    if (number > 2)
-        list_add(factors, (void *)(uintptr_t)number);
-
-    return factors;
-}
-
-/* Main function to create a list of prime factors */
+/**
+ * prime_factors - Factors a given number into a list containing prime factors
+ *
+ * @s: string of the number to factor
+ * Return: list of prime factors
+ **/
 list_t *prime_factors(char const *s)
 {
-    unsigned long number = string_to_ulong(s);
-    return factorize_number(number);
+    unsigned long num = strtoul(s, NULL, 10);
+    if (num == 0) {
+        fprintf(stderr, "Invalid number: %s\n", s);
+        return NULL;
+    }
+
+    unsigned long *temp;
+    unsigned long prime = 2;
+    list_t *prime_list = list_init();
+
+    while (prime * prime <= num)
+    {
+        while (num % prime == 0)
+        {
+            temp = malloc(sizeof(unsigned long));
+            if (!temp) {
+                perror("Failed to allocate memory for prime factor");
+                list_destroy(prime_list, free);
+                exit(EXIT_FAILURE);
+            }
+            *temp = prime;
+            list_add(prime_list, temp);
+            num /= prime;
+        }
+
+        prime += 1 + (prime != 2);
+    }
+
+    if (num >= 2)
+    {
+        temp = malloc(sizeof(unsigned long));
+        if (!temp) {
+            perror("Failed to allocate memory for prime factor");
+            list_destroy(prime_list, free);
+            exit(EXIT_FAILURE);
+        }
+        *temp = num;
+        list_add(prime_list, temp);
+    }
+
+    return prime_list;
 }
