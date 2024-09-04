@@ -19,7 +19,7 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
                     size_t pixel_x = x + ki - kernel_half_size;
                     size_t pixel_y = y + kj - kernel_half_size;
 
-                    // Boundary check
+                    /* Boundary check */
                     if (pixel_x >= 0 && pixel_x < img->w && pixel_y >= 0 && pixel_y < img->h) {
                         size_t pixel_index = pixel_y * img->w + pixel_x;
                         float weight = kernel->matrix[ki][kj];
@@ -32,12 +32,12 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
             }
 
             size_t pixel_index = y * img->w + x;
-            if (weight_sum > 0) {  // Avoid division by zero
+            if (weight_sum > 0) {  /* Avoid division by zero */
                 pixels_blur[pixel_index].r = (char)fminf(fmaxf(r / weight_sum, 0), 255);
                 pixels_blur[pixel_index].g = (char)fminf(fmaxf(g / weight_sum, 0), 255);
                 pixels_blur[pixel_index].b = (char)fminf(fmaxf(b / weight_sum, 0), 255);
             } else {
-                // Default or error handling if weight_sum is zero
+                Default or error handling if weight_sum is zero
                 pixels_blur[pixel_index].r = 0;
                 pixels_blur[pixel_index].g = 0;
                 pixels_blur[pixel_index].b = 0;
