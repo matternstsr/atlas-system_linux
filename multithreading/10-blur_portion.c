@@ -37,8 +37,7 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
                 pixels_blur[pixel_index].g = (char)fminf(fmaxf(g / weight_sum, 0), 255);
                 pixels_blur[pixel_index].b = (char)fminf(fmaxf(b / weight_sum, 0), 255);
             } else {
-                /* Default or error handling */ 
-				if weight_sum is zero
+                /* Default or error handling if weight_sum is zero */
                 pixels_blur[pixel_index].r = 0;
                 pixels_blur[pixel_index].g = 0;
                 pixels_blur[pixel_index].b = 0;
