@@ -20,5 +20,5 @@ void *thread_entry(void *arg)
 	printf("%s\n", str);
 
 	/* Return NULL */
-	pthread_exit (NULL);
+	pthread_exit(NULL);
 }
