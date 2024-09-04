@@ -29,7 +29,7 @@ list_t *prime_factors(char const *s)
             temp = malloc(sizeof(unsigned long));
             if (!temp) {
                 perror("Failed to allocate memory for prime factor");
-                list_destroy(primenum_list, free);
+                list_destroy(prime_list, free);
                 exit(EXIT_FAILURE);
             }
             *temp = primenum;
