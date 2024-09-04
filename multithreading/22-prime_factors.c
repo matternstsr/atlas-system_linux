@@ -43,9 +43,9 @@ void destroy_task(task_t *task)
     {
         if (task->result)
             free(task->result);
+    }
 		list_destroy(task->result, free);
         free(task);
-    }
 }
 
 /**
@@ -96,3 +96,6 @@ void *exec_tasks(const list_t *tasks)
 
     return NULL;
 }
+
+
+
