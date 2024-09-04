@@ -2,13 +2,7 @@
 #include <stdarg.h>
 #include <pthread.h>
 
-/**
-* Global mutex variable.
-*
-* This mutex is used to ensure thread-safe access to shared resources
-* or to protect critical sections of the code where concurrent access
-* might occur.
-*/
+/* Global mutex variable. */
 static pthread_mutex_t print_mutex;
 
 
@@ -17,15 +11,7 @@ __attribute__((constructor))
 
 
 
-/**
-* Constructor function to initialize the mutex.
-*
-* This function is executed automatically before the `main` function starts.
-* It initializes the `print_mutex` mutex to its default settings.
-*
-* The `__attribute__((constructor))` attribute specifies that this function
-* should be run before the main program starts.
-*/
+/* Constructor function to initialize the mutex. */
 __attribute__((constructor))
 static void init_mutex(void)
 {
@@ -37,16 +23,7 @@ __attribute__((destructor))
 
 
 
-/**
-* Destructor function to destroy the mutex.
-*
-* This function is executed automatically after the `main` function ends.
-* It destroys the `print_mutex` mutex, releasing any resources associated
-* with it.
-*
-* The `__attribute__((destructor))` attribute specifies that this function
-* should be run after the program exits, ensuring proper cleanup.
-*/
+/* Destructor function to destroy the mutex. */
 __attribute__((destructor))
 static void destroy_mutex(void)
 {
