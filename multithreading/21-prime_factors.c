@@ -56,15 +56,6 @@ list_t *prime_factors(char const *s)
     return factorize_number(number);
 }
 
-/* Destroy the list and free its contents */
-void list_destroy(list_t *list, void (*free_func)(void *))
-{
-    if (list)
-    {
-        for (size_t i = 0; i < list->size; i++)
-        {
-            free_func(list->data[i]);
-        }
-        list_free(list);
-    }
-}
+
+
+
