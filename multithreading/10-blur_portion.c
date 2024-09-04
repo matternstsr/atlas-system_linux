@@ -1,94 +1,43 @@
-#include <stddef.h>
-#include <stdint.h>
+#include "multithreading.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "multithreading.h"
 
-#define CLAMP(value, min, max) ((value) < (min) ? (min) : ((value) > (max) ? (max) : (value)))
+static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel, size_t x_start, size_t y_start, size_t width, size_t height) {
+    size_t i, j, ki, kj;
+    size_t kernel_half_size = kernel->size / 2;
+    pixel_t *pixels = img->pixels;
+    pixel_t *pixels_blur = img_blur->pixels;
 
-/**
- * apply_kernel - Apply a convolution kernel (2D filter) to a pixel.
- * @img: Source image.
- * @kernel: Convolution kernel.
- * @x: X coordinate of the pixel.
- * @y: Y coordinate of the pixel.
- *
- * Applies the kernel to the selected pixel and returns the blurred result.
- *
- * Return: The blurred pixel.
- */
-pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t y)
-{
-    size_t i, j;
-    float sum_r = 0, sum_g = 0, sum_b = 0;
-    size_t half_size = kernel->size / 2;
+    for (size_t y = y_start; y < y_start + height; y++) {
+        for (size_t x = x_start; x < x_start + width; x++) {
+            float r = 0, g = 0, b = 0;
+            float weight_sum = 0.0;
 
-    for (i = 0; i < kernel->size; i++)
-    {
-        for (j = 0; j < kernel->size; j++)
-        {
-            int img_x = (int)x + (int)i - (int)half_size;
-            int img_y = (int)y + (int)j - (int)half_size;
+            for (ki = 0; ki < kernel->size; ki++) {
+                for (kj = 0; kj < kernel->size; kj++) {
+                    int pixel_x = x + ki - kernel_half_size;
+                    int pixel_y = y + kj - kernel_half_size;
 
-            if (img_x < 0 || img_x >= (int)img->w || img_y < 0 || img_y >= (int)img->h)
-            {
-                continue; /* Skip out-of-bounds pixels */
+                    if (pixel_x >= 0 && pixel_x < img->w && pixel_y >= 0 && pixel_y < img->h) {
+                        size_t pixel_index = pixel_y * img->w + pixel_x;
+                        float weight = kernel->matrix[ki][kj];
+                        r += pixels[pixel_index].r * weight;
+                        g += pixels[pixel_index].g * weight;
+                        b += pixels[pixel_index].b * weight;
+                        weight_sum += weight;
+                    }
+                }
             }
 
-            size_t idx = img_y * img->w + img_x;
-            float weight = kernel->matrix[i][j];
-            sum_r += img->pixels[idx].r * weight;
-            sum_g += img->pixels[idx].g * weight;
-            sum_b += img->pixels[idx].b * weight;
+            size_t pixel_index = y * img->w + x;
+            pixels_blur[pixel_index].r = (char)(r / weight_sum);
+            pixels_blur[pixel_index].g = (char)(g / weight_sum);
+            pixels_blur[pixel_index].b = (char)(b / weight_sum);
         }
     }
-
-    /* Normalize and clamp values */
-    pixel_t blurred_pixel;
-    blurred_pixel.r = (uint8_t)CLAMP(sum_r, 0.0f, 255.0f);
-    blurred_pixel.g = (uint8_t)CLAMP(sum_g, 0.0f, 255.0f);
-    blurred_pixel.b = (uint8_t)CLAMP(sum_b, 0.0f, 255.0f);
-
-    return blurred_pixel;
 }
 
-/**
- * blur_portion - Blur a portion of an image.
- * @portion: Data structure with blurring parameters.
- *
- * Applies the blurring operation to the specified portion of the image.
- */
-void blur_portion(const blur_portion_t *portion)
-{
-    size_t x, y;
-
-    /* Ensure the portion and images are valid */
-    if (!portion || !portion->img || !portion->img_blur || !portion->kernel)
-    {
-        return;
-    }
-
-    /* Loop through each pixel in the portion */
-    for (y = portion->y; y < portion->y + portion->h; y++)
-    {
-        for (x = portion->x; x < portion->x + portion->w; x++)
-        {
-            /* Check if the pixel is within the image bounds */
-            if (x >= portion->img->w || y >= portion->img->h)
-            {
-                continue;
-            }
-
-            /* Apply the Gaussian kernel to the pixel */
-            pixel_t blurred_pixel = apply_kernel(portion->img, portion->kernel, x, y);
-            size_t idx = y * portion->img->w + x;
-
-            /* Ensure the index is within bounds for the blurred image */
-            if (idx < portion->img_blur->w * portion->img_blur->h)
-            {
-                portion->img_blur->pixels[idx] = blurred_pixel;
-            }
-        }
-    }
+void blur_portion(blur_portion_t const *portion) {
+    apply_gaussian_blur(portion->img, portion->img_blur, portion->kernel, portion->x, portion->y, portion->w, portion->h);
 }

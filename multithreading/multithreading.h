@@ -96,13 +96,13 @@ int tprintf(char const *format, ...);
  * Return: The blurred pixel
  */
 /* pixel_t apply_kernel(img_t const *img, kernel_t const *kernel, size_t x, size_t y);*/
-pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t y);
+/* pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t y); */
 
 /**
  * blur_portion - Blur a portion of an image
  * @portion: Information needed to blur a portion of an image
  */
-void blur_portion(blur_portion_t const *portion);
+/* void blur_portion(blur_portion_t const *portion); */
 
 /**
  * blur_image - Blur the entire image using Gaussian Blur with multithreading
@@ -111,5 +111,10 @@ void blur_portion(blur_portion_t const *portion);
  * @kernel: Convolution kernel
  */
 void blur_image(img_t *img_blur, img_t const *img, kernel_t const *kernel);
+
+static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel, size_t x_start, size_t y_start, size_t width, size_t height);
+
+void blur_portion(blur_portion_t const *portion);
+
 
 #endif /* MULTITHREADING_H */
