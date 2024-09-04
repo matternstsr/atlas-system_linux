@@ -4,8 +4,6 @@
 #include "list.h"
 #include "multithreading.h"
 
-pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 /**
 * create_task - Create a new task with a specified entry
 * function and parameter.
@@ -57,6 +55,9 @@ void destroy_task(task_t *task)
 *
 * Return: Always returns NULL.
 */
+
+pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void *exec_tasks(const list_t *tasks)
 {
 	node_t *current_node;
