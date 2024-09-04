@@ -43,7 +43,7 @@ void destroy_task(task_t *task)
     {
         if (task->result)
             free(task->result);
-        pthread_mutex_destroy(&task->lock);
+		list_destroy(task->result, free);
         free(task);
     }
 }
