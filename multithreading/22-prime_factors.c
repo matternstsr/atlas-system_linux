@@ -82,8 +82,8 @@ void *exec_tasks(const list_t *tasks)
 
 			pthread_mutex_lock(&print_mutex);
 			task->status = SUCCESS;
-			tprintf("[%02d] Success\n", task->id);  /* Use ID with zero-padding
-		} */
+			tprintf("[%02d] Success\n", task->id);  /* Use ID with zero-padding */
+		}
 		else
 		{
 			pthread_mutex_unlock(&print_mutex);
