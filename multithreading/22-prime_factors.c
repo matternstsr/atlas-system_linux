@@ -71,7 +71,7 @@ void *exec_tasks(const list_t *tasks)
             tprintf("Task started: %p\n", (void *)task);
             pthread_mutex_unlock(&print_mutex);
 
-            Execute the task
+            /* Execute the task */
             task->result = task->entry(task->param);
 
             pthread_mutex_lock(&print_mutex);
