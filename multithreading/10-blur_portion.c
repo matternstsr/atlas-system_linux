@@ -20,7 +20,7 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
                     size_t pixel_y = y + kj - kernel_half_size;
 
                     /* Boundary check */
-                    if (pixel_x >= 0 && pixel_x < img->w && pixel_y >= 0 && pixel_y < img->h) {
+                    if (pixel_x < img->w && pixel_y < img->h) {
                         size_t pixel_index = pixel_y * img->w + pixel_x;
                         float weight = kernel->matrix[ki][kj];
                         r += pixels[pixel_index].r * weight;
