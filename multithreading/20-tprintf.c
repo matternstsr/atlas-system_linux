@@ -23,7 +23,8 @@ static void destroy_mutex(void)
 * tprintf - Print a formatted string with the thread ID, using mutex for sync.
 * @format: Format string.
 *
-* Prints the formatted string prefixed by the thread ID. Uses mutex for thread-safe output.
+* Prints the formatted string prefixed by the thread ID. Uses mutex
+* for thread-safe output.
 *
 * Return: Number of characters printed (like `printf`).
 */
@@ -55,5 +56,5 @@ int tprintf(const char *format, ...)
 	pthread_mutex_unlock(&print_mutex);
 
 	/* Return the number of characters printed */
-	return ret;
+	return (ret);
 }
