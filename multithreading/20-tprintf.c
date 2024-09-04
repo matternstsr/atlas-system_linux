@@ -5,29 +5,16 @@
 /* Global mutex variable. */
 static pthread_mutex_t print_mutex;
 
-
-/* Constructor function to initialize the mutex */
-__attribute__((constructor))
-
-
-
 /* Constructor function to initialize the mutex. */
 __attribute__((constructor))
-
 /* Initializes the global mutex. */
 static void init_mutex(void)
 {
 	pthread_mutex_init(&print_mutex, NULL);
 }
 
-/* Destructor function to destroy the mutex */
-__attribute__((destructor))
-
-
-
 /* Destructor function to destroy the mutex. */
 __attribute__((destructor))
-
 /* Destroys the global mutex. */
 static void destroy_mutex(void)
 {
@@ -35,14 +22,14 @@ static void destroy_mutex(void)
 }
 
 /**
-* tprintf - Print a formatted string with the thread ID, using mutex for sync.
-* @format: Format string.
-*
-* Prints the formatted string prefixed by the thread ID. Uses mutex
-* for thread-safe output.
-*
-* Return: Number of characters printed (like `printf`).
-*/
+ * tprintf - Print a formatted string with the thread ID, using mutex for sync.
+ * @format: Format string.
+ *
+ * Prints the formatted string prefixed by the thread ID. Uses mutex
+ * for thread-safe output.
+ *
+ * Return: Number of characters printed (like `printf`).
+ */
 int tprintf(const char *format, ...)
 {
 	va_list args;
