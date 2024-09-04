@@ -19,7 +19,8 @@ list_t *prime_factors(char const *s)
 
     unsigned long *temp;
     unsigned long primenum = 2;
-    list_t *prime_list = list_init();
+    list_t *prime_list = malloc(sizeof(list_t));
+	list_init(prime_list);
 
     while (primenum * primenum <= num)
     {
