@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "list.h"
+#include "list.c"
 
 /* Helper function to convert string to unsigned long */
 unsigned long string_to_ulong(char const *s)
