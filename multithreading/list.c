@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include "list.c"
 
 /* Create a list with an initial capacity */
 list_t *list_create(size_t initial_capacity)
