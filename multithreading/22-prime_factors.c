@@ -12,11 +12,11 @@
 *
 * Return: Pointer to the newly created task structure.
 */
-static int next_task_id;
 
 task_t *create_task(task_entry_t entry, void *param)
 {
 	task_t *task = malloc(sizeof(task_t));
+	static int next_task_id;
 
 	if (!task)
 		return (NULL);
