@@ -40,6 +40,9 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
             sum_r += img->pixels[idx].r * weight;
             sum_g += img->pixels[idx].g * weight;
             sum_b += img->pixels[idx].b * weight;
+
+            // Debugging prints
+            printf("Applying kernel: pixel(%zu, %zu) -> img_x: %d, img_y: %d, weight: %f\n", x, y, img_x, img_y, weight);
         }
     }
 
@@ -48,8 +51,12 @@ pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t 
     blurred_pixel.g = (uint8_t)CLAMP(sum_g, 0.0f, 255.0f);
     blurred_pixel.b = (uint8_t)CLAMP(sum_b, 0.0f, 255.0f);
 
+    // Debugging prints
+    printf("Blurred pixel(%zu, %zu) -> r: %u, g: %u, b: %u\n", x, y, blurred_pixel.r, blurred_pixel.g, blurred_pixel.b);
+
     return blurred_pixel;
 }
+
 /**
  * blur_portion - Blur a portion of an image.
  * @portion: Data structure with blurring parameters.
