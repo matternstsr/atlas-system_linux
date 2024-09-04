@@ -39,13 +39,12 @@ task_t *create_task(task_entry_t entry, void *param)
 */
 void destroy_task(task_t *task)
 {
-    if (task)
-    {
-        if (task->result)
-            free(task->result);
-    }
+	if (task)
+	{
 		list_destroy(task->result, free);
-        free(task);
+		free(task->result);
+		free(task);
+	}
 }
 
 /**
