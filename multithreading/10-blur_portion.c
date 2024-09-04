@@ -4,7 +4,7 @@
 #include <math.h>
 
 static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel, size_t x_start, size_t y_start, size_t width, size_t height) {
-    size_t i, j, ki, kj;
+    size_t ki, kj;
     size_t kernel_half_size = kernel->size / 2;
     pixel_t *pixels = img->pixels;
     pixel_t *pixels_blur = img_blur->pixels;
