@@ -16,7 +16,7 @@ list_t *prime_factors(char const *s)
 	if (num == 0)
 	{
 		fprintf(stderr, "Invalid number: %s\n", s);
-		return NULL;
+		return (NULL);
 	}
 	unsigned long *temp;
 	unsigned long primenum = 2;
@@ -52,5 +52,5 @@ list_t *prime_factors(char const *s)
 		*temp = num;
 		list_add(prime_list, temp);
 	}
-	return prime_list;
+	return (prime_list);
 }
