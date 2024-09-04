@@ -13,12 +13,12 @@
  */
 void *thread_entry(void *arg)
 {
-    // Cast argument to a string
+    /* Cast argument to a string */
     char *str = (char *)arg;
 
-    // Print the string
+    /* Print the string */
     printf("%s\n", str);
 
-    // Return NULL
+    /* Return NULL */
     pthread_exit (NULL);
 }
