@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <pthread.h>
 
-#define num_pixels(img) ((img)->w * (img)->h)
+#define num_pix(img) ((img)->w * (img)->h)
 
 
 /**
