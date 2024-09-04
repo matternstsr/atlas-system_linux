@@ -92,7 +92,8 @@ int tprintf(char const *format, ...);
  *
  * Return: The blurred pixel
  */
-pixel_t apply_kernel(img_t const *img, kernel_t const *kernel, size_t x, size_t y);
+/* pixel_t apply_kernel(img_t const *img, kernel_t const *kernel, size_t x, size_t y);*/
+pixel_t apply_kernel(const img_t *img, const kernel_t *kernel, size_t x, size_t y);
 
 /**
  * blur_portion - Blur a portion of an image
