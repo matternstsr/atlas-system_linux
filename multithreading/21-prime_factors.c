@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "list.h"
-#include "others.h"
 
 /* Helper function to convert string to unsigned long */
 unsigned long string_to_ulong(char const *s)
