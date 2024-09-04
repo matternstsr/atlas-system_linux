@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <pthread.h>
+#include "others.h"
 
 /* Global mutex variable */
 static pthread_mutex_t print_mutex;
