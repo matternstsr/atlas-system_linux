@@ -7,17 +7,19 @@
 pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
-* create_task - Create a new task with a specified entry function and parameter.
+* create_task - Create a new task with a specified entry
+* function and parameter.
 * @entry: Function pointer to the task entry function.
 * @param: Parameter for the entry function.
 *
 * Return: Pointer to the newly created task structure.
 */
-static int next_task_id = 0;
+static int next_task_id;
 
 task_t *create_task(task_entry_t entry, void *param)
 {
 	task_t *task = malloc(sizeof(task_t));
+
 	if (!task)
 		return (NULL);
 
