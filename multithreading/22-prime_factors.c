@@ -17,18 +17,18 @@ static int next_task_id = 0;
 
 task_t *create_task(task_entry_t entry, void *param)
 {
-    task_t *task = malloc(sizeof(task_t));
-    if (!task)
-        return NULL;
+	task_t *task = malloc(sizeof(task_t));
+	if (!task)
+		return (NULL);
 
-    task->entry = entry;
-    task->param = param;
-    task->status = PENDING;
-    task->result = NULL;
-    pthread_mutex_init(&task->lock, NULL);
-    task->id = next_task_id++;  // Assign a unique ID
+	task->entry = entry;
+	task->param = param;
+	task->status = PENDING;
+	task->result = NULL;
+	pthread_mutex_init(&task->lock, NULL);
+	task->id = next_task_id++;  // Assign a unique ID
 
-    return task;
+	return (task);
 }
 
 /**
@@ -48,52 +48,52 @@ void destroy_task(task_t *task)
 }
 
 /**
- * exec_tasks - Execute a list of tasks in a thread-safe manner.
- * @tasks: List of tasks to execute.
- *
- * Each task is processed by multiple threads, ensuring thread safety.
- *
- * Return: Always returns NULL.
- */
+* exec_tasks - Execute a list of tasks in a thread-safe manner.
+* @tasks: List of tasks to execute.
+*
+* Each task is processed by multiple threads, ensuring thread safety.
+*
+* Return: Always returns NULL.
+*/
 void *exec_tasks(const list_t *tasks)
 {
-    node_t *current_node;
-    task_t *task;
+	node_t *current_node;
+	task_t *task;
 
-    /* Start from the head of the list */
-    current_node = tasks->head;
+	/* Start from the head of the list */
+	current_node = tasks->head;
 
-    while (current_node)
-    {
-        pthread_mutex_lock(&print_mutex);
+	while (current_node)
+	{
+		pthread_mutex_lock(&print_mutex);
 
-        task = (task_t *)current_node->content;
+		task = (task_t *)current_node->content;
 
-        if (task->status == PENDING)
-        {
-            task->status = STARTED;
-            tprintf("[%02d] Started\n", task->id);  // Use ID with zero-padding
-            pthread_mutex_unlock(&print_mutex);
+		if (task->status == PENDING)
+		{
+			task->status = STARTED;
+			tprintf("[%02d] Started\n", task->id);  // Use ID with zero-padding
+			pthread_mutex_unlock(&print_mutex);
 
-            /* Execute the task */
-            task->result = task->entry(task->param);
+			/* Execute the task */
+			task->result = task->entry(task->param);
 
-            pthread_mutex_lock(&print_mutex);
-            task->status = SUCCESS;
-            tprintf("[%02d] Success\n", task->id);  // Use ID with zero-padding
-        }
-        else
-        {
-            pthread_mutex_unlock(&print_mutex);
-        }
+			pthread_mutex_lock(&print_mutex);
+			task->status = SUCCESS;
+			tprintf("[%02d] Success\n", task->id);  // Use ID with zero-padding
+		}
+		else
+		{
+			pthread_mutex_unlock(&print_mutex);
+		}
 
-        pthread_mutex_unlock(&print_mutex);
+		pthread_mutex_unlock(&print_mutex);
 
-        /* Move to the next node */
-        current_node = current_node->next;
-    }
+		/* Move to the next node */
+		current_node = current_node->next;
+	}
 
-    return NULL;
+	return (NULL);
 }
 
 
