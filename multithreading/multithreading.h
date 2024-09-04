@@ -89,8 +89,6 @@ typedef enum task_status_e
     FAILURE
 } task_status_t;
 
-typedef void (*task_entry_t)(void *);
-
 /**
  * struct task_s - Executable task structure
  *
