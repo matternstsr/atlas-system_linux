@@ -33,5 +33,5 @@ int tprintf(const char *format, ...)
 	va_end(args);
 
 	/* Return the number of chars printed */
-	return ret;
+	return (ret);
 }
