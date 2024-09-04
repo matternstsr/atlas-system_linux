@@ -19,6 +19,11 @@ void *thread_entry(void *arg)
 	/* Print the string */
 	printf("%s\n", str);
 
-	/* Return NULL */
+	/* Explicitly terminate the thread and return NULL */
+	/* pthread_exit: This function explicitly terminates the calling thread */
+	/* and allows it to return a status value to any joining threads. */
+	/* This ensures that the thread’s resources are properly cleaned up and */
+	/* that any pthread_join calls made by other threads to wait for this */
+	/* thread will receive the exit status. */
 	pthread_exit(NULL);
 }
