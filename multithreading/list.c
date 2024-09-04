@@ -65,6 +65,7 @@ list_t *list_init(void)
     return list;
 }
 
+
 /**
  * list_destroy - Destroys the content of a list
  *

@@ -36,7 +36,7 @@ typedef void (*node_func_t)(void *);
 /* list.c */
 node_t  *node_create(void *content);
 node_t  *list_add(list_t *list, void *content);
-list_t  *list_init(void);
+list_t *list_init(void);
 void    list_destroy(list_t *list, node_func_t free_func);
 void    list_each(list_t *list, node_func_t func);
 
