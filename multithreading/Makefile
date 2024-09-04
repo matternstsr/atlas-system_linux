@@ -31,32 +31,32 @@ all: $(TARGET_0) $(TARGET_1) $(TARGET_10) $(TARGET_11) $(TARGET_22)
 
 # Build target for 0-thread_entry
 $(TARGET_0): $(OBJS_0)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Build target for 1-tprintf
 $(TARGET_1): $(OBJS_1)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Build target for 10-blur_portion
 $(TARGET_10): $(OBJS_10)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Build target for 11-blur_image
 $(TARGET_11): $(OBJS_11)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Build target for 22-prime_factors
 $(TARGET_22): $(OBJS_22)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+    $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Rule to compile .c files to .o files
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+    $(CC) $(CFLAGS) -c $< -o $@
 
 # Clean up build artifacts
 clean:
-	rm -f $(OBJS_0) $(OBJS_1) $(OBJS_10) $(OBJS_11) $(OBJS_22)
-	rm -f $(TARGET_0) $(TARGET_1) $(TARGET_10) $(TARGET_11) $(TARGET_22)
+    rm -f $(OBJS_0) $(OBJS_1) $(OBJS_10) $(OBJS_11) $(OBJS_22)
+    rm -f $(TARGET_0) $(TARGET_1) $(TARGET_10) $(TARGET_11) $(TARGET_22)
 
 # Phony targets
 .PHONY: all clean
