@@ -14,11 +14,7 @@ __attribute__((constructor))
 /* Constructor function to initialize the mutex. */
 __attribute__((constructor))
 
-/**
- * Initializes the global mutex.
- *
- * This function sets up `print_mutex` for use in synchronization.
- */
+/* Initializes the global mutex. */
 static void init_mutex(void)
 {
 	pthread_mutex_init(&print_mutex, NULL);
@@ -32,11 +28,7 @@ __attribute__((destructor))
 /* Destructor function to destroy the mutex. */
 __attribute__((destructor))
 
-/**
- * Destroys the global mutex.
- *
- * This function releases resources associated with `print_mutex`.
- */
+/* Destroys the global mutex. */
 static void destroy_mutex(void)
 {
 	pthread_mutex_destroy(&print_mutex);
