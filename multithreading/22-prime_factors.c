@@ -4,6 +4,8 @@
 #include "list.h"
 #include "multithreading.h"
 
+pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 /**
 * create_task - Create a new task with a specified entry function and parameter.
 * @entry: Function pointer to the task entry function.
