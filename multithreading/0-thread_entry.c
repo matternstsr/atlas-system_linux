@@ -6,7 +6,7 @@
 * thread_entry - Thread entry point function.
 * @arg: arg passed to the thread. (Usually a ptr to data or a str.)
 *
-* This func is called when the thread starts. It processes the arg 
+* This func is called when the thread starts. It processes the arg
 * and does the thread's tasks.
 *
 * Return: ALWAYS returns NULL.
