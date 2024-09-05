@@ -22,15 +22,8 @@
  * values, ensuring that pixels near center of kernel have a higher influence
  * on the final result than those further away.
  */
-static void apply_gaussian_blur(
-    img_t const *img,
-    img_t *img_blur,
-    kernel_t const *kernel,
-    size_t x_start,
-    size_t y_start,
-    size_t width,
-    size_t height
-)
+static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel,
+    size_t x_start, size_t y_start, size_t width, size_t height)
 {
     size_t ki, kj;
     size_t kernel_half_size = kernel->size / 2;
