@@ -5,8 +5,8 @@
 
 /**
  * apply_gaussian_blur - Apply a Gaussian blur to a rect portion of an image.
- * @img: Pointer to the original image struct cont the pixel data to be blurred.
- * @img_blur: Pointer to the image struct where the blurred res will be stored.
+ * @img: Ptr to the original image struct cont the pixel data to be blurred.
+ * @img_blur: Ptr to the image struct where the blurred res will be stored.
  * @kernel: Pointer to the Gaussian kernel used for the blurring operation.
  * @x_start: The x-cord of top-left corner of portion of image to be blurred.
  * @y_start: The y-cord of top-left corner of portion of image to be blurred.
@@ -14,8 +14,8 @@
  * @height: The height of the portion of the image to be blurred.
  *
  * The func applies a Gaussian blur to a specified rectangular region of image
- * defined by the coordinates (x_start, y_start) and dimensions (width, height). 
- * The blurring is performed using the specified kernel, and resulting blurred 
+ * defined by the coordinates (x_start, y_start) & dimensions (width, height).
+ * The blurring is performed using the specified kernel, and resulting blurred
  * image is stored in the `img_blur` structure.
  *
  * The Gaussian blur is computed by averaging pixel values weighted by  kernel
@@ -74,14 +74,14 @@ static void apply_gaussian_blur(
 /**
  * blur_portion - Apply a Gaussian blur to a specified portion of an image.
  * @portion: A pointer to a `blur_portion_t` structure containing details about
- * the portion of the image to be blurred. 
- * 
+ * the portion of image to be blurred.
+ *
  * This includes the original image,
- * the image to store the blurred result, the convolution kernel, and the 
+ * the image to store the blurred result, the convolution kernel, and the
  * coordinates and dimensions of the portion to be blurred.
  *
- * The function applies a Gaussian blur to the specified rectangular area of the 
- * image using the provided kernel. The resulting blurred image is stored in the 
+ * The function applies a Gaussian blur to the specified rectangular area of
+ * image using the provided kernel. The resulting blurred image is stored in 
  * `img_blur` field of the `portion` structure.
  */
 void blur_portion(blur_portion_t const *portion)
