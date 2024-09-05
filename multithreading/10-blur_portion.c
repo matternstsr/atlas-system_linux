@@ -23,7 +23,7 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
     pixel_t *pixels_blur = img_blur->pixels;
 
     for (size_t y = y_start; y < y_start + height; y++)
-	{
+	{ /* Looping Over Pixels: */
         for (size_t x = x_start; x < x_start + width; x++)
 		{
             float r = 0, g = 0, b = 0;
@@ -32,10 +32,10 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
             for (ki = 0; ki < kernel->size; ki++)
 			{
                 for (kj = 0; kj < kernel->size; kj++)
-				{
+				{ /* Applying the Kernel: */
                     size_t pixel_x = x + ki - kernel_half_size;
                     size_t pixel_y = y + kj - kernel_half_size;
-
+					/* Boundary Check for Pixel Indices: */
                     if (pixel_x < img->w && pixel_y < img->h)
 					{
                         size_t pixel_index = pixel_y * img->w + pixel_x;
@@ -47,7 +47,7 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
                     }
                 }
             }
-
+			/* Updating the Blurred Image */
             size_t pixel_index = y * img->w + x;
             pixels_blur[pixel_index].r = (char)(r / weight_sum);
             pixels_blur[pixel_index].g = (char)(g / weight_sum);
