@@ -18,65 +18,50 @@ static int is_valid_pixel(img_t const *img, size_t x, size_t y);
 *
 */
 static void apply_gaussian_blur(img_t const *img, img_t *img_blur,
-    kernel_t const *kernel, size_t x_start, size_t y_start, size_t width,
-    size_t height)
+	kernel_t const *kernel, size_t x_start, size_t y_start, size_t width,
+	size_t height)
 {
-    pixel_t *pixels, *pix_b;
-    size_t pixel_x, pixel_y, pix_idx, kernel_half_size, ki, kj;
-    float r, g, b, weight_sum, weight;
+	pixel_t *pixels, *pixels_blur;
+	size_t pixel_x, pixel_y, pixel_index, kernel_half_size, ki, kj;
+	float r, g, b, weight_sum, weight;
 
-    kernel_half_size = kernel->size / 2;
-    pixels = img->pixels;
-    pix_b = img_blur->pixels;
+	kernel_half_size = kernel->size / 2;
+	pixels = img->pixels;
+	pixels_blur = img_blur->pixels;
 
-    float kernel_weight_sum = 0.0;/* Ensure the kernel weights sum to 1 */
-    for (ki = 0; ki < kernel->size; ki++) {
-        for (kj = 0; kj < kernel->size; kj++) {
-            kernel_weight_sum += kernel->matrix[ki][kj];
-        }
-    }
-    if (kernel_weight_sum == 0) {
-        kernel_weight_sum = 1; /* Prevent division by zero */
-    }
-    for (size_t y = y_start; y < y_start + height; y++)
-    { 
-        for (size_t x = x_start; x < x_start + width; x++)
-        {
-            r = 0;
-            g = 0;
-            b = 0;
-            weight_sum = 0.0;
-            for (ki = 0; ki < kernel->size; ki++)
-            {
-                for (kj = 0; kj < kernel->size; kj++)
-                { 
-                    pixel_x = x + ki - kernel_half_size;
-                    pixel_y = y + kj - kernel_half_size;
-                    if (is_valid_pixel(img, pixel_x, pixel_y))
-                    {
-                        pix_idx = pixel_y * img->w + pixel_x;
-                        weight = kernel->matrix[ki][kj];
-                        r += pixels[pix_idx].r * weight;
-                        g += pixels[pix_idx].g * weight;
-                        b += pixels[pix_idx].b * weight;
-                        weight_sum += weight;
-                    }
-                }
-            } /* Normalize the result */
-            if (weight_sum > 0) {
-                r /= weight_sum;
-                g /= weight_sum;
-                b /= weight_sum;
-            }
-            pix_idx = y * img->w + x;
-			pix_b[pix_idx].r = (char)((r < 0) ? 0 : ((r > 255) ? 255 : r));
-			pix_b[pix_idx].g = (char)((g < 0) ? 0 : ((g > 255) ? 255 : g));
-			pix_b[pix_idx].b = (char)((b < 0) ? 0 : ((b > 255) ? 255 : b));
+	for (size_t y = y_start; y < y_start + height; y++)
+	{ /* Looping Over Pixels: */
+		for (size_t x = x_start; x < x_start + width; x++)
+		{
+			r = 0;
+			g = 0;
+			b = 0;
+			weight_sum = 0.0;
+			for (ki = 0; ki < kernel->size; ki++)
+			{
+				for (kj = 0; kj < kernel->size; kj++)
+				{ /* Applying the Kernel: */
+					pixel_x = x + ki - kernel_half_size;
+					pixel_y = y + kj - kernel_half_size;
 
-        }
-    }
+					if (is_valid_pixel(img, pixel_x, pixel_y))
+					{
+						pixel_index = pixel_y * img->w + pixel_x;
+						weight = kernel->matrix[ki][kj];
+						r += pixels[pixel_index].r * weight;
+						g += pixels[pixel_index].g * weight;
+						b += pixels[pixel_index].b * weight;
+						weight_sum += weight;
+					}
+				}
+			} /* Updating the Blurred Image */
+			pixel_index = y * img->w + x;
+			pixels_blur[pixel_index].r = (char)(r / weight_sum);
+			pixels_blur[pixel_index].g = (char)(g / weight_sum);
+			pixels_blur[pixel_index].b = (char)(b / weight_sum);
+		}
+	}
 }
-
 
 /**
 * is_valid_pixel - checks if given pixel coordinates are within image bounds.
@@ -97,7 +82,7 @@ static int is_valid_pixel(img_t const *img, size_t x, size_t y)
 
 /**
 * blur_portion - Apply a Gaussian blur to a specified portion of an image.
-* @portion: A pointer to a `blur_portion_t` structure containing details about
+* @portion: A pointer to a blur_portion_t structure containing details about
 * the portion of the image to be blurred.
 *
 */
