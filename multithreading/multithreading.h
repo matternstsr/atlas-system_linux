@@ -198,7 +198,7 @@ void *exec_tasks(const list_t *tasks);
  * @y: y-coordinate of the pixel.
  * Return: 1 if the pixel is within bounds, 0 otherwise.
  */
-static int is_valid_pixel(img_t const *img, size_t x, size_t y);
+/* static int is_valid_pixel(img_t const *img, size_t x, size_t y); */
 
 
 #endif /* MULTITHREADING_H */
