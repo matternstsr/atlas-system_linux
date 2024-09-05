@@ -69,9 +69,10 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur,
                 b /= weight_sum;
             }
             pixel_index = y * img->w + x;
-            pixels_blur[pixel_index].r = (char)fmin(fmax(r, 0), 255);
-            pixels_blur[pixel_index].g = (char)fmin(fmax(g, 0), 255);
-            pixels_blur[pixel_index].b = (char)fmin(fmax(b, 0), 255);
+			pixels_blur[pixel_index].r = (char)((r < 0) ? 0 : ((r > 255) ? 255 : r));
+			pixels_blur[pixel_index].g = (char)((g < 0) ? 0 : ((g > 255) ? 255 : g));
+			pixels_blur[pixel_index].b = (char)((b < 0) ? 0 : ((b > 255) ? 255 : b));
+
         }
     }
 }
