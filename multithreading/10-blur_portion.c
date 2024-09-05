@@ -21,13 +21,13 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur,
     kernel_t const *kernel, size_t x_start, size_t y_start, size_t width,
     size_t height)
 {
-    pixel_t *pixels, *pixels_blur;
-    size_t pixel_x, pixel_y, pixel_index, kernel_half_size, ki, kj;
+    pixel_t *pixels, *pix_b;
+    size_t pixel_x, pixel_y, pix_idx, kernel_half_size, ki, kj;
     float r, g, b, weight_sum, weight;
 
     kernel_half_size = kernel->size / 2;
     pixels = img->pixels;
-    pixels_blur = img_blur->pixels;
+    pix_b = img_blur->pixels;
 
     float kernel_weight_sum = 0.0;/* Ensure the kernel weights sum to 1 */
     for (ki = 0; ki < kernel->size; ki++) {
@@ -54,11 +54,11 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur,
                     pixel_y = y + kj - kernel_half_size;
                     if (is_valid_pixel(img, pixel_x, pixel_y))
                     {
-                        pixel_index = pixel_y * img->w + pixel_x;
+                        pix_idx = pixel_y * img->w + pixel_x;
                         weight = kernel->matrix[ki][kj];
-                        r += pixels[pixel_index].r * weight;
-                        g += pixels[pixel_index].g * weight;
-                        b += pixels[pixel_index].b * weight;
+                        r += pixels[pix_idx].r * weight;
+                        g += pixels[pix_idx].g * weight;
+                        b += pixels[pix_idx].b * weight;
                         weight_sum += weight;
                     }
                 }
@@ -68,10 +68,10 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur,
                 g /= weight_sum;
                 b /= weight_sum;
             }
-            pixel_index = y * img->w + x;
-			pixels_blur[pixel_index].r = (char)((r < 0) ? 0 : ((r > 255) ? 255 : r));
-			pixels_blur[pixel_index].g = (char)((g < 0) ? 0 : ((g > 255) ? 255 : g));
-			pixels_blur[pixel_index].b = (char)((b < 0) ? 0 : ((b > 255) ? 255 : b));
+            pix_idx = y * img->w + x;
+			pix_b[pix_idx].r = (char)((r < 0) ? 0 : ((r > 255) ? 255 : r));
+			pix_b[pix_idx].g = (char)((g < 0) ? 0 : ((g > 255) ? 255 : g));
+			pix_b[pix_idx].b = (char)((b < 0) ? 0 : ((b > 255) ? 255 : b));
 
         }
     }
