@@ -13,14 +13,6 @@
  * @width: The width of the portion of the image to be blurred.
  * @height: The height of the portion of the image to be blurred.
  *
- * The func applies a Gaussian blur to a specified rectangular region of image
- * defined by the coordinates (x_start, y_start) & dimensions (width, height).
- * The blurring is performed using the specified kernel, and resulting blurred
- * image is stored in the `img_blur` structure.
- *
- * The Gaussian blur is computed by averaging pixel values weighted by  kernel
- * values, ensuring that pixels near center of kernel have a higher influence
- * on the final result than those further away.
  */
 static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t const *kernel,
     size_t x_start, size_t y_start, size_t width, size_t height)
@@ -69,13 +61,6 @@ static void apply_gaussian_blur(img_t const *img, img_t *img_blur, kernel_t cons
  * @portion: A pointer to a `blur_portion_t` structure containing details about
  * the portion of image to be blurred.
  *
- * This includes the original image,
- * the image to store the blurred result, the convolution kernel, and the
- * coordinates and dimensions of the portion to be blurred.
- *
- * The function applies a Gaussian blur to the specified rectangular area of
- * image using the provided kernel. The resulting blurred image is stored in 
- * `img_blur` field of the `portion` structure.
  */
 void blur_portion(blur_portion_t const *portion)
 {
