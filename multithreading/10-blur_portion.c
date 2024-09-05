@@ -80,9 +80,9 @@ static int is_valid_pixel(img_t const *img, size_t x, size_t y)
 {
     if (x < img->w && y < img->h)
     {
-        return 1;
+        return (1);
     }
-    return 0;
+    return (0);
 }
 
 /**
