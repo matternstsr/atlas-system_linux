@@ -74,3 +74,53 @@ void blur_portion(blur_portion_t const *portion)
         portion->h
     );
 }
+
+typedef struct {
+    img_t const *img;
+    img_t *img_blur;
+    kernel_t const *kernel;
+    size_t x_start;
+    size_t y_start;
+    size_t width;
+    size_t height;
+} blur_task_t;
+
+void *thread_apply_gaussian_blur(void *arg) {
+    blur_task_t *task = (blur_task_t *)arg;
+    apply_gaussian_blur(
+        task->img,
+        task->img_blur,
+        task->kernel,
+        task->x_start,
+        task->y_start,
+        task->width,
+        task->height
+    );
+    return NULL;
+}
+
+void blur_image(img_t *img_blur, img_t const *img, kernel_t const *kernel) {
+    /* Define number of threads and tasks */
+    int num_threads = 4; /* Adjust as needed */
+    pthread_t threads[num_threads];
+    blur_task_t tasks[num_threads];
+
+    /* Divide the image into portions for each thread */
+    size_t portion_height = img->h / num_threads;
+    for (int i = 0; i < num_threads; i++) {
+        tasks[i].img = img;
+        tasks[i].img_blur = img_blur;
+        tasks[i].kernel = kernel;
+        tasks[i].x_start = 0;
+        tasks[i].y_start = i * portion_height;
+        tasks[i].width = img->w;
+        tasks[i].height = (i == num_threads - 1) ? (img->h - (portion_height * (num_threads - 1))) : portion_height;
+
+        pthread_create(&threads[i], NULL, thread_apply_gaussian_blur, &tasks[i]);
+    }
+
+    /* Wait for all threads to finish */
+    for (int i = 0; i < num_threads; i++) {
+        pthread_join(threads[i], NULL);
+    }
+}
