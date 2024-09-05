@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <math.h>
 
+/* Forward declaration of is_valid_pixel */
+static int is_valid_pixel(img_t const *img, size_t x, size_t y);
+
 /**
  * apply_gaussian_blur - Apply a Gaussian blur to a rect portion of an image.
  * @img: Ptr to the original image struct containing the pixel data to be blurred.
