@@ -1,0 +1,1 @@
+This ia a readme for the sockets and after understanding this ill make a readme.
