@@ -40,7 +40,7 @@ int main()
     printf("Server listening on port %d\n", PORT);
     while (1) /* Hang indefinitely */
 	{
-        pause();  /* Suspend the process until a signal is received */
+        ;  /* Suspend the process until a signal is received */
     }
     /* close(sockfd); Close the socket (not reachable) */
     return 0;
