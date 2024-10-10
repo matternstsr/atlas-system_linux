@@ -28,13 +28,13 @@ int main()
     if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
         perror("Bind failed");
-        close(sockfd);
+        /* close(sockfd); */
         exit(EXIT_FAILURE);
     }
     if (listen(sockfd, 5) < 0) /* Listen on the socket */
 	{
         perror("Listen failed");
-        close(sockfd);
+        /* close(sockfd); */
         exit(EXIT_FAILURE);
     }
     printf("Server listening on port %d\n", PORT);
