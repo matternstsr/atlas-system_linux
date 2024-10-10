@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 #define PORT 12345
 
@@ -14,7 +15,7 @@ int main()
     struct sockaddr_in server_addr;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0); /* Create a socket */
-    if (sockfd == -1)
+    if (sockfd < 0)
 	{
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
