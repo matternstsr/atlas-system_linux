@@ -20,7 +20,7 @@ int main()
         exit(EXIT_FAILURE);
     }
     /* Prepare the sockaddr_in structure */
-    memset(&server_addr, 0, sizeof(server_addr));
+    /* memset(&server_addr, 0, sizeof(server_addr)); */
     server_addr.sin_family = AF_INET; /* IPv4 optimizes direction used*/
     server_addr.sin_addr.s_addr = INADDR_ANY;  /* Any address */
     server_addr.sin_port = htons(PORT);  /* Port number */
