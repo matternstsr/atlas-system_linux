@@ -42,6 +42,6 @@ int main()
 	{
         pause();  /* Suspend the process until a signal is received */
     }
-    close(sockfd); /* Close the socket (not reachable) */
+    /* close(sockfd); Close the socket (not reachable) */
     return 0;
 }
