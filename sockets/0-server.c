@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+
 #define PORT 12345
 
 int main()
@@ -21,7 +22,7 @@ int main()
         exit(EXIT_FAILURE);
     }
     /* Prepare the sockaddr_in structure */
-    /* memset(&server_addr, 0, sizeof(server_addr)); */
+    memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET; /* IPv4 optimizes direction used*/
     server_addr.sin_addr.s_addr = INADDR_ANY;  /* Any address */
     server_addr.sin_port = htons(PORT);  /* Port number */
@@ -29,19 +30,19 @@ int main()
     if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
         perror("Bind failed");
-        /* close(sockfd); */
+        close(sockfd);
         exit(EXIT_FAILURE);
     }
     if (listen(sockfd, 5) < 0) /* Listen on the socket */
 	{
         perror("Listen failed");
-        /* close(sockfd); */
+        close(sockfd);
         exit(EXIT_FAILURE);
     }
     printf("Server listening on port %d\n", PORT);
     while (1) /* Hang indefinitely */
 	{
-        ;  /* Suspend the process until a signal is received */
+        pause();  /* Suspend the process until a signal is received */
     }
     /* close(sockfd); Close the socket (not reachable) */
     return 0;
