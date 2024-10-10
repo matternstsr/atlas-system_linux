@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#define PORT 1432
+#define PORT 12345
 
 int main()
 {
@@ -40,7 +40,7 @@ int main()
     printf("Server listening on port %d\n", PORT);
     while (1) /* Hang indefinitely */
 	{
-        ;  /* Suspend the process until a signal is received */
+        pause();  /* Suspend the process until a signal is received */
     }
     /* close(sockfd); Close the socket (not reachable) */
     return 0;
