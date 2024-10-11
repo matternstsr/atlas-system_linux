@@ -10,7 +10,7 @@
 
 #define PORT 12345
 
-int main()
+int main(void)
 {
 	int sockfd;
 	struct sockaddr_in server_addr;
@@ -45,5 +45,5 @@ int main()
 		pause();  /* Suspend the process until a signal is received */
 	}
 	close(sockfd); /* Close the socket (not reachable) */
-	return 0;
+	return (0);
 }
