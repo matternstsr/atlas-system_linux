@@ -10,7 +10,7 @@
 
 #define PORT 12345
 
-/**
+/*
  * main - Initializes and runs a simple TCP server.
  * This function creates a TCP socket, binds it to a specified port (12345),
  * and listens for incoming connections. The server runs indefinitely,
