@@ -11,15 +11,15 @@
 #define PORT 12345
 
 /**
- * @brief Main function that initializes and runs a simple TCP server.
- *
- * This function creates a TCP socket, binds it to a specified port (12345),
- * and listens for incoming connections. The server runs indefinitely, 
- * waiting for signals to handle incoming requests. Error handling is 
- * implemented for socket creation, binding, and listening.
- *
- * @return Returns 0 upon successful (though unreachable in this case).
- */
+* @brief Main function that initializes and runs a simple TCP server.
+*
+* This function creates a TCP socket, binds it to a specified port (12345),
+* and listens for incoming connections. The server runs indefinitely,
+* waiting for signals to handle incoming requests. Error handling is
+* implemented for socket creation, binding, and listening.
+*
+* @return Returns 0 upon successful (though unreachable in this case).
+*/
 int main(void)
 {
 	int sockfd;
