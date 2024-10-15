@@ -17,7 +17,7 @@ int main(void)
 	int server_socket, client_socket;
 	size_t received_bytes = 0;
 	char buffer[4096];
-	char method[50], path[50], version[50], sent[32] = MESSAGE;
+	char method[50], path[50], version[50], sent[32] = RESPONSE;
 	struct sockaddr_in server_addr;
 	socklen_t addr_len = sizeof(server_addr);
 	
