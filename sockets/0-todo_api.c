@@ -17,7 +17,7 @@ int main(void)
 	int server_socket, client_socket;
 	size_t received_bytes = 0;
 	char buffer[4096];
-	char method[50], path[50], version[50];
+	char method[50], path[50], version[50], sent[32] = MESSAGE;
 	struct sockaddr_in server_addr;
 	socklen_t addr_len = sizeof(server_addr);
 	
@@ -25,7 +25,7 @@ int main(void)
 	server_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_socket < 0)
 	{
-		perror("Socket creation failed");
+		perror("socket failed"),
 		exit(EXIT_FAILURE);
 	}
 	
@@ -37,8 +37,7 @@ int main(void)
 	/* Bind the socket */
 	if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
-		perror("Bind failed");
-		close(server_socket);
+		perror("bind failed");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -48,7 +47,6 @@ int main(void)
 	if (listen(server_socket, 5) < 0)
 	{
 		perror("Listen failed");
-		close(server_socket);
 		exit(EXIT_FAILURE);
 	}
 
@@ -58,7 +56,7 @@ int main(void)
 		client_socket = accept(server_socket, (struct sockaddr *)&server_addr, &addr_len);
 		if (client_socket < 0)
 		{
-			perror("Accept failed");
+			perror("accept failed");
 			continue; /* Continue to the next iteration on error */
 		}
 		
