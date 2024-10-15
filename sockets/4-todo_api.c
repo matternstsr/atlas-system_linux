@@ -99,8 +99,8 @@ int main(void) {
 				if (content_length_header) {
 					int content_length = atoi(content_length_header + 16);
 					char *body = buffer + bytes - content_length;
-					*body = '\0'; // Null-terminate the request
-					parse_body(body + 2, title, description); // Skip the CRLF before the body
+					*body = '\0'; /* Null-terminate the request */
+					parse_body(body + 2, title, description); /* Skip the CRLF before the body */
 
 					if (strlen(title) > 0 && strlen(description) > 0) {
 						int id = create_todo(title, description);

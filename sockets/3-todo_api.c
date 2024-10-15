@@ -27,7 +27,7 @@ void parse_body(char *body) {
 int main(void) {
 	int socket_fd, new_con;
 	size_t bytes = 0;
-	char buffer[4096], meth[50], path[50], ver[50];
+	char buffer[4096], meth[50], path[50], ver[50], *content_length_header, *body;
 	struct sockaddr_in address;
 	socklen_t addrlen = sizeof(address);
 	int content_length = 0;
@@ -74,13 +74,13 @@ int main(void) {
 			printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, ver);
 			fflush(stdout);
 
-			// Check for Content-Length header
-			char *content_length_header = strstr(buffer, "Content-Length: ");
+			/* Check for Content-Length header */
+			content_length_header = strstr(buffer, "Content-Length: ");
 			if (content_length_header) {
 				content_length = atoi(content_length_header + 16);
-				char *body = buffer + bytes - content_length;
-				*body = '\0'; // Null-terminate the request
-				parse_body(body + 2); // Skip the CRLF before the body
+				body = buffer + bytes - content_length;
+				body = '\0'; /* Null-terminate the request */
+				parse_body(body + 2); /* Skip the CRLF before the body */
 			}
 		}
 

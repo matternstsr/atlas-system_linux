@@ -27,7 +27,7 @@ void parse_query(const char *query) {
 int main(void) {
 	int socket_fd, new_con;
 	size_t bytes = 0;
-	char buffer[4096], meth[50], path[50], ver[50];
+	char buffer[4096], meth[50], path[50], ver[50], *query_start;
 	struct sockaddr_in address;
 	socklen_t addrlen = sizeof(address);
 
@@ -73,9 +73,9 @@ int main(void) {
 			printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, ver);
 			fflush(stdout);
 
-			char *query_start = strchr(path, '?');
+			query_start = strchr(path, '?');
 			if (query_start) {
-				*query_start = '\0'; // Split path and query
+				*query_start = '\0'; /* Split path and query */
 				printf("Path: %s\n", path);
 				parse_query(query_start + 1);
 			} else {
