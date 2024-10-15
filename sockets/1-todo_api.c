@@ -19,8 +19,8 @@ int main(void)
     int server_fd, client_fd;
     size_t received_bytes = 0;
     char request_buffer[4096];
-    struct sockaddr_in server_addr;
-    socklen_t addr_len = sizeof(server_addr);
+    struct sockaddr_in address;
+    socklen_t addr_len = sizeof(address);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == -1)
@@ -29,11 +29,11 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(8080);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    address.sin_family = AF_INET;
+    address.sin_port = htons(8080);
+    address.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("binding failed");
         exit(EXIT_FAILURE);
@@ -50,14 +50,14 @@ int main(void)
 
     while (1)
     {
-        client_fd = accept(server_fd, (struct sockaddr *)&server_addr, &addr_len);
+        client_fd = accept(server_fd, (struct sockaddr *)&address, &addr_len);
         if (client_fd < 0)
         {
             perror("connection acceptance failed");
             exit(EXIT_FAILURE);
         }
 
-        printf("Client connected: %s\n", inet_ntoa(server_addr.sin_addr));
+        printf("Client connected: %s\n", inet_ntoa(address.sin_addr));
         fflush(stdout);
 
         received_bytes = recv(client_fd, request_buffer, sizeof(request_buffer) - 1, 0);
