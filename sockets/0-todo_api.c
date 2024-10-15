@@ -17,6 +17,7 @@ int main(void)
     int socket_fd, new_con;
     size_t bytes = 0;
     char buffer[4096], meth[50], path[50], ver[50], sent[32] = RESPONSE;
+    struct sockaddr_in address;
     socklen_t addrlen = sizeof(address);
 
     socket_fd = socket(AF_INET, SOCK_STREAM, 0); /* Create socket */
