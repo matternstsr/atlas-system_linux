@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 1024
 
-**
+/**
 * main - Connects to a specified server.
 * This function creates a TCP socket, connects to the server at the
 * provided host and port, and allows the user to send messages to the server.
