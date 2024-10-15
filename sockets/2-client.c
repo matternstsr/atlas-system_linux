@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
 	memset(&hints, 0, sizeof(hints)); /* Initialize hints */
 	hints.ai_family = AF_INET; /* Use IPv4 */
 	hints.ai_socktype = SOCK_STREAM; /* TCP socket */
-	if ((status = getaddrinfo(argv[1], argv[2], &hints, &res)) != 0)
-	{ /* Get address info */
+	status = getaddrinfo(argv[1], argv[2], &hints, &res);
+	if (status != 0) /* Get address info */
+	{
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
 		return (EXIT_F);
 	}
