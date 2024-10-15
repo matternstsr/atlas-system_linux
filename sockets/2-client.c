@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
 	sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	if (sockfd == -1)
 	{ /* Create a socket */
-		perror("socket");
-		freeaddrinfo(res);
+		perror("socket"), freeaddrinfo(res);
 		return (EXIT_F);
 	}
 	for (p = res; p != NULL; p = p->ai_next)
