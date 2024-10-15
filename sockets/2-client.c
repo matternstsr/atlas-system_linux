@@ -8,7 +8,7 @@
 #define EXIT_S 0
 #define EXIT_F 1
 
-/*
+/**
 * main - Connects to a listening server.
 *
 * @argc: arg count.

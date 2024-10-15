@@ -9,7 +9,7 @@
 #define PORT 12345
 #define BUFFER_SIZE 1024
 
-/*
+/**
 * main - Initializes and runs a simple TCP server.
 * This function creates a TCP socket, binds it to a specified port (12345),
 * listens for incoming connections, and handles a single client request.
