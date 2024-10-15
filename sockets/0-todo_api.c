@@ -16,7 +16,7 @@ void handle_client(int client_sock)
 	if (bytes_received < 0)
 	{
 		perror("Receive failed");
-		return ();
+		return;
 	}
 	buffer[bytes_received] = '\0'; /* Null-terminate the string */
 
