@@ -36,13 +36,11 @@ int main(void)
 	if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
 		perror("Bind failed"); /* Bind the socket */
-		close(sockfd);
 		exit(EXIT_FAILURE);
 	}
 	if (listen(sockfd, 1) < 0) /* Listen on the socket */
 	{
 		perror("Listen failed");
-		close(sockfd);
 		exit(EXIT_FAILURE);
 	}
 	printf("Server listening on port %d\n", PORT);
@@ -50,12 +48,10 @@ int main(void)
 	if (newsockfd < 0)
 	{
 		perror("Accept failed");
-		close(sockfd);
 		exit(EXIT_FAILURE);
 	} /* Print the client's IP address */
 	inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
 	printf("Client connected: %s\n", client_ip);
-	/* Receive a message from the client */
 	bytes_received = recv(newsockfd, buffer, sizeof(buffer) - 1, 0);
 	if (bytes_received < 0)
 		perror("Receive failed");
