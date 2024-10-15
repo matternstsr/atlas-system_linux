@@ -8,85 +8,99 @@
 
 #define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
 
-void parse_query(const char *query) {
-	char *query_copy = strdup(query);
-	char *pair = strtok(query_copy, "&");
-	
-	while (pair) {
-		char *key = strtok(pair, "=");
-		char *value = strtok(NULL, "=");
-		if (key && value) {
-			printf("Query: \"%s\" -> \"%s\"\n", key, value);
-		}
-		pair = strtok(NULL, "&");
-	}
-	
-	free(query_copy);
+void parse_headers(char *request);
+
+/**
+ * main - Entry point of the server
+ * Return: 0 on success
+ */
+int main(void)
+{
+    int server_fd, client_fd;
+    size_t received_bytes = 0;
+    char request_buffer[4096];
+    struct sockaddr_in server_addr;
+    socklen_t addr_len = sizeof(server_addr);
+
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd == -1)
+    {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(8080);
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    {
+        perror("binding failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Server listening on port 8080\n");
+    fflush(stdout);
+
+    if (listen(server_fd, 5) < 0)
+    {
+        perror("listening failed");
+        exit(EXIT_FAILURE);
+    }
+
+    while (1)
+    {
+        client_fd = accept(server_fd, (struct sockaddr *)&server_addr, &addr_len);
+        if (client_fd < 0)
+        {
+            perror("connection acceptance failed");
+            exit(EXIT_FAILURE);
+        }
+
+        printf("Client connected: %s\n", inet_ntoa(server_addr.sin_addr));
+        fflush(stdout);
+
+        received_bytes = recv(client_fd, request_buffer, sizeof(request_buffer) - 1, 0);
+        if (received_bytes > 0)
+        {
+            request_buffer[received_bytes] = '\0'; /* Null-terminate the buffer */
+            printf("Raw request: \"%s\"\n", request_buffer);
+            fflush(stdout);
+            parse_headers(request_buffer); /* Use the new header parser */
+        }
+
+        send(client_fd, RESPONSE, sizeof(RESPONSE) - 1, 0);
+        close(client_fd);
+    }
+
+    close(server_fd);
+    return (0);
 }
 
-int main(void) {
-	int socket_fd, new_con;
-	size_t bytes = 0;
-	char buffer[4096], meth[50], path[50], ver[50], *query_start;
-	struct sockaddr_in address;
-	socklen_t addrlen = sizeof(address);
+/**
+ * parse_headers - Parses an HTTP request headers
+ * @request: The request string to parse
+ */
+void parse_headers(char *request)
+{
+    int index = 0;
+    char *line_token;
+    char *header_lines[16] = {0}; /* Array to store header lines */
+    char header_key[50], header_value[50];
 
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd == -1) {
-		perror("socket failed");
-		exit(EXIT_FAILURE);
-	}
+    line_token = strtok(request, "\r\n");
+    while (line_token)
+    {
+        header_lines[index++] = line_token; /* Store each line */
+        line_token = strtok(NULL, "\r\n");
+    }
 
-	address.sin_family = AF_INET;
-	address.sin_port = htons(8080);
-	address.sin_addr.s_addr = INADDR_ANY;
-
-	if (bind(socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-
-	printf("Server listening on port 8080\n");
-	fflush(stdout);
-
-	if (listen(socket_fd, 5) < 0) {
-		perror("listen failed");
-		exit(EXIT_FAILURE);
-	}
-
-	while (1) {
-		new_con = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
-		if (new_con < 0) {
-			perror("accept failed");
-			exit(EXIT_FAILURE);
-		}
-
-		printf("Client connected: %s\n", inet_ntoa(address.sin_addr));
-		fflush(stdout);
-
-		bytes = recv(new_con, buffer, sizeof(buffer) - 1, 0);
-		if (bytes > 0) {
-			buffer[bytes] = '\0';
-			printf("Raw request: \"%s\"\n", buffer);
-			fflush(stdout);
-			sscanf(buffer, "%s %s %s", meth, path, ver);
-			printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, ver);
-			fflush(stdout);
-
-			query_start = strchr(path, '?');
-			if (query_start) {
-				*query_start = '\0'; /* Split path and query */
-				printf("Path: %s\n", path);
-				parse_query(query_start + 1);
-			} else {
-				printf("Path: %s\n", path);
-			}
-		}
-
-		send(new_con, RESPONSE, sizeof(RESPONSE) - 1, 0);
-		close(new_con);
-	}
-
-	close(socket_fd);
-	return (0);
+    /* Process the headers starting from index 1 (skip request line) */
+    for (index = 1; header_lines[index]; index++)
+    {
+        if (sscanf(header_lines[index], "%[^:]: %s", header_key, header_value) == 2)
+        {
+            printf("Header: \"%s\" -> \"%s\"\n", header_key, header_value);
+        }
+    }
 }
