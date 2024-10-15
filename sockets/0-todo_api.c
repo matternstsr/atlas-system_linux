@@ -18,8 +18,8 @@ int main(void)
     size_t received_bytes = 0;
     char req_buffer[4096], request_method[50], request_path[50], http_version[50];
     char sent[32] = RESPONSE_MSG;
-    struct sockaddr_in client_addr;
-    socklen_t addr_len = sizeof(client_addr);
+    struct sockaddr_in address;
+    socklen_t addr_len = sizeof(address);
 
     /* Create socket */
     server_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,12 +30,12 @@ int main(void)
     }
 
     /* Configure server address */
-    client_addr.sin_family = AF_INET;
-    client_addr.sin_port = htons(8080);
-    client_addr.sin_addr.s_addr = INADDR_ANY;
+    address.sin_family = AF_INET;
+    address.sin_port = htons(8080);
+    address.sin_addr.s_addr = INADDR_ANY;
 
     /* Bind the socket */
-    if (bind(server_sock, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
+    if (bind(server_sock, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("Binding failed");
         close(server_sock);
@@ -55,14 +55,14 @@ int main(void)
     /* Main loop to accept and handle clients */
     while (1)
     {
-        client_sock = accept(server_sock, (struct sockaddr *)&client_addr, &addr_len);
+        client_sock = accept(server_sock, (struct sockaddr *)&address, &addr_len);
         if (client_sock < 0)
         {
             perror("Accepting connection failed");
             continue; /* Continue to the next iteration on error */
         }
 
-        printf("Client connected: %s\n", inet_ntoa(client_addr.sin_addr));
+        printf("Client connected: %s\n", inet_ntoa(address.sin_addr));
 
         /* Receive request */
         received_bytes = recv(client_sock, req_buffer, sizeof(req_buffer) - 1, 0);
