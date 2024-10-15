@@ -2,83 +2,51 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
+#define MESSAGE "HTTP/1.1 200 OK\r\n\r\n"
 
-/* 
-* main - Entry point of the HTTP server
-* Return: 0 on success 
+/**
+ * main - entry to the function
+ * Return: 0 on success
 */
 int main(void)
 {
-	int server_socket, client_socket;
-	size_t received_bytes = 0;
-	char buffer[4096];
-	char method[50], path[50], version[50], sent[32] = MESSAGE;
-	struct sockaddr_in server_addr;
-	socklen_t addr_len = sizeof(server_addr);
-	
-	/* Create socket */
-	server_socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (server_socket < 0)
-	{
-		perror("socket failed"),
-		exit(EXIT_FAILURE);
-	}
-	
-	/* Configure server address */
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(8080);
-	server_addr.sin_addr.s_addr = INADDR_ANY;
-	
-	/* Bind the socket */
-	if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-	{
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-	
-	printf("Server listening on port 8080\n");
-	
-	/* Start listening for connections */
-	if (listen(server_socket, 5) < 0)
-	{
-		perror("Listen failed");
-		exit(EXIT_FAILURE);
-	}
+	int socket_fd, new_con;
+	size_t bytes = 0;
+	char buffer[4096], meth[50], path[50], ver[50], sent[32] = MESSAGE;
+	struct sockaddr_in address;
+	socklen_t addrlen = sizeof(address);
 
-	/* Main loop to accept and handle clients */
+	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (socket_fd == -1)
+		perror("socket failed"), exit(EXIT_FAILURE);
+	address.sin_family = AF_INET, address.sin_port = htons(8080);
+	address.sin_addr.s_addr = INADDR_ANY;
+	if (bind(socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+		perror("bind failed"), exit(EXIT_FAILURE);
+	printf("Server listening on port 8080\n");
+	if (listen(socket_fd, 5) < 0)
+		perror("listen failed"), exit(EXIT_FAILURE);
 	while (1)
 	{
-		client_socket = accept(server_socket, (struct sockaddr *)&server_addr, &addr_len);
-		if (client_socket < 0)
+		new_con = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
+		if (new_con < 0)
+			perror("accept failed"), exit(EXIT_FAILURE);
+		printf("Client connected: %s\n", inet_ntoa(address.sin_addr));
+		bytes = recv(new_con, buffer, 4096, 0);
+		if (bytes > 0)
 		{
-			perror("accept failed");
-			continue; /* Continue to the next iteration on error */
+			printf("Raw request: \"%s\"\n", buffer), fflush(stdout);
+			sscanf(buffer, "%s %s %s", meth, path, ver);
+			printf("Method: %s\nPath: %s\nVersion: %s\n", meth, path, ver);
+			fflush(stdout);
 		}
-		
-		printf("Client connected: %s\n", inet_ntoa(server_addr.sin_addr));
-		
-		/* Receive request */
-		received_bytes = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
-		if (received_bytes > 0)
-		{
-			buffer[received_bytes] = '\0'; /* Null-terminate the received string */
-			printf("Raw request: \"%s\"\n", buffer);
-			
-			/* Parse the request */
-			sscanf(buffer, "%s %s %s", method, path, version);
-			printf("Method: %s\nPath: %s\nVersion: %s\n", method, path, version);
-		}
-
-		/* Send response */
-		send(client_socket, RESPONSE, sizeof(RESPONSE) - 1, 0);
-		close(client_socket); /* Close the client connection */
+		send(new_con, sent, sizeof(sent), 0);
+		close(new_con);
 	}
-
-	close(server_socket); /* Close the server socket */
 	return (0);
 }
