@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
 	if (p == NULL) /* Check if we were able to connect */
 	{
 		fprintf(stderr, "Connection failed\n");
-		close(sockfd);
-		freeaddrinfo(res);
+		close(sockfd), freeaddrinfo(res);
 		return (EXIT_F);
 	}
 	freeaddrinfo(res); /* Clean up */
