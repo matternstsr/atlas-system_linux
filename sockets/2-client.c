@@ -25,17 +25,14 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Usage: %s <host> <port>\n", argv[0]);
 		return (EXIT_F);
 	}
-
 	memset(&hints, 0, sizeof(hints)); /* Initialize hints */
 	hints.ai_family = AF_INET; /* Use IPv4 */
 	hints.ai_socktype = SOCK_STREAM; /* TCP socket */
-
 	if ((status = getaddrinfo(argv[1], argv[2], &hints, &res)) != 0)
 	{ /* Get address info */
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
 		return (EXIT_F);
 	}
-
 	sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	if (sockfd == -1)
 	{ /* Create a socket */
@@ -43,7 +40,6 @@ int main(int argc, char *argv[])
 		freeaddrinfo(res);
 		return (EXIT_F);
 	}
-
 	for (p = res; p != NULL; p = p->ai_next)
 	{ /* Attempt to connect */
 		if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
@@ -52,7 +48,6 @@ int main(int argc, char *argv[])
 			break; /* Connection successful */
 		}
 	}
-
 	if (p == NULL) /* Check if we were able to connect */
 	{
 		fprintf(stderr, "Connection failed\n");
@@ -60,7 +55,6 @@ int main(int argc, char *argv[])
 		freeaddrinfo(res);
 		return (EXIT_F);
 	}
-
 	freeaddrinfo(res); /* Clean up */
 	close(sockfd);
 	return (EXIT_S);
