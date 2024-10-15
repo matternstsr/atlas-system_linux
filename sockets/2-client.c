@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	if (argc != 3) /* Check for the correct number of arguments */
 	{
 		fprintf(stderr, "Usage: %s <host> <port>\n", argv[0]);
-		return EXIT_F;
+		return (EXIT_F);
 	}
 
 	memset(&hints, 0, sizeof(hints)); /* Initialize hints */
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	if ((status = getaddrinfo(argv[1], argv[2], &hints, &res)) != 0)
 	{ /* Get address info */
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
-		return EXIT_F;
+		return (EXIT_F);
 	}
 
 	sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	{ /* Create a socket */
 		perror("socket");
 		freeaddrinfo(res);
-		return EXIT_F;
+		return (EXIT_F);
 	}
 
 	for (p = res; p != NULL; p = p->ai_next)
@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Connection failed\n");
 		close(sockfd);
 		freeaddrinfo(res);
-		return EXIT_F;
+		return (EXIT_F);
 	}
 
 	freeaddrinfo(res); /* Clean up */
 	close(sockfd);
-	return EXIT_S;
+	return (EXIT_S);
 }
