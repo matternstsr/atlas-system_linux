@@ -8,6 +8,10 @@
 
 #define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
 
+/*
+ * main - entry to the function
+ * Return: 0 on success
+ */
 int main(void)
 {
     int socket_fd, new_con;
@@ -16,8 +20,7 @@ int main(void)
     struct sockaddr_in address;
     socklen_t addrlen = sizeof(address);
 
-    /* Create socket */
-    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    socket_fd = socket(AF_INET, SOCK_STREAM, 0); /* Create socket */
     if (socket_fd == -1)
     {
         perror("socket failed");
@@ -46,8 +49,7 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    /* Main loop to accept and handle clients */
-    while (1)
+    while (1) /* Main loop to accept and handle clients */
     {
         new_con = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
         if (new_con < 0)
