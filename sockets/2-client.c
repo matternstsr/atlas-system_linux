@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	/* Convert IP address from text to binary form */
 	if (inet_pton(AF_INET, host, &server_addr.sin_addr) <= 0)
 	{
-		perror("Invalid address/ Address not supported");
+		/* perror("Invalid address/ Address not supported"); */
 		close(sockfd);
 		exit(EXIT_FAILURE);
 	}
