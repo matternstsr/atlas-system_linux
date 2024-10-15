@@ -8,7 +8,7 @@
 
 #define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
 
-/**
+/*
  * main - entry to the function
  * Return: 0 on success
  */
