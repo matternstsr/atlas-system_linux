@@ -11,6 +11,7 @@ void handle_client(int client_sock)
 {
 	char buffer[BUFFER_SIZE];
 	ssize_t bytes_received;
+	const char *http_response;
 
 	bytes_received = recv(client_sock, buffer, sizeof(buffer) - 1, 0);
 	if (bytes_received < 0)
@@ -22,7 +23,7 @@ void handle_client(int client_sock)
 
 	printf("Raw request: %s\n", buffer);
 
-	const char *http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello, World!";
+	http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello, World!";
 	send(client_sock, http_response, strlen(http_response), 0);
 }
 
