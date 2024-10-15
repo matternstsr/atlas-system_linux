@@ -6,12 +6,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define RESPONSE_MSG "HTTP/1.1 200 OK\r\n\r\n"
+#define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
 
-/**
- * parse_headers - Parses an HTTP request headers
- * @request: The request string to parse
- */
 void parse_headers(char *request);
 
 /**
@@ -67,13 +63,13 @@ int main(void)
         received_bytes = recv(client_fd, request_buffer, sizeof(request_buffer) - 1, 0);
         if (received_bytes > 0)
         {
-            request_buffer[received_bytes] = '\0'; /** Null-terminate the buffer */
+            request_buffer[received_bytes] = '\0'; /* Null-terminate the buffer */
             printf("Raw request: \"%s\"\n", request_buffer);
             fflush(stdout);
-            parse_headers(request_buffer); /** Use the new header parser */
+            parse_headers(request_buffer); /* Use the new header parser */
         }
 
-        send(client_fd, RESPONSE_MSG, sizeof(RESPONSE_MSG) - 1, 0);
+        send(client_fd, RESPONSE, sizeof(RESPONSE) - 1, 0);
         close(client_fd);
     }
 
@@ -89,17 +85,17 @@ void parse_headers(char *request)
 {
     int index = 0;
     char *line_token;
-    char *header_lines[16] = {0}; /** Array to store header lines */
+    char *header_lines[16] = {0}; /* Array to store header lines */
     char header_key[50], header_value[50];
 
     line_token = strtok(request, "\r\n");
     while (line_token)
     {
-        header_lines[index++] = line_token; /** Store each line */
+        header_lines[index++] = line_token; /* Store each line */
         line_token = strtok(NULL, "\r\n");
     }
 
-    /** Process the headers starting from index 1 (skip request line) */
+    /* Process the headers starting from index 1 (skip request line) */
     for (index = 1; header_lines[index]; index++)
     {
         if (sscanf(header_lines[index], "%[^:]: %s", header_key, header_value) == 2)
