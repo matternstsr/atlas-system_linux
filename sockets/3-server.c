@@ -7,6 +7,14 @@
 #define PORT 12345
 #define BUFFER_SIZE 1024
 
+/**
+ * setup_server - Initializes the server socket.
+ *
+ * @server_addr: Pointer to a sockaddr_in structure that contains
+ *                the server's address information.
+ *
+ * Return: The file descriptor for the server socket.
+ */
 int setup_server(struct sockaddr_in *server_addr)
 {
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -39,6 +47,11 @@ int setup_server(struct sockaddr_in *server_addr)
 	return (sockfd);
 }
 
+/**
+ * handle_client - Accepts a client connection and handles message reception.
+ *
+ * @sockfd: The file descriptor for the server socket.
+ */
 void handle_client(int sockfd)
 {
 	struct sockaddr_in client_addr;
@@ -68,6 +81,12 @@ void handle_client(int sockfd)
 
 	close(newsockfd);
 }
+
+/**
+ * main - Entry point of the server program.
+ *
+ * Return: 0 on success.
+ */
 int main(void)
 {
 	struct sockaddr_in server_addr;
