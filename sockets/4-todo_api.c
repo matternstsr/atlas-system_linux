@@ -194,6 +194,6 @@ void add_todo_item(char *description, char *title, int fd)
 	dprintf(fd, "%s", STAT_201);
 	dprintf(fd, "Content-Length: %d\r\n", response_length);
 	dprintf(fd, "Content-Type: application/json\r\n\r\n");
-	dprintf(fd, "%s", response_buffer);
+	dprintf(fd, "%s\r\n", response_buffer); /* added new line...*/
 }
 
