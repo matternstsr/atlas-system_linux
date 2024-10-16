@@ -27,6 +27,7 @@ void send_todos(int conn)
 	char response[2048] = {0};
 	char buffer[512];
 	char final_response[2300];
+	size_t response_length;
 
 	snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
 	strcat(response, "[");
@@ -43,7 +44,7 @@ void send_todos(int conn)
 	}
 	strcat(response, "]");
 
-	size_t response_length = strlen(response);
+	response_length = strlen(response);
 	snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
 			response, response_length, response);
 
