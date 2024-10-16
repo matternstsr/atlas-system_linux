@@ -51,6 +51,7 @@ void handle_post(int conn, const char *body)
 {
 	char title[100] = {0}, description[256] = {0};
 	char response_body[256];
+	int id = todo_count;
 
 	sscanf(body, "title=%99[^&]&description=%255s", title, description);
 
@@ -62,7 +63,7 @@ void handle_post(int conn, const char *body)
 		todo_count++;
 
 		snprintf(response_body, sizeof(response_body), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-				todo_count - 1, title, description);
+				id, title, description);
 		send_response(conn, "HTTP/1.1 201 Created\r\n", "application/json", response_body);
 	} 
 	else 
@@ -78,6 +79,8 @@ int main(void)
 	char method[10], path[50];
 	struct sockaddr_in s_address;
 	socklen_t addrlen = sizeof(s_address);
+	ssize_t bytes;
+	char *body;
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd == -1) 
@@ -110,13 +113,13 @@ int main(void)
 
 		printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
 
-		ssize_t bytes = recv(connect, buffer, sizeof(buffer) - 1, 0);
+		bytes = recv(connect, buffer, sizeof(buffer) - 1, 0);
 		if (bytes > 0) 
 		{
 			buffer[bytes] = '\0';
 			printf("Raw request: \"%s\"\n", buffer);
 			sscanf(buffer, "%s %s", method, path);
-			char *body = strstr(buffer, "\r\n\r\n");
+			body = strstr(buffer, "\r\n\r\n");
 			body = body ? body + 4 : NULL;
 
 			if (strcmp(method, "GET") == 0 && strcmp(path, "/todos") == 0) 
