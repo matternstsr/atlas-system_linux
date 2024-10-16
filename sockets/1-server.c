@@ -18,9 +18,7 @@ void cleanup(int sockfd, int newsockfd);
 
 /**
 * main - Initializes and runs a simple TCP server.
-* This function creates a TCP socket, binds it to a specified port (12345),
-* and listens for incoming connections. Upon accepting a connection, it
-* receives messages from clients and sends responses back.
+*
 * Return: 0 upon successful execution (though unreachable in this case).
 */
 int main(void)
@@ -52,8 +50,7 @@ int main(void)
 
 /**
 * create_socket - Creates a TCP socket.
-* This function initializes a socket for IPv4 communication using
-* the TCP protocol. It returns the socket file descriptor.
+*
 * Return: socket file descriptor on success, or exits on failure.
 */
 int create_socket(void)
@@ -70,9 +67,8 @@ int create_socket(void)
 
 /**
 * bind_socket - Binds the socket to a specified port.
-* This function binds the socket to the specified port (12345)
-* and sets it to listen for incoming connections.
-* Parameter: sockfd - the socket file descriptor to bind.
+*
+* @sockfd: the socket file descriptor to bind.
 * Return: void.
 */
 void bind_socket(int sockfd)
@@ -94,9 +90,8 @@ void bind_socket(int sockfd)
 
 /**
 * listen_for_connections - Prepares the socket to listen for connections.
-* This function puts the socket in a listening state with a backlog of
-* up to 5 pending connections.
-* Parameter: sockfd - the socket file descriptor to listen on.
+*
+* @sockfd: the socket file descriptor to listen on.
 * Return: void.
 */
 void listen_for_connections(int sockfd)
@@ -111,9 +106,8 @@ void listen_for_connections(int sockfd)
 
 /**
 * handle_client - Manages communication with a connected client.
-* This function receives messages from the client, echoes them back,
-* and handles client disconnection.
-* Parameter: newsockfd - the socket file descriptor for the connected client.
+*
+* @newsockfd: the socket file descriptor for the connected client.
 * Return: void.
 */
 void handle_client(int newsockfd)
@@ -143,9 +137,8 @@ void handle_client(int newsockfd)
 
 /**
 * handle_client - Manages communication with a connected client.
-* This function receives messages from the client, echoes them back,
-* and handles client disconnection.
-* Parameter: newsockfd - the socket file descriptor for the connected client.
+*
+* @newsockfd: the socket file descriptor for the connected client.
 * Return: void.
 */
 void cleanup(int sockfd, int newsockfd)
