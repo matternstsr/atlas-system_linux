@@ -45,11 +45,23 @@ void send_todos(int conn)
 	strcat(response, "]");
 
 	response_length = strlen(response);
-	snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
-			response, response_length, response);
+	
+	size_t final_response_length = strlen(RESPONSE_OK) + strlen(RESPONSE_JSON_CONTENT) + response_length + 40; // 40 for headers
+	
+	if (final_response_length < sizeof(final_response)) 
+	{
+		snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
+				response, response_length, response);
+	} 
+	else 
+	{
+		snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
+				RESPONSE_NOT_FOUND, strlen(RESPONSE_NOT_FOUND), RESPONSE_NOT_FOUND);
+	}
 
 	send(conn, final_response, strlen(final_response), 0);
 }
+
 
 
 void add_todo(char *title, char *description)
