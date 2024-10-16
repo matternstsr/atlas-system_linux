@@ -137,12 +137,12 @@ void handle_client(int newsockfd)
 
 
 /**
- * cleanup - Closes the server and client sockets.
- *
- * @sockfd: the server socket file descriptor.
- * @newsockfd: the client socket file descriptor (can be -1 if no client).
- * Return: void.
- */
+* cleanup - Closes the server and client sockets.
+*
+* @sockfd: the server socket file descriptor.
+* @newsockfd: the client socket file descriptor (can be -1 if no client).
+* Return: void.
+*/
 void cleanup(int sockfd, int newsockfd)
 {
 	if (newsockfd != -1)
