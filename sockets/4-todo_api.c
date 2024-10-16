@@ -22,9 +22,9 @@ void parse_headers(char *query, int fd);
 void parse_body(char *body, int fd);
 void add_todo_item(char *description, char *title, int fd);
 
-const char *STAT_404 = "HTTP/1.1 404 Not Found\r\n";
-const char *STAT_411 = "HTTP/1.1 411 Length Required\r\n";
-const char *STAT_422 = "HTTP/1.1 422 Unprocessable Entity\r\n";
+const char *STAT_404 = "HTTP/1.1 404 Not Found\r\n\r\n";
+const char *STAT_411 = "HTTP/1.1 411 Length Required\r\n\r\n";
+const char *STAT_422 = "HTTP/1.1 422 Unprocessable Entityr\n\r\n";
 const char *STAT_201 = "HTTP/1.1 201 Created\r\n";
 
 int main(void)
@@ -194,6 +194,6 @@ void add_todo_item(char *description, char *title, int fd)
 	dprintf(fd, "%s", STAT_201);
 	dprintf(fd, "Content-Length: %d\r\n", response_length);
 	dprintf(fd, "Content-Type: application/json\r\n\r\n");
-	dprintf(fd, "%s\r\n", response_buffer); /* added new line...*/
+	dprintf(fd, "%s\r\n", response_buffer); /* added new line..nowork.*/
 }
 
