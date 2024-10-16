@@ -97,6 +97,7 @@ void parse_headers(char *request)
 
 			printf("Header: \"%s\" -> \"%s\"\n", key_start, value_start);
 		}
+
 		line_token = strtok(NULL, "\r\n");
 	}
 }
