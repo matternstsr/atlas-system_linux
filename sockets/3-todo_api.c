@@ -11,7 +11,7 @@
 #define BUFFER_SIZE 4096
 #define PATH_SIZE 50
 
-void parse_http_headers(char *request);
+void parse_http_parameters(char *request);
 void parse_http_body(char *request);
 
 int main(void)
