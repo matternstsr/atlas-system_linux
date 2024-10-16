@@ -20,6 +20,7 @@ int main(void)
 	char buffer[4096];
 	struct sockaddr_in server_address;
 	socklen_t addrlen = sizeof(server_address);
+	char client_address[INET_ADDRSTRLEN];
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd == -1)
@@ -54,7 +55,6 @@ int main(void)
 			exit(EXIT_FAILURE);
 		}
 
-		char client_address[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &server_address.sin_addr, client_address, sizeof(client_address));
 		bytes = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
 		if (bytes > 0)
