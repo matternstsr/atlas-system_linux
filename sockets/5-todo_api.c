@@ -29,32 +29,32 @@ void send_todos(int conn)
 	char final_response[2300];
 	size_t response_length, final_response_length;
 
-    snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
-    strcat(response, "[");
+	snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
+	strcat(response, "[");
 
-    for (i = 0; i < todo_count; i++) 
-    {
-        if (i > 0) 
-        {
-            strcat(response, ",");
-        }
-        snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}", 
-                todos[i].id, todos[i].title, todos[i].description);
-        strcat(response, buffer);
-    }
-    strcat(response, "]");
+	for (i = 0; i < todo_count; i++) 
+	{
+		if (i > 0) 
+		{
+			strcat(response, ",");
+		}
+		snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}", 
+				todos[i].id, todos[i].title, todos[i].description);
+		strcat(response, buffer);
+	}
+	strcat(response, "]");
 
-    response_length = strlen(response);
-    written = snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
-            response, response_length, response);
+	response_length = strlen(response);
+	written = snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
+			response, response_length, response);
 
-    if (written >= sizeof(final_response)) 
-    {
-        snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
-                RESPONSE_NOT_FOUND, strlen(RESPONSE_NOT_FOUND), RESPONSE_NOT_FOUND);
-    }
+	if (written >= sizeof(final_response)) 
+	{
+		snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
+				RESPONSE_NOT_FOUND, strlen(RESPONSE_NOT_FOUND), RESPONSE_NOT_FOUND);
+	}
 
-    send(conn, final_response, strlen(final_response), 0);
+	send(conn, final_response, strlen(final_response), 0);
 }
 
 void add_todo(char *title, char *description)
