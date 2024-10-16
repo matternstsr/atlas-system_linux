@@ -85,13 +85,14 @@ void body_parser(char *query, int connect, const char *method)
 
 void query_parser(char *query, int connect, const char *method)
 {
-	char response_body[256];
+	char response_body[1024];
+	int i;
 
 	if (strcmp(method, "GET") == 0) {
 		if (strcmp(query, "/todos") == 0) {
 			snprintf(response_body, sizeof(response_body), "[");
-			for (int i = 0; i < todo_count; i++) {
-				char todo_item[150];
+			for (i = 0; i < todo_count; i++) {
+				char todo_item[256];
 				snprintf(todo_item, sizeof(todo_item), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}%s",
 						todos[i].id, todos[i].title, todos[i].description, (i < todo_count - 1) ? "," : "");
 				strncat(response_body, todo_item, sizeof(response_body) - strlen(response_body) - 1);
