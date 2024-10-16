@@ -35,9 +35,9 @@ void send_todos(int conn) {
                                     "Content-Type: application/json\r\n"
                                     "Content-Length: %lu\r\n"
                                     "\r\n"
-                                    "[", content_length);
+                                    "[", content_length), i;
     
-    for (int i = 0; i < todo_count; i++) {
+    for (i = 0; i < todo_count; i++) {
         char buffer[256];
         int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
                                     todos[i].id, todos[i].title, todos[i].description);
