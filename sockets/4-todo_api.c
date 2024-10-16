@@ -109,6 +109,7 @@ int create_todo(char *title, char *description) {
 
 char *process_request(char *method, char *path, char *body) {
 	char response[512];
+	char *json_response = NULL;
 
 	if (strcmp(method, "POST") == 0 && strcmp(path, "/todos") == 0) {
 		char title[100] = {0}, description[256] = {0};
@@ -120,15 +121,25 @@ char *process_request(char *method, char *path, char *body) {
 				snprintf(response, sizeof(response),
 						RESPONSE_CREATED "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
 						id, title, description);
-				return strdup(response);
+				json_response = strdup(response);
 			}
 		} else {
 			return strdup(RESPONSE_UNPROCESSABLE_ENTITY);
 		}
 	}
 
+	if (json_response) {
+		int content_length = strlen(json_response);
+		snprintf(response, sizeof(response), 
+				"HTTP/1.1 201 Created\r\nContent-Length: %d\r\nContent-Type: application/json\r\n\r\n%s",
+				content_length, json_response);
+		free(json_response);
+		return strdup(response);
+	}
+
 	return strdup(RESPONSE_NOT_FOUND);
 }
+
 
 char *make_response(char *buffer) {
 	char method[10], path[100], version[10];
