@@ -1,9 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stddef.h>
+
 typedef struct todo
 {
-    size_t id;
-    char *title;
-    char *description;
-    struct todo *next;
+	size_t id;
+	char *title;
+	char *description;
+	struct todo *next;
 } todo_t;
 
 todo_t *todo_list = NULL;
@@ -124,8 +133,7 @@ void parse_body(char *body, int fd)
 		{
 			title = strdup(value);
 			has_title = 1;
-		}
-		else if (strcmp(key, "description") == 0)
+		} else if (strcmp(key, "description") == 0)
 		{
 			description = strdup(value);
 			has_description = 1;
@@ -137,7 +145,7 @@ void parse_body(char *body, int fd)
 		send(fd, STAT_422, strlen(STAT_422), 0);
 		return;
 	}
-	
+
 	printf("Title: %s\nDescription: %s\n", title, description);
 	add_todo_item(description, title, fd);
 }
@@ -147,8 +155,7 @@ void add_todo_item(char *description, char *title, int fd)
 	static size_t todo_id = 0;
 	char response_buffer[1024];
 	todo_t *new_todo = calloc(1, sizeof(todo_t));
-	if (!new_todo)
-		return;
+	if (!new_todo) return;
 
 	new_todo->id = todo_id++;
 	new_todo->title = strdup(title);
@@ -171,9 +178,10 @@ void add_todo_item(char *description, char *title, int fd)
 	int response_length = strlen(response_buffer);
 	printf("%s\n", response_buffer);
 	fflush(stdout);
-	
+
 	dprintf(fd, "%s", STAT_201);
 	dprintf(fd, "Content-Length: %d\r\n", response_length);
 	dprintf(fd, "Content-Type: application/json\r\n\r\n");
 	dprintf(fd, "%s", response_buffer);
 }
+
