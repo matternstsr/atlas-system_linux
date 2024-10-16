@@ -10,6 +10,7 @@
 int setup_server(struct sockaddr_in *server_addr)
 {
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
 	if (sockfd < 0)
 	{
 		perror("Socket creation failed");
@@ -35,7 +36,7 @@ int setup_server(struct sockaddr_in *server_addr)
 		exit(EXIT_FAILURE);
 	}
 
-	return sockfd;
+	return (sockfd);
 }
 
 void handle_client(int sockfd)
@@ -46,6 +47,7 @@ void handle_client(int sockfd)
 	ssize_t bytes_received;
 
 	int newsockfd = accept(sockfd, (struct sockaddr *)&client_addr, &addr_len);
+
 	if (newsockfd < 0)
 	{
 		perror("Accept failed");
@@ -69,12 +71,12 @@ void handle_client(int sockfd)
 int main(void)
 {
 	struct sockaddr_in server_addr;
-
 	int sockfd = setup_server(&server_addr);
+
 	printf("Server listening on port %d\n", PORT);
 
 	handle_client(sockfd);
 
 	close(sockfd);
-	return 0;
+	return (0);
 }
