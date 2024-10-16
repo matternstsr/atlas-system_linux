@@ -22,7 +22,8 @@ Todo todos[100];
 int todo_count = 0;
 void send_todos(int conn)
 {
-	int i, written;
+	size_t written;
+	int i;
 	char response[2048] = {0};
 	char buffer[512];
 	char final_response[2300];
