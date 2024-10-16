@@ -23,16 +23,14 @@ int todo_count = 0;
 
 void send_todos(int conn)
 {
-	size_t response_length;
-    int i;
-    char response[2048] = {0};
+    char final_response[2300], response[2048] = {0};
     char buffer[512];
-    char final_response[2300];
+    size_t response_length;
 
     snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
     strcat(response, "[");
 
-    for (i = 0; i < todo_count; i++) 
+    for (int i = 0; i < todo_count; i++) 
     {
         if (i > 0) 
         {
@@ -45,7 +43,6 @@ void send_todos(int conn)
     strcat(response, "]");
 
     response_length = strlen(response);
-    
     snprintf(final_response, sizeof(final_response), 
              "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: application/json\r\n\r\n%s", 
              (unsigned long)response_length, response);
@@ -53,18 +50,15 @@ void send_todos(int conn)
     send(conn, final_response, strlen(final_response), 0);
 }
 
-
-
-
 void add_todo(char *title, char *description)
 {
 	if (todo_count < 100) 
 	{
 		todos[todo_count].id = todo_count;
 		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title) - 1);
-		todos[todo_count].title[sizeof(todos[todo_count].title) - 1] = '\0'; /* Ensure null termination */
+		todos[todo_count].title[sizeof(todos[todo_count].title) - 1] = '\0';
 		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description) - 1);
-		todos[todo_count].description[sizeof(todos[todo_count].description) - 1] = '\0'; /* Ensure null termination */
+		todos[todo_count].description[sizeof(todos[todo_count].description) - 1] = '\0';
 		todo_count++;
 	}
 }
@@ -72,9 +66,9 @@ void add_todo(char *title, char *description)
 void parse_body(char *body, int conn)
 {
 	char response[512];
-	char *title = NULL, *description = NULL, *token;
+	char *title = NULL, *description = NULL;
 
-	token = strtok(body, "&");
+	char *token = strtok(body, "&");
 	while (token) 
 	{
 		if (strncmp(token, "title=", 6) == 0) 
@@ -91,8 +85,8 @@ void parse_body(char *body, int conn)
 	if (title && description) 
 	{
 		add_todo(title, description);
-		snprintf(response, sizeof(response), "%sContent-Length: 51\r\nContent-Type: application/json\r\n\r\n{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}", 
-				RESPONSE_CREATED, todo_count - 1, title, description);
+		snprintf(response, sizeof(response), "%sContent-Length: %lu\r\nContent-Type: application/json\r\n\r\n{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}", 
+				RESPONSE_CREATED, (unsigned long)strlen(response), todo_count - 1, title, description);
 		send(conn, response, strlen(response), 0);
 	} 
 	else 
