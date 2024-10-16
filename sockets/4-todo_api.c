@@ -6,164 +6,171 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define RESPONSE_OK "HTTP/1.1 200 OK\r\n\r\n"
-#define RESPONSE_CREATED "HTTP/1.1 201 Created\r\nContent-Type: application/json\r\n\r\n"
-#define RESPONSE_LENGTH_REQUIRED "HTTP/1.1 411 Length Required\r\n\r\n"
-#define RESPONSE_UNPROCESSABLE_ENTITY "HTTP/1.1 422 Unprocessable Entity\r\n\r\n"
-#define RESPONSE_NOT_FOUND "HTTP/1.1 404 Not Found\r\n\r\n"
+#define STAT_404 "HTTP/1.1 404 Not Found\r\n\r\n"
+#define STAT_411 "HTTP/1.1 411 Length Required\r\n\r\n"
+#define STAT_422 "HTTP/1.1 422 Unprocessable Entity\r\n\r\n"
+#define STAT_201 "HTTP/1.1 201 Created\r\n"
 
-#define MAX_TODOS 100
+typedef struct todo {
+	size_t id;
+	char *title;
+	char *description;
+	struct todo *next;
+} todo_t;
 
-typedef struct
-{
-	int id;
-	char title[100];
-	char description[256];
-} Todo;
+todo_t *list = NULL;
 
-static Todo todos[MAX_TODOS];
-static int todo_count = 0;
-
-void parse_body(char *body, char *title, char *description);
-int create_todo(char *title, char *description);
-char *process_request(char *method, char *path, char *body);
-char *make_response(char *buffer);
+void process_req(char *request, int fd);
+void head_parser(char *query, int fd);
+void task_parser(char *query, int fd);
+void add_todo(char *desc, char *title, int fd);
 
 int main(void)
 {
-	int socket_fd, new_conn;
+	int socket_fd, connect;
 	size_t bytes = 0;
-	char buffer[4096], *response;
-	struct sockaddr_in address;
-	socklen_t addrlen = sizeof(address);
+	char buffer[4096];
+	struct sockaddr_in s_address;
+	socklen_t addrlen = sizeof(s_address);
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd == -1)
-	{
+	if (socket_fd == -1) {
 		perror("socket failed");
 		exit(EXIT_FAILURE);
 	}
-
-	address.sin_family = AF_INET;
-	address.sin_port = htons(8080);
-	address.sin_addr.s_addr = INADDR_ANY;
-
-	if (bind(socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-	{
+	s_address.sin_family = AF_INET;
+	s_address.sin_port = htons(8080);
+	s_address.sin_addr.s_addr = INADDR_ANY;
+	if (bind(socket_fd, (struct sockaddr *)&s_address, sizeof(s_address)) < 0) {
 		perror("bind failed");
 		exit(EXIT_FAILURE);
 	}
-
 	printf("Server listening on port 8080\n");
-	fflush(stdout);
-
-	if (listen(socket_fd, 5) < 0)
-	{
+	if (listen(socket_fd, 5) < 0) {
 		perror("listen failed");
 		exit(EXIT_FAILURE);
 	}
-
-	while (1)
-	{
-		new_conn = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
-		if (new_conn < 0)
-		{
+	while (1) {
+		connect = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
+		if (connect < 0) {
 			perror("accept failed");
 			exit(EXIT_FAILURE);
 		}
-
-		printf("Client connected: %s\n", inet_ntoa(address.sin_addr));
-		fflush(stdout);
-
-		bytes = recv(new_conn, buffer, sizeof(buffer) - 1, 0);
-		if (bytes > 0)
-		{
+		printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
+		bytes = recv(connect, buffer, sizeof(buffer), 0);
+		if (bytes > 0) {
 			buffer[bytes] = '\0';
 			printf("Raw request: \"%s\"\n", buffer);
-			fflush(stdout);
-			response = make_response(buffer);
-			send(new_conn, response, strlen(response), 0);
-			free(response);
+			process_req(buffer, connect);
 		}
-
-		close(new_conn);
+		close(connect);
 	}
-
-	close(socket_fd);
 	return 0;
 }
 
-void parse_body(char *body, char *title, char *description)
+void process_req(char *request, int fd)
 {
-	char *title_param = strstr(body, "title=");
-	char *description_param = strstr(body, "description=");
-
-	if (title_param)
-		sscanf(title_param + 6, "%[^&]", title);
-	if (description_param)
-		sscanf(description_param + 12, "%[^&]", description);
-}
-
-int create_todo(char *title, char *description)
-{
-	if (todo_count < MAX_TODOS)
-	{
-		todos[todo_count].id = todo_count;
-		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title) - 1);
-		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description) - 1);
-		return todo_count++;
+	char meth[50], path[50];
+	sscanf(request, "%s %s", meth, path);
+	if (strcmp(meth, "POST") != 0 && strcmp(meth, "GET") != 0) {
+		send(fd, STAT_404, strlen(STAT_404), 0);
+		return;
 	}
-	return -1;
+	if (strcmp(path, "/todos") != 0) {
+		send(fd, STAT_404, strlen(STAT_404), 0);
+		return;
+	}
+	head_parser(request, fd);
 }
 
-char *process_request(char *method, char *path, char *body)
+void head_parser(char *query, int fd)
 {
-	char response[512];
-	char json_response[512];
-	int content_length;
+	char *token = NULL, *lines[16] = {0}, *body = NULL;
+	char key[50], val[50];
+	int my_switch = 0, i = 0;
 
-	if (strcmp(method, "POST") == 0 && strcmp(path, "/todos") == 0)
-	{
-		char title[100] = {0}, description[256] = {0};
-		parse_body(body, title, description);
+	while ((token = strsep(&query, "\r\n")) != NULL) {
+		lines[i++] = token;
+		if (i >= 16) break;
+	}
 
-		if (strlen(title) > 0 && strlen(description) > 0)
-		{
-			int id = create_todo(title, description);
-			if (id != -1)
-			{
-				int json_length = snprintf(json_response, sizeof(json_response), 
-					"{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}", 
-					id, title, description);
-				
-				if (json_length < 0 || json_length >= sizeof(json_response))
-				{
-					return strdup(RESPONSE_UNPROCESSABLE_ENTITY);
-				}
+	body = lines[i - 1];
+	for (i = 1; lines[i]; i++) {
+		sscanf(lines[i], "%[^:]: %s", key, val);
+		if (strcmp(key, "Content-Length") == 0) {
+			my_switch = 1;
+		}
+	}
+	if (!my_switch) {
+		send(fd, STAT_411, strlen(STAT_411), 0);
+		return;
+	}
+	printf("%s\n", body);
+	task_parser(body, fd);
+}
 
-				content_length = strlen(json_response);
-				
+void task_parser(char *query, int fd)
+{
+	char *token = NULL, *key_vals[16] = {0};
+	char key[50], val[50], *title = NULL, *desc = NULL;
+	int i = 0, my_switch = 0;
 
-				snprintf(response, sizeof(response), 
-						"HTTP/1.1 201 Created\r\nContent-Length: %d\r\nContent-Type: application/json\r\n\r\n%s",
-						content_length, json_response);
-				return strdup(response);
-			}
-		} else {
-			return strdup(RESPONSE_UNPROCESSABLE_ENTITY);
+	while ((token = strsep(&query, "&")) != NULL) {
+		if (token[0]) {
+			key_vals[i++] = token;
+			my_switch = 1;
 		}
 	}
 
-	return strdup(RESPONSE_NOT_FOUND);
+	for (i = 0; key_vals[i]; i++) {
+		sscanf(key_vals[i], "%[^=]=%s", key, val);
+		if (strcmp(key, "title") == 0) {
+			title = strdup(val);
+		} else if (strcmp(key, "description") == 0) {
+			desc = strdup(val);
+		}
+	}
+
+	if (!title || !desc) {
+		send(fd, STAT_422, strlen(STAT_422), 0);
+		free(title);
+		free(desc);
+		return;
+	}
+	printf("title: %s\ndesc: %s\n", title, desc);
+	add_todo(desc, title, fd);
+	free(title);
+	free(desc);
 }
 
-
-
-char *make_response(char *buffer)
+void add_todo(char *desc, char *title, int fd)
 {
-	char method[10], path[100], version[10];
-	char *body = strstr(buffer, "\r\n\r\n") + 4;
+	static size_t id = 0;
+	char buffer[1024];
+	todo_t *new_todo = calloc(1, sizeof(todo_t));
+	if (!new_todo) return;
 
-	sscanf(buffer, "%s %s %s", method, path, version);
-	return process_request(method, path, body);
+	new_todo->id = id++;
+	new_todo->title = strdup(title);
+	new_todo->description = strdup(desc);
+	new_todo->next = NULL;
+
+	if (!list) {
+		list = new_todo;
+	} else {
+		todo_t *tmp = list;
+		while (tmp->next) {
+			tmp = tmp->next;
+		}
+		tmp->next = new_todo;
+	}
+
+	snprintf(buffer, sizeof(buffer), "{\"id\":%lu,\"title\":\"%s\",\"description\":\"%s\"}",
+			new_todo->id, title, desc);
+	int len = strlen(buffer);
+	printf("%s\n", buffer);
+	dprintf(fd, "%s", STAT_201);
+	dprintf(fd, "Content-Length: %d\r\n", len);
+	dprintf(fd, "Content-Type: application/json\r\n\r\n");
+	dprintf(fd, "%s", buffer);
 }
