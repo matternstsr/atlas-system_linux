@@ -61,7 +61,7 @@ void parse_http_headers(char *request)
 	char *header_line;
 	char *header_array[16] = {0};
 	char header_key[50], header_value[50];
-	int header_count = 0;
+	int i, header_count = 0;
 
 	while ((header_line = strsep(&request, "\r\n")) != NULL)
 	{
@@ -69,7 +69,7 @@ void parse_http_headers(char *request)
 			header_array[header_count++] = header_line;
 	}
 
-	for (int i = 1; i < header_count; i++)
+	for (i = 1; i < header_count; i++)
 	{
 		if (sscanf(header_array[i], "%[^:]: %[^\r\n]", header_key, header_value) == 2)
 			printf("Header: \"%s\" -> \"%s\"\n", header_key, header_value), fflush(stdout);
