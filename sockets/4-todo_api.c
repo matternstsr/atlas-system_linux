@@ -91,12 +91,12 @@ void handle_request(char *request, int fd)
 
 	if (strcmp(method, "POST") != 0 && strcmp(method, "GET") != 0)
 	{
-		send(fd, STAT_404, strlen(STAT_404), 0);
+		send(fd, STAT_404, sizeof(STAT_404), 0);
 		return;
 	}
 	if (strcmp(path, "/todos") != 0)
 	{
-		send(fd, STAT_404, strlen(STAT_404), 0);
+		send(fd, STAT_404, sizeof(STAT_404), 0);
 		return;
 	}
 	parse_headers(request, fd);
@@ -120,7 +120,7 @@ void parse_headers(char *query, int fd)
 	}
 	if (!has_content_length)
 	{
-		send(fd, STAT_411, strlen(STAT_411), 0);
+		send(fd, STAT_404, sizeof(STAT_404), 0);
 		return;
 	}
 	printf("Body: %s\n", body);
@@ -152,7 +152,7 @@ void parse_body(char *body, int fd)
 
 	if (!has_title || !has_description)
 	{
-		send(fd, STAT_422, strlen(STAT_422), 0);
+		send(fd, STAT_404, sizeof(STAT_404), 0);
 		return;
 	}
 
