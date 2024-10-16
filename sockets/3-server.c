@@ -9,72 +9,72 @@
 
 int setup_server(struct sockaddr_in *server_addr)
 {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0)
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0)
 	{
-        perror("Socket creation failed");
-        exit(EXIT_FAILURE);
-    }
+		perror("Socket creation failed");
+		exit(EXIT_FAILURE);
+	}
 
-    memset(server_addr, 0, sizeof(*server_addr));
-    server_addr->sin_family = AF_INET;
-    server_addr->sin_addr.s_addr = INADDR_ANY;
-    server_addr->sin_port = htons(PORT);
+	memset(server_addr, 0, sizeof(*server_addr));
+	server_addr->sin_family = AF_INET;
+	server_addr->sin_addr.s_addr = INADDR_ANY;
+	server_addr->sin_port = htons(PORT);
 
-    if (bind(sockfd, (struct sockaddr *)server_addr, sizeof(*server_addr)) < 0)
+	if (bind(sockfd, (struct sockaddr *)server_addr, sizeof(*server_addr)) < 0)
 	{
-        perror("Bind failed");
-        close(sockfd);
-        exit(EXIT_FAILURE);
-    }
+		perror("Bind failed");
+		close(sockfd);
+		exit(EXIT_FAILURE);
+	}
 
-    if (listen(sockfd, 1) < 0)
+	if (listen(sockfd, 1) < 0)
 	{
-        perror("Listen failed");
-        close(sockfd);
-        exit(EXIT_FAILURE);
-    }
+		perror("Listen failed");
+		close(sockfd);
+		exit(EXIT_FAILURE);
+	}
 
-    return sockfd;
+	return sockfd;
 }
 
 void handle_client(int sockfd)
 {
-    struct sockaddr_in client_addr;
-    socklen_t addr_len = sizeof(client_addr);
-    char buffer[BUFFER_SIZE], client_ip[INET_ADDRSTRLEN];
-    ssize_t bytes_received;
+	struct sockaddr_in client_addr;
+	socklen_t addr_len = sizeof(client_addr);
+	char buffer[BUFFER_SIZE], client_ip[INET_ADDRSTRLEN];
+	ssize_t bytes_received;
 
-    int newsockfd = accept(sockfd, (struct sockaddr *)&client_addr, &addr_len);
-    if (newsockfd < 0)
+	int newsockfd = accept(sockfd, (struct sockaddr *)&client_addr, &addr_len);
+	if (newsockfd < 0)
 	{
-        perror("Accept failed");
-        exit(EXIT_FAILURE);
-    }
+		perror("Accept failed");
+		exit(EXIT_FAILURE);
+	}
 
-    inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
-    printf("Client connected: %s\n", client_ip);
+	inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
+	printf("Client connected: %s\n", client_ip);
 
-    bytes_received = recv(newsockfd, buffer, sizeof(buffer) - 1, 0);
-    if (bytes_received < 0)
-        perror("Receive failed");
+	bytes_received = recv(newsockfd, buffer, sizeof(buffer) - 1, 0);
+	if (bytes_received < 0)
+		perror("Receive failed");
 	else
 	{
-        buffer[bytes_received] = '\0';
-        printf("Message received: \"%s\"\n", buffer);
-    }
+		buffer[bytes_received] = '\0';
+		printf("Message received: \"%s\"\n", buffer);
+	}
 
-    close(newsockfd);
+	close(newsockfd);
 }
 int main(void)
 {
-    struct sockaddr_in server_addr;
+	struct sockaddr_in server_addr;
 
-    int sockfd = setup_server(&server_addr);
-    printf("Server listening on port %d\n", PORT);
+	int sockfd = setup_server(&server_addr);
+	printf("Server listening on port %d\n", PORT);
 
-    handle_client(sockfd);
+	handle_client(sockfd);
 
-    close(sockfd);
-    return 0;
+	close(sockfd);
+	return 0;
 }
