@@ -1,176 +1,150 @@
+#include "sockets.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include "http_request_parser.c"
+#include "todos.c"
 
-#define STAT_404 "HTTP/1.1 404 Not Found\r\n\r\n"
-#define STAT_411 "HTTP/1.1 411 Length Required\r\n\r\n"
-#define STAT_422 "HTTP/1.1 422 Unprocessable Entity\r\n\r\n"
-#define STAT_201 "HTTP/1.1 201 Created\r\n"
+#define GET_URIS {"/todos"}
+#define HEAD_URIS {NULL}
+#define POST_URIS {"/todos"}
+#define PUT_URIS {NULL}
+#define DELETE_URIS {"/todos"}
+#define CONNECT_URIS {NULL}
+#define OPTIONS_URIS {NULL}
+#define TRACE_URIS {NULL}
 
-typedef struct todo {
-	size_t id;
-	char *title;
-	char *description;
-	struct todo *next;
-} todo_t;
+bool is_known_uri(http_request_t *request) {
+    const char *uris_by_method[][NUM_HTTP_METHODS] = {
+        GET_URIS,
+        HEAD_URIS,
+        POST_URIS,
+        PUT_URIS,
+        DELETE_URIS,
+        CONNECT_URIS,
+        OPTIONS_URIS,
+        TRACE_URIS
+    };
+    
+    char **uris = uris_by_method[request->method];
 
-todo_t *list = NULL;
-
-void process_req(char *request, int fd);
-void head_parser(char *query, int fd);
-void task_parser(char *query, int fd);
-void add_todo(char *desc, char *title, int fd);
-
-int main(void)
-{
-	int socket_fd, connect;
-	size_t bytes = 0;
-	char buffer[4096];
-	struct sockaddr_in s_address;
-	socklen_t addrlen = sizeof(s_address);
-
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd == -1) {
-		perror("socket failed");
-		exit(EXIT_FAILURE);
-	}
-	s_address.sin_family = AF_INET;
-	s_address.sin_port = htons(8080);
-	s_address.sin_addr.s_addr = INADDR_ANY;
-	if (bind(socket_fd, (struct sockaddr *)&s_address, sizeof(s_address)) < 0) {
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-	printf("Server listening on port 8080\n");
-	if (listen(socket_fd, 5) < 0) {
-		perror("listen failed");
-		exit(EXIT_FAILURE);
-	}
-	while (1) {
-		connect = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
-		if (connect < 0) {
-			perror("accept failed");
-			exit(EXIT_FAILURE);
-		}
-		printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
-		bytes = recv(connect, buffer, sizeof(buffer), 0);
-		if (bytes > 0) {
-			buffer[bytes] = '\0';
-			printf("Raw request: \"%s\"\n", buffer);
-			process_req(buffer, connect);
-		}
-		close(connect);
-	}
-	return 0;
+    for (size_t i = 0; uris[i]; ++i) {
+        if (strcmp(request->uri, uris[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
-void process_req(char *request, int fd)
-{
-	char meth[50], path[50];
-	sscanf(request, "%s %s", meth, path);
-	if (strcmp(meth, "POST") != 0 && strcmp(meth, "GET") != 0) {
-		send(fd, STAT_404, strlen(STAT_404), 0);
-		return;
-	}
-	if (strcmp(path, "/todos") != 0) {
-		send(fd, STAT_404, strlen(STAT_404), 0);
-		return;
-	}
-	head_parser(request, fd);
+size_t handle_get_request(http_request_t *request, char **body, todo_t *todos, int sum_repr_lens, int id) {
+    char *param_id = get_param(request->query_params, "id");
+    
+    if (param_id) {
+        int i = atoi(param_id);
+        if (i >= id || !todos[i].repr) return 0;
+
+        *body = strdup(todos[i].repr);
+        return todos[i].repr_len;
+    } 
+
+    *body = malloc(sum_repr_lens + 3);
+    (*body)[0] = '[';
+    
+    size_t length = 1;
+    char *delimiter = "";
+
+    for (int i = 0; i < id; ++i) {
+        if (todos[i].repr) {
+            length += sprintf(*body + length, "%s%s", delimiter, todos[i].repr);
+            delimiter = ",";
+        }
+    }
+    
+    (*body)[length++] = ']';
+    (*body)[length] = '\0';
+    
+    return length;
 }
 
-void head_parser(char *query, int fd)
-{
-	char *token = NULL, *lines[16] = {0}, *body = NULL;
-	char key[50], val[50];
-	int my_switch = 0, i = 0;
+char *handle_delete_request(http_request_t *request, todo_t *todos, int id, int *sum_repr_lens) {
+    char *param_id = get_param(request->query_params, "id");
+    
+    if (!param_id) return NULL;
 
-	while ((token = strsep(&query, "\r\n")) != NULL) {
-		lines[i++] = token;
-		if (i >= 16) break;
-	}
+    int i = atoi(param_id);
+    if (i >= id || !todos[i].repr) return NULL;
 
-	body = lines[i - 1];
-	for (i = 1; lines[i]; i++) {
-		sscanf(lines[i], "%[^:]: %s", key, val);
-		if (strcmp(key, "Content-Length") == 0) {
-			my_switch = 1;
-		}
-	}
-	if (!my_switch) {
-		send(fd, STAT_411, strlen(STAT_411), 0);
-		return;
-	}
-	printf("%s\n", body);
-	task_parser(body, fd);
+    *sum_repr_lens -= todos[i].repr_len;
+    memset(&todos[i], 0, sizeof(todo_t));
+    return strdup("\r\n");
 }
 
-void task_parser(char *query, int fd)
-{
-	char *token = NULL, *key_vals[16] = {0};
-	char key[50], val[50], *title = NULL, *desc = NULL;
-	int i = 0, my_switch = 0;
+char *process_request(http_request_t *request) {
+    char *body = NULL;
+    static todo_t todos[100];
+    static int current_id = 0, total_repr_length = 0;
+    size_t response_length = 0;
 
-	while ((token = strsep(&query, "&")) != NULL) {
-		if (token[0]) {
-			key_vals[i++] = token;
-			my_switch = 1;
-		}
-	}
+    if (request->method == GET) {
+        response_length = handle_get_request(request, &body, todos, total_repr_length, current_id);
+    } else {
+        char *title = get_param(request->body_params, "title");
+        char *description = get_param(request->body_params, "description");
 
-	for (i = 0; key_vals[i]; i++) {
-		sscanf(key_vals[i], "%[^=]=%s", key, val);
-		if (strcmp(key, "title") == 0) {
-			title = strdup(val);
-		} else if (strcmp(key, "description") == 0) {
-			desc = strdup(val);
-		}
-	}
+        if (!title || !description) return NULL;
 
-	if (!title || !desc) {
-		send(fd, STAT_422, strlen(STAT_422), 0);
-		free(title);
-		free(desc);
-		return;
-	}
-	printf("title: %s\ndesc: %s\n", title, desc);
-	add_todo(desc, title, fd);
-	free(title);
-	free(desc);
+        add_todo(todos, current_id, title, description);
+        total_repr_length += todos[current_id].repr_len;
+        body = strdup(todos[current_id].repr);
+        response_length = todos[current_id].repr_len;
+        current_id++;
+    }
+
+    if (request->method == DELETE) {
+        return handle_delete_request(request, todos, current_id, &total_repr_length);
+    }
+
+    if (!body) return NULL;
+
+    #define RESPONSE_FORMAT "Content-Length: %lu\r\nContent-Type: application/json\r\n\r\n%s"
+    
+    char *response = calloc(response_length + sizeof(RESPONSE_FORMAT) + 10, sizeof(char));
+    sprintf(response, RESPONSE_FORMAT, response_length, body);
+    free(body);
+    return response;
 }
 
-void add_todo(char *desc, char *title, int fd)
-{
-	static size_t id = 0;
-	char buffer[1024];
-	todo_t *new_todo = calloc(1, sizeof(todo_t));
-	if (!new_todo) return;
+char *make_response(char *client_address, char *buffer) {
+    struct http_request_s *request;
+    char *status = NULL, *response = NULL;
 
-	new_todo->id = id++;
-	new_todo->title = strdup(title);
-	new_todo->description = strdup(desc);
-	new_todo->next = NULL;
+    (void)client_address;
 
-	if (!list) {
-		list = new_todo;
-	} else {
-		todo_t *tmp = list;
-		while (tmp->next) {
-			tmp = tmp->next;
-		}
-		tmp->next = new_todo;
-	}
+    if (!(request = http_request_init(buffer))) {
+        status = "400 Bad Request";
+    } else if (!is_known_uri(request)) {
+        status = "404 Not Found";
+    } else if (request->method == POST && !get_header(request->headers, "Content-Length")) {
+        status = "411 Length Required";
+    } else {
+        response = process_request(request);
+        if (!response) {
+            status = (request->method == POST) ? "422 Unprocessable Entity" : "404 Not Found";
+        } else {
+            status = (request->method == POST) ? "201 Created" : (request->method == DELETE) ? "204 No Content" : "200 OK";
+        }
+    }
 
-	snprintf(buffer, sizeof(buffer), "{\"id\":%lu,\"title\":\"%s\",\"description\":\"%s\"}",
-			new_todo->id, title, desc);
-	int len = strlen(buffer);
-	printf("%s\n", buffer);
-	dprintf(fd, "%s", STAT_201);
-	dprintf(fd, "Content-Length: %d\r\n", len);
-	dprintf(fd, "Content-Type: application/json\r\n\r\n");
-	dprintf(fd, "%s", buffer);
+    char *method = request ? request->method_str : strtok(buffer, " ");
+    char *uri = request ? request->uri : strtok(NULL, "? ");
+    printf("%s %s -> %s\n", method, uri, status);
+
+    char *res = calloc(1024, sizeof(char));
+    sprintf(res, "HTTP/1.1 %s\r\n%s", status, response ? response : "\r\n");
+    
+    free_http_request(request);
+    free(response);
+    return res;
 }
