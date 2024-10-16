@@ -81,10 +81,22 @@ void parse_headers(char *request)
 	line_token = strtok(request, "\r\n");
 	while (line_token)
 	{
-		if (sscanf(line_token, "%[^:]: %[^\r\n]", header_key, header_value) == 2)
+		// Skip the request line (first line)
+		if (line_token[0] != '\0' && line_token != request) 
 		{
-			printf("Header: \"%s\" -> \"%s\"\n", header_key, header_value);
+			// Use sscanf to extract key and value, allowing for leading/trailing spaces
+			if (sscanf(line_token, "%255[^:]: %255[^\r\n]", header_key, header_value) == 2)
+			{
+				// Trim any leading or trailing whitespace
+				char *key_start = header_key;
+				while (isspace(*key_start)) key_start++;
+				char *value_start = header_value;
+				while (isspace(*value_start)) value_start++;
+
+				printf("Header: \"%s\" -> \"%s\"\n", key_start, value_start);
+			}
 		}
 		line_token = strtok(NULL, "\r\n");
 	}
 }
+
