@@ -1,159 +1,106 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
-#define PORT 8080
 #define MAX_TODOS 100
+#define BUFFER_SIZE 4096
 
 typedef struct {
-	int id;
-	char title[100];
-	char description[256];
+    int id;
+    char title[50];
+    char description[100];
 } Todo;
 
 Todo todos[MAX_TODOS];
 int todo_count = 0;
 
-void add_todo(const char *title, const char *description) {
-	if (todo_count < MAX_TODOS) {
-		todos[todo_count].id = todo_count;
-		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title) - 1);
-		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description) - 1);
-		todo_count++;
-	}
-}
+void query_parser(char *query);
+void body_parser(char *query);
+void send_response(int connect);
 
-void send_todos(int conn) {
-    char response[2048];
-    unsigned long content_length = 2 + 3 * todo_count;
-    int response_length = snprintf(response, sizeof(response),
-                                    "HTTP/1.1 200 OK\r\n"
-                                    "Content-Type: application/json\r\n"
-                                    "Content-Length: %lu\r\n"
-                                    "\r\n"
-                                    "[", content_length), i;
-    
-    for (i = 0; i < todo_count; i++) {
-        char buffer[256];
-        int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-                                    todos[i].id, todos[i].title, todos[i].description);
-        
-        if (item_length < 0 || item_length >= (int)sizeof(buffer)) {
-            fprintf(stderr, "Error formatting todo item\n");
-            return;
-        }
+int main(void) {
+    int socket_fd, connect;
+    size_t bytes = 0;
+    char buffer[BUFFER_SIZE];
+    struct sockaddr_in s_address;
+    socklen_t addrlen = sizeof(s_address);
 
-        if (i > 0) {
-            response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
-        }
+    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (socket_fd == -1)
+        perror("socket failed"), exit(EXIT_FAILURE);
 
-        response_length += snprintf(response + response_length, sizeof(response) - response_length, "%s", buffer);
-        
-        if (response_length >= (int)sizeof(response)) {
-            fprintf(stderr, "Response buffer overflow\n");
-            return;
+    s_address.sin_family = AF_INET;
+    s_address.sin_port = htons(8080);
+    s_address.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(socket_fd, (struct sockaddr *)&s_address, sizeof(s_address)) < 0)
+        perror("bind failed"), exit(EXIT_FAILURE);
+
+    printf("Server listening on port 8080\n");
+    if (listen(socket_fd, 5) < 0)
+        perror("listen failed"), exit(EXIT_FAILURE);
+
+    while (1) {
+        connect = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
+        if (connect < 0)
+            perror("accept failed"), exit(EXIT_FAILURE);
+
+        printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
+        bytes = recv(connect, buffer, BUFFER_SIZE, 0);
+        if (bytes > 0) {
+            buffer[bytes] = '\0'; // Null-terminate the buffer
+            printf("Raw request: \"%s\"\n", buffer), fflush(stdout);
+            body_parser(buffer);
+            send_response(connect);
         }
+        close(connect);
     }
-    response_length += snprintf(response + response_length, sizeof(response) - response_length, "]");
-
-    send(conn, response, response_length, 0);
+    return 0;
 }
 
+void body_parser(char *query) {
+    char *method = strtok(query, " ");
+    char *path = strtok(NULL, " ");
+    char *version = strtok(NULL, "\r\n");
 
-
-void handle_post(int conn, char *body) {
-	char title[100], description[256];
-	char response_body[256];
-	char response[512];
-	int response_length;
-
-	if (sscanf(body, "title=%99[^&]&description=%255s", title, description) == 2) {
-		add_todo(title, description);
-		response_length = snprintf(response_body, sizeof(response_body),
-								"{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-								todo_count - 1, title, description);
-
-		if (response_length >= (int)sizeof(response_body)) {
-			response_length = sizeof(response_body) - 1;
-		}
-
-		response_length = snprintf(response, sizeof(response),
-								"HTTP/1.1 201 Created\r\n"
-								"Content-Type: application/json\r\n"
-								"Content-Length: %lu\r\n"
-								"\r\n"
-								"%s", (unsigned long)strlen(response_body), response_body);
-		send(conn, response, response_length, 0);
-	} else {
-		send(conn, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 9\r\n\r\nNot Found", 85, 0);
-	}
+    if (strcmp(method, "POST") == 0) {
+        char *body = strtok(NULL, "\r\n\r\n");
+        query_parser(body);
+    } else if (strcmp(method, "GET") == 0)
+	{
+        /* Handle GET requests? */
+    }
 }
 
-void handle_request(int conn) {
-	char buffer[1024];
-	ssize_t bytes = recv(conn, buffer, sizeof(buffer) - 1, 0);
-	if (bytes < 0) {
-		perror("recv failed");
-		close(conn);
-		return;
-	}
-	buffer[bytes] = '\0';
-
-	if (strstr(buffer, "GET /todos")) {
-		send_todos(conn);
-	} else if (strstr(buffer, "POST /todos")) {
-		char *body = strstr(buffer, "\r\n\r\n");
-		if (body) {
-			handle_post(conn, body + 4);
-		}
-	} else {
-		send(conn, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 9\r\n\r\nNot Found", 85, 0);
-	}
-	close(conn);
+void query_parser(char *query) {
+    char key[50], val[100];
+    sscanf(query, "title=%[^&]&description=%s", val, key);
+    
+    if (todo_count < MAX_TODOS) {
+        todos[todo_count].id = todo_count;
+        strcpy(todos[todo_count].title, val);
+        strcpy(todos[todo_count].description, key);
+        todo_count++;
+        printf("Added todo: %s -> %s\n", val, key), fflush(stdout);
+    }
 }
 
-int main() {
-	int server_fd, new_socket;
-	struct sockaddr_in address;
-	int opt = 1;
-	int addrlen = sizeof(address);
-
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-		perror("socket failed");
-		exit(EXIT_FAILURE);
-	}
-
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-		perror("setsockopt");
-		exit(EXIT_FAILURE);
-	}
-
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(PORT);
-
-	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-
-	if (listen(server_fd, 3) < 0) {
-		perror("listen");
-		exit(EXIT_FAILURE);
-	}
-
-	while (1) {
-		new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
-		if (new_socket < 0) {
-			perror("accept");
-			exit(EXIT_FAILURE);
-		}
-		handle_request(new_socket);
-	}
-
-	return 0;
+void send_response(int connect) {
+    char response[BUFFER_SIZE];
+    int response_length = snprintf(response, sizeof(response),
+                                    "HTTP/1.1 201 Created\r\n"
+                                    "Content-Type: application/json\r\n"
+                                    "Content-Length: %d\r\n"
+                                    "\r\n"
+                                    "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
+                                    (int)(strlen("{\"id\":0,\"title\":\"test\",\"description\":\"desc\"}") + 1),
+                                    todos[todo_count - 1].id,
+                                    todos[todo_count - 1].title,
+                                    todos[todo_count - 1].description);
+    send(connect, response, response_length, 0);
 }
