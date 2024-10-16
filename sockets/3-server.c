@@ -66,3 +66,15 @@ void handle_client(int sockfd)
 
     close(newsockfd);
 }
+int main(void)
+{
+    struct sockaddr_in server_addr;
+
+    int sockfd = setup_server(&server_addr);
+    printf("Server listening on port %d\n", PORT);
+
+    handle_client(sockfd);
+
+    close(sockfd);
+    return 0;
+}
