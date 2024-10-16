@@ -77,23 +77,20 @@ int main(void)
 
 void body_parser(char *query, int connect, const char *method)
 {
-	char *line = strtok(query, "\r\n");
-	char *body = NULL;
-
-	while (line != NULL) {
-		if (strncmp(line, "Content-Length:", 15) == 0) {
-			body = line + 16 + strlen(line + 16);
-			break;
-		}
-		line = strtok(NULL, "\r\n");
+	char *body = strstr(query, "\r\n\r\n");
+	if (body) {
+		body += 4;
+	} else {
+		body = "";
 	}
+	
 	query_parser(body, connect, method);
 }
 
 void query_parser(char *query, int connect, const char *method)
 {
-	char response_body[1024];
 	int i;
+	char response_body[1024];
 
 	if (strcmp(method, "GET") == 0) {
 		if (strcmp(query, "/todos") == 0) {
