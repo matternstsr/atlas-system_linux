@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <ctype.h> // Include for isspace
+#include <ctype.h>
 
 #define RESPONSE "HTTP/1.1 200 OK\r\n\r\n"
 
@@ -86,11 +86,8 @@ void parse_headers(char *request)
 		{
 			if (sscanf(line_token, "%255[^:]: %255[^\r\n]", header_key, header_value) == 2)
 			{
-				// Trim whitespace from key
 				key_start = header_key;
 				while (isspace(*key_start)) key_start++;
-				
-				// Trim whitespace from value
 				value_start = header_value;
 				while (isspace(*value_start)) value_start++;
 				
