@@ -43,11 +43,13 @@ void send_todos(int conn)
 	}
 	strcat(response, "]");
 
+	size_t response_length = strlen(response);
 	snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
-			response, strlen(response), response);
+			response, response_length, response);
 
 	send(conn, final_response, strlen(final_response), 0);
 }
+
 
 void add_todo(char *title, char *description)
 {
