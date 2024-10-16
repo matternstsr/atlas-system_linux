@@ -75,7 +75,7 @@ int main(void)
 
 void parse_headers(char *request)
 {
-	char *line_token,*key_start,*value_start = header_value;
+	char *line_token,*key_start,*value_start;
 	char header_key[256], header_value[256];
 
 	line_token,*key_start = header_key;
