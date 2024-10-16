@@ -47,8 +47,8 @@ void send_todos(int conn)
     response_length = strlen(response);
     
     snprintf(final_response, sizeof(final_response), 
-            "%sContent-Length: %zu\r\nContent-Type: application/json\r\n\r\n%s", 
-            RESPONSE_OK, response_length, response);
+         "%sContent-Length: %lu\r\nContent-Type: application/json\r\n\r\n%s", 
+         RESPONSE_OK, (unsigned long)response_length, response);
 
     send(conn, final_response, strlen(final_response), 0);
 }
