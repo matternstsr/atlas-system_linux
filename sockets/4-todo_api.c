@@ -31,7 +31,7 @@ char *make_response(char *buffer);
 int main(void) {
 	int socket_fd, new_conn;
 	size_t bytes = 0;
-	char buffer[4096];
+	char buffer[4096], *response;
 	struct sockaddr_in address;
 	socklen_t addrlen = sizeof(address);
 
@@ -73,7 +73,7 @@ int main(void) {
 			buffer[bytes] = '\0';
 			printf("Raw request: \"%s\"\n", buffer);
 			fflush(stdout);
-			char *response = make_response(buffer);
+			response = make_response(buffer);
 			send(new_conn, response, strlen(response), 0);
 			free(response);
 		}
