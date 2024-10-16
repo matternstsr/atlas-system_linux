@@ -29,25 +29,27 @@ void add_todo(const char *title, const char *description) {
 
 void send_todos(int conn) {
 	char response[2048];
-	snprintf(response, sizeof(response),
-			"HTTP/1.1 200 OK\r\n"
-			"Content-Type: application/json\r\n"
-			"Content-Length: %lu\r\n"
-			"\r\n"
-			"[", (unsigned long)(2 + 3 * todo_count)); // Adjust content length
+	unsigned long content_length = 2 + 3 * todo_count;
+	int i;
+	int response_length = snprintf(response, sizeof(response),
+									"HTTP/1.1 200 OK\r\n"
+									"Content-Type: application/json\r\n"
+									"Content-Length: %lu\r\n"
+									"\r\n"
+									"[", content_length);
 
-	for (int i = 0; i < todo_count; i++) {
-		if (i > 0) {
-			strcat(response, ",");
-		}
+	for (i = 0; i < todo_count; i++) {
 		char buffer[256];
+		if (i > 0) {
+			response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
+		}
 		snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
 				todos[i].id, todos[i].title, todos[i].description);
-		strcat(response, buffer);
+		response_length += snprintf(response + response_length, sizeof(response) - response_length, "%s", buffer);
 	}
-	strcat(response, "]");
+	response_length += snprintf(response + response_length, sizeof(response) - response_length, "]");
 
-	send(conn, response, strlen(response), 0);
+	send(conn, response, response_length, 0);
 }
 
 void handle_post(int conn, char *body) {
@@ -59,13 +61,13 @@ void handle_post(int conn, char *body) {
 				todo_count - 1, title, description);
 
 		char response[512];
-		snprintf(response, sizeof(response),
-				"HTTP/1.1 201 Created\r\n"
-				"Content-Type: application/json\r\n"
-				"Content-Length: %lu\r\n"
-				"\r\n"
-				"%s", (unsigned long)strlen(response_body), response_body);
-		send(conn, response, strlen(response), 0);
+		int response_length = snprintf(response, sizeof(response),
+										"HTTP/1.1 201 Created\r\n"
+										"Content-Type: application/json\r\n"
+										"Content-Length: %lu\r\n"
+										"\r\n"
+										"%s", (unsigned long)strlen(response_body), response_body);
+		send(conn, response, response_length, 0);
 	} else {
 		send(conn, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 9\r\n\r\nNot Found", 85, 0);
 	}
