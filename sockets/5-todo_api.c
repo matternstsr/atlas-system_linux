@@ -24,7 +24,6 @@ int todo_count = 0;
 void send_todos(int conn)
 {
     int i;
-    size_t response_length;
     char response[2048] = {0};
     char buffer[512];
     char final_response[2300];
@@ -44,14 +43,15 @@ void send_todos(int conn)
     }
     strcat(response, "]");
 
-    response_length = strlen(response);
+    size_t response_length = strlen(response);
     
     snprintf(final_response, sizeof(final_response), 
-         "%sContent-Length: %lu\r\nContent-Type: application/json\r\n\r\n%s", 
-         RESPONSE_OK, (unsigned long)response_length, response);
+             "HTTP/1.1 200 OK\r\nContent-Length: %lu\r\nContent-Type: application/json\r\n\r\n%s", 
+             (unsigned long)response_length, response);
 
     send(conn, final_response, strlen(final_response), 0);
 }
+
 
 
 
