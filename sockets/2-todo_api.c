@@ -75,7 +75,7 @@ int main(void)
 
 void parse_headers(char *request)
 {
-	char *line_token;
+	char *line_token,*key_start = header_key,*value_start = header_value;
 	char header_key[256], header_value[256];
 
 	line_token = strtok(request, "\r\n");
@@ -85,9 +85,9 @@ void parse_headers(char *request)
 		{
 			if (sscanf(line_token, "%255[^:]: %255[^\r\n]", header_key, header_value) == 2)
 			{
-				char *key_start = header_key;
+				key_start = header_key;
 				while (isspace(*key_start)) key_start++;
-				char *value_start = header_value;
+				value_start = header_value;
 				while (isspace(*value_start)) value_start++;
 				printf("Header: \"%s\" -> \"%s\"\n", key_start, value_start);
 			}
