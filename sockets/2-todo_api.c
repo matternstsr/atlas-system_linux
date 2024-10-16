@@ -86,10 +86,10 @@ void parse_headers(char *request)
 		{
 			if (sscanf(line_token, "%255[^:]: %255[^\r\n]", header_key, header_value) == 2)
 			{
-				char *key_start = header_key;
+				key_start = header_key;
 				while (isspace(*key_start)) key_start++;
 
-				char *value_start = header_value;
+				value_start = header_value;
 				while (isspace(*value_start)) value_start++;
 
 				printf("Header: \"%s\" -> \"%s\"\n", key_start, value_start);
