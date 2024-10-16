@@ -3,7 +3,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "http_request_parser.c"
 #include "todos.c"
 
 #define GET_URIS {"/todos"}
