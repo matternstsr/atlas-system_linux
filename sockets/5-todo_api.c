@@ -27,7 +27,7 @@ void send_todos(int conn)
 	char response[2048] = {0};
 	char buffer[512];
 	char final_response[2300];
-	size_t response_length;
+	size_t response_length, final_response_length;
 
 	snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
 	strcat(response, "[");
@@ -46,7 +46,7 @@ void send_todos(int conn)
 
 	response_length = strlen(response);
 	
-	size_t final_response_length = strlen(RESPONSE_OK) + strlen(RESPONSE_JSON_CONTENT) + response_length + 40; // 40 for headers
+	final_response_length = strlen(RESPONSE_OK) + strlen(RESPONSE_JSON_CONTENT) + response_length + 40;
 	
 	if (final_response_length < sizeof(final_response)) 
 	{
