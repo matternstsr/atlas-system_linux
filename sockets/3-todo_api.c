@@ -81,7 +81,6 @@ void parse_http_body(char *query)
 {
 	char *header_lines[16] = {0};
 	char *body_start;
-	char *body = NULL;
 	int i = 0;
 
 	char *line = strtok(query, "\r\n");
@@ -102,7 +101,7 @@ void parse_http_parameters(char *query)
 {
 	char *key_value_pairs[16] = {0};
 	char key[50], value[50];
-	int i = 0;
+	int i = 0, j;
 	char *pair;
 
 	pair = strtok(query, "&");
@@ -112,7 +111,7 @@ void parse_http_parameters(char *query)
 		pair = strtok(NULL, "&");
 	}
 
-	for (int j = 0; j < i; j++)
+	for (j = 0; j < i; j++)
 	{
 		sscanf(key_value_pairs[j], "%[^=]=%s", key, value);
 		printf("Body param: \"%s\" -> \"%s\"\n", key, value);
