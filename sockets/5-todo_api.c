@@ -70,28 +70,29 @@ int main(void)
 
 void body_parser(char *query, int connect, const char *method)
 {
-	int i = 0, my_switch = 0;
-	char *token = NULL, *lines[16] = {0}, *body = NULL;
+	char *line = strtok(query, "\r\n");
+	char *body = NULL;
 
-	do {
-		token = strsep(&query, "\r\n");
-		if (token)
-			lines[i++] = token, my_switch = 1;
-	} while (token && my_switch--);
+	while (line != NULL) {
+		if (strncmp(line, "Content-Length:", 15) == 0) {
+			int length = atoi(line + 16);
+			body = line + 16 + strlen(line + 16);
+			break;
+		}
+		line = strtok(NULL, "\r\n");
+	}
 
-	body = lines[i - 1];
 	query_parser(body, connect, method);
 }
 
 void query_parser(char *query, int connect, const char *method)
 {
 	char response_body[1024];
-	int i;
 
 	if (strcmp(method, "GET") == 0) {
 		if (strcmp(query, "/todos") == 0) {
 			snprintf(response_body, sizeof(response_body), "[");
-			for (i = 0; i < todo_count; i++) {
+			for (int i = 0; i < todo_count; i++) {
 				char todo_item[256];
 				snprintf(todo_item, sizeof(todo_item), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}%s",
 						todos[i].id, todos[i].title, todos[i].description, (i < todo_count - 1) ? "," : "");
