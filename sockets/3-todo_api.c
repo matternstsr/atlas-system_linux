@@ -79,20 +79,19 @@ int main(void)
 
 void parse_http_body(char *query)
 {
-	char *header_lines[16] = {0};
 	char *body_start;
-	int i = 0;
+	char *line;
 
-	char *line = strtok(query, "\r\n");
-	while (line && i < 16)
+	line = strtok(query, "\r\n");
+	while (line != NULL)
 	{
-		header_lines[i++] = line;
 		line = strtok(NULL, "\r\n");
 	}
 
-	if (i > 0)
+	body_start = strstr(query, "\r\n\r\n");
+	if (body_start != NULL)
 	{
-		body_start = strstr(query, "\r\n\r\n") + 4;
+		body_start += 4;
 		parse_http_parameters(body_start);
 	}
 }
