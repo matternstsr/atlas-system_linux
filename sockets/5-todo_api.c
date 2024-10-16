@@ -35,21 +35,35 @@ void send_todos(int conn) {
 									"Content-Type: application/json\r\n"
 									"Content-Length: %lu\r\n"
 									"\r\n"
-									"[", content_length), i;
+									"[", content_length);
 	
-	for (i = 0; i < todo_count; i++) {
+	for (int i = 0; i < todo_count; i++) {
 		char buffer[256];
+
+		int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
+									todos[i].id, todos[i].title, todos[i].description);
+		
+		if (item_length < 0 || item_length >= sizeof(buffer)) {
+			fprintf(stderr, "Error formatting todo item\n");
+			return;
+		}
+
 		if (i > 0) {
 			response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
 		}
-		snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-				todos[i].id, todos[i].title, todos[i].description);
+
 		response_length += snprintf(response + response_length, sizeof(response) - response_length, "%s", buffer);
+		
+		if (response_length >= (int)sizeof(response)) {
+			fprintf(stderr, "Response buffer overflow\n");
+			return;
+		}
 	}
 	response_length += snprintf(response + response_length, sizeof(response) - response_length, "]");
 
 	send(conn, response, response_length, 0);
 }
+
 
 void handle_post(int conn, char *body) {
 	char title[100], description[256];
