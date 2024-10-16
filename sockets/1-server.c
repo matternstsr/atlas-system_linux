@@ -142,10 +142,10 @@ void handle_client(int newsockfd)
 }
 
 /**
-* cleanup - Closes the server and client sockets.
-* This func ensures that both the server and client sockets closed properly.
-* Parameters: sockfd - the server socket file descriptor,
-*             newsockfd - the client socket file desc (can be -1 if no client).
+* handle_client - Manages communication with a connected client.
+* This function receives messages from the client, echoes them back,
+* and handles client disconnection.
+* Parameter: newsockfd - the socket file descriptor for the connected client.
 * Return: void.
 */
 void cleanup(int sockfd, int newsockfd)
