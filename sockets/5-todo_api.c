@@ -30,7 +30,6 @@ void add_todo(const char *title, const char *description) {
 void send_todos(int conn) {
     char response[2048];
     unsigned long content_length = 2 + 3 * todo_count;
-    int i;
     int response_length = snprintf(response, sizeof(response),
                                     "HTTP/1.1 200 OK\r\n"
                                     "Content-Type: application/json\r\n"
@@ -38,7 +37,7 @@ void send_todos(int conn) {
                                     "\r\n"
                                     "[", content_length);
     
-    for (i = 0; i < todo_count; i++) {
+    for (int i = 0; i < todo_count; i++) {
         char buffer[256];
         if (i > 0) {
             response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
@@ -64,7 +63,7 @@ void handle_post(int conn, char *body) {
                                    "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
                                    todo_count - 1, title, description);
 
-        if (response_length >= sizeof(response_body)) {
+        if (response_length >= (int)sizeof(response_body)) {
             response_length = sizeof(response_body) - 1;
         }
 
