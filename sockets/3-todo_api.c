@@ -86,7 +86,7 @@ void parse_http_body(char *query)
 	char *line = strtok(query, "\r\n");
 	while (line && i < 16)
 	{
-		header_lines[i++] = line;
+		*header_lines[i++] = line;
 		line = strtok(NULL, "\r\n");
 	}
 
