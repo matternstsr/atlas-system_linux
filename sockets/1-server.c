@@ -47,7 +47,7 @@ int main(void)
 	}
 
 	cleanup(sockfd, -1); /* Close the main socket (not reachable) */
-	return 0;
+	return (0);
 }
 
 /**
@@ -59,12 +59,13 @@ int main(void)
 int create_socket(void)
 {
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0); /* Create a socket */
+	
 	if (sockfd < 0)
 	{
 		perror("Socket creation failed");
 		exit(EXIT_FAILURE);
 	}
-	return sockfd;
+	return (sockfd);
 }
 
 /**
@@ -77,6 +78,7 @@ int create_socket(void)
 void bind_socket(int sockfd)
 {
 	struct sockaddr_in server_addr;
+
 	memset(&server_addr, 0, sizeof(server_addr)); /* Prepare the sockaddr_in */
 	server_addr.sin_family = AF_INET; /* IPv4 */
 	server_addr.sin_addr.s_addr = INADDR_ANY; /* Any address */
