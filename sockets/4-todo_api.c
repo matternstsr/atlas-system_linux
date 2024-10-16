@@ -1,3 +1,11 @@
+typedef struct todo
+{
+    size_t id;
+    char *title;
+    char *description;
+    struct todo *next;
+} todo_t;
+
 todo_t *todo_list = NULL;
 
 int main(void)
