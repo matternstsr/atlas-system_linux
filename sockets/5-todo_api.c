@@ -9,8 +9,8 @@
 
 #define BUFFER_SIZE 4096
 
-void query_parser(char *query);
-void body_parser(char *query);
+void query_parser(char *query, int connect);
+void body_parser(char *query, int connect);
 void send_response(int connect, int status_code, const char *body);
 
 int main(void)
@@ -51,7 +51,7 @@ int main(void)
 			printf("Raw request: \"%s\"\n", buffer), fflush(stdout);
 			sscanf(buffer, "%*s %s", path);
 			printf("Path: %s\n", path), fflush(stdout);
-			body_parser(buffer);
+			body_parser(buffer, connect);
 		}
 		close(connect);
 	}
@@ -59,7 +59,7 @@ int main(void)
 	return (0);
 }
 
-void body_parser(char *query)
+void body_parser(char *query, int connect)
 {
 	int i = 0, my_switch = 0;
 	char *token = NULL, *lines[16] = {0}, *body = NULL;
@@ -71,10 +71,10 @@ void body_parser(char *query)
 	} while (token && my_switch--);
 
 	body = lines[i - 1];
-	query_parser(body);
+	query_parser(body, connect);
 }
 
-void query_parser(char *query)
+void query_parser(char *query, int connect)
 {
 	int i = 0, my_switch = 0;
 	char *token = NULL, *key_vals[16] = {0}, key[50], val[50];
@@ -94,9 +94,9 @@ void query_parser(char *query)
 
 	if (strcmp(query, "/todos") == 0) {
 		snprintf(response_body, sizeof(response_body), "{\"id\":0,\"title\":\"Holberton\",\"description\":\"School\"}");
-		send_response(200, response_body);
+		send_response(connect, 200, response_body);
 	} else {
-		send_response(404, "Not Found");
+		send_response(connect, 404, "Not Found");
 	}
 }
 
