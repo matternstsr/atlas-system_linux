@@ -7,28 +7,33 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define MESSAGE "HTTP/1.1 200 OK\r\n\r\n"
+#define BUFFER_SIZE 4096
 
 void query_parser(char *query);
 void body_parser(char *query);
+void send_response(int connect, int status_code, const char *body);
 
 int main(void)
 {
 	int socket_fd, connect;
 	size_t bytes = 0;
-	char buffer[4096], path[50];
+	char buffer[BUFFER_SIZE], path[50];
 	struct sockaddr_in s_address;
 	socklen_t addrlen = sizeof(s_address);
 
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd == -1)
 		perror("socket failed"), exit(EXIT_FAILURE);
+	
 	s_address.sin_family = AF_INET;
 	s_address.sin_port = htons(8080);
 	s_address.sin_addr.s_addr = INADDR_ANY;
+
 	if (bind(socket_fd, (struct sockaddr *)&s_address, sizeof(s_address)) < 0)
 		perror("bind failed"), exit(EXIT_FAILURE);
+	
 	printf("Server listening on port 8080\n");
+	
 	if (listen(socket_fd, 5) < 0)
 		perror("listen failed"), exit(EXIT_FAILURE);
 	
@@ -37,6 +42,7 @@ int main(void)
 		connect = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
 		if (connect < 0)
 			perror("accept failed"), exit(EXIT_FAILURE);
+		
 		printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
 		bytes = recv(connect, buffer, sizeof(buffer) - 1, 0);
 		if (bytes > 0)
@@ -47,9 +53,9 @@ int main(void)
 			printf("Path: %s\n", path), fflush(stdout);
 			body_parser(buffer);
 		}
-		send(connect, MESSAGE, sizeof(MESSAGE) - 1, 0);
 		close(connect);
 	}
+	
 	return (0);
 }
 
@@ -72,6 +78,7 @@ void query_parser(char *query)
 {
 	int i = 0, my_switch = 0;
 	char *token = NULL, *key_vals[16] = {0}, key[50], val[50];
+	char response_body[256];
 
 	do {
 		token = strsep(&query, "&");
@@ -84,4 +91,22 @@ void query_parser(char *query)
 		sscanf(key_vals[i], "%[^=]=%s", key, val);
 		printf("Body param: \"%s\" -> \"%s\"\n", key, val), fflush(stdout);
 	}
+
+	if (strcmp(query, "/todos") == 0) {
+		snprintf(response_body, sizeof(response_body), "{\"id\":0,\"title\":\"Holberton\",\"description\":\"School\"}");
+		send_response(200, response_body);
+	} else {
+		send_response(404, "Not Found");
+	}
+}
+
+void send_response(int connect, int status_code, const char *body)
+{
+	char header[256];
+	int body_length = strlen(body);
+	
+	snprintf(header, sizeof(header), "HTTP/1.1 %d %s\r\nContent-Type: application/json\r\nContent-Length: %d\r\n\r\n%s",
+			status_code, status_code == 200 ? "OK" : "Not Found", body_length, body);
+	
+	send(connect, header, strlen(header), 0);
 }
