@@ -53,7 +53,7 @@ int main(void) {
         printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
         bytes = recv(connect, buffer, BUFFER_SIZE, 0);
         if (bytes > 0) {
-            buffer[bytes] = '\0'; // Null-terminate the buffer
+            buffer[bytes] = '\0';
             printf("Raw request: \"%s\"\n", buffer), fflush(stdout);
             body_parser(buffer);
             send_response(connect);
@@ -65,8 +65,6 @@ int main(void) {
 
 void body_parser(char *query) {
     char *method = strtok(query, " ");
-    char *path = strtok(NULL, " ");
-    char *version = strtok(NULL, "\r\n");
 
     if (strcmp(method, "POST") == 0) {
         char *body = strtok(NULL, "\r\n\r\n");
