@@ -100,7 +100,7 @@ void parse_http_parameters(char *body)
 {
 	char *key_value_pairs[16] = {0};
 	char key[50], value[50], *pair;
-	int i = 0;
+	int i = 0, j;
 
 	pair = strtok(body, "&");
 	while (pair && i < 16)
@@ -109,7 +109,7 @@ void parse_http_parameters(char *body)
 		pair = strtok(NULL, "&");
 	}
 
-	for (int j = 0; j < i; j++)
+	for (j = 0; j < i; j++)
 	{
 		sscanf(key_value_pairs[j], "%[^=]=%s", key, value);
 		printf("Body param: \"%s\" -> \"%s\"\n", key, value);
