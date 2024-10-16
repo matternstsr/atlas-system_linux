@@ -60,13 +60,13 @@ int main(void)
 		received_bytes = recv(client_fd, request_buffer, sizeof(request_buffer) - 1, 0);
 		if (received_bytes > 0)
 		{
-			request_buffer[received_bytes] = '\0'; /* Null-terminate the buffer */
+			request_buffer[received_bytes] = '\0';
 			printf("Raw request: \"%s\"\n", request_buffer);
 			fflush(stdout);
-			parse_headers(request_buffer); /* Use the new header parser */
+			parse_headers(request_buffer);
 		}
 
-		send(client_fd, RESPONSE, strlen(RESPONSE), 0); /* Correct response length */
+		send(client_fd, RESPONSE, strlen(RESPONSE), 0);
 		close(client_fd);
 	}
 
@@ -76,7 +76,7 @@ int main(void)
 
 void parse_headers(char *request)
 {
-	char *line_token, *key_start, *value_start;
+	char *line_token;
 	char header_key[256], header_value[256];
 
 	line_token = strtok(request, "\r\n");
@@ -86,11 +86,12 @@ void parse_headers(char *request)
 		{
 			if (sscanf(line_token, "%255[^:]: %255[^\r\n]", header_key, header_value) == 2)
 			{
-				key_start = header_key;
+				char *key_start = header_key;
 				while (isspace(*key_start)) key_start++;
-				value_start = header_value;
+
+				char *value_start = header_value;
 				while (isspace(*value_start)) value_start++;
-				
+
 				printf("Header: \"%s\" -> \"%s\"\n", key_start, value_start);
 			}
 		}
