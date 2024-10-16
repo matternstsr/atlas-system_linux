@@ -25,8 +25,8 @@ void send_todos(int conn)
 {
 	int i;
 	char response[2048] = {0};
-	char buffer[256], final_response[2300];
-
+	char buffer[512];
+	
 	snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
 	strcat(response, "[");
 
@@ -42,8 +42,9 @@ void send_todos(int conn)
 	}
 	strcat(response, "]");
 
-	snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
-			response, strlen(response), response);
+	snprintf(buffer, sizeof(buffer), "Content-Length: %lu\r\n\r\n", strlen(response));
+	char final_response[2300];
+	snprintf(final_response, sizeof(final_response), "%s%s%s", response, buffer, response);
 
 	send(conn, final_response, strlen(final_response), 0);
 }
@@ -53,15 +54,18 @@ void add_todo(char *title, char *description)
 	if (todo_count < 100) 
 	{
 		todos[todo_count].id = todo_count;
-		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title));
-		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description));
+		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title) - 1);
+		todos[todo_count].title[sizeof(todos[todo_count].title) - 1] = '\0'; // Ensure null termination
+		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description) - 1);
+		todos[todo_count].description[sizeof(todos[todo_count].description) - 1] = '\0'; // Ensure null termination
 		todo_count++;
 	}
 }
 
 void parse_body(char *body, int conn)
 {
-	char response[256], *title = NULL, *description = NULL, *token;
+	char response[512];
+	char *title = NULL, *description = NULL, *token;
 
 	token = strtok(body, "&");
 	while (token) 
