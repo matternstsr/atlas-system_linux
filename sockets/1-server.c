@@ -59,7 +59,7 @@ int main(void)
 int create_socket(void)
 {
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0); /* Create a socket */
-	
+
 	if (sockfd < 0)
 	{
 		perror("Socket creation failed");
