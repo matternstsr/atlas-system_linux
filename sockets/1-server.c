@@ -9,6 +9,13 @@
 #define PORT 12345
 #define BUFFER_SIZE 1024
 
+/* Function prototypes */
+int create_socket(void);
+void bind_socket(int sockfd);
+void listen_for_connections(int sockfd);
+void handle_client(int newsockfd);
+void cleanup(int sockfd, int newsockfd);
+
 /**
 * main - Initializes and runs a simple TCP server.
 * This function creates a TCP socket, binds it to a specified port (12345),
