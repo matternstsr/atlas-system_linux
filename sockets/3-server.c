@@ -37,8 +37,10 @@ int main(void)
 	if ((bytes_received = recv(newsockfd, buffer, sizeof(buffer) - 1, 0)) < 0)
 		perror("Receive failed");
 	else
+	{
 		buffer[bytes_received] = '\0';
 		printf("Message received: \"%s\"\n", buffer);
+	}
 	close(newsockfd);
 	close(sockfd);
 	return 0;
