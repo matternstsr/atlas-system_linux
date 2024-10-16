@@ -18,15 +18,18 @@ typedef struct {
 Todo todos[100];
 int todo_count = 0;
 
-void send_todos(int conn) {
+void send_todos(int conn)
+{
+	int i;
+	char id[4];
+
 	char response[2048] = {0};
 	snprintf(response, sizeof(response), RESPONSE_OK);
 	
 	strcat(response, "[");
-	for (int i = 0; i < todo_count; i++) {
+	for (i = 0; i < todo_count; i++) {
 		if (i > 0) strcat(response, ",");
 		strcat(response, "{\"id\":");
-		char id[4];
 		snprintf(id, sizeof(id), "%d", todos[i].id);
 		strcat(response, id);
 		strcat(response, ",\"title\":\"");
