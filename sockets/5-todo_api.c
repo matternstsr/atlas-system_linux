@@ -28,7 +28,7 @@ void send_todos(int conn)
     char response[2048] = {0};
     char buffer[512];
     char final_response[2300];
-    size_t response_length;
+    unsigned long response_length;
 
     snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
     strcat(response, "[");
@@ -46,9 +46,9 @@ void send_todos(int conn)
     strcat(response, "]");
 
     response_length = strlen(response);
-    written = snprintf(final_response, sizeof(final_response), 
-            "%sContent-Length: %zu\r\nContent-Type: application/json\r\n\r\n%s", 
-            RESPONSE_OK, response_length, response);
+    
+    written = snprintf(final_response, sizeof(final_response), "%sContent-Length: %lu\r\n\r\n%s", 
+            response, response_length, response);
 
     if (written >= sizeof(final_response)) 
     {
