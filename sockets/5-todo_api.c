@@ -59,11 +59,13 @@ void handle_post(int conn, const char *body)
 	{
 		todos[todo_count].id = todo_count;
 		strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title) - 1);
+		todos[todo_count].title[sizeof(todos[todo_count].title) - 1] = '\0';
 		strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description) - 1);
+		todos[todo_count].description[sizeof(todos[todo_count].description) - 1] = '\0';
 		todo_count++;
 
 		snprintf(response_body, sizeof(response_body), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-				id, title, description);
+				id, title[0] ? title : "Untitled", description[0] ? description : "No description");
 		send_response(conn, "HTTP/1.1 201 Created\r\n", "application/json", response_body);
 	} 
 	else 
@@ -71,6 +73,7 @@ void handle_post(int conn, const char *body)
 		send_response(conn, "HTTP/1.1 500 Internal Server Error\r\n", "text/plain", "Todo list full");
 	}
 }
+
 
 int main(void) 
 {
