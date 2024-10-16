@@ -61,7 +61,7 @@ int main(void) {
         printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
         bytes = recv(connect, buffer, BUFFER_SIZE - 1, 0);
         if (bytes > 0) {
-            buffer[bytes] = '\0'; // Null-terminate the buffer
+            buffer[bytes] = '\0';
             printf("Raw request: \"%s\"\n", buffer);
             body_parser(buffer, connect);
         }
@@ -70,7 +70,9 @@ int main(void) {
     return 0;
 }
 
-void body_parser(char *query, int connect) {
+void body_parser(char *query, int connect)
+{
+	int i;
     char *method = strtok(query, " ");
     char *path = strtok(NULL, " ");
     /* char *version = strtok(NULL, "\r\n"); */
@@ -85,7 +87,7 @@ void body_parser(char *query, int connect) {
     } else if (strcmp(method, "GET") == 0) {
         if (strcmp(path, "/todos") == 0) {
             char response_body[BUFFER_SIZE] = "[";
-            for (int i = 0; i < todo_count; i++) {
+            for (i = 0; i < todo_count; i++) {
                 char todo_json[256];
                 snprintf(todo_json, sizeof(todo_json), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}%s",
                          todos[i].id, todos[i].title, todos[i].description, (i < todo_count - 1) ? "," : "");
