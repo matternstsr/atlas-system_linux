@@ -60,7 +60,6 @@ int main(void)
 		buffer[bytes_received] = '\0'; /* Null-terminate the received string */
 		printf("Message received: \"%s\"\n", buffer);
 	}
-	close(newsockfd), close(sockfd); /* Close the connection with the client */
-	/* close(sockfd); Close the server socket */
+	close(newsockfd), close(sockfd); /* Close the conn client and socket */
 	return (0);
 }
