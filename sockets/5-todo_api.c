@@ -23,9 +23,8 @@ void query_parser(char *query, int connect, const char *method);
 void body_parser(char *query, int connect, const char *method);
 void send_response(int connect, int status_code, const char *body);
 
-int main(void)
-{
-	int socket_fd, connect;
+int main(void) {
+	int socket_fd, connect_fd;
 	size_t bytes = 0;
 	char buffer[BUFFER_SIZE], path[50], method[10];
 	struct sockaddr_in s_address;
@@ -36,7 +35,7 @@ int main(void)
 		perror("socket failed");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	s_address.sin_family = AF_INET;
 	s_address.sin_port = htons(8080);
 	s_address.sin_addr.s_addr = INADDR_ANY;
@@ -47,36 +46,35 @@ int main(void)
 	}
 
 	printf("Server listening on port 8080\n");
-	
+
 	if (listen(socket_fd, 5) < 0) {
 		perror("listen failed");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	while (1) {
-		connect = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
-		if (connect < 0) {
+		connect_fd = accept(socket_fd, (struct sockaddr *)&s_address, &addrlen);
+		if (connect_fd < 0) {
 			perror("accept failed");
 			exit(EXIT_FAILURE);
 		}
 
 		printf("Client connected: %s\n", inet_ntoa(s_address.sin_addr));
-		bytes = recv(connect, buffer, sizeof(buffer) - 1, 0);
+		bytes = recv(connect_fd, buffer, sizeof(buffer) - 1, 0);
 		if (bytes > 0) {
 			buffer[bytes] = '\0';
 			printf("Raw request: \"%s\"\n", buffer);
 			sscanf(buffer, "%s %s", method, path);
 			printf("Method: %s, Path: %s\n", method, path);
-			body_parser(buffer, connect, method);
+			body_parser(buffer, connect_fd, method);
 		}
-		close(connect);
+		close(connect_fd);
 	}
-	
+
 	return 0;
 }
 
-void body_parser(char *query, int connect, const char *method)
-{
+void body_parser(char *query, int connect, const char *method) {
 	char *body = strstr(query, "\r\n\r\n");
 	if (body) {
 		body += 4;
@@ -87,15 +85,11 @@ void body_parser(char *query, int connect, const char *method)
 	query_parser(body, connect, method);
 }
 
-void query_parser(char *query, int connect, const char *method)
-{
-	int i;
-	char response_body[1024];
-
+void query_parser(char *query, int connect, const char *method) {
 	if (strcmp(method, "GET") == 0) {
 		if (strcmp(query, "/todos") == 0) {
-			snprintf(response_body, sizeof(response_body), "[");
-			for (i = 0; i < todo_count; i++) {
+			char response_body[1024] = "[";
+			for (int i = 0; i < todo_count; i++) {
 				char todo_item[256];
 				snprintf(todo_item, sizeof(todo_item), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}%s",
 						todos[i].id, todos[i].title, todos[i].description, (i < todo_count - 1) ? "," : "");
@@ -108,10 +102,16 @@ void query_parser(char *query, int connect, const char *method)
 		}
 	} else if (strcmp(method, "POST") == 0) {
 		if (todo_count < MAX_TODOS) {
-			sscanf(query, "title=%[^&]&description=%s", todos[todo_count].title, todos[todo_count].description);
-			todos[todo_count].id = todo_count;
-			todo_count++;
-			send_response(connect, 201, "{\"status\":\"Created\"}");
+			char title[50], description[100];
+			if (sscanf(query, "title=%49[^&]&description=%99s", title, description) == 2) {
+				todos[todo_count].id = todo_count;
+				strncpy(todos[todo_count].title, title, sizeof(todos[todo_count].title));
+				strncpy(todos[todo_count].description, description, sizeof(todos[todo_count].description));
+				todo_count++;
+				send_response(connect, 201, "{\"status\":\"Created\"}");
+			} else {
+				send_response(connect, 400, "Bad Request");
+			}
 		} else {
 			send_response(connect, 500, "Server full");
 		}
@@ -120,13 +120,12 @@ void query_parser(char *query, int connect, const char *method)
 	}
 }
 
-void send_response(int connect, int status_code, const char *body)
-{
+void send_response(int connect, int status_code, const char *body) {
 	char header[256];
 	int body_length = strlen(body);
 	
 	snprintf(header, sizeof(header), "HTTP/1.1 %d %s\r\nContent-Type: application/json\r\nContent-Length: %d\r\n\r\n%s",
-			status_code, status_code == 200 ? "OK" : "Not Found", body_length, body);
+			status_code, status_code == 200 ? "OK" : (status_code == 201 ? "Created" : "Not Found"), body_length, body);
 	
 	send(connect, header, strlen(header), 0);
 }
