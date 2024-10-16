@@ -37,9 +37,9 @@ void send_todos(int conn) {
 									"\r\n"
 									"[", content_length);
 	
-	for (int i = 0; i < todo_count; i++) {
+	int i;
+	for (i = 0; i < todo_count; i++) {
 		char buffer[256];
-
 		int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
 									todos[i].id, todos[i].title, todos[i].description);
 		
