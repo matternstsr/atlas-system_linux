@@ -79,7 +79,7 @@ int main(void)
 
 void parse_http_body(char *query)
 {
-	char header_lines[16] = {0};
+	char *header_lines[16] = {0};
 	char *body_start;
 	int i = 0;
 
