@@ -28,41 +28,41 @@ void add_todo(const char *title, const char *description) {
 }
 
 void send_todos(int conn) {
-	char response[2048];
-	unsigned long content_length = 2 + 3 * todo_count;
-	int response_length = snprintf(response, sizeof(response),
-									"HTTP/1.1 200 OK\r\n"
-									"Content-Type: application/json\r\n"
-									"Content-Length: %lu\r\n"
-									"\r\n"
-									"[", content_length);
-	
-	int i;
-	for (i = 0; i < todo_count; i++) {
-		char buffer[256];
-		int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
-									todos[i].id, todos[i].title, todos[i].description);
-		
-		if (item_length < 0 || item_length >= sizeof(buffer)) {
-			fprintf(stderr, "Error formatting todo item\n");
-			return;
-		}
+    char response[2048];
+    unsigned long content_length = 2 + 3 * todo_count;
+    int response_length = snprintf(response, sizeof(response),
+                                    "HTTP/1.1 200 OK\r\n"
+                                    "Content-Type: application/json\r\n"
+                                    "Content-Length: %lu\r\n"
+                                    "\r\n"
+                                    "[", content_length);
+    
+    for (int i = 0; i < todo_count; i++) {
+        char buffer[256];
+        int item_length = snprintf(buffer, sizeof(buffer), "{\"id\":%d,\"title\":\"%s\",\"description\":\"%s\"}",
+                                    todos[i].id, todos[i].title, todos[i].description);
+        
+        if (item_length < 0 || item_length >= (int)sizeof(buffer)) {
+            fprintf(stderr, "Error formatting todo item\n");
+            return;
+        }
 
-		if (i > 0) {
-			response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
-		}
+        if (i > 0) {
+            response_length += snprintf(response + response_length, sizeof(response) - response_length, ",");
+        }
 
-		response_length += snprintf(response + response_length, sizeof(response) - response_length, "%s", buffer);
-		
-		if (response_length >= (int)sizeof(response)) {
-			fprintf(stderr, "Response buffer overflow\n");
-			return;
-		}
-	}
-	response_length += snprintf(response + response_length, sizeof(response) - response_length, "]");
+        response_length += snprintf(response + response_length, sizeof(response) - response_length, "%s", buffer);
+        
+        if (response_length >= (int)sizeof(response)) {
+            fprintf(stderr, "Response buffer overflow\n");
+            return;
+        }
+    }
+    response_length += snprintf(response + response_length, sizeof(response) - response_length, "]");
 
-	send(conn, response, response_length, 0);
+    send(conn, response, response_length, 0);
 }
+
 
 
 void handle_post(int conn, char *body) {
