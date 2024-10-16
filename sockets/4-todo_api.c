@@ -164,6 +164,8 @@ void add_todo_item(char *description, char *title, int fd)
 {
 	static size_t todo_id = 0;
 	char response_buffer[1024];
+	int response_length;
+
 	todo_t *new_todo = calloc(1, sizeof(todo_t));
 	if (!new_todo) return;
 
@@ -185,7 +187,7 @@ void add_todo_item(char *description, char *title, int fd)
 	snprintf(response_buffer, sizeof(response_buffer), "{\"id\":%lu,\"title\":\"%s\",\"description\":\"%s\"}",
 			new_todo->id, title, description);
 
-	int response_length = strlen(response_buffer);
+	response_length = strlen(response_buffer);
 	printf("%s\n", response_buffer);
 	fflush(stdout);
 
