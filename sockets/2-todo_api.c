@@ -10,17 +10,13 @@
 
 void parse_headers(char *request);
 
-/**
- * main - Entry point of the server
- * Return: 0 on success
- */
 int main(void)
 {
     int server_fd, client_fd;
     size_t received_bytes = 0;
     char request_buffer[4096];
-    struct sockaddr_in server_addr;
-    socklen_t addr_len = sizeof(server_addr);
+    struct sockaddr_in server_addr, client_addr;
+    socklen_t addr_len = sizeof(client_addr);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == -1)
@@ -50,14 +46,14 @@ int main(void)
 
     while (1)
     {
-        client_fd = accept(server_fd, (struct sockaddr *)&server_addr, &addr_len);
+        client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &addr_len);
         if (client_fd < 0)
         {
             perror("connection acceptance failed");
             exit(EXIT_FAILURE);
         }
 
-        printf("Client connected: %s\n", inet_ntoa(server_addr.sin_addr));
+        printf("Client connected: %s\n", inet_ntoa(client_addr.sin_addr));
         fflush(stdout);
 
         received_bytes = recv(client_fd, request_buffer, sizeof(request_buffer) - 1, 0);
@@ -69,38 +65,26 @@ int main(void)
             parse_headers(request_buffer); /* Use the new header parser */
         }
 
-        send(client_fd, RESPONSE, sizeof(RESPONSE) - 1, 0);
+        send(client_fd, RESPONSE, strlen(RESPONSE), 0); /* Correct response length */
         close(client_fd);
     }
 
     close(server_fd);
-    return (0);
+    return 0;
 }
 
-/**
- * parse_headers - Parses an HTTP request headers
- * @request: The request string to parse
- */
 void parse_headers(char *request)
 {
-    int index = 0;
     char *line_token;
-    char *header_lines[16] = {0}; /* Array to store header lines */
-    char header_key[50], header_value[50];
+    char header_key[256], header_value[256];
 
     line_token = strtok(request, "\r\n");
     while (line_token)
     {
-        header_lines[index++] = line_token; /* Store each line */
-        line_token = strtok(NULL, "\r\n");
-    }
-
-    /* Process the headers starting from index 1 (skip request line) */
-    for (index = 1; header_lines[index]; index++)
-    {
-        if (sscanf(header_lines[index], "%[^:]: %s", header_key, header_value) == 2)
+        if (sscanf(line_token, "%[^:]: %[^\r\n]", header_key, header_value) == 2)
         {
             printf("Header: \"%s\" -> \"%s\"\n", header_key, header_value);
         }
+        line_token = strtok(NULL, "\r\n");
     }
 }
