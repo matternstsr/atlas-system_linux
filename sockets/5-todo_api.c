@@ -20,14 +20,13 @@ typedef struct
 
 Todo todos[100];
 int todo_count = 0;
-
 void send_todos(int conn)
 {
 	int i, written;
 	char response[2048] = {0};
 	char buffer[512];
 	char final_response[2300];
-	size_t response_length, final_response_length;
+	unsigned long response_length;
 
 	snprintf(response, sizeof(response), "%s%s", RESPONSE_OK, RESPONSE_JSON_CONTENT);
 	strcat(response, "[");
@@ -56,6 +55,7 @@ void send_todos(int conn)
 
 	send(conn, final_response, strlen(final_response), 0);
 }
+
 
 void add_todo(char *title, char *description)
 {
